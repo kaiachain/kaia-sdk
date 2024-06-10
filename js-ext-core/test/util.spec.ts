@@ -21,11 +21,17 @@ import {
   getSignatureTuple,
   getRpcTxObject,
   formatKlayUnits,
+  formatKaiaUnits,
   formatKlay,
+  formatKaia,
   parseKlayUnits,
+  parseKaiaUnits,
   parseKlay,
+  parseKaia,
   toPeb,
+  toKei,
   fromPeb,
+  fromKei,
   asyncOpenApi,
   HexStr,
   isKIP3Json,
@@ -279,6 +285,94 @@ describe("util", () => {
       assert.equal(toPeb(eth, "ether"), toWei(eth, "ether"));
       assert.equal(toPeb(eth), toWei(eth, "ether"));
       assert.equal(toPeb(eth), "123456000000000000000");
+    });
+  });
+
+  describe("kei to unit (formatKaiaUnits, formatKaia, fromKei)", () => {
+    it("kaia units", () => {
+      // unit names are case-insensitive.
+      const kei = BigNumber.from("1000000000000000000"); // 1e18 kei
+
+      assert.equal(formatKaiaUnits(kei, "Gkei"), "1000000000.0"); // = 1e9 Gkei
+      assert.equal(fromKei(kei, "Gkei"), "1000000000.0");
+
+      assert.equal(formatKaiaUnits(kei, "KAIA"), "1.0"); // = 1 KAIA
+      assert.equal(fromKei(kei, "KAIA"), "1.0");
+
+      assert.equal(formatKaia(kei), "1.0"); // unit=KAIA by default
+      assert.equal(fromKei(kei), "1.0");
+    });
+
+    // Make sure {formatKaiaUnits, formatKaia} can safely replace {formatUnits, formatEther}.
+    it("for eth units, equivalent to ethers.utils.formatUnits", () => {
+      {
+        const wei = BigNumber.from("1000000000000000000"); // 1e18 wei in BigNumber
+        assert.equal(formatKaiaUnits(wei, "gwei"), formatEthUnits(wei, "gwei"));
+        assert.equal(formatKaiaUnits(wei, "ether"), formatEthUnits(wei, "ether"));
+        assert.equal(formatKaia(wei), formatEther(wei));
+      }
+      {
+        const wei = "25000000000"; // 25e9 wei in String
+        assert.equal(formatKaiaUnits(wei, "gwei"), formatEthUnits(wei, "gwei"));
+        assert.equal(formatKaiaUnits(wei, "ether"), formatEthUnits(wei, "ether"));
+        assert.equal(formatKaia(wei), formatEther(wei));
+      }
+    });
+
+    // Make sure {fromKei} can safely replace {fromWei}.
+    it("for eth units, equivalent to web3.utils.fromWei", () => {
+      // fromWei and fromKei are slightly different in decimal representation
+      // but the number is the same.
+      {
+        const wei = "1000000000000000000"; // 1e18 wei
+
+        assert.equal(fromWei(wei, "gwei"), "1000000000");
+        assert.equal(fromKei(wei, "gwei"), "1000000000.0");
+
+        assert.equal(fromWei(wei, "ether"), "1");
+        assert.equal(fromKei(wei, "ether"), "1.0");
+        assert.equal(fromKei(wei), "1.0");
+      }
+      {
+        const wei = "25000000000"; // 25e9 wei
+
+        assert.equal(fromWei(wei, "gwei"), "25");
+        assert.equal(fromKei(wei, "gwei"), "25.0");
+
+        assert.equal(fromWei(wei, "ether"), "0.000000025");
+        assert.equal(fromKei(wei, "ether"), "0.000000025");
+        assert.equal(fromKei(wei), "0.000000025");
+      }
+    });
+  });
+
+  describe("unit to kei (parseKaiaUnits, parseUnits, toKei)", () => {
+    it("kaia units", () => {
+      assert.equal(parseKaiaUnits("25.0", "Gkei").toString(), "25000000000"); // 25 Gkei = 25e9 kei
+      assert.equal(toKei("25.0", "Gkei"), "25000000000");
+
+      assert.equal(parseKaiaUnits("123.456", "kaia").toString(), "123456000000000000000"); // 123.456 kaia = 123.456e18 kei
+      assert.equal(parseKaiaUnits("123.456", "KAIA").toString(), "123456000000000000000"); // 123.456 KAIA = 123.456e18 kei
+      assert.equal(toKei("123.456", "kaia"), "123456000000000000000");
+
+      assert.equal(parseKaia("123.456").toString(), "123456000000000000000");// unit=KAIA by default
+      assert.equal(toKei("123.456"), "123456000000000000000");
+    });
+
+    it("for eth units, equivalent to ethers.utils.parseUnits", () => {
+      const eth = "123.456";
+      assert.equal(parseKaiaUnits(eth, "gwei").toString(), parseEthUnits(eth, "gwei").toString());
+      assert.equal(parseKaiaUnits(eth, "ether").toString(), parseEthUnits(eth, "ether").toString());
+      assert.equal(parseKaia(eth).toString(), parseEther(eth).toString());
+      assert.equal(parseKaiaUnits(eth).toString(), "123456000000000000000");
+    });
+
+    it("for eth units, equivalent to web3.utils.toPeb", () => {
+      const eth = "123.456";
+      assert.equal(toKei(eth, "gwei"), toWei(eth, "gwei"));
+      assert.equal(toKei(eth, "ether"), toWei(eth, "ether"));
+      assert.equal(toKei(eth), toWei(eth, "ether"));
+      assert.equal(toKei(eth), "123456000000000000000");
     });
   });
 

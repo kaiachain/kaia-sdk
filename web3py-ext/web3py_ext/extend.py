@@ -62,6 +62,14 @@ units.units['tklay'] = decimal.Decimal('1000000000000000000000000000000')
 BaseWeb3.to_peb = types.MethodType(to_peb, BaseWeb3)
 BaseWeb3.from_peb = types.MethodType(from_peb, BaseWeb3)
 
+# kaia units
+units.units['kei'] = decimal.Decimal('1')
+units.units['Gkei'] = decimal.Decimal('1000000000')
+units.units['kaia'] = decimal.Decimal('1000000000000000000')
+units.units['KAIA'] = decimal.Decimal('1000000000000000000')
+BaseWeb3.to_kei = types.MethodType(to_kei, BaseWeb3)
+BaseWeb3.from_kei = types.MethodType(from_kei, BaseWeb3)
+
 # APIs
 from web3.eth.eth import Eth
 from web3.eth.async_eth import AsyncEth

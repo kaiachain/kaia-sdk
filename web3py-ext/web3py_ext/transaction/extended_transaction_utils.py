@@ -261,3 +261,10 @@ def to_peb(self, number: Union[int, float, str, decimal.Decimal], unit: str) -> 
 
 def from_peb(self, number: int, unit: str) -> Union[int, decimal.Decimal]:
     return from_wei(number, unit)
+
+Gkei = NewType("gkei", int)
+def to_kei(self, number: Union[int, float, str, decimal.Decimal], unit: str) -> Gkei:
+    return cast(Gkei, to_wei(number, unit))
+
+def from_kei(self, number: int, unit: str) -> Union[int, decimal.Decimal]:
+    return from_wei(number, unit)

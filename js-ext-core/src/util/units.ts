@@ -5,24 +5,26 @@ import { parseUnits as parseEthUnits, formatUnits as formatEthUnits } from "@eth
 import _ from "lodash";
 
 // All in lowercase. The ambiguity between mKLAY and MKLAY is resolved in getKlayDecimals.
-const names = [
+const names: { [key: string]: number } = {
   // Klaytn units
-  "peb", // 0
-  "kpeb", // 3
-  "mpeb", // 6
-  "ston", // 9, alias to Gpeb
-  "uklay", // 12
-  "mklay", // 15
-  "klay", // 18
-  "kklay", // 21
-  "mklay", // 24
-  "gklay", // 27
-  "tklay", // 30
+  peb: 0,
+  kpeb: 3,
+  mpeb: 6,
+  ston: 9,
+  gpeb: 9,
+  uklay: 12,
+  mklay: 15,
+  klay: 18,
+  kklay: 21,
+  Mklay: 24,
+  gklay: 27,
+  tklay: 30,
+
   // Kaia units
-  "kei", // 0
-  "gkei", // 9, Gkei
-  "kaia", // 18, KAIA
-];
+  kei: 0,
+  gkei: 9,
+  kaia: 18
+};
 
 // Returns the decimal corresponding the unitName.
 // If not found, returns undefined.
@@ -30,30 +32,15 @@ function getKlayDecimals(unitName?: string | BigNumberish): number | undefined {
   if (_.isString(unitName)) {
     const lower = unitName.toLowerCase();
 
-    // Tricky special cases.
-    // Gpeb is alias to ston, thus 9 decimals
-    if (lower == "gpeb") {
-      return 9;
-    }
     // mKLAY and MKLAY are different
     if (lower == "mklay" && unitName[0] == "m") {
       return 15;
     } else if (lower == "mklay" && unitName[0] == "M") {
       return 24;
-    }
-
-    // Kaia units (kei, Gkei, KAIA)
-    if (lower == "kei") {
-      return 0;
-    } else if (lower == "gkei") {
-      return 9;
-    } else if (lower == "kaia") {
-      return 18;
-    }
-
-    const index = names.indexOf(lower);
-    if (index !== -1) {
-      return index * 3;
+    } else if (lower in names) {
+      return names[lower];
+    } else {
+      return undefined;
     }
   }
   return undefined;
@@ -120,7 +107,7 @@ export const parseUnits = parseKlayUnits;
 // Shadow kaia functions because klay functions supports same function.
 export const formatKaiaUnits = formatKlayUnits;
 export const parseKaiaUnits = parseKlayUnits;
-export const formatKaia = formatKlay; 
+export const formatKaia = formatKlay;
 export const parseKaia = parseKlay;
 
 // Equivalent to web3.utils.fromWei.

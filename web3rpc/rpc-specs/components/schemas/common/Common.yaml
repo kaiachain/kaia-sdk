@@ -821,12 +821,12 @@ components:
       items:
         type: string
         format: Hexadecimal
-      description: An array of block base fees per gas. This includes the next block after the newest of the returned range, because this value can be derived from the newest block.
+      description: An array of block base fee per gas. This includes the next block after the newest of the returned range, because this value can be derived from the newest block. Zeroes are returned for pre-Magma blocks.
 
     Reward:
       title: Reward
       type: array
-      description: An array of effective priority fee per gas data points from a single block. All zeroes are returned if the block is empty.
+      description: A 2D array of effective priority fees per gas. `reward[n][i]` is the `rewardPercentiles[i]-th` percentile effective priority fees per gas among the transactions in the block `oldestBlock + n`. Only returned if rewardPercentiles is specified.
       items:
         type: array
         items:
@@ -1591,37 +1591,39 @@ components:
       properties:
         disableStorage:
           type: boolean
-          description: Setting this to true will disable storage capture (default = false).
+          description: "Setting this to true will disable storage capture in the null (structLog) tracer (default: false)."
           default: false
         disableMemory:
           type: boolean
-          description: Setting this to true will disable memory capture (default = false).
+          description: "Setting this to true will disable memory capture in the null (structLog) tracer (default: false)."
           default: false
         disableStack:
           type: boolean
-          description: Setting this to true will disable stack capture (default = false).
+          description: "Setting this to true will disable stack capture in the null (structLog) tracer (default: false)."
           default: false
         timeout:
           type: string
-          description: Overrides the default timeout of 5 seconds for JavaScript-based tracing calls. A duration string is a possibly signed sequence of decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "-1.5h" or "2h45m". Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h".
+          description: Overrides the default timeout of 5 seconds for trace-enabled EVM execution. A duration string can be anything that is accepted by [Go time.ParseDuration](https://pkg.go.dev/time#ParseDuration) function such as "10s" or "300ms".
         trace:
           type: string
-          enum: ["4byteTracer","callTracer","fastCallTracer","evmdisTracer","noopTracer","opcountTracer","prestateTracer","revertTracer","unigramTracer","bigramTracer","trigramTracer"]
+          enum: [null,"4byteTracer","callTracer","fastCallTracer","evmdisTracer","noopTracer","opcountTracer","prestateTracer","revertTracer","unigramTracer","bigramTracer","trigramTracer", "custom javascript tracer code"]
           description: |
-            Setting this will enable JavaScript-based transaction tracing, described in the next section. If set, the previous four arguments will be ignored. The predefined tracers can also be used as the following table.
+            If this field is empty or null, then the structLog tracer is used where the execution of every opcode is shown in detail. This null tracer is extremely heavy and usually too verbose for any debugging purpose, so it is advised to use other predefined tracers. This field can be the name of one of the predefined tracers shown below.
             | Tracer Name | Description |
             |-----|-----|
-            | 4byteTracer | 4byteTracer searches for 4byte-identifiers, and collects them for post-processing. It collects the methods identifiers along with the size of the supplied data, so a reversed signature can be matched against the size of the data. |
-            | callTracer | callTracer is a full-blown transaction tracer that extracts and reports all the internal calls made by a transaction, along with any useful information. |
-            | fastCallTracer | fastCallTracer is a Go-native version of callTracer. Since it is not executed on JavaScript VM, it shows more than 10x speedup compared to callTracer. Please use fastCallTracer instead of callTracer if the performance is the matter of the first importance. |
-            | evmdisTracer | evmdisTracer returns sufficient information from a trace to perform evmdis-style disassembly. |
-            | noopTracer | noopTracer is just the barebone boilerplate code required from a JavaScript object to be usable as a transaction tracer. |
-            | opcountTracer | opcountTracer is a sample tracer that just counts the number of instructions executed by the KLVM before the transaction terminated. |
-            | prestateTracer | prestateTracer outputs sufficient information to create a local execution of the transaction from a custom assembled genesis block. |
-            | revertTracer | revertTracer outputs the error string of REVERT. If the execution is not reverted, it outputs an empty string. |
-            | unigramTracer | unigramTracer returns the number of occurrences of each opcode. |
-            | bigramTracer | bigramTracer returns the number of occurrences of two consecutive opcodes. |
-            | trigramTracer | trigramTracer returns the number of occurrences of three consecutive opcodes. |
+            | 4byteTracer | traces 4-byte solidity function signatures. |
+            | callTracer | a slow version of fastCallTracer. It is deprecated in favor of fastCallTracer. |
+            | fastCallTracer | traces internal contract calls, gas usage, and call results. |
+            | evmdisTracer | returns information needed to perform evmdis-style disassembly. |
+            | noopTracer | is a template tracer that does nothing. |
+            | opcountTracer | is a sample tracer that counts the executed opcode. |
+            | prestateTracer | returns information needed to construct a custom local genesis state that this transaction can run on. |
+            | revertTracer | returns the revert reason, or an empty string if the transaction has not reverted. |
+            | unigramTracer | counts the occurrence of each opcode. |
+            | bigramTracer | counts the occurrence of two consecutive opcodes. |
+            | trigramTracer | counts the occurrence of three consecutive opcodes. |
+
+            Otherwise this field is interpreted as a piece of javascript code. You can find more about custom JS tracer [here](https://docs.chainstack.com/reference/custom-js-tracing-ethereum) and [here](https://geth.ethereum.org/docs/developers/evm-tracing/custom-tracer). Below is an example custom tracer that prints the gasUsed after each opcode `"{gasUsed: [], step: function(log) { this.gasUsed.push(log.getGas()); }, result: function() { return this.gasUsed; }, fault: function() {}}"`. Note that some nodes with `--rpc.unsafe-debug.disable` option will prohibit custom tracer.
 
     StandardTracingOptions:
       title: StandardTracingOptions

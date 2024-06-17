@@ -145,10 +145,7 @@ paths:
     $ref: ../klay/configuration/chainID.yaml#/paths/~1klay~1configuration~1chainID
   /klay/configuration/clientVersion:
     $ref: ../klay/configuration/clientVersion.yaml#/paths/~1klay~1configuration~1clientVersion
-  /klay/configuration/gasPrice:
-    $ref: ../klay/configuration/gasPrice.yaml#/paths/~1klay~1configuration~1gasPrice
-  # /klay/configuration/gasPriceAt:
-  #   $ref: ../klay/configuration/gasPriceAt.yaml#/paths/~1klay~1configuration~1gasPriceAt
+  
   /klay/configuration/getChainConfig:
     $ref: ../klay/configuration/getChainConfig.yaml#/paths/~1klay~1configuration~1getChainConfig
   /klay/configuration/isParallelDBWrite:
@@ -191,7 +188,11 @@ paths:
     $ref: ../klay/gas/maxPriorityFeePerGas.yaml#/paths/~1klay~1gas~1maxPriorityFeePerGas
   /klay/gas/upperBoundGasPrice:
     $ref: ../klay/gas/upperBoundGasPrice.yaml#/paths/~1klay~1gas~1upperBoundGasPrice
-
+  /klay/gas/gasPrice:
+    $ref: ../klay/gas/gasPrice.yaml#/paths/~1klay~1gas~1gasPrice
+  # /klay/configuration/gasPriceAt:
+  #   $ref: ../klay/configuration/gasPriceAt.yaml#/paths/~1klay~1configuration~1gasPriceAt
+  
   # klay/miscellaneous
   /klay/miscellaneous/getStakingInfo:
     $ref: ../klay/miscellaneous/getStakingInfo.yaml#/paths/~1klay~1miscellaneous~1getStakingInfo
@@ -205,6 +206,15 @@ paths:
     $ref: ../klay/miscellaneous/recoverFromMessage.yaml#/paths/~1klay~1miscellaneous~1recoverFromMessage
   /klay/miscellaneous/getProof:
     $ref: ../klay/miscellaneous/getProof.yaml#/paths/~1klay~1miscellaneous~1getProof
+  /klay/miscellaneous/getBlsInfos:
+    $ref: ../klay/miscellaneous/getBlsInfos.yaml#/paths/~1klay~1miscellaneous~1getBlsInfos
+  /klay/miscellaneous/getActiveAddressFromRegistry:
+    $ref: ../klay/miscellaneous/getActiveAddressFromRegistry.yaml#/paths/~1klay~1miscellaneous~1getActiveAddressFromRegistry
+  /klay/miscellaneous/getAllRecordsFromRegistry:
+    $ref: ../klay/miscellaneous/getAllRecordsFromRegistry.yaml#/paths/~1klay~1miscellaneous~1getAllRecordsFromRegistry
+  /klay/miscellaneous/getTotalSupply:
+    $ref: ../klay/miscellaneous/getTotalSupply.yaml#/paths/~1klay~1miscellaneous~1getTotalSupply
+
   # net
   /net/listening:
     $ref: ../net/listening.yaml#/paths/~1net~1listening

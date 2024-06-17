@@ -10,12 +10,12 @@ servers:
   - url: http://localhost:7151
 
 paths:
-  /klay/configuration/gasPriceAt:
+  /klay/gas/gasPriceAt:
     post:
       operationId: gasPriceAt
-      summary: "[Configuration] klay_gasPriceAt"
+      summary: "[Gas] klay_gasPriceAt"
       description: |
-        Returns different values based on the condition described below. The unit of the return value is peb.
+        Returns different values based on the condition described below. The unit of the return value is kei.
         
         - If baseFee is undefined in the header, it returns the unit price from the governance parameter
         
@@ -45,7 +45,7 @@ paths:
 
       responses:
         200:
-          description: Integer of the current gas price in peb.
+          description: Gas price at the given block in kei.
           content:
             application/json:
               schema:
@@ -56,26 +56,26 @@ paths:
                       result:
                         type: string
                         format: hex
-                        description: "Integer of the current gas price in peb."
+                        description: Gas price at the given block in kei.
                         example: "0xAE9F7BCC00"
 
       x-codeSamples:
         - lang: "curl"
           label: "Curl"
           source:
-            $ref: "../../../code-samples/curl/klay/configuration/gasPriceAt.sh"
+            $ref: "../../../code-samples/curl/klay/gas/gasPriceAt.sh"
         - lang: "java"
           label: "Java"
           source:
-            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/klay/configuration/KlayGasPriceAtExample.java"
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/klay/gas/KlayGasPriceAtExample.java"
         - lang: "javascript"
           label: "Javascript"
           source:
-            $ref: "../../../code-samples/javascript/klay/configuration/gasPriceAt.js"
+            $ref: "../../../code-samples/javascript/klay/gas/gasPriceAt.js"
         - lang: "python"
           label: "Python"
           source:
-            $ref: "../../../code-samples/python/klay/configuration/gasPriceAt.py"
+            $ref: "../../../code-samples/python/klay/gas/gasPriceAt.py"
 
 components:
   schemas:

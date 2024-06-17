@@ -10,14 +10,17 @@ servers:
   - url: http://localhost:7151
 
 paths:
-  /eth/config/gasPrice:
+  /eth/gas/gasPrice:
     post:
-      summary: "[Configuration] eth_gasPrice"
+      summary: "[Gas] eth_gasPrice"
       tags:
         - eth
       operationId: gasPrice
       description: |
-        Returns the current price per gas in peb.
+        Returns a suggested gasPrice or maxFeePerGas. The suggested price depends on the hardfork status.
+        - Fixed unit price before Magma
+        - Twice the base fee before Kaia
+        - Base fee plus suggested priority fee after Kaia
 
         **NOTE:** This API has different behavior from Ethereum's and returns a gas price of Klaytn instead of suggesting a gas price as in Ethereum.
 
@@ -37,7 +40,7 @@ paths:
 
       responses:
         200:
-          description: Returns the current price per gas in peb.
+          description: Suggested price in kei.
           content:
             application/json:
               schema:
@@ -49,19 +52,19 @@ paths:
         - lang: "curl"
           label: "Curl"
           source:
-            $ref: "../../../code-samples/curl/eth/config/gasPrice.sh"
+            $ref: "../../../code-samples/curl/eth/gas/gasPrice.sh"
         - lang: "java"
           label: "Java"
           source:
-            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/eth/configuration/EthGasPriceExample.java"
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/eth/gas/EthGasPriceExample.java"
         - lang: "javascript"
           label: "Javascript"
           source:
-            $ref: "../../../code-samples/javascript/eth/config/gasPrice.js"
+            $ref: "../../../code-samples/javascript/eth/gas/gasPrice.js"
         - lang: "python"
           label: "Python"
           source:
-            $ref: "../../../code-samples/python/eth/config/gasPrice.py"
+            $ref: "../../../code-samples/python/eth/gas/gasPrice.py"
 
 components:
   schemas:
@@ -71,5 +74,5 @@ components:
         result:
           type: string
           format: hex
-          description: Integer of the current gas price in peb.
+          description: Suggested price in kei.
           example: "0xAE9F7BCC00"

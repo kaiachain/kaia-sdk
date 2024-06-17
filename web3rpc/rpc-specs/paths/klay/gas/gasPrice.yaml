@@ -10,12 +10,15 @@ servers:
   - url: http://localhost:7151
 
 paths:
-  /klay/configuration/gasPrice:
+  /klay/gas/gasPrice:
     post:
       operationId: gasPrice
-      summary: "[Configuration] klay_gasPrice"
+      summary: "[Gas] klay_gasPrice"
       description: |
-        Returns a suggestion for a gas price in peb.
+        Returns a suggested gasPrice or maxFeePerGas. The suggested price depends on the hardfork status.
+        - Fixed unit price before Magma
+        - Twice the base fee before Kaia
+        - Base fee plus suggested priority fee after Kaia
         
         **JSONRPC:** `klay_gasPrice`
       tags:
@@ -35,7 +38,7 @@ paths:
 
       responses:
         200:
-          description: Returns a suggestion for a gas price in peb.
+          description: Suggested price in kei.
           content:
             application/json:
               schema:
@@ -46,24 +49,24 @@ paths:
                       result:
                         type: string
                         format: hex
-                        description: "Integer of the current gas price in peb"
+                        description: Suggested price in kei.
                         example: "0xAE9F7BCC00"
 
       x-codeSamples:
         - lang: "curl"
           label: "Curl"
           source:
-            $ref: "../../../code-samples/curl/klay/configuration/gasPrice.sh"
+            $ref: "../../../code-samples/curl/klay/gas/gasPrice.sh"
         - lang: "java"
           label: "Java"
           source:
-            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/klay/configuration/KlayGasPriceExample.java"
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/klay/gas/KlayGasPriceExample.java"
         - lang: "python"
           label: "Python"
           source:
-            $ref: "../../../code-samples/python/klay/configuration/gasPrice.py"
+            $ref: "../../../code-samples/python/klay/gas/gasPrice.py"
         - lang: "javascript"
           label: "Javascript"
           source:
-            $ref: "../../../code-samples/javascript/klay/configuration/gasPrice.js"
+            $ref: "../../../code-samples/javascript/klay/gas/gasPrice.js"
 

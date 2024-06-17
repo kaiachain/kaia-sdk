@@ -1,0 +1,145 @@
+openapi: "3.0.2"
+info:
+  title: Klay Open API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /klay/miscellaneous/getTotalSupply:
+    post:
+      summary: "[Miscellaneous] klay_getTotalSupply"
+      tags:
+        - klay
+      operationId: getTotalSupply
+      description: |
+        Returns the native token token supply by tracking block rewards and various burning mechanisms. If some components are not available then a partial result is returned.
+       
+        **JSONRPC:** `klay_getTotalSupply`
+
+      parameters:
+        - name: blockNumber
+          in: query
+          description: integer block number, or the string "latest" or "earliest", see the default block parameter
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: klay_getTotalSupply
+                    params:
+                      type: array
+                      items:
+                        properties:
+                           BlockNumberOrTag:
+                            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+                      example: [
+                        "latest"
+                      ]
+
+      responses:
+        200:
+          description: Returns the native token token supply by tracking block rewards and various burning mechanisms. If some components are not available then a partial result is returned.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KlaygetTotalSupplyResp"
+
+      x-codeSamples:
+        - lang: "curl"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/klay/miscellaneous/getTotalSupply.sh"
+        - lang: "java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/klay/miscellaneous/KlayGetTotalSupplyExample.java"
+        - lang: "javascript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/klay/miscellaneous/getTotalSupply.js"
+        - lang: "python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/klay/miscellaneous/getTotalSupply.py"
+
+components:
+  schemas:
+    KlaygetTotalSupplyResp:
+      type: object
+      properties:
+        result:
+          type: object
+          required:
+            - number
+            - totalMinted
+            - burntFee
+            - zeroBurn
+            - deadBurn
+            - kip103Burn
+            - kip160Burn
+            - totalBurnt
+            - totalSupply
+          properties:
+            number:
+              type: string
+              format: hex
+              description: The last block number the token supply is accumulated to.
+            totalMinted:
+              type: string
+              format: hex
+              description: Accumulated block rewards minted up to number plus the genesis total supply.
+            burntFee:
+              type: string
+              format: hex
+              description: Accumulated transaction fees burnt.
+            zeroBurn:
+              type: string
+              format: hex
+              description: The balance of the address 0x0, which is a canonical burn address. It is null if the state at the requested block is not available.
+            deadBurn:
+              type: string
+              format: hex
+              description: The balance of the address 0xdead, which is another canonical burn address. It is null if the state at the requested block is not available.
+            kip103Burn:
+              type: string
+              format: hex
+              description: The amounts burnt by KIP-103 TreasuryRebalance, if executed. It is null if KIP-103 is configured and the hardfork block passed but memo field is not set in the contract. It is 0 if KIP-103 is not configured or the hardfork block is larger than the requested block.
+            kip160Burn:
+              type: string
+              format: hex
+              description: The amounts burnt by KIP-160 TreasuryRebalanceV2, if executed. It is null if KIP-160 is configured and the hardfork block passed but memo field is not set in the contract. It is 0 if KIP-160 is not configured or the hardfork block is larger than the requested block.
+            totalBurnt:
+              type: string
+              format: hex
+              description: Sum of the burns from above reasons. It is null if some components cannot be determined.
+            totalSupply:
+              type: string
+              format: hex
+              description: The calculated total supply of the native token at the given block. Difference between totalMinted and totalBurnt. It is null if some components cannot be determined.
+      example:
+         {
+          "burntFee": "0x29ec817ffd11a9cd3a4b3",
+          "deadBurn": "0x40c166a428511ad626d306",
+          "kip103Burn": "0x111d0449fb2a238eca3b1720",
+          "kip160Burn": "0x0",
+          "number": "0x93295ce",
+          "totalBurnt": "0x11606478b75245c43d358ed9",
+          "totalMinted": "0x249a79581de10f4cd3000000",
+          "totalSupply": "0x133a14df668ec98895ca7127",
+          "zeroBurn": "0x0"
+        }

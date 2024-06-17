@@ -15,7 +15,7 @@ paths:
       operationId: feeHistory
       summary: "[Gas] klay_feeHistory"
       description: |
-        Returns base fee per gas and transaction effective priority fee per gas history for the requested block range if available.
+        Returns historical gas information for a range of blocks.
 
         **NOTE:** This API is effective after Klaytn v1.8.0
 
@@ -28,19 +28,19 @@ paths:
           required: true
           schema:
             $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockCount"
-          description: Number of blocks in the requested range in hexadecimal. Between 1 (0x1) and 1024 (0x400) blocks can be requested in a single query. Less than requested may be returned if not all blocks are available.
+          description: Number of blocks in the requested range.
           in: query
         - name: lastBlock
           in: query
-          description: Highest numbered block of the requested range as block number or block tag.
+          description: Highest block of the requested range. Can be a number or "latest".
           required: true
           schema:
             $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
         - name: rewardPercentiles
-          required: true
+          required: false
           schema:
             $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/RewardPercentiles"
-          description: An array of floating point values between 0 and 100.
+          description:  A monotonically increasing list of percentile (between 0 and 100) values. For each block in the requested range, the transactions will be sorted in ascending order by effective tip per gas and sampled at the specified percentiles.
           in: query
 
       requestBody:
@@ -53,7 +53,7 @@ paths:
 
       responses:
         200:
-          description: Returns base fee per gas and transaction effective priority fee per gas history for the requested block range if available.
+          description: Returns historical gas information for a range of blocks.
           content:
             application/json:
               schema:
@@ -100,6 +100,7 @@ components:
                 $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
               rewardPercentiles:
                 $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/RewardPercentiles"
+                required: false
           example:  ["0x10", "latest", [0.1, 0.2, 0.3]]
 
     KlayFeeHistoryResp:
@@ -111,12 +112,11 @@ components:
                 - oldestBlock
                 - baseFeePerGas
                 - gasUsedRatio
-                - reward
               properties:
                 oldestBlock:
                   type: string
                   format: Hexadecimal
-                  description: Lowest numbered block of the returned range in hexadecimal.
+                  description: Lowest number block of returned range.
                 baseFeePerGas:
                   $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BaseFeePerGas"
                 gasUsedRatio:
@@ -124,7 +124,7 @@ components:
                   items:
                     type: number
                     format: float
-                  description: An array of the ratios of gas used per block. These are calculated as the ratio of gasUsed and gasLimit.
+                  description: An array of block gas used ratios. Measures the network congestion level. These are calculated as the ratio of block gas used and [KIP-71 MAX_BLOCK_GAS_USED_FOR_BASE_FEE](https://kips.klaytn.foundation/KIPs/kip-71). If the ratio is above 1, then 1 is returned.
                 reward:
                   $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/Reward"
               example:

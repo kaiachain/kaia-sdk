@@ -140,10 +140,6 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/klay/configuration/chainID.yaml#/paths/~1klay~1configuration~1chainID
   /klay/configuration/clientVersion:
     $ref: ../web3rpc/rpc-specs/paths/klay/configuration/clientVersion.yaml#/paths/~1klay~1configuration~1clientVersion
-  /klay/configuration/gasPrice:
-    $ref: ../web3rpc/rpc-specs/paths/klay/configuration/gasPrice.yaml#/paths/~1klay~1configuration~1gasPrice
-  /klay/configuration/gasPriceAt:
-    $ref: ../web3rpc/rpc-specs/paths/klay/configuration/gasPriceAt.yaml#/paths/~1klay~1configuration~1gasPriceAt
   /klay/configuration/getChainConfig:
     $ref: ../web3rpc/rpc-specs/paths/klay/configuration/getChainConfig.yaml#/paths/~1klay~1configuration~1getChainConfig
   /klay/configuration/isParallelDBWrite:
@@ -184,7 +180,10 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/klay/gas/maxPriorityFeePerGas.yaml#/paths/~1klay~1gas~1maxPriorityFeePerGas
   /klay/gas/upperBoundGasPrice:
     $ref: ../web3rpc/rpc-specs/paths/klay/gas/upperBoundGasPrice.yaml#/paths/~1klay~1gas~1upperBoundGasPrice
-
+  /klay/gas/gasPrice:
+    $ref: ../web3rpc/rpc-specs/paths/klay/gas/gasPrice.yaml#/paths/~1klay~1gas~1gasPrice
+  /klay/gas/gasPriceAt:
+    $ref: ../web3rpc/rpc-specs/paths/klay/gas/gasPriceAt.yaml#/paths/~1klay~1gas~1gasPriceAt
   # klay/miscellaneous
   /klay/miscellaneous/getStakingInfo:
     $ref: ../web3rpc/rpc-specs/paths/klay/miscellaneous/getStakingInfo.yaml#/paths/~1klay~1miscellaneous~1getStakingInfo
@@ -198,6 +197,14 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/klay/miscellaneous/sha3.yaml#/paths/~1klay~1miscellaneous~1sha3
   /klay/miscellaneous/getProof:
     $ref: ../web3rpc/rpc-specs/paths/klay/miscellaneous/getProof.yaml#/paths/~1klay~1miscellaneous~1getProof
+  /klay/miscellaneous/getBlsInfos:
+    $ref: ../web3rpc/rpc-specs/paths/klay/miscellaneous/getBlsInfos.yaml#/paths/~1klay~1miscellaneous~1getBlsInfos
+  /klay/miscellaneous/getActiveAddressFromRegistry:
+    $ref: ../web3rpc/rpc-specs/paths/klay/miscellaneous/getActiveAddressFromRegistry.yaml#/paths/~1klay~1miscellaneous~1getActiveAddressFromRegistry
+  /klay/miscellaneous/getAllRecordsFromRegistry:
+    $ref: ../web3rpc/rpc-specs/paths/klay/miscellaneous/getAllRecordsFromRegistry.yaml#/paths/~1klay~1miscellaneous~1getAllRecordsFromRegistry
+  /klay/miscellaneous/getTotalSupply:
+    $ref: ../web3rpc/rpc-specs/paths/klay/miscellaneous/getTotalSupply.yaml#/paths/~1klay~1miscellaneous~1getTotalSupply
 
   # eth/account
   /eth/account/accounts:
@@ -285,8 +292,7 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/eth/config/coinbase.yaml#/paths/~1eth~1config~1coinbase
   /eth/config/etherbase:
     $ref: ../web3rpc/rpc-specs/paths/eth/config/etherbase.yaml#/paths/~1eth~1config~1etherbase
-  /eth/config/gasPrice:
-    $ref: ../web3rpc/rpc-specs/paths/eth/config/gasPrice.yaml#/paths/~1eth~1config~1gasPrice
+ 
   /eth/protocolVersion:
     $ref: ../web3rpc/rpc-specs/paths/eth/config/protocolVersion.yaml#/paths/~1eth~1config~1protocolVersion
 
@@ -295,7 +301,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/eth/gas/feeHistory.yaml#/paths/~1eth~1gas~1feeHistory
   /eth/gas/maxPriorityFeePerGas:
     $ref: ../web3rpc/rpc-specs/paths/eth/gas/maxPriorityFeePerGas.yaml#/paths/~1eth~1gas~1maxPriorityFeePerGas
-
+  /eth/gas/gasPrice:
+    $ref: ../web3rpc/rpc-specs/paths/eth/gas/gasPrice.yaml#/paths/~1eth~1gas~1gasPrice
   # eth/filter
   /eth/filter/getFilterChanges:
     $ref: ../web3rpc/rpc-specs/paths/eth/filter/getFilterChanges.yaml#/paths/~1eth~1filter~1getFilterChanges

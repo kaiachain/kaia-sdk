@@ -96,8 +96,6 @@ paths:
   # eth/config
   /eth/config/chainID:
     $ref: ../../web3rpc/rpc-specs/paths/eth/config/chainId.yaml#/paths/~1eth~1config~1chainId
-  /eth/config/gasPrice:
-    $ref: ../../web3rpc/rpc-specs/paths/eth/config/gasPrice.yaml#/paths/~1eth~1config~1gasPrice
   /eth/config/coinbase:
     $ref: ../../web3rpc/rpc-specs/paths/eth/config/coinbase.yaml#/paths/~1eth~1config~1coinbase
   /eth/config/etherbase:
@@ -112,7 +110,8 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/eth/transaction/estimateGas.yaml#/paths/~1eth~1transaction~1estimateGas
   /eth/gas/maxPriorityFeePerGas:
     $ref: ../../web3rpc/rpc-specs/paths/eth/gas/maxPriorityFeePerGas.yaml#/paths/~1eth~1gas~1maxPriorityFeePerGas
-
+  /eth/gas/gasPrice:
+    $ref: ../../web3rpc/rpc-specs/paths/eth/gas/gasPrice.yaml#/paths/~1eth~1gas~1gasPrice
   # eth/filter
   /eth/filter/getFilterLogs:
     $ref: ../../web3rpc/rpc-specs/paths/eth/filter/getFilterLogs.yaml#/paths/~1eth~1filter~1getFilterLogs

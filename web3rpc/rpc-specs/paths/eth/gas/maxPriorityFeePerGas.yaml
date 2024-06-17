@@ -17,7 +17,10 @@ paths:
         - eth
       operationId: maxPriorityFeePerGas
       description: |
-        Returns a suggestion for a gas tip cap for dynamic fee transaction in peb.
+        Returns a suggested gasPrice or maxPriorityFeePerGas. The suggested price depends on the hardfork status.
+          - Fixed unit price before Magma
+          - Zero before Kaia
+          - Suggested priority fee from fee history, after Kaia
 
         **NOTE:** This API has different behavior from Ethereum's and returns a gas price of Klaytn instead of suggesting a gas price as in Ethereum.
 
@@ -33,7 +36,7 @@ paths:
 
       responses:
         200:
-          description: Integer of the current gas price in peb.
+          description: Suggested price in kei
           content:
             application/json:
               schema:
@@ -73,6 +76,6 @@ components:
       properties:
         result:
           type: string
-          description: Integer of the current gas price in peb.
+          description: Suggested price in kei
           format: hex
           example: "0xAE9F7BCC00"

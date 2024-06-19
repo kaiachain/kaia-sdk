@@ -1,9 +1,9 @@
 // Legacy
 // https://docs.klaytn.foundation/docs/learn/transactions/
 
-const ethers = require("ethers");
+const ethers = require("ethers6");
 
-import { parseKlay, TxType, Wallet } from "../../src";
+import { parseKlay, TxType, Wallet } from "../../src/v6";
 const recieverAddr = "0xec8d2d57f76b39959116fb3b6879418e7b1baa18";
 const senderAddr = "0xec8d2d57f76b39959116fb3b6879418e7b1baa18";
 const senderPriv =

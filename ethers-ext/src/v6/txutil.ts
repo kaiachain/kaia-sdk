@@ -1,8 +1,8 @@
-import { Provider, TransactionLike, TransactionResponse } from "ethers";
-import { ZeroAddress } from "ethers";
+import { Provider, TransactionLike, TransactionResponse } from "ethers6";
+import { ZeroAddress } from "ethers6";
 import { Logger } from "@ethersproject/logger";
 import { Deferrable, resolveProperties } from "@ethersproject/properties";
-import { SigningKey } from "ethers";
+import { SigningKey } from "ethers6";
 import { poll } from "@ethersproject/web";
 import _ from "lodash";
 

@@ -1,8 +1,8 @@
-import { FetchRequest, Networkish } from "ethers";
+import { FetchRequest, Networkish } from "ethers6";
 import {
   JsonRpcProvider as EthersJsonRpcProvider,
   BrowserProvider as EthersWeb3Provider,
-} from "ethers";
+} from "ethers6";
 
 import { asyncOpenApi, AsyncNamespaceApi } from "@klaytn/js-ext-core";
 import {

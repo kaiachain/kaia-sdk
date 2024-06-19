@@ -1,23 +1,12 @@
-// Pass-through js-ext-core exports
-export * from "@klaytn/js-ext-core/util";
-export {
-  AccountKey,
-  AccountKeyFactory,
-  KlaytnTx,
-  KlaytnTxFactory,
-  parseTransaction,
-} from "@klaytn/js-ext-core";
+// require("@klaytn/ethers-ext") exports the extension for ethers v5
+export * from "./v5";
 
-// ethers-ext classes and functions
-export * from "./accountStore";
-export * from "./keystore";
-export * from "./signer";
+// require("@klaytn/ethers-ext").v5 exports the extension for ethers v5
+// require("@klaytn/ethers-ext").v6 exports the extension for ethers v6
+import * as v5 from "./v5";
+import * as v6 from "./v6";
+export { v5, v6 };
 
-// Follow ethers v6 convention like `ethers.JsonRpcProvider`
-export * from "./provider";
-// Follow ethers v5 convention like `ethers.providers.JsonRpcProvider`
-import { JsonRpcProvider, Web3Provider } from "./provider";
-export const providers = {
-  JsonRpcProvider,
-  Web3Provider,
-};
+// require("@klaytn/ethers-ext/v5") exports the extension for ethers v5
+// require("@klaytn/ethers-ext/v6") exports the extension for ethers v6
+// (declared in package.json:exports. No code needeed here)

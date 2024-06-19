@@ -1,9 +1,6 @@
-import { getAddress } from "ethers";
-import {
-  ProgressCallback,
-  decryptKeystoreJson,
-  decryptKeystoreJsonSync,
-} from "ethers";
+import { getAddress } from "@ethersproject/address";
+import { Bytes } from "@ethersproject/bytes";
+import { ProgressCallback, decryptKeystore, decryptKeystoreSync } from "@ethersproject/json-wallets";
 import _ from "lodash";
 
 import { isKIP3Json, splitKeystoreKIP3 } from "@klaytn/js-ext-core";
@@ -16,17 +13,13 @@ export interface KeystoreAccountList {
   privateKeyList: string[];
 }
 
-function decryptKIP3(
-  json: string,
-  password: Uint8Array | string,
-  progressCallback?: ProgressCallback
-): Promise<KeystoreAccountList> {
+function decryptKIP3(json: string, password: Bytes | string, progressCallback?: ProgressCallback): Promise<KeystoreAccountList> {
   const obj = JSON.parse(json);
   const jsonList = splitKeystoreKIP3(json);
   const count = jsonList.length;
 
   const accounts = _.map(jsonList, (json, index) => {
-    const result = decryptKeystoreJsonSync(json, password);
+    const result = decryptKeystoreSync(json, password);
     if (progressCallback) {
       progressCallback((index + 1) / count);
     }
@@ -40,15 +33,12 @@ function decryptKIP3(
   });
 }
 
-function decryptKIP3Sync(
-  json: string,
-  password: Uint8Array | string
-): KeystoreAccountList {
+function decryptKIP3Sync(json: string, password: Bytes | string): KeystoreAccountList {
   const obj = JSON.parse(json);
   const jsonList = splitKeystoreKIP3(json);
 
   const accounts = _.map(jsonList, (json) => {
-    return decryptKeystoreJsonSync(json, password);
+    return decryptKeystoreSync(json, password);
   });
 
   return {
@@ -58,36 +48,27 @@ function decryptKIP3Sync(
   };
 }
 
-export function decryptKeystoreList(
-  json: string,
-  password: Uint8Array | string,
-  progressCallback?: ProgressCallback
-): Promise<KeystoreAccountList> {
+export function decryptKeystoreList(json: string, password: Bytes | string, progressCallback?: ProgressCallback): Promise<KeystoreAccountList> {
   if (isKIP3Json(json)) {
     return decryptKIP3(json, password, progressCallback);
   } else {
     // Because ethers decryptJsonWallet is not an async function,
     // decryptJsonWalletList is not an async function either, hence using 'then'.
-    return decryptKeystoreJson(json, password, progressCallback).then(
-      (account) => {
-        return {
-          address: account.address,
-          privateKey: account.privateKey,
-          privateKeyList: [account.privateKey],
-        };
-      }
-    );
+    return decryptKeystore(json, password, progressCallback).then((account) => {
+      return {
+        address: account.address,
+        privateKey: account.privateKey,
+        privateKeyList: [account.privateKey],
+      };
+    });
   }
 }
 
-export function decryptKeystoreListSync(
-  json: string,
-  password: Uint8Array | string
-): KeystoreAccountList {
+export function decryptKeystoreListSync(json: string, password: Bytes | string): KeystoreAccountList {
   if (isKIP3Json(json)) {
     return decryptKIP3Sync(json, password);
   } else {
-    const account = decryptKeystoreJsonSync(json, password);
+    const account = decryptKeystoreSync(json, password);
     return {
       address: account.address,
       privateKey: account.privateKey,

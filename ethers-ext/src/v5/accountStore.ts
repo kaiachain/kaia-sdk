@@ -1,8 +1,8 @@
-import { getAddress } from "ethers";
+import { getAddress } from "@ethersproject/address";
 import { BigNumber } from "@ethersproject/bignumber";
-import { JsonRpcProvider } from "ethers";
-import { SigningKey } from "ethers";
-import { computeAddress } from "ethers";
+import { JsonRpcProvider } from "@ethersproject/providers";
+import { SigningKey, computePublicKey } from "@ethersproject/signing-key";
+import { computeAddress } from "@ethersproject/transactions";
 
 import { HexStr } from "@klaytn/js-ext-core";
 
@@ -385,7 +385,7 @@ export class AccountStore {
     const stripedX = String(zeroPadX).substring(2);
     const stripedY = String(zeroPadY).substring(2);
 
-    const compressedKey = SigningKey.computePublicKey(
+    const compressedKey = computePublicKey(
       HexStr.concat("0x04" + stripedX + stripedY),
       true
     );

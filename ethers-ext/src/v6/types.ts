@@ -1,7 +1,7 @@
-import { TransactionRequest as EthersTransactionRequest } from "ethers";
+import { TransactionRequest as EthersTransactionRequest } from "ethers6";
 import { ExternallyOwnedAccount } from "@ethersproject/abstract-signer";
-import { BytesLike } from "ethers";
-import { SigningKey } from "ethers";
+import { BytesLike } from "ethers6";
+import { SigningKey } from "ethers6";
 export type EthersExternalProvider = {
   isMetaMask?: boolean;
   isStatus?: boolean;

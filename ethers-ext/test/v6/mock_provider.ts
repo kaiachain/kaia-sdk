@@ -1,8 +1,8 @@
-import { FetchRequest, Networkish } from "ethers";
-import { JsonRpcProvider as EthersProvider } from "ethers";
+import { FetchRequest, Networkish } from "ethers6";
+import { JsonRpcProvider as EthersProvider } from "ethers6";
 import _ from "lodash";
 
-import { JsonRpcProvider as KlaytnProvider } from "../src";
+import { JsonRpcProvider as KlaytnProvider } from "../../src/v6";
 
 type mockRpcHandler = (params: Array<any>) => Promise<any> | any;
 

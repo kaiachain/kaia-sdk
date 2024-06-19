@@ -1,11 +1,15 @@
-import { keccak256, TransactionRequest } from "ethers";
-import { Wallet as EthersWallet } from "ethers";
+import { keccak256 } from "@ethersproject/keccak256";
+import { Wallet as EthersWallet } from "@ethersproject/wallet";
 import chai, { assert, expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
 import _ from "lodash";
 import { describe, it } from "mocha";
 
-import { Wallet as KlaytnWallet, parseTransaction } from "../src";
+import {
+  KlaytnTxFactory,
+  Wallet as KlaytnWallet,
+  parseTransaction,
+} from "../../src/v5";
 
 import { MockEthersProvider, MockKlaytnProvider } from "./mock_provider";
 
@@ -94,13 +98,12 @@ describe("Wallet", () => {
   // - If from field exists, reject if different from getAddress()
   // - Original tx object remain untouched
   describe("checkTransaction", () => {
-    // ethers v6 removed Wallet.checkTransaction.
-    async function testOK(W: KlaytnWallet, tx: any, expectedFrom?: any) {
+    async function testOK(W: EthersWallet, tx: any, expectedFrom?: any) {
       let res = W.checkTransaction(tx);
       expectedFrom ??= await W.getAddress();
       assert.equal(await res.from, expectedFrom);
     }
-    async function testErr(W: KlaytnWallet, tx: any, err: string) {
+    async function testErr(W: EthersWallet, tx: any, err: string) {
       let trigger = async () => {
         let res = W.checkTransaction(tx);
         // "from address mismatch" error is lazy. await to trigger the error.
@@ -110,19 +113,19 @@ describe("Wallet", () => {
     }
 
     it("fill missing 'from' field", async () => {
-      // for (let W of [EW, KW]) {
-      //   // Ethereum TxType always filled with legacy address
-      //   await testOK(W, { type: 0, to, value }, from);
-      // }
+      for (let W of [EW, KW]) {
+        // Ethereum TxType always filled with legacy address
+        await testOK(W, { type: 0, to, value }, from);
+      }
       for (let W of [KW, KWD]) {
         await testOK(W, { type: 9, to, feePayer, value });
       }
     });
     it("preserve existing 'from' field", async () => {
-      // for (let W of [EW, KW, KWD]) {
-      //   // Ethereum TxType always filled with legacy address
-      //   await testOK(W, { type: 0, from, to, value }, from);
-      // }
+      for (let W of [EW, KW, KWD]) {
+        // Ethereum TxType always filled with legacy address
+        await testOK(W, { type: 0, from, to, value }, from);
+      }
       for (let W of [KW, KWD]) {
         await testOK(W, {
           type: 9,
@@ -133,11 +136,11 @@ describe("Wallet", () => {
         });
       }
       for (let W of [EW, KW, KWD]) {
-        // await testErr(
-        //   W,
-        //   { type: 0, from: otherAddr, to, value },
-        //   "from address mismatch"
-        // );
+        await testErr(
+          W,
+          { type: 0, from: otherAddr, to, value },
+          "from address mismatch"
+        );
       }
       for (let W of [KW, KWD]) {
         await testErr(

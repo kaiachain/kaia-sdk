@@ -1,4 +1,4 @@
-import { BigNumberish } from "ethers";
+import { BigNumber } from "@ethersproject/bignumber";
 import { assert } from "chai";
 import { describe, it } from "mocha";
 
@@ -28,7 +28,7 @@ import {
   parseKlay,
   toPeb,
   fromPeb,
-} from "../src";
+} from "../../src/v5";
 
 // Test that js-ext-core utils are properly exported.
 // Do not test the correctness. That is done in js-ext-core/test.
@@ -126,7 +126,7 @@ describe("utils", () => {
   });
 
   it("units", () => {
-    const peb = BigInt("1000000000000000000");
+    const peb = BigNumber.from("1000000000000000000");
     assert.equal(formatKlayUnits(peb, "ston"), "1000000000.0");
     assert.equal(fromPeb(peb, "ston"), "1000000000.0");
 

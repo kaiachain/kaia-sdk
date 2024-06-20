@@ -32,7 +32,7 @@ import {
 
 // Test that js-ext-core utils are properly exported.
 // Do not test the correctness. That is done in js-ext-core/test.
-describe("utils", () => {
+describe("utils v5", () => {
   it("const", () => {
     assert.equal(TxType.ValueTransfer, 8);
     assert.equal(isKlaytnTxType(8), true);

@@ -1,7 +1,12 @@
-import { Provider, TransactionLike, TransactionResponse } from "ethers6";
+import {
+  Provider,
+  TransactionLike,
+  TransactionResponse,
+  resolveProperties,
+} from "ethers6";
 import { ZeroAddress } from "ethers6";
 import { Logger } from "@ethersproject/logger";
-import { Deferrable, resolveProperties } from "@ethersproject/properties";
+import { Deferrable } from "@ethersproject/properties";
 import { SigningKey } from "ethers6";
 import { poll } from "@ethersproject/web";
 import _ from "lodash";
@@ -9,10 +14,10 @@ import _ from "lodash";
 import {
   getChainIdFromSignatureTuples,
   parseTransaction,
+  SignatureLike,
 } from "@klaytn/js-ext-core";
 
 import { TransactionRequest } from "./types";
-import { KlaytnSignature } from "./signer";
 
 const logger = new Logger("@klaytn/ethers-ext");
 
@@ -137,7 +142,7 @@ export function eip155sign(
   key: SigningKey,
   digest: string,
   chainId: number
-): KlaytnSignature {
+): SignatureLike {
   const sig = key.sign(digest);
   const recoveryParam = sig.v === 27 ? 0 : 1;
   const v = recoveryParam + +chainId * 2 + 35;

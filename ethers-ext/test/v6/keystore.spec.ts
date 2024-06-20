@@ -3,7 +3,7 @@ import { describe, it } from "mocha";
 
 import { decryptKeystoreList, decryptKeystoreListSync } from "../../src/v6";
 
-describe("keystore", () => {
+describe("keystore v6", () => {
   const testcases = [
     {
       // Eth V3. ethers.Wallet.createRandom().encrypt("password")

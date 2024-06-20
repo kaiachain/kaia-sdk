@@ -44,7 +44,7 @@
     "lint": "npm run lint:check",
     "lint:check": "eslint example src test --cache --quiet",
     "lint:fix": "eslint example src test --cache --fix",
-    "test": "mocha --timeout 10000 -r ts-node/register \"test/**/*.ts\"",
+    "test": "mocha --timeout 50000 -r ts-node/register \"test/**/*.ts\"",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {

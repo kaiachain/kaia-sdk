@@ -11,7 +11,7 @@ const txpoolStatus = { pending: 4, queued: 2 };
 
 // Test that P.func() or P.namespace.func() correctly invokes the
 // underlying P.send() function. This test does not actually query the Internet.
-describe("Provider", () => {
+describe("Provider v6", () => {
   let P: MockKlaytnProvider;
 
   before(async () => {

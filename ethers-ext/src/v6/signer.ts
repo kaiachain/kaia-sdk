@@ -50,18 +50,6 @@ import {
 import { ExternalProvider } from "./types";
 
 const logger = new Logger("@klaytn/ethers-ext");
-export interface KlaytnSignature {
-  r: string;
-
-  s: string;
-  _vs?: string;
-
-  recoveryParam?: number;
-  v: number;
-
-  yParityAndS?: string;
-  compact?: string;
-}
 export class Wallet extends EthersWallet {
   // Override Wallet factories accepting keystores to support both v3 and v4 (KIP-3) formats
   static override async fromEncryptedJson(

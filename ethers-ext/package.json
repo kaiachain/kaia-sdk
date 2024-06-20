@@ -88,7 +88,7 @@
     "@ethersproject/transactions": "^5.7.0",
     "@ethersproject/wallet": "^5.7.0",
     "@ethersproject/web": "^5.7.1",
-    "@klaytn/js-ext-core": "^1.0.0",
+    "@klaytn/js-ext-core": "^1.0.2",
     "@klaytn/web3rpc": "^0.9.9",
     "ethers6": "npm:ethers@^6.12.1",
     "lodash": "^4.17.21"

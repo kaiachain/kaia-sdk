@@ -1,16 +1,19 @@
 // AccountKeyLegacy
 // https://docs.klaytn.foundation/docs/learn/accounts/
 
-const { ethers } = require("ethers");
+const { ethers } = require("ethers6");
 
-const { Wallet, TxType, AccountKeyType} = require("@klaytn/ethers-ext");
+const { Wallet, TxType, AccountKeyType } = require("@klaytn/ethers-ext/v6");
 
 // Using legacy AccountKey to execute this example repeatedly.
 // But you might want to register a different Accountkey.
 const senderAddr = "0xecbf243ac167a3b5097fef758e07881582a89027";
-const senderPriv = "0xc696ccd259792f2ffb87e0012e4a37ae3526a3224686225af679e3aaa2aeab0d";
+const senderPriv =
+  "0xc696ccd259792f2ffb87e0012e4a37ae3526a3224686225af679e3aaa2aeab0d";
 
-const provider = new ethers.providers.JsonRpcProvider("https://public-en-baobab.klaytn.net");
+const provider = new ethers.JsonRpcProvider(
+  "https://public-en-baobab.klaytn.net"
+);
 const wallet = new Wallet(senderPriv, provider);
 
 async function main() {
@@ -19,7 +22,7 @@ async function main() {
     from: senderAddr,
     key: {
       type: AccountKeyType.Legacy,
-    }
+    },
   };
 
   const sentTx = await wallet.sendTransaction(tx);

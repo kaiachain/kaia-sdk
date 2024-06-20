@@ -1,4 +1,4 @@
-const { JsonRpcProvider } = require("@klaytn/ethers-ext");
+const { JsonRpcProvider } = require("@klaytn/ethers-ext/v6");
 
 async function main() {
   let provider = new JsonRpcProvider("https://public-en-baobab.klaytn.net/");
@@ -11,7 +11,10 @@ async function main() {
   const peers = await provider.net.peerCountByType();
   console.log("net.peerCountByType", peers);
 
-  const account = await provider.klay.getAccount("0x1173d5dc7b5e1e07d857d74e962b6ed7d4234a92", "latest");
+  const account = await provider.klay.getAccount(
+    "0x1173d5dc7b5e1e07d857d74e962b6ed7d4234a92",
+    "latest"
+  );
   console.log("klay.getAccount", JSON.stringify(account, null, 2));
 
   // eth_ namespace JSON-RPCs are provided by the vanilla ethers.js provider methods:

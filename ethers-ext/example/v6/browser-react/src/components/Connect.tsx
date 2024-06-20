@@ -17,7 +17,7 @@ function Connect({ account, setAccount }: Props) {
     // Wrap the window.{ethereum,klaytn} object with Web3Provider.
     const provider = new Web3Provider(injectedProvider);
     // // Uncomment to use the original ethers.js Web3Provider:
-    // provider = new ethers.providers.Web3Provider(injectedProvider);
+    // provider = new ethers.Web3Provider(injectedProvider);
 
     const isMetaMask = injectedProvider.isMetaMask;
     const isKaikas = injectedProvider.isKaikas;

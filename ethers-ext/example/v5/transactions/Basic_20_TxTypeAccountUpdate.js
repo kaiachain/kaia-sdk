@@ -1,17 +1,21 @@
 // TxTypeAccountUpdate
 // https://docs.klaytn.foundation/docs/learn/transactions/
 
-const ethers = require("ethers");
+const ethers = require("ethers5");
 
-const { Wallet, TxType, AccountKeyType } = require("@klaytn/ethers-ext");
+const { Wallet, TxType, AccountKeyType } = require("@klaytn/ethers-ext/v5");
 
 // Using senderPriv == senderNewPriv to execute this example repeatedly.
 // But you might want to register a different private key.
 const senderAddr = "0xe15cd70a41dfb05e7214004d7d054801b2a2f06b";
-const senderPriv = "0x0e4ca6d38096ad99324de0dde108587e5d7c600165ae4cd6c2462c597458c2b8";
-const senderNewPriv = "0x0e4ca6d38096ad99324de0dde108587e5d7c600165ae4cd6c2462c597458c2b8";
+const senderPriv =
+  "0x0e4ca6d38096ad99324de0dde108587e5d7c600165ae4cd6c2462c597458c2b8";
+const senderNewPriv =
+  "0x0e4ca6d38096ad99324de0dde108587e5d7c600165ae4cd6c2462c597458c2b8";
 
-const provider = new ethers.providers.JsonRpcProvider("https://public-en-baobab.klaytn.net");
+const provider = new ethers.providers.JsonRpcProvider(
+  "https://public-en-baobab.klaytn.net"
+);
 const wallet = new Wallet(senderAddr, senderPriv, provider); // decoupled account
 
 async function main() {
@@ -24,7 +28,7 @@ async function main() {
     key: {
       type: AccountKeyType.Public,
       key: pub,
-    }
+    },
   };
 
   const sentTx = await wallet.sendTransaction(tx);

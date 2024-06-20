@@ -1,6 +1,4 @@
-const {
-  Wallet
-} = require("@klaytn/ethers-ext");
+const { Wallet } = require("@klaytn/ethers-ext/v6");
 
 // Klaytn V4 with multiple role-based keys. https://toolkit.klaytn.foundation/misc/generateKeystore
 const encryptedKey = `{
@@ -68,8 +66,12 @@ const password = "password";
 // const address = "0x17226c9B4e130551c258Eb7B1Cdc927c13998cd6";
 const keys = [
   "0x278c3d035328daf04ab2597da96dd2d8868fd61a8837030f7d8a85f27b7f1bad",
-  "0xa06d13800719307ea7e2503ea441c2ea49279d0d600a2eec2887b50928869676", "0xc32f4007ffad303db99dee0d79a720e1d70c4b2babf8e33cb28170a16bac467d",
-  "0xc274d13302891d0d91a60891a48fde8c2860018f8dcb6293dcc0b28a238590b0", "0x83c127e5207b70086a702c93f1c9a041f15ce49ee5183ce848f35c64de196eff", "0x48f97204ac4886dfbd819ada04ea31a730c6fc43fcb08900566360ee7402f93b"];
+  "0xa06d13800719307ea7e2503ea441c2ea49279d0d600a2eec2887b50928869676",
+  "0xc32f4007ffad303db99dee0d79a720e1d70c4b2babf8e33cb28170a16bac467d",
+  "0xc274d13302891d0d91a60891a48fde8c2860018f8dcb6293dcc0b28a238590b0",
+  "0x83c127e5207b70086a702c93f1c9a041f15ce49ee5183ce848f35c64de196eff",
+  "0x48f97204ac4886dfbd819ada04ea31a730c6fc43fcb08900566360ee7402f93b",
+];
 
 async function main() {
   const account = Wallet.fromEncryptedJsonListSync(encryptedKey, password);

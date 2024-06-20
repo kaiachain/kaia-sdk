@@ -19,7 +19,7 @@ async function connect(injectedProvider) {
   // Wrap the window.{ethereum,klaytn} object with Web3Provider.
   provider = new ethers_ext.providers.Web3Provider(injectedProvider);
   // Uncomment to use the original ethers.js Web3Provider:
-  // provider = new ethers.providers.Web3Provider(injectedProvider);
+  // provider = new ethers.Web3Provider(injectedProvider);
 
   // Detect user network
   // https://docs.metamask.io/wallet/how-to/connect/detect-network/
@@ -61,7 +61,9 @@ async function connectKK() {
 async function switchNetwork(networkSpec) {
   console.log("switching to", networkSpec);
   try {
-    await provider.send("wallet_switchEthereumChain", [{ chainId: networkSpec.chainId }]);
+    await provider.send("wallet_switchEthereumChain", [
+      { chainId: networkSpec.chainId },
+    ]);
   } catch (e) {
     await provider.send("wallet_addEthereumChain", [networkSpec]);
   }
@@ -88,11 +90,19 @@ async function signMsg() {
       const message = "Hello dapp";
       const hexMessage = hexlify(toUtf8Bytes(message));
 
-      const signature = await provider.send("eth_sign", [await signer.getAddress(), hexMessage]);
+      const signature = await provider.send("eth_sign", [
+        await signer.getAddress(),
+        hexMessage,
+      ]);
       console.log("signature", signature);
       $("#textSignature").html(signature);
 
-      const recoveredAddress = await provider.send("klay_recoverFromMessage", [await signer.getAddress(), hexMessage, signature, "latest"]);
+      const recoveredAddress = await provider.send("klay_recoverFromMessage", [
+        await signer.getAddress(),
+        hexMessage,
+        signature,
+        "latest",
+      ]);
       console.log("recoveredAddress", recoveredAddress);
       $("#textRecoveredAddress").html(recoveredAddress);
     } else {
@@ -123,7 +133,9 @@ async function doSendTx(makeTxRequest) {
     console.log("sentTx", sentTx);
     const txhash = sentTx.hash;
     const explorerUrl = "https://baobab.klaytnscope.com/tx/";
-    $("#textTxhash").html(`<a href="${explorerUrl}${txhash}" target="_blank">${txhash}</a>`);
+    $("#textTxhash").html(
+      `<a href="${explorerUrl}${txhash}" target="_blank">${txhash}</a>`
+    );
   } catch (err) {
     console.error(err);
     $("#textTxhash").html(`Error: ${err.message}`);
@@ -167,15 +179,20 @@ async function sendKlaytnSC() {
 // This operation is usually done in the backend by the dApp operator.
 // We do it here with hardcoded private key for demonstration purpose.
 async function doSendTxAsFeePayer(signedTx) {
-  const httpProvider = new ethers_ext.JsonRpcProvider("https://public-en-baobab.klaytn.net");
-  const feePayerPriv = "0xb3cf575dea0081563fe5482de2fe4425e025502b1f4ae7e02b2540ac0a5beda1";
+  const httpProvider = new ethers_ext.JsonRpcProvider(
+    "https://public-en-baobab.klaytn.net"
+  );
+  const feePayerPriv =
+    "0xb3cf575dea0081563fe5482de2fe4425e025502b1f4ae7e02b2540ac0a5beda1";
   const feePayerWallet = new ethers_ext.Wallet(feePayerPriv, httpProvider);
 
   const sentTx = await feePayerWallet.sendTransactionAsFeePayer(signedTx);
   console.log("sentTx", sentTx);
   const txhash = sentTx.hash;
   const explorerUrl = "https://baobab.klaytnscope.com/tx/";
-  $("#textTxhash").html(`<a href="${explorerUrl}${txhash}" target="_blank">${txhash}</a>`);
+  $("#textTxhash").html(
+    `<a href="${explorerUrl}${txhash}" target="_blank">${txhash}</a>`
+  );
 }
 
 async function doSignTx(makeTxRequest) {

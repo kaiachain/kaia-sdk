@@ -1,5 +1,4 @@
-import { getAddress } from "ethers6";
-import { BigNumber } from "@ethersproject/bignumber";
+import { BigNumberish, getAddress } from "ethers6";
 import { JsonRpcProvider } from "ethers6";
 import { SigningKey } from "ethers6";
 import { computeAddress } from "ethers6";
@@ -150,7 +149,7 @@ export class Accounts {
 type AccountInfo = {
   address: string;
   nonce: number;
-  balance: string | BigNumber;
+  balance: string | BigNumberish;
   key: any;
 };
 

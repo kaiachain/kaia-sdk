@@ -1,8 +1,8 @@
-import { getAddress } from "ethers6";
 import {
   ProgressCallback,
   decryptKeystoreJson,
   decryptKeystoreJsonSync,
+  getAddress,
 } from "ethers6";
 import _ from "lodash";
 

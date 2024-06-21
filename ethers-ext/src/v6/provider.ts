@@ -1,5 +1,7 @@
-import { FetchRequest, Networkish } from "ethers6";
+import { Logger } from "@ethersproject/logger";
 import {
+  FetchRequest,
+  Networkish,
   JsonRpcProvider as EthersJsonRpcProvider,
   BrowserProvider as EthersWeb3Provider,
 } from "ethers6";
@@ -17,7 +19,7 @@ import {
 } from "@klaytn/web3rpc";
 
 import { JsonRpcSigner } from "./signer";
-import { Logger } from "@ethersproject/logger";
+
 const logger = new Logger("@klaytn/ethers-ext");
 
 /* eslint-disable no-multi-spaces */

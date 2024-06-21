@@ -1,23 +1,23 @@
+import { Logger } from "@ethersproject/logger";
+import { Deferrable } from "@ethersproject/properties";
 import {
   SigningKey,
   TransactionLike,
   TypedDataDomain,
   TypedDataField,
   TypedDataEncoder,
-  JsonRpcProvider,
   BrowserProvider as EthersWeb3Provider,
   JsonRpcApiProvider as EthersJsonRpcApiProvider,
   JsonRpcSigner as EthersJsonRpcSigner,
   Provider,
   TransactionRequest,
   TransactionResponse,
+  Wallet as EthersWallet,
+  hexlify,
+  toUtf8Bytes,
+  ProgressCallback,
+  keccak256,
 } from "ethers6";
-import { hexlify } from "ethers6";
-import { ProgressCallback } from "ethers6";
-import { keccak256 } from "ethers6";
-import { Logger } from "@ethersproject/logger";
-import { toUtf8Bytes } from "ethers6";
-import { Wallet as EthersWallet } from "ethers6";
 import _ from "lodash";
 
 import {
@@ -107,7 +107,7 @@ export class Wallet extends EthersWallet {
   constructor(
     addressOrPrivateKey: string | SigningKey,
     privateKeyOrProvider?: SigningKey | Provider | string,
-    provider?: EthersJsonRpcApiProvider
+    provider?: Provider
   ) {
     if (HexStr.isHex(addressOrPrivateKey, 20)) {
       // First argument is an address. new KlaytnWallet(address, privateKey, provider?)
@@ -155,7 +155,9 @@ export class Wallet extends EthersWallet {
   }
 
   // Fill 'from' if not set. Check 'from' against the private key or decoupled address.
-  checkTransaction(transaction: TransactionRequest): TransactionRequest {
+  checkTransaction(
+    transaction: Deferrable<TransactionRequest>
+  ): Deferrable<TransactionRequest> {
     const tx = _.clone(transaction);
 
     const useLegacyFrom = !isKlaytnTxType(parseTxType(tx.type as number));
@@ -166,14 +168,14 @@ export class Wallet extends EthersWallet {
   }
 
   async populateTransaction(
-    transaction: TransactionRequest
+    transaction: Deferrable<TransactionRequest>
   ): Promise<TransactionLike<string>> {
     return this._populateTransaction(transaction, false);
   }
 
   // If asFeePayer is true, skip the 'from' address check.
   private async _populateTransaction(
-    transaction: TransactionRequest,
+    transaction: Deferrable<TransactionRequest>,
     asFeePayer: boolean
   ): Promise<TransactionLike<string>> {
     const tx = await getTransactionRequest(transaction);
@@ -200,7 +202,7 @@ export class Wallet extends EthersWallet {
   // tx.sigs += Sign(tx.sigRLP(), wallet.privateKey)
   // return tx.txHashRLP() or tx.senderTxHashRLP();
   override async signTransaction(
-    transaction: TransactionRequest
+    transaction: Deferrable<TransactionRequest>
   ): Promise<string> {
     const tx = await getTransactionRequest(transaction);
 
@@ -233,7 +235,7 @@ export class Wallet extends EthersWallet {
   // tx.feepayerSigs += Sign(tx.sigFeePayerRLP(), wallet.privateKey)
   // return tx.txHashRLP();
   async signTransactionAsFeePayer(
-    transactionOrRLP: TransactionRequest | string
+    transactionOrRLP: Deferrable<TransactionRequest> | string
   ): Promise<string> {
     const tx = await getTransactionRequest(transactionOrRLP);
 
@@ -260,7 +262,7 @@ export class Wallet extends EthersWallet {
   }
 
   async sendTransaction(
-    transaction: TransactionRequest
+    transaction: Deferrable<TransactionRequest>
   ): Promise<TransactionResponse> {
     const tx = await getTransactionRequest(transaction);
 
@@ -274,7 +276,7 @@ export class Wallet extends EthersWallet {
   }
 
   async sendTransactionAsFeePayer(
-    transactionOrRLP: TransactionRequest | string
+    transactionOrRLP: Deferrable<TransactionRequest> | string
   ): Promise<TransactionResponse> {
     const tx = await getTransactionRequest(transactionOrRLP);
 
@@ -293,15 +295,16 @@ export class Wallet extends EthersWallet {
   async _sendKlaytnRawTransaction(
     signedTx: string
   ): Promise<TransactionResponse> {
-    if (this.provider instanceof JsonRpcProvider) {
-      const txhash = await (this.provider as JsonRpcProvider)?.send(
-        "klay_sendRawTransaction",
-        [signedTx]
+    if (!(this.provider instanceof EthersJsonRpcApiProvider)) {
+      throw new Error(
+        "Provider is not JsonRpcProvider: cannot send klay_sendRawTransaction"
       );
-
+    } else {
+      const txhash = await this.provider.send("klay_sendRawTransaction", [
+        signedTx,
+      ]);
       return await pollTransactionInPool(txhash, this.provider);
     }
-    throw new Error("Provider not existed");
   }
 }
 
@@ -463,7 +466,9 @@ export class JsonRpcSigner extends EthersJsonRpcSigner {
     }
   }
 
-  checkTransaction(transaction: TransactionRequest): TransactionRequest {
+  checkTransaction(
+    transaction: Deferrable<TransactionRequest>
+  ): Deferrable<TransactionRequest> {
     const tx = _.clone(transaction);
     const expectedFrom = this.getAddress();
     populateFromSync(tx, expectedFrom);
@@ -471,7 +476,7 @@ export class JsonRpcSigner extends EthersJsonRpcSigner {
   }
 
   override async populateTransaction(
-    transaction: TransactionRequest
+    transaction: Deferrable<TransactionRequest>
   ): Promise<TransactionLike<string>> {
     const tx = await getTransactionRequest(transaction);
 
@@ -491,7 +496,7 @@ export class JsonRpcSigner extends EthersJsonRpcSigner {
 
   // Return the signed transaction as a string but do not send it.
   override async signTransaction(
-    transaction: TransactionRequest
+    transaction: Deferrable<TransactionRequest>
   ): Promise<string> {
     if (!this.isKaikas()) {
       return logger.throwError(
@@ -526,14 +531,14 @@ export class JsonRpcSigner extends EthersJsonRpcSigner {
   }
 
   override async sendTransaction(
-    transaction: TransactionRequest
+    transaction: Deferrable<TransactionRequest>
   ): Promise<TransactionResponse> {
     const txhash = await this.sendUncheckedTransaction(transaction);
     return pollTransactionInPool(txhash, this.provider);
   }
 
   async sendUncheckedTransaction(
-    transaction: TransactionRequest
+    transaction: Deferrable<TransactionRequest>
   ): Promise<string> {
     const tx = await getTransactionRequest(transaction);
     await populateFrom(tx, await this.getAddress());
@@ -571,7 +576,7 @@ export class JsonRpcSigner extends EthersJsonRpcSigner {
 // @ethersproject/providers/src.ts/json-rpc-provider.ts:UncheckedJsonRpcSigner
 class UncheckedJsonRpcSigner extends JsonRpcSigner {
   override async sendTransaction(
-    transaction: TransactionRequest
+    transaction: Deferrable<TransactionRequest>
   ): Promise<TransactionResponse> {
     const txhash = await this.sendUncheckedTransaction(transaction);
     return Promise.resolve({

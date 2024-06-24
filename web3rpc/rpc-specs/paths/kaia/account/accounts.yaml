@@ -1,0 +1,78 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/account/accounts:
+    post:
+      operationId: .accounts
+      summary: "[Account] kaia_accounts"
+      description: |
+        Returns a list of addresses owned by client.
+        
+        **JSONRPC:** `kaia_accounts`
+
+      tags:
+        - kaia
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  required:
+                    - method
+                    - params
+                  properties:
+                    method:
+                      type: string
+                      default: 'kaia_accounts'
+
+      responses:
+        200:
+          description: Returns a list of addresses owned by client.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaAccountsResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/account/accounts.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/account/KaiaAccountsExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/account/accounts.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/account/accounts.py"
+
+components:
+  schemas:
+    KaiaAccountsResp:
+      type: object
+      properties:
+        result:
+          type: array
+          description: Addresses owned by the client
+          items:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/Address"
+          example:  ["0xc94770007dda54cF92009BFF0dE90c06F603a09f"]

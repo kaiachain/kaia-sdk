@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    api "foundation.klaytn:web3rpc-java:v0.9.0"
+    api "foundation.klaytn:web3rpc-java:v1.0.1"
     implementation "org.web3j:core:4.9.7"
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.6'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'

@@ -161,6 +161,22 @@ class KlayApi(Module):
         return self._get_account_key(*args)
     
     
+    _get_active_address_from_registry: Method[Callable[..., Any]] = Method(
+        namespace + "_getActiveAddressFromRegistry", mungers=[default_root_munger]
+    )
+
+    def get_active_address_from_registry(self, *args) -> Any:
+        return self._get_active_address_from_registry(*args)
+    
+    
+    _get_all_records_from_registry: Method[Callable[..., Any]] = Method(
+        namespace + "_getAllRecordsFromRegistry", mungers=[default_root_munger]
+    )
+
+    def get_all_records_from_registry(self, *args) -> Any:
+        return self._get_all_records_from_registry(*args)
+    
+    
     _get_balance: Method[Callable[..., Any]] = Method(
         namespace + "_getBalance", mungers=[default_root_munger]
     )
@@ -231,6 +247,14 @@ class KlayApi(Module):
 
     def get_block_with_consensus_info_by_number_range(self, *args) -> Any:
         return self._get_block_with_consensus_info_by_number_range(*args)
+    
+    
+    _get_bls_infos: Method[Callable[..., Any]] = Method(
+        namespace + "_getBlsInfos", mungers=[default_root_munger]
+    )
+
+    def get_bls_infos(self, *args) -> Any:
+        return self._get_bls_infos(*args)
     
     
     _get_code: Method[Callable[..., Any]] = Method(
@@ -375,6 +399,14 @@ class KlayApi(Module):
 
     def get_storage_at(self, *args) -> Any:
         return self._get_storage_at(*args)
+    
+    
+    _get_total_supply: Method[Callable[..., Any]] = Method(
+        namespace + "_getTotalSupply", mungers=[default_root_munger]
+    )
+
+    def get_total_supply(self, *args) -> Any:
+        return self._get_total_supply(*args)
     
     
     _get_transaction_by_block_hash_and_index: Method[Callable[..., Any]] = Method(
@@ -798,6 +830,22 @@ class AsyncKlayApi(Module):
         return await self._get_account_key(*args)
     
     
+    _get_active_address_from_registry: Method[Callable[..., Awaitable[Any]]] = Method(
+        namespace + "_getActiveAddressFromRegistry", mungers=[default_root_munger]
+    )
+
+    async def get_active_address_from_registry(self, *args) -> Any:
+        return await self._get_active_address_from_registry(*args)
+    
+    
+    _get_all_records_from_registry: Method[Callable[..., Awaitable[Any]]] = Method(
+        namespace + "_getAllRecordsFromRegistry", mungers=[default_root_munger]
+    )
+
+    async def get_all_records_from_registry(self, *args) -> Any:
+        return await self._get_all_records_from_registry(*args)
+    
+    
     _get_balance: Method[Callable[..., Awaitable[Any]]] = Method(
         namespace + "_getBalance", mungers=[default_root_munger]
     )
@@ -868,6 +916,14 @@ class AsyncKlayApi(Module):
 
     async def get_block_with_consensus_info_by_number_range(self, *args) -> Any:
         return await self._get_block_with_consensus_info_by_number_range(*args)
+    
+    
+    _get_bls_infos: Method[Callable[..., Awaitable[Any]]] = Method(
+        namespace + "_getBlsInfos", mungers=[default_root_munger]
+    )
+
+    async def get_bls_infos(self, *args) -> Any:
+        return await self._get_bls_infos(*args)
     
     
     _get_code: Method[Callable[..., Awaitable[Any]]] = Method(
@@ -1012,6 +1068,14 @@ class AsyncKlayApi(Module):
 
     async def get_storage_at(self, *args) -> Any:
         return await self._get_storage_at(*args)
+    
+    
+    _get_total_supply: Method[Callable[..., Awaitable[Any]]] = Method(
+        namespace + "_getTotalSupply", mungers=[default_root_munger]
+    )
+
+    async def get_total_supply(self, *args) -> Any:
+        return await self._get_total_supply(*args)
     
     
     _get_transaction_by_block_hash_and_index: Method[Callable[..., Awaitable[Any]]] = Method(

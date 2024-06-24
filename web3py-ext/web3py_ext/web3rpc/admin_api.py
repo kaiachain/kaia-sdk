@@ -80,12 +80,12 @@ class AdminApi(GethAdmin):
         return self._node_config(*args)
     
     
-    _node_information: Method[Callable[..., Any]] = Method(
-        namespace + "_nodeInformation".replace("Ws", "WS"), mungers=[default_root_munger]
+    _node_info: Method[Callable[..., Any]] = Method(
+        namespace + "_nodeInfo".replace("Ws", "WS"), mungers=[default_root_munger]
     )
 
-    def node_information(self, *args) -> Any:
-        return self._node_information(*args)
+    def node_info(self, *args) -> Any:
+        return self._node_info(*args)
     
     
     _remove_peer: Method[Callable[..., Any]] = Method(
@@ -269,12 +269,12 @@ class AsyncAdminApi(AsyncGethAdmin):
         return await self._node_config(*args)
     
     
-    _node_information: Method[Callable[..., Awaitable[Any]]] = Method(
-        namespace + "_nodeInformation", mungers=[default_root_munger]
+    _node_info: Method[Callable[..., Awaitable[Any]]] = Method(
+        namespace + "_nodeInfo", mungers=[default_root_munger]
     )
 
-    async def node_information(self, *args) -> Any:
-        return await self._node_information(*args)
+    async def node_info(self, *args) -> Any:
+        return await self._node_info(*args)
     
     
     _remove_peer: Method[Callable[..., Awaitable[Any]]] = Method(

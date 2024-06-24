@@ -1,0 +1,105 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/account/getTransactionCount:
+    post:
+      operationId: .getTransactionCount
+      summary: "[Account] kaia_getTransactionCount"
+      description: |
+        Returns the number of transactions sent from an address.
+
+        **NOTE:** *In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available*
+
+        **JSONRPC:** `kaia_getTransactionCount`
+      tags:
+        - kaia
+
+      parameters:
+        - name: Address
+          required: true
+          schema:
+            type: string
+            format: 20-byte DATA
+          description: Address
+          in: query
+        - name: blockNumberOrHashOrTag
+          in: query
+          description: Integer or hexadecimal block number, or the string "earliest", "latest" or "pending" as in the default block parameter, or block hash.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetTransactionCountReq"
+
+      responses:
+        200:
+          description: Returns the number of transactions sent from an address.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetTransactionCountResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/account/getTransactionCount.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/account/KaiaGetTransactionCountExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/account/getTransactionCount.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/account/getTransactionCount.py"
+
+components:
+  schemas:
+    KaiaGetTransactionCountReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getTransactionCount'
+        params:
+          type: array
+          items:
+            properties:
+              Address:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/Address"
+              BlockNumberOrHashOrTag:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+          example:  ["0xc94770007dda54cF92009BFF0dE90c06F603a09f","latest"]
+
+    KaiaGetTransactionCountResp:
+      type: object
+      properties:
+        result:
+          type: string
+          format: hex
+          description: Integer of the number of transactions send from this address.
+          example: "0x1"

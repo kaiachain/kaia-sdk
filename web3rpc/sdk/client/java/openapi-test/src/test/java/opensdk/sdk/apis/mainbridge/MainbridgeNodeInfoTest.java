@@ -1,11 +1,11 @@
-package opensdk.sdk.apis.net;
+package opensdk.sdk.apis.mainbridge;
 
 import opensdk.sdk.apis.constant.UrlConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.web3j.protocol.core.methods.response.NetListening;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.klaytn.Web3j;
+import org.web3j.protocol.klaytn.core.method.response.MainbridgeNodeInfoResponse;
 
 import java.io.IOException;
 
@@ -18,7 +18,7 @@ public class MainbridgeNodeInfoTest {
     @Test
     @DisplayName("RPC main_bridge")
     void whenRequestValid_ThenCall200ResponseReturns() throws IOException {
-        NetListening response = w3.mainbridgeGetNodeInfo().send();
+        MainbridgeNodeInfoResponse response = w3.mainbridgeNodeInfo ().send();
         assertNotNull(response);
         assertNull(response.getError());
         assertNotNull(response.getResult());

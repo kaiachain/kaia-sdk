@@ -1,0 +1,106 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/account/encodeAccountKey:
+    post:
+      operationId: .encodeAccountKey
+      summary: "[Account] kaia_encodeAccountKey"
+      description: |
+        Encodes an account key using the Recursive Length Prefix (RLP) encoding scheme.
+
+        **JSONRPC:** `kaia_encodeAccountKey`
+      tags:
+        - kaia
+
+      parameters:
+        - name: object
+          in: query
+          description: object
+          required: true
+          schema:
+            type: object
+            properties:
+              keytype:
+                type: integer
+                description: Integer value indicating account key type. For the value of each account key type, see AccountKey.
+              key:
+                type: object
+                description: Account key object
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaEncodeAccountKeyReq"
+
+      responses:
+        200:
+          description: Return RLP encoded account key
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaEncodeAccountKeyResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/account/encodeAccountKey.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/account/KaiaEncodeAccountKeyExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/account/encodeAccountKey.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/account/encodeAccountKey.py"
+
+components:
+  schemas:
+    KaiaEncodeAccountKeyReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_encodeAccountKey'
+        params:
+          type: array
+          items:
+            type: object
+            properties:
+              keytype:
+                type: integer
+                description: "Integer value indicating account key type. For the value of each account key type, see AccountKey."
+              key:
+                type: object
+                description: "Account key object"
+          example: [{"keyType": 1, "key": {}}]
+
+    KaiaEncodeAccountKeyResp:
+      type: object
+      properties:
+        result:
+          type: string
+          description: RLP encoded account key
+          format: DATA
+          example: "0x01c0"

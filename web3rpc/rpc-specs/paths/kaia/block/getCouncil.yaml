@@ -1,0 +1,102 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/block/getCouncil:
+    post:
+      operationId: .getCouncil
+      summary: "[Block] kaia_getCouncil"
+      description: |
+        Returns a list of all validators of the council at the specified block. If the parameter is not set, returns a list of all validators of the council at the latest block.
+
+        **NOTE:** 
+        
+        *kaia_getValidators is replaced with this method and is not supported anymore.*
+        
+        *In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available.*
+
+        **JSONRPC:** `kaia_getCouncil`
+      tags:
+        - kaia
+
+      parameters:
+        - name: blockNumberOrTag
+          in: query
+          description: (optional) Integer or hexadecimal block number, or the string "earliest" or "latest" as in the default block parameter.
+          required: false
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetCouncilReq"
+
+      responses:
+        200:
+          description: Array - Array of validator addresses of the council, or null when no council was found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetCouncilResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/block/getCouncil.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/block/KaiaGetCouncilExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/block/getCouncil.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/block/getCouncil.py"
+components:
+  schemas:
+    KaiaGetCouncilReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getCouncil'
+        params:
+          type: array
+          items:
+            properties:
+              BlockNumberOrTag:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+          example:  ["0x1b4"]
+
+    KaiaGetCouncilResp:
+      type: object
+      properties:
+        result:
+          description: Addresses of all validators of the council.
+          type: array
+          items:
+            type: string
+            format: hex
+            description: Addresses of all validators of the council
+            example: "0x207e38864b45a538733741dc1ff92eff9d1a6159"

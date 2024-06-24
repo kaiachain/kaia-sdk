@@ -48,19 +48,19 @@ paths:
                   - $ref: "#/components/schemas/DebugWriteMutexProfileResp"
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../../code-samples/curl/debug/profiling/writeMutexProfile.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/debug/profiling/DebugWriteMutexProfileExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../../code-samples/javascript/debug/profilling/writeMutexProfile.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref: "../../../code-samples/python/debug/profiling/writeMutexProfile.py"

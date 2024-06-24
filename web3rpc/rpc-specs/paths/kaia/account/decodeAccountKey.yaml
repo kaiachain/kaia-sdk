@@ -1,0 +1,147 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/account/decodeAccountKey:
+    post:
+      operationId: .decodeAccountKey
+      summary: "[Account] kaia_decodeAccountKey"
+      description: |
+        Decodes an RLP encoded account key.
+
+        **JSONRPC:** `kaia_decodeAccountKey`
+      tags:
+        - kaia
+
+      parameters:
+        - name: encodedAccountKey
+          in: query
+          description: RLP encoded account key
+          required: true
+          schema:
+            type: string
+            format: DATA
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaDecodeAccountKeyReq"
+
+      responses:
+        200:
+          description: Decodes an RLP encoded account key.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaDecodeAccountKeyResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/account/decodeAccountKey.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/account/KaiaDecodeAccountKeyExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/account/decodeAccountKey.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/account/decodeAccountKey.py"
+components:
+  schemas:
+    KaiaDecodeAccountKeyReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_decodeAccountKey'
+        params:
+          type: array
+          description: RLP encoded account key
+          items:
+            title: EncodedAccountKey
+            type: string
+            format: DATA
+          example: ["0x05f898a302a103e4a01407460c1c03ac0c82fd84f303a699b210c0b054f4aff72ff7dcdf01512db84e04f84b02f848e301a103e4a01407460c1c03ac0c82fd84f303a699b210c0b054f4aff72ff7dcdf01512de301a10336f6355f5b532c3c1606f18fa2be7a16ae200c5159c8031dd25bfa389a4c9c06a302a102c8785266510368d9372badd4c7f4a94b692e82ba74e0b5e26b34558b0f081447"]
+
+    KaiaDecodeAccountKeyResp:
+      type: object
+      properties:
+        result:
+          type: object
+          required: 
+            - keytype
+            - key
+          properties:
+            keytype:
+              type: number
+              description: "Integer value indicating account key type."
+            key:
+              type: array
+              items:
+                type: object
+              description: "Account key object"
+          example:
+            {
+              "key": [
+                {
+                  "key": {
+                    "x": "0xe4a01407460c1c03ac0c82fd84f303a699b210c0b054f4aff72ff7dcdf01512d",
+                    "y": "0xa5735a23ce1654b14680054a993441eae7c261983a56f8e0da61280758b5919"
+                  },
+                  "keyType": 2
+                },
+                {
+                  "key": {
+                    "keys": [
+                      {
+                        "key": {
+                          "x": "0xe4a01407460c1c03ac0c82fd84f303a699b210c0b054f4aff72ff7dcdf01512d",
+                          "y": "0xa5735a23ce1654b14680054a993441eae7c261983a56f8e0da61280758b5919"
+                        },
+                        "weight": 1
+                      },
+                      {
+                        "key": {
+                          "x": "0x36f6355f5b532c3c1606f18fa2be7a16ae200c5159c8031dd25bfa389a4c9c06",
+                          "y": "0x6fdf9fc87a16ac359e66d9761445d5ccbb417fb7757a3f5209d713824596a50d"
+                        },
+                        "weight": 1
+                      }
+                    ],
+                    "threshold": 2
+                  },
+                  "keyType": 4
+                },
+                {
+                  "key": {
+                    "x": "0xc8785266510368d9372badd4c7f4a94b692e82ba74e0b5e26b34558b0f081447",
+                    "y": "0x94c27901465af0a703859ab47f8ae17e54aaba453b7cde5a6a9e4a32d45d72b2"
+                  },
+                  "keyType": 2
+                }
+              ],
+              "keyType": 5
+            }
+

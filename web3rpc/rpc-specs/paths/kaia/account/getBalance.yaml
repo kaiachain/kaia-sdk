@@ -1,0 +1,104 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/account/getBalance:
+    post:
+      operationId: .getBalance
+      summary: "[Account] kaia_getBalance"
+      description: |
+        Returns the balance of the account of given address.
+
+        **NOTE:** *In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available.*`
+
+        **JSONRPC:** `kaia_getBalance`
+      tags:
+        - kaia
+
+      parameters:
+        - name: address
+          in: query
+          description: Address
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/Address"
+        - name: blockNumberOrHash
+          in: query
+          description: Integer or hexadecimal block number, or the string "earliest", "latest" or "pending" as in the default block parameter, or block hash.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetBalanceReq"
+
+      responses:
+        200:
+          description: Returns the balance of the account of given address.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetBalanceResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/account/getBalance.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/account/KaiaGetBalanceExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/account/getBalance.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/account/getBalance.py"
+
+components:
+  schemas:
+    KaiaGetBalanceReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getBalance'
+        params:
+          type: array
+          items:
+            properties:
+              Address:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/Address"
+              BlockNumberOrHashOrTag:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+          example:  ["0x3111a0577f322e8fb54f78d9982a26ae7ca0f722", "latest"]
+
+    KaiaGetBalanceResp:
+      type: object
+      properties:
+        result:
+          type: string
+          format: hex
+          description: Integer of the current balance in peb.
+          example: 0x0234c8a3397aab58

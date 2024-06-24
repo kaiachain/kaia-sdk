@@ -10,19 +10,60 @@ components:
           enum: ["4byteTracer","callTracer","fastCallTracer","evmdisTracer","noopTracer","opcountTracer","prestateTracer","revertTracer","unigramTracer","bigramTracer","trigramTracer"]
           description: |
             Setting this will enable JavaScript-based transaction tracing, described in the next section. If set, the previous four arguments will be ignored. The predefined tracers can also be used as the following table.
-            | Tracer Name | Description |
-            |-----|-----|
-            | 4byteTracer | 4byteTracer searches for 4byte-identifiers, and collects them for post-processing. It collects the methods identifiers along with the size of the supplied data, so a reversed signature can be matched against the size of the data. |
-            | callTracer | callTracer is a full-blown transaction tracer that extracts and reports all the internal calls made by a transaction, along with any useful information. |
-            | fastCallTracer | fastCallTracer is a Go-native version of callTracer. Since it is not executed on JavaScript VM, it shows more than 10x speedup compared to callTracer. Please use fastCallTracer instead of callTracer if the performance is the matter of the first importance. |
-            | evmdisTracer | evmdisTracer returns sufficient information from a trace to perform evmdis-style disassembly. |
-            | noopTracer | noopTracer is just the barebone boilerplate code required from a JavaScript object to be usable as a transaction tracer. |
-            | opcountTracer | opcountTracer is a sample tracer that just counts the number of instructions executed by the KLVM before the transaction terminated. |
-            | prestateTracer | prestateTracer outputs sufficient information to create a local execution of the transaction from a custom assembled genesis block. |
-            | revertTracer | revertTracer outputs the error string of REVERT. If the execution is not reverted, it outputs an empty string. |
-            | unigramTracer | unigramTracer returns the number of occurrences of each opcode. |
-            | bigramTracer | bigramTracer returns the number of occurrences of two consecutive opcodes. |
-            | trigramTracer | trigramTracer returns the number of occurrences of three consecutive opcodes. |
+            <table>
+              <thead>
+                <tr>
+                  <th>Tracer Name</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>4byteTracer</td>
+                  <td>traces 4-byte solidity function signatures.</td>
+                </tr>
+                <tr>
+                  <td>callTracer</td>
+                  <td>a slow version of fastCallTracer. It is deprecated in favor of fastCallTracer.</td>
+                </tr>
+                <tr>
+                  <td>fastCallTracer</td>
+                  <td>traces internal contract calls, gas usage, and call results.</td>
+                </tr>
+                <tr>
+                  <td>evmdisTracer</td>
+                  <td>returns information needed to perform evmdis-style disassembly.</td>
+                </tr>
+                <tr>
+                  <td>noopTracer</td>
+                  <td>is a template tracer that does nothing.</td>
+                </tr>
+                <tr>
+                  <td>opcountTracer</td>
+                  <td>is a sample tracer that counts the executed opcode.</td>
+                </tr>
+                <tr>
+                  <td>prestateTracer</td>
+                  <td>returns information needed to construct a custom local genesis state that this transaction can run on.</td>
+                </tr>
+                <tr>
+                  <td>revertTracer</td>
+                  <td>returns the revert reason, or an empty string if the transaction has not reverted.</td>
+                </tr>
+                <tr>
+                  <td>unigramTracer</td>
+                  <td>counts the occurrence of each opcode.</td>
+                </tr>
+                <tr>
+                  <td>bigramTracer</td>
+                  <td>counts the occurrence of two consecutive opcodes.</td>
+                </tr>
+                <tr>
+                  <td>trigramTracer</td>
+                  <td>counts the occurrence of three consecutive opcodes.</td>
+                </tr>
+              </tbody>
+            </table>
     TracerCallObject:
       title: TracerCallObject
       type: object
@@ -821,12 +862,12 @@ components:
       items:
         type: string
         format: Hexadecimal
-      description: An array of block base fees per gas. This includes the next block after the newest of the returned range, because this value can be derived from the newest block.
+      description: An array of block base fee per gas. This includes the next block after the newest of the returned range, because this value can be derived from the newest block. Zeroes are returned for pre-Magma blocks.
 
     Reward:
       title: Reward
       type: array
-      description: An array of effective priority fee per gas data points from a single block. All zeroes are returned if the block is empty.
+      description: A 2D array of effective priority fees per gas. `reward[n][i]` is the `rewardPercentiles[i]-th` percentile effective priority fees per gas among the transactions in the block `oldestBlock + n`. Only returned if rewardPercentiles is specified.
       items:
         type: array
         items:
@@ -1591,37 +1632,81 @@ components:
       properties:
         disableStorage:
           type: boolean
-          description: Setting this to true will disable storage capture (default = false).
+          description: "Setting this to true will disable storage capture in the null (structLog) tracer (default: false)."
           default: false
         disableMemory:
           type: boolean
-          description: Setting this to true will disable memory capture (default = false).
+          description: "Setting this to true will disable memory capture in the null (structLog) tracer (default: false)."
           default: false
         disableStack:
           type: boolean
-          description: Setting this to true will disable stack capture (default = false).
+          description: "Setting this to true will disable stack capture in the null (structLog) tracer (default: false)."
           default: false
         timeout:
           type: string
-          description: Overrides the default timeout of 5 seconds for JavaScript-based tracing calls. A duration string is a possibly signed sequence of decimal numbers, each with optional fraction and a unit suffix, such as "300ms", "-1.5h" or "2h45m". Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h".
+          description: Overrides the default timeout of 5 seconds for trace-enabled EVM execution. A duration string can be anything that is accepted by [Go time.ParseDuration](https://pkg.go.dev/time#ParseDuration) function such as "10s" or "300ms".
         trace:
           type: string
-          enum: ["4byteTracer","callTracer","fastCallTracer","evmdisTracer","noopTracer","opcountTracer","prestateTracer","revertTracer","unigramTracer","bigramTracer","trigramTracer"]
+          enum: [null,"4byteTracer","callTracer","fastCallTracer","evmdisTracer","noopTracer","opcountTracer","prestateTracer","revertTracer","unigramTracer","bigramTracer","trigramTracer", "custom javascript tracer code"]
           description: |
-            Setting this will enable JavaScript-based transaction tracing, described in the next section. If set, the previous four arguments will be ignored. The predefined tracers can also be used as the following table.
-            | Tracer Name | Description |
-            |-----|-----|
-            | 4byteTracer | 4byteTracer searches for 4byte-identifiers, and collects them for post-processing. It collects the methods identifiers along with the size of the supplied data, so a reversed signature can be matched against the size of the data. |
-            | callTracer | callTracer is a full-blown transaction tracer that extracts and reports all the internal calls made by a transaction, along with any useful information. |
-            | fastCallTracer | fastCallTracer is a Go-native version of callTracer. Since it is not executed on JavaScript VM, it shows more than 10x speedup compared to callTracer. Please use fastCallTracer instead of callTracer if the performance is the matter of the first importance. |
-            | evmdisTracer | evmdisTracer returns sufficient information from a trace to perform evmdis-style disassembly. |
-            | noopTracer | noopTracer is just the barebone boilerplate code required from a JavaScript object to be usable as a transaction tracer. |
-            | opcountTracer | opcountTracer is a sample tracer that just counts the number of instructions executed by the KLVM before the transaction terminated. |
-            | prestateTracer | prestateTracer outputs sufficient information to create a local execution of the transaction from a custom assembled genesis block. |
-            | revertTracer | revertTracer outputs the error string of REVERT. If the execution is not reverted, it outputs an empty string. |
-            | unigramTracer | unigramTracer returns the number of occurrences of each opcode. |
-            | bigramTracer | bigramTracer returns the number of occurrences of two consecutive opcodes. |
-            | trigramTracer | trigramTracer returns the number of occurrences of three consecutive opcodes. |
+            If this field is empty or null, then the structLog tracer is used where the execution of every opcode is shown in detail. This null tracer is extremely heavy and usually too verbose for any debugging purpose, so it is advised to use other predefined tracers. This field can be the name of one of the predefined tracers shown below.
+            
+            <table>
+              <thead>
+                <tr>
+                  <th>Tracer Name</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>4byteTracer</td>
+                  <td>traces 4-byte solidity function signatures.</td>
+                </tr>
+                <tr>
+                  <td>callTracer</td>
+                  <td>a slow version of fastCallTracer. It is deprecated in favor of fastCallTracer.</td>
+                </tr>
+                <tr>
+                  <td>fastCallTracer</td>
+                  <td>traces internal contract calls, gas usage, and call results.</td>
+                </tr>
+                <tr>
+                  <td>evmdisTracer</td>
+                  <td>returns information needed to perform evmdis-style disassembly.</td>
+                </tr>
+                <tr>
+                  <td>noopTracer</td>
+                  <td>is a template tracer that does nothing.</td>
+                </tr>
+                <tr>
+                  <td>opcountTracer</td>
+                  <td>is a sample tracer that counts the executed opcode.</td>
+                </tr>
+                <tr>
+                  <td>prestateTracer</td>
+                  <td>returns information needed to construct a custom local genesis state that this transaction can run on.</td>
+                </tr>
+                <tr>
+                  <td>revertTracer</td>
+                  <td>returns the revert reason, or an empty string if the transaction has not reverted.</td>
+                </tr>
+                <tr>
+                  <td>unigramTracer</td>
+                  <td>counts the occurrence of each opcode.</td>
+                </tr>
+                <tr>
+                  <td>bigramTracer</td>
+                  <td>counts the occurrence of two consecutive opcodes.</td>
+                </tr>
+                <tr>
+                  <td>trigramTracer</td>
+                  <td>counts the occurrence of three consecutive opcodes.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            Otherwise this field is interpreted as a piece of javascript code. You can find more about custom JS tracer [here](https://docs.chainstack.com/reference/custom-js-tracing-ethereum) and [here](https://geth.ethereum.org/docs/developers/evm-tracing/custom-tracer). Below is an example custom tracer that prints the gasUsed after each opcode `"{gasUsed: [], step: function(log) { this.gasUsed.push(log.getGas()); }, result: function() { return this.gasUsed; }, fault: function() {}}"`. Note that some nodes with `--rpc.unsafe-debug.disable` option will prohibit custom tracer.
 
     StandardTracingOptions:
       title: StandardTracingOptions
@@ -1643,3 +1728,316 @@ components:
         txHash:
           type: string
           description: Setting this value will trace only the specified transaction.
+    
+    KaiaCallObject:
+      title: KaiaCallObject
+      type: object
+      description: The transaction call object. See the next table for the object's properties.
+      properties:
+        from:
+          type: string
+          format: 20-byte DATA
+          description: (optional) The address the transaction is sent from.
+        to:
+          type: string
+          format: 20-byte DATA
+          description: (optional when testing the deployment of a new contract) The address the transaction is directed to.
+        gas:
+          type: string
+          format: hex
+          description: (optional) Integer of the gas provided for the transaction execution. kaia_call consumes zero gas, but this parameter may be needed by some executions.
+        gasPrice:
+          type: string
+          format: hex
+          description: (optional) Integer of the gasPrice used for each paid gas.
+        value:
+          type: string
+          format: hex
+          description: (optional) Integer of the value sent with this transaction.
+        input:
+          type: string
+          format: DATA
+          description: (optional) Hash of the method signature and encoded parameters. It replaces data field, but 'data` field is still supported for backward compatibility.
+
+    KaiaHeaderObject:
+      title: KaiaHeaderObject
+      type: object
+      description: The block header object.
+      required:
+        - parentHash
+        - hash
+        - transactionsRoot
+        - stateRoot
+        - receiptsRoot
+        - reward
+        - blockScore
+        - extraData
+        - gasUsed
+        - timestamp
+        - timestampFoS
+        - governanceData
+        - voteData
+        - baseFeePerGas
+      properties:
+        number:
+          type: string
+          format: hex
+          nullable: true
+          description: The block number. null when its pending block.
+        hash:
+          type: string
+          format: 32-byte DATA
+          nullable: true
+          description: Hash of the block. null when it is pending block.
+        parentHash:
+          type: string
+          format: 32-byte DATA
+          description: Hash of the parent block.
+        logsBloom:
+          type: string
+          format: 256-byte DATA
+          nullable: true
+          description: The bloom filter for the logs of the block. null when it is pending block.
+        transactionsRoot:
+          type: string
+          format: 32-byte DATA
+          description: The root of the transaction trie of the block
+        stateRoot:
+            type: string
+            format: 32-byte DATA
+            description: The root of the final state trie of the block.
+        receiptsRoot:
+            type: string
+            format: 32-byte DATA
+            description: The root of the receipts trie of the block.
+        reward:
+            type: string
+            format: 20-byte DATA
+            description: The address of the beneficiary to whom the block rewards were given.
+        blockScore:
+            type: string
+            format: hex
+            description: Former difficulty. Always 1 in the BFT consensus engine
+        extraData:
+            type: string
+            format: DATA
+            description: The "extra data" field of this block.
+        gasUsed:
+            type: string
+            format: hex
+            description: The total used gas by all transactions in this block.
+        timestamp:
+            type: string
+            format: hex
+            description: The Unix timestamp for when the block was collated.
+        timestampFoS:
+            type: string
+            format: hex
+            description: The fraction of a second of the timestamp for when the block was collated.
+        governanceData:
+            type: string
+            format: DATA
+            description: RLP encoded governance configuration
+        voteData:
+            type: string
+            format: DATA
+            description: RLP encoded governance vote of the proposer
+        baseFeePerGas:
+            type: string
+            format: hex
+            description: The base fee per gas. It has a meaningful value when EthTxTypeCompatible and Magma hardforks are activated.
+      example:
+        {
+          "baseFeePerGas": "0x5d21dba00",
+          "blockScore": "0x1",
+          "extraData": "0xda83010800846b6c617989676f312e31362e31338664617277696e0000000000f89ed5949712f943b296758aaae79944ec975884188d3a96b841ddfdf7e2cb0a93538f757f87f23a93ee35df703c781c6f15e31e4978ecdfb3501fc00924372b9a01df2bc452f2a924c242d83580183d131c47e49a25b78f625201f843b841b9b6034d5a8c5f5b057274cda4f427614cd1f448ee781f4c4322861d1361d09d47d6030f2b69a26cb426db984f54e71f8c112fbf882930ccd715d595e8d8307500",
+          "gasUsed": "0x0",
+          "governanceData": "0x",
+          "hash": "0xe882d7a16f38126dc0c507f990b3fe18fa2d3a380002538581327abe96ca6edc",
+          "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "number": "0x1e67",
+          "parentHash": "0x28b1c054346c3bd083741c757a750dcabf94b6d50c7f87158753544e96e73550",
+          "receiptsRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+          "reward": "0x4b2c736fd05c2e2da3ccbd001a395a444f16a861",
+          "stateRoot": "0xdf9885621c9e6e75912ca94d6987bcb1b54fef0e4a99cbec5e68f1ffc7468a78",
+          "timestamp": "0x62130beb",
+          "timestampFoS": "0x0",
+          "transactionsRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+        }
+
+    KaiaArrayOfLog:
+      title: KaiaArrayOfLog
+      type: array
+      items:
+        anyOf:
+          - type: string
+            format: 32-byte DATA
+            title: BlockHash
+            description: For filters created with kaia_newBlockFilter, the return are block hashes (32-byte DATA), e.g., ["0x3454645634534..."].
+          - type: string
+            format: 32-byte DATA
+            title: TransactionHash
+            description: For filters created with kaia_newPendingTransactionFilter, the return are transaction hashes (32-byte DATA), e.g., ["0x6345343454645..."].
+          - $ref: "#/components/schemas/LogObject"
+      description: Array of log objects, or an empty array if nothing has changed since last poll.
+      example:
+        [
+          {
+            "address": "0x87ac99835e67168d4f9a40580f8f5c33550ba88b",
+            "topics": [ "0xfa9b2165fc71c1d6ffa03291c7f5d223ea363ec063d747eec9ce2d30d24855ef" ],
+            "data": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000060000000000000000000000000d3564e57bb5c6f4d983a493a946534f8e1e8b481000000000000000000000000000000000000000000000000000000000000001341646472657373426f6f6b436f6e747261637400000000000000000000000000",
+            "blockNumber": "0xd3b5",
+            "transactionHash": "0x57ca8ff0a0d454d4c5418694c21bc4ef3de26cf7cd18dd404d6a7189a826bfe0",
+            "transactionIndex": "0x0",
+            "blockHash": "0x279251a907c6ab1fb723595511ff401432e7c2437d54189298f53a7d33ce3a60",
+            "logIndex": "0x0",
+            "removed": false
+          },
+          {
+            "address": "0x87ac99835e67168d4f9a40580f8f5c33550ba88b",
+            "topics": [ "0xfa3e1e272694072320aad73a3fadd8876c4bf8f40899c6c7ce2fda9f4e652cfa" ],
+            "data": "0x00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000000300000000000000000000000041383b6ee0ea5108d6b139165a9c85351aacd39800000000000000000000000057f7439898e652fa9b5654022297588532e5e0370000000000000000000000005b5b7a718a4124eb746ae00b1ce6edcaa5ab55bc",
+            "blockNumber": "0xd3b5",
+            "transactionHash": "0x57ca8ff0a0d454d4c5418694c21bc4ef3de26cf7cd18dd404d6a7189a826bfe0",
+            "transactionIndex": "0x0",
+            "blockHash": "0x279251a907c6ab1fb723595511ff401432e7c2437d54189298f53a7d33ce3a60",
+            "logIndex": "0x1",
+            "removed": false
+          }
+        ]
+
+    KaiaBlock:
+      type: object
+      required: 
+        - number
+        - hash
+        - parentHash
+        - logsBloom
+        - transactionsRoot
+        - stateRoot
+        - receiptsRoot
+        - reward
+        - blockScore
+        - totalBlockScore
+        - extraData
+        - size
+        - gasUsed
+        - timestamp
+        - timestampFoS
+        - transactions
+        - governanceData
+        - voteData
+        - baseFeePerGas
+      description: A block object, or error when no block was found
+      properties:
+        number:
+          type: string
+          format: hex
+          description: The block number. null when it is pending block.
+        hash:
+          type: string
+          format: 32-byte DATA
+          description: Hash of the block. null when it is pending block.
+        parentHash:
+          type: string
+          format: 32-byte DATA
+          description: Hash of the parent block.
+        logsBloom:
+          type: string
+          format: 256-byte DATA
+          description: The bloom filter for the logs of the block. null when it is pending block.
+        transactionsRoot:
+          type: string
+          format: 32-byte DATA
+          description: The root of the transaction trie of the block.
+        stateRoot:
+          type: string
+          format: 32-byte DATA
+          description: The root of the final state trie of the block.
+        receiptsRoot:
+          type: string
+          format: 32-byte DATA
+          description: The root of the receipts trie of the block.
+        reward:
+          type: string
+          format: 20-byte DATA
+          description: The address of the beneficiary to whom the block rewards were given.
+        blockScore:
+          type: string
+          format: hex
+          description: Former difficulty. Always 1 in the BFT consensus engine
+        totalBlockScore:
+          type: string
+          format: hex
+          description: Integer of the total blockScore of the chain until this block.
+        extraData:
+          type: string
+          format: DATA
+          description: The "extra data" field of this block.
+        size:
+          type: string
+          format: hex
+          description: Integer the size of this block in bytes.
+        gasUsed:
+          type: string
+          format: hex
+          description: The total used gas by all transactions in this block.
+        timestamp:
+          type: string
+          format: hex
+          description: The unix timestamp for when the block was collated.
+        timestampFoS:
+          type: string
+          format: hex
+          description: The fraction of a second of the timestamp for when the block was collated.
+        transactions:
+          type: array
+          items:
+            oneOf:
+              - type: string
+                format: 32-byte DATA
+                description: Hash of a transaction.
+              - type: object
+                required:
+                 - hash
+                properties:
+                  hash:
+                    type: string
+                    format: 32-byte DATA
+                    description: Hash of the transaction.
+                additionalProperties: true
+          description: Array of transaction objects, or 32-byte transaction hashes depending on the last given parameter.
+        governanceData:
+          type: string
+          format: DATA
+          description: RLP encoded governance configuration
+        voteData:
+          type: string
+          format: DATA
+          description: RLP encoded governance vote of the proposer
+        baseFeePerGas:
+          type: string
+          format: hex
+          description: The base fee per gas. It has a meaningful value when EthTxTypeCompatible and Magma hardforks are activated.
+      example:
+        {
+          "baseFeePerGas": "0x0",
+          "blockscore": "0x1",
+          "extraData": "0xda83010800846b6c617989676f312e31362e31338664617277696e0000000000f89ed5949712f943b296758aaae79944ec975884188d3a96b841ddfdf7e2cb0a93538f757f87f23a93ee35df703c781c6f15e31e4978ecdfb3501fc00924372b9a01df2bc452f2a924c242d83580183d131c47e49a25b78f625201f843b841b9b6034d5a8c5f5b057274cda4f427614cd1f448ee781f4c4322861d1361d09d47d6030f2b69a26cb426db984f54e71f8c112fbf882930ccd715d595e8d8307500",
+          "gasUsed": "0x0",
+          "governanceData": "0x",
+          "hash": "0xe882d7a16f38126dc0c507f990b3fe18fa2d3a380002538581327abe96ca6edc",
+          "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "number": "0x1e67",
+          "parentHash": "0x28b1c054346c3bd083741c757a750dcabf94b6d50c7f87158753544e96e73550",
+          "receiptsRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+          "reward": "0x4b2c736fd05c2e2da3ccbd001a395a444f16a861",
+          "size": "0x272",
+          "stateRoot": "0xdf9885621c9e6e75912ca94d6987bcb1b54fef0e4a99cbec5e68f1ffc7468a78",
+          "timestamp": "0x62130beb",
+          "timestampFoS": "0x0",
+          "totalBlockScore": "0x1e68",
+          "transactions": [ ],
+          "transactionsRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+          "voteData": "0x"
+        }

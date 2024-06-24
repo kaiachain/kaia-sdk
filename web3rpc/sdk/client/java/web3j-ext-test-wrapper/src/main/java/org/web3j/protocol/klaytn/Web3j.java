@@ -18,8 +18,9 @@ import org.web3j.protocol.klaytn.core.NetApi;
 import org.web3j.protocol.klaytn.core.PersonalApi;
 import org.web3j.protocol.klaytn.core.SubbridgeApi;
 import org.web3j.protocol.klaytn.core.TxpoolApi;
+import org.web3j.protocol.klaytn.core.KaiaApi;
 
-public class Web3j extends JsonRpc2_0Web3j implements KlayApi, GovernanceApi, AdminApi, NetApi, PersonalApi, TxpoolApi,
+public class Web3j extends JsonRpc2_0Web3j implements KaiaApi, KlayApi, GovernanceApi, AdminApi, NetApi, PersonalApi, TxpoolApi,
         DebugApi, MainbridgeApi, SubbridgeApi {
     public static final int DEFAULT_BLOCK_TIME = 15 * 1000;
 

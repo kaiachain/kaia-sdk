@@ -1,0 +1,99 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/account/accountCreated:
+    post:
+      operationId: .accountCreated
+      summary: "[Account] kaia_accountCreated"
+      description: |
+        Returns `true` if the account associated with the address is created. It returns `false` otherwise.
+
+        **NOTE:** *In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available.*
+
+        **JSONRPC:** `kaia_accountCreated`
+      tags:
+        - kaia
+
+      parameters:
+        - name: account
+          required: true
+          schema:
+            type: string
+            format: 20-byte DATA
+          description: Address
+          in: query
+        - name: blockNumberOrHash
+          in: query
+          description: Integer or hexadecimal block number, or the string "earliest", "latest" or "pending" as in default block parameter.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaAccountCreatedReq"
+
+      responses:
+        200:
+          description: The existence of an input address
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        description: The existence of an input address
+                        type: boolean
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/account/accountCreated.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/account/KaiaAccountCreatedExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+           $ref: "../../../code-samples/javascript/kaia/account/accountCreated.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/account/accountCreated.py"
+components:
+  schemas:
+    KaiaAccountCreatedReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_accountCreated'
+        params:
+          type: array
+          items:
+            properties:
+              Address:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/Address"
+              BlockNumberOrHashOrTag:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+          example:  ["0xa4f42d4d2a3a13874406435500950c9bf2d783db", "latest"]
+

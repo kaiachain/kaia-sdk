@@ -15,7 +15,10 @@ paths:
       operationId: maxPriorityFeePerGas
       summary: "[Gas] klay_maxPriorityFeePerGas"
       description: |
-        Returns a suggestion for a gas tip cap for dynamic fee transactions in peb.
+       Returns a suggested gasPrice or maxPriorityFeePerGas. The suggested price depends on the hardfork status.
+        - Fixed unit price before Magma
+        - Zero before Kaia
+        - Suggested priority fee from fee history, after Kaia
 
         **NOTE:** This API is effective after Klaytn v1.8.0
 
@@ -38,7 +41,7 @@ paths:
 
       responses:
         200:
-          description: Returns a suggestion for a gas tip cap for dynamic fee transactions in peb.
+          description: Suggested price in kei
           content:
             application/json:
               schema:
@@ -53,19 +56,19 @@ paths:
                         example: "0xAE9F7BCC00"
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../../code-samples/curl/klay/gas/maxPriorityFeePerGas.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/klay/gas/KlayMaxPriorityFeePerGasExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../../code-samples/javascript/klay/configuration/maxPriorityFeePerGas.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref: "../../../code-samples/python/klay/configuration/maxPriorityFeePerGas.py"

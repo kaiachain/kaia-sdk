@@ -43,6 +43,7 @@ export class KlaytnWeb3
   public debug: AsyncNamespaceApi;
   public governance: AsyncNamespaceApi;
   public klay: AsyncNamespaceApi;
+  public kaia: AsyncNamespaceApi;
   public net: AsyncNamespaceApi;
   public personal: AsyncNamespaceApi;
   public txpool: AsyncNamespaceApi;
@@ -87,6 +88,7 @@ export class KlaytnWeb3
     this.debug = asyncOpenApi(send, DebugApi);
     this.governance = asyncOpenApi(send, GovernanceApi);
     this.klay = asyncOpenApi(send, KlayApi);
+    this.kaia = asyncOpenApi(send, KlayApi);
     this.net = asyncOpenApi(send, NetApi);
     this.personal = asyncOpenApi(send, PersonalApi);
     this.txpool = asyncOpenApi(send, TxpoolApi);

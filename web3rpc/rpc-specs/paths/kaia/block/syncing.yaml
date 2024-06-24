@@ -1,0 +1,113 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/block/syncing:
+    post:
+      operationId: .syncing
+      summary: "[Block] kaia_syncing"
+      description: |
+        Returns an object with data about the sync status or false.
+
+        **JSONRPC:** `kaia_syncing`
+
+      tags:
+        - kaia
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: kaia_syncing
+
+      responses:
+        200:
+          description: Returns Object|Boolean, an object with sync status data or false when not syncing
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaSyncingResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/block/syncing.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/block/KaiaSyncingExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/block/syncing.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/block/syncing.py"
+
+components:
+  schemas:
+    KaiaSyncingResp:
+      type: object
+      properties:
+        result:
+          oneOf:
+            - $ref: "#/components/schemas/SyncingObject"
+            - type: boolean
+              example: false
+
+    SyncingObject:
+      title: SyncingObject
+      type: object
+      required:
+        - startingBlock
+        - currentBlock
+        - highestBlock
+        - pulledStates
+        - knownStates
+      properties:
+        startingBlock:
+          type: string
+          format: hex
+          description: The block at which the import started (will only be reset, after the sync reached his head).
+        currentBlock:
+          type: string
+          format: hex
+          description: The current block, same as kaia_blockNumber.
+        highestBlock:
+          type: string
+          format: hex
+          description: The estimated highest block.
+        pulledStates:
+          type: string
+          format: hex
+          description: The number of state entries processed until now. If the sync mode is not "fast", zero is returned.
+        knownStates:
+          type: string
+          format: hex
+          description: The number of known state entries that still need to be pulled. If the sync mode is not "fast", zero is returned.
+      example:
+          {
+            "currentBlock": "0x3e31e",
+            "highestBlock": "0x827eef",
+            "knownStates": "0x0",
+            "pulledStates": "0x0",
+            "startingBlock": "0x0"
+          }

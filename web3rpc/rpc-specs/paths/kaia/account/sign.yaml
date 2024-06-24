@@ -1,0 +1,118 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/account/sign:
+    post:
+      operationId: .sign
+      summary: "[Account] kaia_sign"
+      description: |
+        The sign method calculates a Klaytn-specific signature with:
+
+        sign(keccak256("\x19Klaytn Signed Message:\n" + len(message) + message)))
+
+        Adding a prefix to the message makes the calculated signature recognizable as a Klaytn-specific signature. This prevents misuse where a malicious dApp can sign arbitrary data, e.g., transaction, and use the signature to impersonate the victim.
+
+        `kaia_sign` will be failed to baobab/cypress network because it is signed in the EN node, which means that the EN must have the key that you want to sign with.
+        Steps to test `kaia_sign`.
+          - Step 1: Setup a local EN node
+          - Step 2: <a href="#tag/personal/operation/newAccount" target="_blank">Create an account</a> into the EN node
+          - Step 3: <a href="#tag/personal/operation/unlockAccount" target="_blank">Unlock the account</a> for using in signing
+
+        **JSONRPC:** `kaia_sign`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: account
+          required: true
+          schema:
+            type: string
+            format: 20-byte DATA
+          description: Address
+          in: query
+        - name: message
+          required: true
+          schema:
+            type: string
+            format: N-byte DATA
+          description: Message to sign
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaSignReq"
+
+      responses:
+        200:
+          description: Return signature
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: string
+                        format: DATA
+                        description: Signature
+                        example: "0xa3f20717a250c2b0b729b7e5becbff67fdaef7e0699da4de7ca5895b02a170a12d887fd3b17bfdce3481f10bea41f45ba9f709d39ce8325427b57afcfc994cee1b"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/account/sign.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/account/KaiaSignExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/account/sign.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/account/sign.py"
+
+components:
+  schemas:
+    KaiaSignReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_sign'
+        params:
+          type: array
+          items:
+            properties:
+              Account:
+                type: string
+                title: Account
+                format: 20-byte DATA
+                description: Address
+              Message:
+                type: string
+                title: Message
+                format: N-byte DATA
+                description: Message to sign
+          example:  ["0x9b2055d370f73ec7d8a03e965129118dc8f5bf83", "0xdeadbeaf"]

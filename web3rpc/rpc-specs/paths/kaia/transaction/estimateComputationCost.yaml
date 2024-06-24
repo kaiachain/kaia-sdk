@@ -1,0 +1,104 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/transaction/estimateComputationCost:
+    post:
+      operationId: .estimateComputationCost
+      summary: "[Transaction] kaia_estimateComputationCost"
+      tags:
+        - kaia
+      description: |
+        Generates and returns an estimate of how much computation cost will be spent to execute the transaction. Klaytn limits the computation cost of a transaction to 100000000 currently not to take too much time by a single transaction. The transaction will not be added to the blockchain like kaia_estimateGas
+
+        **JSONRPC:** `kaia_estimateComputationCost`
+
+      parameters:
+        - name: callObject
+          in: query
+          description: The transaction call object. See the next table for the object's properties.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaCallObject"
+        - name: blockNumberOrHash
+          in: query
+          description: Integer or hexadecimal block number, or the string "earliest", "latest" or "pending" as in default block parameter.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaEstimateComputationCostReq"
+
+      responses:
+        200:
+          description: Return the amount of computation cost used.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: string
+                        format: hex
+                        description: "The amount of computation cost used."
+                        example: "0x1e8b0ad"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/transaction/estimateComputationCost.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/transaction/KaiaEstimateComputationCostExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/transaction/estimateComputationCost.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/transaction/estimateComputationCost.py"
+
+components:
+  schemas:
+    KaiaEstimateComputationCostReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_estimateComputationCost'
+        params:
+          type: array
+          items:
+            properties:
+              CallObject:
+                title: CallObject
+                description: A transaction call object. Please see caver.rpc.kaia.call parameters.
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaCallObject"
+              BlockNumberOrHashOrTag:
+                title: blockParameter
+                description: (optional) A block number, blockhash or the block tag string (latest or earliest). If omitted, latest will be used.
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+          example: [{"from":"0x73718c4980728857f3aa5148e9d1b471efa3a7dd", "to":"0x069942a3ca0dabf495dba872533134205764bc9c", "value":"0x0", "input":"0x2a31efc7000000000000000000000000000000000000000000000000000000000000271000000000000000000000000000000000000000000000000000000000000000420000000000000000000000000000000000000000000000000000000000003039"}, "latest"]
+

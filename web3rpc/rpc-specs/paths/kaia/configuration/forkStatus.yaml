@@ -1,0 +1,99 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/configuration/forkStatus:
+    post:
+      operationId: .forkStatus
+      summary: "[Configuration] kaia_forkStatus"
+      description: |
+        Using this API, users can easily query the fork status with negligible management costs.
+
+        **JSONRPC:** `kaia_forkStatus`
+      tags:
+        - kaia
+
+      parameters:
+        - name: number
+          in: query
+          description: Number
+          required: true
+          schema:
+            type: number
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaforkStatusReq"
+
+      responses:
+        200:
+          description: The chain configuration of the chain.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaforkStatusResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/configuration/forkStatus.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/configuration/KaiaForkStatusExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/configuration/forkStatus.js"
+            
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/configuration/forkStatus.py"
+
+components:
+  schemas:
+    KaiaforkStatusReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_forkStatus'
+        params:
+          type: array
+          items:
+            type: number
+          example: [20]
+
+    KaiaforkStatusResp:
+      type: object
+      properties:
+        result:
+          type: object
+          example: {
+            EthTxType: true,
+            Istanbul: true,
+            KIP103: false,
+            Kore: true,
+            London: true,
+            Magma: true,
+            Mantle: false
+          }

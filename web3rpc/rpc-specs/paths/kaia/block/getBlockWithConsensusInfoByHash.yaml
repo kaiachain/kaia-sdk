@@ -1,0 +1,91 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/block/getBlockWithConsensusInfoByHash:
+    post:
+      operationId: .getBlockWithConsensusInfoByHash
+      summary: "[Block] kaia_getBlockWithConsensusInfoByHash"
+      description: |
+        Returns a block with consensus information that matches the given hash.
+
+        **JSONRPC:** `kaia_getBlockWithConsensusInfoByHash`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: blockHash
+          in: query
+          description: Hash of a block.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockHash"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetBlockWithConsensusInfoByHashReq"
+
+      responses:
+        200:
+          description: Returns a block with consensus information that matches the given hash.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetBlockWithConsensusInfoByHashResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/block/getBlockWithConsensusInfoByHash.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/block/KaiaGetBlockWithConsensusInfoByHashExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/block/getBlockWithConsensusInfoByHash.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/block/getBlockWithConsensusInfoByHash.py"
+
+components:
+  schemas:
+    KaiaGetBlockWithConsensusInfoByHashReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getBlockWithConsensusInfoByHash'
+        params:
+          type: array
+          description: Hash of a block.
+          items:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockHash"
+          example:  ["0xba647d41423faeebe8a7c64737d284fc2eba6f0388a3e1ebf6243db509ec1577"]
+
+    KaiaGetBlockWithConsensusInfoByHashResp:
+      type: object
+      properties:
+        result:
+          $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockWithConsensusInfo"

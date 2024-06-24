@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.klaytn.Web3j;
-import org.web3j.protocol.klaytn.core.method.response.GovernanceGetChainConfigResponse;
+import org.web3j.protocol.klaytn.core.method.response.GovernanceChainConfigResponse;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -19,7 +19,7 @@ public class GovernanceGetChainConfigTest {
     @Test
     @DisplayName("RPC governance_getChainConfig")
     void whenRequestValid_ThenCall200ResponseReturns() throws IOException {
-        GovernanceGetChainConfigResponse response = w3.governanceGetChainConfig().send();
+        GovernanceChainConfigResponse response = w3.governanceGetChainConfig().send();
         assertNotNull(response);
         assertNull(response.getError());
         assertNotNull(response.getResult());

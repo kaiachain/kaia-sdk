@@ -50,19 +50,19 @@ paths:
                   - $ref: "#/components/schemas/KlayGetTransactionBySenderTxHashResp"
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../../code-samples/curl/klay/transaction/getTransactionBySenderTxHash.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/klay/transaction/KlayGetTransactionBySenderTxHashExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../../code-samples/javascript/klay/transaction/getTransactionBySenderTxHash.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref: "../../../code-samples/python/klay/transaction/getTransactionBySenderTxHash.py"

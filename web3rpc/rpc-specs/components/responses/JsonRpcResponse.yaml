@@ -17,10 +17,28 @@ components:
             A Number that indicates the error type that occurred.
             This MUST be an integer.
 
-            | code | message | description |
-            |-----|-----|-------|
-            | -32700   | Parse error   | invalid JSON was received by the server. An error occurred on the server while parsing the JSON text. |
-            |-32602 | Invalid params | Invalid method parameter(s). |
+            <table>
+                <thead>
+                    <tr>
+                        <th>code</th>
+                        <th>message</th>
+                        <th>description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>-32700</td>
+                        <td>Parse error</td>
+                        <td>invalid JSON was received by the server. An error occurred on the server while parsing the JSON text.</td>
+                    </tr>
+                    <tr>
+                        <td>-32602</td>
+                        <td>Invalid params</td>
+                        <td>Invalid method parameter(s).</td>
+                    </tr>
+                </tbody>
+            </table>
+
         message:
           type: string
           example: Parse error

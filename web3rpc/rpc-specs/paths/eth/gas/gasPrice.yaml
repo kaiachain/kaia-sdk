@@ -1,0 +1,78 @@
+openapi: "3.0.2"
+info:
+  title: Klay Open API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /eth/gas/gasPrice:
+    post:
+      summary: "[Gas] eth_gasPrice"
+      tags:
+        - eth
+      operationId: gasPrice
+      description: |
+        Returns a suggested gasPrice or maxFeePerGas. The suggested price depends on the hardfork status.
+        - Fixed unit price before Magma
+        - Twice the base fee before Kaia
+        - Base fee plus suggested priority fee after Kaia
+
+        **NOTE:** This API has different behavior from Ethereum's and returns a gas price of Klaytn instead of suggesting a gas price as in Ethereum.
+
+        **JSONRPC:** `eth_gasPrice`
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: 'eth_gasPrice'
+
+      responses:
+        200:
+          description: Suggested price in kei.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/EthGasPriceResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/eth/gas/gasPrice.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/eth/gas/EthGasPriceExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/eth/gas/gasPrice.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/eth/gas/gasPrice.py"
+
+components:
+  schemas:
+    EthGasPriceResp:
+      type: object
+      properties:
+        result:
+          type: string
+          format: hex
+          description: Suggested price in kei.
+          example: "0xAE9F7BCC00"

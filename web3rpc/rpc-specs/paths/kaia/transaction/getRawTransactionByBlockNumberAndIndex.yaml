@@ -1,0 +1,105 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/transaction/getRawTransactionByBlockNumberAndIndex:
+    post:
+      operationId: .getRawTransactionByBlockNumberAndIndex
+      summary: "[Transaction] kaia_getRawTransactionByBlockNumberAndIndex"
+      tags:
+        - kaia
+      description: |
+        GetRawTransactionByBlockNumberAndIndex returns the bytes of the transaction for the given block number and index.
+
+        **JSONRPC:** `kaia_getRawTransactionByBlockNumberAndIndex`
+
+      parameters:
+        - name: blockNumberOrHashOrTag
+          in: query
+          description: Integer or hexadecimal block number, or the string "earliest", "latest" or "pending" as in default block parameter.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+        - name: transactionIndex
+          required: true
+          schema:
+            type: string
+            format: hex
+          description: The transaction index position.
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetRawTransactionByBlockNumberAndIndexReq"
+
+      responses:
+        200:
+          description: Returns the bytes of the transaction for the given block number and index.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetRawTransactionByBlockNumberAndIndexResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/others/getRawTransactionByBlockNumberAndIndex.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/others/KaiaGetRawTransactionByBlockNumberAndIndexExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/transaction/getRawTransactionByBlockNumberAndIndex.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/others/getRawTransactionByBlockNumberAndIndex.py"
+
+components:
+  schemas:
+    KaiaGetRawTransactionByBlockNumberAndIndexReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getRawTransactionByBlockNumberAndIndex'
+        params:
+          type: array
+          items:
+            properties:
+              BlockNumberOrHashOrTag:  
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+              TransactionIndex:
+                type: string
+                format: hex
+                title: TransactionIndex
+                description: The transaction index position.
+          example:  ["0x27", "0x0"]
+
+    KaiaGetRawTransactionByBlockNumberAndIndexResp:
+      type: object
+      properties:
+        result:
+          type: string
+          description: Hex representation of some bytes
+          example: "0x0"

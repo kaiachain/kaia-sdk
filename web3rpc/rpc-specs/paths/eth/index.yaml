@@ -94,8 +94,7 @@ paths:
   # eth/config
   /eth/config/chainID:
     $ref: ./config/chainId.yaml#/paths/~1eth~1config~1chainId
-  /eth/config/gasPrice:
-    $ref: ./config/gasPrice.yaml#/paths/~1eth~1config~1gasPrice
+ 
   /eth/config/coinbase:
     $ref: ./config/coinbase.yaml#/paths/~1eth~1config~1coinbase
   /eth/config/etherbase:
@@ -110,7 +109,8 @@ paths:
     $ref: ./transaction/estimateGas.yaml#/paths/~1eth~1transaction~1estimateGas
   /eth/gas/maxPriorityFeePerGas:
     $ref: ./gas/maxPriorityFeePerGas.yaml#/paths/~1eth~1gas~1maxPriorityFeePerGas
-
+  /eth/gas/gasPrice:
+    $ref: ./gas/gasPrice.yaml#/paths/~1eth~1gas~1gasPrice
   # eth/filter
   /eth/filter/getFilterLogs:
     $ref: ./filter/getFilterLogs.yaml#/paths/~1eth~1filter~1getFilterLogs

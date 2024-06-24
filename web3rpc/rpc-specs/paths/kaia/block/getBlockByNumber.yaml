@@ -1,0 +1,103 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/block/getBlockByNumber:
+    post:
+      operationId: .getBlockByNumber
+      summary: "[Block] kaia_getBlockByNumber"
+      description: |
+        Returns information about a block by block number. This API works only on RPC call, not on JavaScript console.
+
+        **NOTE:** *In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available.*
+        
+        **JSONRPC:** `kaia_getBlockByNumber`
+      tags:
+        - kaia
+
+      parameters:
+        - name: blockNumberOrTag
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+          description: Integer or hexadecimal block number, or the string "earliest", "latest" or "pending" as in the default block parameter.
+          in: query
+        - name: boolean
+          in: query
+          description: If true it returns the full transaction objects, if false only the hashes of the transactions.
+          required: true
+          schema:
+            type: boolean
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetBlockByNumberReq"
+
+      responses:
+        200:
+          description: Returns information about a block by block number.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetBlockByNumberResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/block/getBlockByNumber.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/block/KaiaGetBlockByNumberExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/block/getBlockByNumber.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/block/getBlockByNumber.py"
+
+components:
+  schemas:
+    KaiaGetBlockByNumberReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getBlockByNumber'
+        params:
+          type: array
+          items:
+            properties:
+              BlockNumberOrTag:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+              Boolean:
+                type: boolean
+                title: Boolean
+                description: If true it returns the full transaction objects, if false only the hashes of the transactions.
+          example:  ["0x1b4", true]
+
+    KaiaGetBlockByNumberResp:
+      type: object
+      properties:
+        result:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaBlock"

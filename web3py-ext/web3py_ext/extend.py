@@ -95,6 +95,7 @@ def extended_get_default_modules():
         "tracing": Tracing,
         "testing": Testing,
         "klay": KlayApi,
+        "kaia": KlayApi,
         "governance": GovernanceApi,
         "debug": DebugApi,
     }
@@ -111,6 +112,7 @@ def extended_get_async_default_modules():
             },
         ),
         "klay": AsyncKlayApi,
+        "kaia": AsyncKlayApi,
         "governance": AsyncGovernanceApi,
         "debug": AsyncDebugApi,
     }

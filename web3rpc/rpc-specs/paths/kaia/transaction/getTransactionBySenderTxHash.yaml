@@ -1,0 +1,95 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/transaction/getTransactionBySenderTxHash:
+    post:
+      operationId: .getTransactionBySenderTxHash
+      summary: "[Transaction] kaia_getTransactionBySenderTxHash"
+      description: |
+        Returns the information about a transaction requested by sender transaction hash. This API works only on RPC call, not on JavaScript console. Please note that this API returns correct result only if indexing feature is enabled by --sendertxhashindexing. This can be checked by call kaia_isSenderTxHashIndexingEnabled.
+
+        **JSONRPC:** `kaia_getTransactionBySenderTxHash`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: transactionHash
+          required: true
+          schema:
+            type: string
+            format: 32-byte DATA
+          description: Hash of a transaction that is signed only by the sender.
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetTransactionBySenderTxHashReq"
+
+      responses:
+        200:
+          description: Returns information about a transaction by block number and transaction index position.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetTransactionBySenderTxHashResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/transaction/getTransactionBySenderTxHash.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/transaction/KaiaGetTransactionBySenderTxHashExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/transaction/getTransactionBySenderTxHash.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/transaction/getTransactionBySenderTxHash.py"
+
+components:
+  schemas:
+    KaiaGetTransactionBySenderTxHashReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getTransactionBySenderTxHash'
+        params:
+          type: array
+          description: Hash of a transaction that is signed only by the sender.
+          items:
+              type: string
+              format: 32-byte DATA
+              title: TransactionHash
+              description: Hash of a transaction that is signed only by the sender.
+          example:  ["0x18fe9e1007da7d20aad77778557fb8acc58c80054daba65124c8c843aadd3478"]
+
+    KaiaGetTransactionBySenderTxHashResp:
+      type: object
+      properties:
+        result:
+          $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/TransactionObject"

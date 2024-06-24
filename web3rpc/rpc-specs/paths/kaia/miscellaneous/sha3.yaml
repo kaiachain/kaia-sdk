@@ -1,0 +1,97 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/miscellaneous/sha3:
+    post:
+      operationId: .sha3
+      summary: "[Miscellaneous] kaia_sha3"
+      description: |
+        Returns Keccak-256 (not the standardized SHA3-256) of the given data.
+
+        **JSONRPC:** `kaia_sha3`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: data
+          required: true
+          schema:
+            type: string
+            format: DATA
+          description: The data to convert into a SHA3 hash.
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaSha3Req"
+
+      responses:
+        200:
+          description: Return the SHA3 result of the given data.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaSha3Resp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/miscellaneous/sha3.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/miscellaneous/KaiaSha3Example.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/miscellaneous/sha3.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/miscellaneous/sha3.py"
+
+components:
+  schemas:
+    KaiaSha3Req:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_sha3'
+        params:
+          type: array
+          items:
+            title: data
+            type: string
+            format: DATA
+          description: The data to convert into a SHA3 hash.
+          example:  ["0x11223344"]
+
+    KaiaSha3Resp:
+        type: object
+        properties:
+          result:
+            type: string
+            format: 32-byte DATA
+            example: "0x36712aa4d0dd2f64a9ae6ac09555133a157c74ddf7c079a70c33e8b4bf70dd73"
+            description: The SHA3 result of the given data.

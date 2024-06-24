@@ -1,0 +1,69 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/miscellaneous/nodeAddress:
+    post:
+      operationId: .nodeAddress
+      summary: "[Miscellaneous] kaia_nodeAddress"
+      description: |
+        The nodeAddress property provides the address of the node that a user is using. It is derived from the nodekey and used to sign consensus messages.
+        
+        **JSONRPC:** `kaia_nodeAddress`
+
+      tags:
+        - kaia
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: "kaia_nodeAddress"
+
+      responses:
+        200:
+          description: Return 20 BYTE address of a node
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: string
+                        format: hex
+                        description: "20 BYTE address of a node"
+                        example: "0x86a68a935953996509e724c6afd521df8d7d13ba"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/others/nodeAddress.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/others/KaiaGetNodeAddressExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/others/nodeAddress.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/others/nodeAddress.py"

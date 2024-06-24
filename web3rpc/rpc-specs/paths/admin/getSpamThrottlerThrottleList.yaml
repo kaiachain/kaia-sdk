@@ -41,19 +41,19 @@ paths:
                   - $ref: "#/components/schemas/GetSpamThrottlerThrottleListResp"
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../code-samples/curl/admin/getSpamThrottlerThrottleList.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../code-samples/java/src/main/java/opensdk/sdk/apis/admin/AdminGetSpamThrottlerThrottleListExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../code-samples/javascript/admin/getSpamThrottlerThrottleList.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref: "../../code-samples/python/admin/getSpamThrottlerThrottleList.py"

@@ -18,6 +18,7 @@ export class JsonRpcProvider extends EthersJsonRpcProvider {
   debug:      AsyncNamespaceApi;
   governance: AsyncNamespaceApi;
   klay:       AsyncNamespaceApi;
+  kaia:       AsyncNamespaceApi;
   net:        AsyncNamespaceApi;
   personal:   AsyncNamespaceApi;
   txpool:     AsyncNamespaceApi;
@@ -33,6 +34,7 @@ export class JsonRpcProvider extends EthersJsonRpcProvider {
     this.debug      = asyncOpenApi(send, DebugApi);
     this.governance = asyncOpenApi(send, GovernanceApi);
     this.klay       = asyncOpenApi(send, KlayApi);
+    this.kaia       = asyncOpenApi(send, KlayApi);
     this.net        = asyncOpenApi(send, NetApi);
     this.personal   = asyncOpenApi(send, PersonalApi);
     this.txpool     = asyncOpenApi(send, TxpoolApi);
@@ -45,6 +47,7 @@ export class Web3Provider extends EthersWeb3Provider {
   debug:      AsyncNamespaceApi;
   governance: AsyncNamespaceApi;
   klay:       AsyncNamespaceApi;
+  kaia:       AsyncNamespaceApi;
   net:        AsyncNamespaceApi;
   personal:   AsyncNamespaceApi;
   txpool:     AsyncNamespaceApi;
@@ -60,6 +63,7 @@ export class Web3Provider extends EthersWeb3Provider {
     this.debug      = asyncOpenApi(send, DebugApi);
     this.governance = asyncOpenApi(send, GovernanceApi);
     this.klay       = asyncOpenApi(send, KlayApi);
+    this.kaia       = asyncOpenApi(send, KlayApi);
     this.net        = asyncOpenApi(send, NetApi);
     this.personal   = asyncOpenApi(send, PersonalApi);
     this.txpool     = asyncOpenApi(send, TxpoolApi);

@@ -1,0 +1,269 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/account/getAccount:
+    post:
+      operationId: .getAccount
+      summary: "[Account] kaia_getAccount"
+      description: |
+        Returns the account information of a given address. There are two different account types in Klaytn: Externally Owned Account (EOA) and Smart Contract Account. See Klaytn Accounts.
+
+        **NOTE:** *In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available.*`
+
+        **JSONRPC:** `kaia_getAccount`
+      tags:
+        - kaia
+
+      parameters:
+        - name: address
+          in: query
+          description: Address
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/Address"
+        - name: blockNumberOrHashOrTag
+          in: query
+          description: Integer or hexadecimal block number, or the string "earliest", "latest" or "pending" as in the default block parameter, or block hash.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetAccountReq"
+
+      responses:
+        200:
+          description: Returns the account information of a given address.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetAccountResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/account/getAccount.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/account/KaiaGetAccountExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/account/getAccount.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/account/getAccount.py"
+
+components:
+  schemas:
+    KaiaGetAccountReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getAccount'
+        params:
+          type: array
+          items:
+            properties:
+              Address:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/Address"
+              BlockNumberOrHashOrTag:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+          example:  ["0x3111a0577f322e8fb54f78d9982a26ae7ca0f722", "latest"]
+
+    KaiaGetAccountResp:
+      type: object
+      properties:
+        result:
+          type: object
+          description: Each account type has different attributes.
+          required: 
+            - accType
+            - account
+          properties:
+            accType:
+              type: number
+              default: 1
+            account:
+              type: object
+              properties:
+                balance:
+                  type: string
+                humanReadable:
+                  type: boolean
+                key:
+                  type: object
+                  properties:
+                    key:
+                      oneOf:
+                        - $ref: "#/components/schemas/AccountKeyLegacy"
+                        - $ref: "#/components/schemas/AccountKeyNil"
+                        - $ref: "#/components/schemas/AccountKeyPublic"
+                        - $ref: "#/components/schemas/AccountKeyFail"
+                        - $ref: "#/components/schemas/AccountKeyWeightedMultiSig"
+                        - $ref: "#/components/schemas/AccountKeyRoleBased"
+                    keyType:
+                      type: number
+                nonce:
+                  type: number
+          example:
+            {
+              accType: 1,
+              account: {
+                balance: 4985316100000000000,
+                humanReadable: false,
+                key: {
+                  key: {
+                    x: "0x230037a99462acd829f317d0ce5c8e2321ac2951de1c1b1a18f9af5cff66f0d7",
+                    y: "0x18a7fb1b9012d2ac87bc291cbf1b3b2339356f1ce7669ae68405389be7f8b3b6"
+                  },
+                  keyType: 2
+                },
+                nonce: 11
+              }
+            }
+
+    AccountKeyNil:
+      title: AccountKeyNil
+      type: string
+
+    AccountKeyLegacy:
+      title: AccountKeyLegacy
+      type: object
+      required:
+        - key
+        - keyType
+      description: "AccountKeyLegacy is used for the account having an address derived from the corresponding key pair"
+      properties:
+        key:
+          type: object
+        keyType:
+          type: integer
+          description: "The type of AccountKeyLegacy. This must be 0x01."
+
+    AccountKeyPublic:
+      title: AccountKeyPublic
+      type: object
+      required:
+        - key
+        - keyType
+      description: "AccountKeyPublic is used for accounts having one public key."
+      properties:
+        key:
+          type: object
+          required:
+            - x
+            - y
+          description: "Key should be a compressed public key on S256 curve."
+          properties:
+            x:
+              type: string
+              format: 32-byte DATA
+              description: "The x coordinate of the public key."
+            y:
+              type: string
+              format: 32-byte DATA
+              description: "The y coordinate of the public key."
+        keyType:
+          type: integer
+          description: "The type of AccountKeyPublic. This must be 0x02."
+
+    AccountKeyFail:
+      title: AccountKeyFail
+      type: object
+      required:
+        - keyType
+        - key
+      description: "If an account has the key AccountKeyFail, the transaction validation process always fails. It can be used for smart contract accounts so that a transaction sent from the smart contract account always fails."
+      properties:
+        key:
+          type: object
+        keyType:
+          type: integer
+          description: "The type of AccountKeyFail. This must be 0x03."
+
+    AccountKeyWeightedMultiSig:
+      title: AccountKeyWeightedMultiSig
+      type: object
+      required:
+        - keyType
+        - Threshold
+        - WeightedPublicKeys
+      description: "AccountKeyWeightedMultiSig is an account key type containing a threshold and WeightedPublicKeys which contains a list consisting of a public key and its weight."
+      properties:
+        keyType:
+          type: integer
+          description: "The type of AccountKeyWeightedMultiSig. This must be 0x04."
+        Threshold:
+          type: integer
+          description: "Validation threshold. To be a valid transaction, the weight sum of signatures should be larger than or equal to the threshold."
+        WeightedPublicKeys:
+          type: array
+          description: "A list of weighted public keys. A weighted public key contains a compressed public key and its weight."
+          items:
+            type: object
+            required:
+              - PublicKey
+              - Weight
+            properties:
+              PublicKey:
+                type: object
+                required:
+                  - x
+                  - y
+                properties:
+                  x:
+                    type: string
+                    format: 32-byte DATA
+                    description: "The x coordinate of the public key."
+                  y:
+                    type: string
+                    format: 32-byte DATA
+                    description: "The y coordinate of the public key."
+              Weight:
+                type: integer
+
+    AccountKeyRoleBased:
+      title: AccountKeyRoleBased
+      type: object
+      required:
+        - keyType
+        - key
+      description: "AccountKeyRoleBased represents a role-based key"
+      properties:
+        key:
+          type: array
+          description: "A list of keys. A key can be any of AccountKeyNil, AccountKeyLegacy, AccountKeyPublic, AccountKeyFail, and AccountKeyWeightedMultiSig"
+          items:
+            anyOf:
+              - $ref: "#/components/schemas/AccountKeyNil"
+              - $ref: "#/components/schemas/AccountKeyLegacy"
+              - $ref: "#/components/schemas/AccountKeyPublic"
+              - $ref: "#/components/schemas/AccountKeyFail"
+              - $ref: "#/components/schemas/AccountKeyWeightedMultiSig"
+        keyType:
+          type: integer
+          description: "The type of AccountKeyRoleBased. This must be 0x05."

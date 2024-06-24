@@ -1,0 +1,111 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/transaction/getRawTransactionByBlockHashAndIndex:
+    post:
+      operationId: .getRawTransactionByBlockHashAndIndex
+      summary: "[Transaction] kaia_getRawTransactionByBlockHashAndIndex"
+      description: |
+        GetRawTransactionByBlockHashAndIndex returns the bytes of the transaction for the given block hash and index.
+        
+        **JSONRPC:** `kaia_getRawTransactionByBlockHashAndIndex`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: blockHash
+          required: true
+          schema:
+            type: string
+            format: hex
+          description: Hex representation of a Keccak 256 hash
+          in: query
+        - name: index
+          in: query
+          description: Hex representation of a uint
+          required: true
+          schema:
+            type: string
+            format: hex
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetRawTransactionByBlockHashAndIndexReq"
+
+      responses:
+        200:
+          description: Returns the bytes of the transaction for the given block hash and index.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetRawTransactionByBlockHashAndIndexResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/others/getRawTransactionByBlockHashAndIndex.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/others/KaiaGetRawTransactionByBlockHashAndIndexExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/transaction/getRawTransactionByBlockHashAndIndex.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/others/getRawTransactionByBlockHashAndIndex.py"
+components:
+  schemas:
+    KaiaGetRawTransactionByBlockHashAndIndexReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getRawTransactionByBlockHashAndIndex'
+        params:
+          type: array
+          items:
+            properties:
+              BlockHash:
+                title: BlockHash
+                type: string
+                format: hex
+                description: Hex representation of a Keccak 256 hash
+              Index:
+                title: Index
+                description: Hex representation of a uint
+                type: string
+                format: hex
+          example:  ["0x29b6cd965c7d9a53a6f068da259dce1d3810ba79fff8eebac5d4da14754e67e6","0x20965255"]
+
+    KaiaGetRawTransactionByBlockHashAndIndexResp:
+      type: object
+      properties:
+        result:
+          type: string
+          format: hex
+          description: Hex representation of some bytes
+          title: dataWord
+          example: "0x"

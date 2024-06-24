@@ -4,19 +4,32 @@ import java.math.BigDecimal;
 
 public class KlayConvert {
     private KlayConvert() { } 
+
+    // Klaytn units
     public static BigDecimal fromPeb(String number, Unit unit) {
         return fromPeb(new BigDecimal(number), unit);
     }
-
     public static BigDecimal fromPeb(BigDecimal number, Unit unit) {
         return number.divide(unit.getpebFactor());
     }
-
     public static BigDecimal toPeb(String number, Unit unit) {
         return toPeb(new BigDecimal(number), unit);
     }
-
     public static BigDecimal toPeb(BigDecimal number, Unit unit) {
+        return number.multiply(unit.getpebFactor());
+    }
+
+    // KAIA units
+    public static BigDecimal fromKei(String number, Unit unit) {
+        return fromKei(new BigDecimal(number), unit);
+    }
+    public static BigDecimal fromKei(BigDecimal number, Unit unit) {
+        return number.divide(unit.getpebFactor());
+    }
+    public static BigDecimal toKei(String number, Unit unit) {
+        return toKei(new BigDecimal(number), unit);
+    }
+    public static BigDecimal toKei(BigDecimal number, Unit unit) {
         return number.multiply(unit.getpebFactor());
     }
 
@@ -31,7 +44,10 @@ public class KlayConvert {
         KLAY("KLAY", 18),
         KKLAY("kKLAY", 21),
         MKLAY("MKLAY", 24),
-        GKLAY("GKLAY", 27);
+        GKLAY("GKLAY", 27),
+        KEI("kei", 0),
+        GKEI("Gkei", 9),
+        KAIA("KAIA", 18);
 
         private String name;
         private BigDecimal pebFactor;

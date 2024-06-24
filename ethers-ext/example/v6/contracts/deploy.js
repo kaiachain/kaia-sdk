@@ -2,9 +2,9 @@ const ethers = require("ethers6");
 
 const { Wallet } = require("@klaytn/ethers-ext/v6");
 
-const senderAddr = "0x24e8efd18d65bcb6b3ba15a4698c0b0d69d13ff7";
+const senderAddr = "0xcb0eb737dfda52756495a5e08a9b37aab3b271da";
 const senderPriv =
-  "0x4a72b3d09c3d5e28e8652e0111f9c4ce252e8299aad95bb219a38eb0a3f4da49";
+  "0x9435261ed483b6efa3886d6ad9f64c12078a0e28d8d80715c773e16fc000cff4";
 
 const provider = new ethers.JsonRpcProvider(
   "https://public-en-baobab.klaytn.net"
@@ -43,10 +43,10 @@ async function main() {
   const factory = new ethers.ContractFactory(abi, bytecode, wallet);
   const contract = await factory.deploy(100);
 
-  const sentTx = contract.deployTransaction;
-  const receipt = await sentTx.wait();
+  const deployedContract = await contract.waitForDeployment();
+  const receipt = await deployedContract.deploymentTransaction();
   console.log("receipt", receipt);
-  console.log("deployed address", receipt.contractAddress);
+  console.log("deployed address", await deployedContract.getAddress());
 }
 
 main();

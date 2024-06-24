@@ -8,6 +8,8 @@ import {
   resolveProperties,
   ZeroAddress,
   SigningKey,
+  resolveAddress,
+  Transaction,
 } from "ethers6";
 import _ from "lodash";
 
@@ -23,11 +25,14 @@ const logger = new Logger("@klaytn/ethers-ext");
 
 // Normalize transaction request in Object or RLP format
 export async function getTransactionRequest(
-  transactionOrRLP: Deferrable<TransactionRequest> | string
+  transactionOrRLP: Deferrable<TransactionRequest> | string | Transaction
 ): Promise<TransactionLike<string>> {
   if (_.isString(transactionOrRLP)) {
     return parseTransaction(transactionOrRLP);
   } else {
+    if (transactionOrRLP instanceof Transaction) {
+      return transactionOrRLP.toJSON();
+    }
     return resolveProperties(transactionOrRLP) as TransactionLike<string>;
   }
 }
@@ -76,6 +81,7 @@ export async function populateTo(
   if (!tx.to || tx.to == "0x") {
     tx.to = ZeroAddress;
   } else {
+    return resolveAddress(tx.to);
     // const address = await provider?.resolveName(tx.to.toString());
     // if (address == null) {
     //   logger.throwArgumentError(

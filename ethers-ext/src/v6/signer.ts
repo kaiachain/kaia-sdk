@@ -15,6 +15,7 @@ import {
   toUtf8Bytes,
   ProgressCallback,
   keccak256,
+  assert,
 } from "ethers6";
 import _ from "lodash";
 
@@ -41,9 +42,8 @@ import {
   populateChainId,
   populateFeePayerAndSignatures,
   pollTransactionInPool,
-  throwErr,
 } from "./txutil";
-import { EKlaytnErrorCode, ExternalProvider } from "./types";
+import { ExternalProvider } from "./types";
 
 export class Wallet extends EthersWallet {
   // Override Wallet factories accepting keystores to support both v3 and v4 (KIP-3) formats
@@ -279,10 +279,16 @@ export class Wallet extends EthersWallet {
   async _sendKlaytnRawTransaction(
     signedTx: string
   ): Promise<TransactionResponse> {
+    assert(
+      this.provider instanceof EthersJsonRpcApiProvider,
+      "Provider is not JsonRpcProvider: cannot send klay_sendRawTransaction",
+      "UNSUPPORTED_OPERATION",
+      {
+        operation: "_sendKlaytnRawTransaction",
+      }
+    );
     if (!(this.provider instanceof EthersJsonRpcApiProvider)) {
-      throw new Error(
-        "Provider is not JsonRpcProvider: cannot send klay_sendRawTransaction"
-      );
+      throw new Error();
     } else {
       const txhash = await this.provider.send("klay_sendRawTransaction", [
         signedTx,
@@ -311,12 +317,10 @@ export class JsonRpcSigner extends EthersJsonRpcSigner {
 
   // @ethers/providers/src.ts/provider-jsonrpc.ts:JsonRpcSigner.connect
   override connect(_provider: Provider): EthersJsonRpcSigner {
-    return throwErr(
+    assert(
+      false,
       "cannot alter JSON-RPC Signer connection",
-      EKlaytnErrorCode.UNSUPPORTED_OPERATION,
-      {
-        operation: "connect",
-      }
+      "UNSUPPORTED_OPERATION"
     );
   }
 
@@ -371,15 +375,12 @@ export class JsonRpcSigner extends EthersJsonRpcSigner {
   // https://support.metamask.io/hc/en-us/articles/14764161421467-What-is-eth-sign-and-why-is-it-a-risk-
   // @ethers/providers/src.ts/provider-jsonrpc.ts:JsonRpcSigner._legacySignMessage
   async _legacySignMessage(message: Uint8Array | string): Promise<string> {
-    if (this.isKaikas()) {
-      throwErr(
-        "Kaikas does not support the prefix-less legacy sign message",
-        EKlaytnErrorCode.UNSUPPORTED_OPERATION,
-        {
-          operation: "_legacySignMessage",
-        }
-      );
-    }
+    assert(
+      !this.isKaikas(),
+      "Kaikas does not support the prefix-less legacy sign message",
+      "UNSUPPORTED_OPERATION",
+      { operation: "_legacySignMessage" }
+    );
 
     const data = typeof message === "string" ? toUtf8Bytes(message) : message;
     const address = await this.getAddress();
@@ -403,15 +404,12 @@ export class JsonRpcSigner extends EthersJsonRpcSigner {
     types: Record<string, Array<TypedDataField>>,
     value: Record<string, any>
   ): Promise<string> {
-    if (this.isKaikas()) {
-      throwErr(
-        "Kaikas does not support the EIP-712 typed structured data signing",
-        EKlaytnErrorCode.UNSUPPORTED_OPERATION,
-        {
-          operation: "_signTypedData",
-        }
-      );
-    }
+    assert(
+      !this.isKaikas(),
+      "Kaikas does not support the EIP-712 typed structured data signing",
+      "UNSUPPORTED_OPERATION",
+      { operation: "_signTypedData" }
+    );
 
     // @ethers/providers/src.ts/provider-jsonrpc.ts:JsonRpcSigner._signTypedData
     // Populate any ENS names (in-place)
@@ -466,15 +464,12 @@ export class JsonRpcSigner extends EthersJsonRpcSigner {
   override async signTransaction(
     transaction: TransactionRequest
   ): Promise<string> {
-    if (!this.isKaikas()) {
-      return throwErr(
-        "signing transactions is only supported in Kaikas",
-        EKlaytnErrorCode.UNSUPPORTED_OPERATION,
-        {
-          operation: "signTransaction",
-        }
-      );
-    }
+    assert(
+      this.isKaikas(),
+      "signing transactions is only supported in Kaikas",
+      "UNSUPPORTED_OPERATION",
+      { operation: "signTransaction" }
+    );
 
     const tx = await getTransactionRequest(transaction);
     await populateFrom(tx, await this.getAddress());
@@ -566,34 +561,41 @@ class UncheckedJsonRpcSigner extends JsonRpcSigner {
 
 function catchUserRejectedSigning(
   error: any,
-  action: string,
-  from: string,
+  action: any,
+  from: any,
   messageData: any
 ) {
-  if (
-    typeof error.message === "string" &&
-    error.message.match(/user denied/i)
-  ) {
-    throwErr("user rejected signing", EKlaytnErrorCode.ACTION_REJECTED, {
-      action,
-      from,
-      messageData,
-    });
-  }
+  assert(
+    !(typeof error.message === "string" && error.message.match(/user denied/i)),
+    "user rejected signing",
+    "ACTION_REJECTED",
+    {
+      action: "signTransaction",
+      reason: "rejected",
+      info: {
+        from,
+        messageData,
+        action,
+      },
+    }
+  );
 }
 
 function catchUserRejectedTransaction(
   error: any,
-  action: string,
+  action: any,
   transaction: any
 ) {
-  if (
-    typeof error.message === "string" &&
-    error.message.match(/user denied/i)
-  ) {
-    throwErr("user rejected transaction", EKlaytnErrorCode.ACTION_REJECTED, {
-      action,
-      transaction,
-    });
-  }
+  assert(
+    !(typeof error.message === "string" && error.message.match(/user denied/i)),
+    "user rejected signing",
+    "ACTION_REJECTED",
+    {
+      action: "sendTransaction",
+      reason: "rejected",
+      info: {
+        transaction,
+      },
+    }
+  );
 }

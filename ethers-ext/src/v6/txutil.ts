@@ -7,6 +7,7 @@ import {
   SigningKey,
   resolveAddress,
   Transaction,
+  assert,
 } from "ethers6";
 import _ from "lodash";
 
@@ -16,7 +17,7 @@ import {
   SignatureLike,
 } from "@klaytn/js-ext-core";
 
-import { EKlaytnErrorCode, TransactionRequest } from "./types";
+import { TransactionRequest } from "./types";
 
 // Normalize transaction request in Object or RLP format
 export async function getTransactionRequest(
@@ -39,13 +40,12 @@ export async function populateFrom(
   if (!tx.from || tx.from == "0x") {
     tx.from = expectedFrom;
   } else {
-    if (tx.from?.toString().toLowerCase() != expectedFrom?.toLowerCase()) {
-      throwErr(
-        `from address mismatch (wallet address=${expectedFrom}) (tx.from=${tx.from})`,
-        EKlaytnErrorCode.INVALID_ARGUMENT,
-        { name: "transaction", value: tx }
-      );
-    }
+    assert(
+      tx.from?.toString().toLowerCase() === expectedFrom?.toLowerCase(),
+      `from address mismatch (wallet address=${expectedFrom}) (tx.from=${tx.from})`,
+      "INVALID_ARGUMENT",
+      { argument: "from", value: tx.from }
+    );
     tx.from = expectedFrom;
   }
 }
@@ -75,9 +75,7 @@ export async function populateGasLimit(
   tx: TransactionRequest,
   provider: Provider | null
 ) {
-  if (!provider) {
-    throwErr("provider is undefined");
-  }
+  assert(!!provider, "provider is undefined", "MISSING_ARGUMENT");
   if (!tx.gasLimit) {
     // Sometimes Klaytn node's eth_estimateGas may return insufficient amount.
     // To avoid this, add buffer to the estimated gas.
@@ -91,12 +89,12 @@ export async function populateGasLimit(
       const gasLimit = await provider?.estimateGas(tx);
       tx.gasLimit = Math.ceil(Number(gasLimit) * bufferMultiplier); // overflow risk when gasLimit exceed Number.MAX_SAFE_INTEGER
     } catch (error) {
-      throwErr(
+      assert(
+        false,
         "cannot estimate gas; transaction may fail or may require manual gas limit",
-        EKlaytnErrorCode.UNPREDICTABLE_GAS_LIMIT,
+        "UNKNOWN_ERROR",
         {
-          error: error,
-          tx: tx,
+          data: tx,
         }
       );
     }
@@ -144,12 +142,16 @@ export async function populateFeePayerAndSignatures(
   if (!tx.feePayer || tx.feePayer == ZeroAddress) {
     tx.feePayer = expectedFeePayer;
   } else {
-    if (tx.feePayer.toLowerCase() != expectedFeePayer.toLowerCase()) {
-      throwErr("feePayer address mismatch", EKlaytnErrorCode.INVALID_ARGUMENT, {
-        name: "transaction",
-        value: tx,
-      });
-    }
+    assert(
+      tx.feePayer.toLowerCase() === expectedFeePayer.toLowerCase(),
+      "feePayer address mismatch",
+      "INVALID_ARGUMENT",
+      {
+        argument: "feePayer",
+        value: tx.feePayer,
+      }
+    );
+    tx.feePayer = expectedFeePayer;
   }
 
   // A SenderTxHashRLP returned from caver may have dummy feePayerSignatures if SenderTxHashRLP shouldn't have feePayerSignatures.
@@ -166,27 +168,40 @@ export async function populateFeePayerAndSignatures(
     });
   }
 }
-export async function sleep(time: number): Promise<void> {
-  await new Promise((res, _) => {
-    setTimeout(() => res(true), time);
+/**
+ * Delay the execution inside an async function in miliseconds.
+ *
+ * @param   time  (miliseconds) the amount of time to be delayed.
+ */
+export function sleep(time: number): Promise<void> {
+  return new Promise((res, _) => {
+    setTimeout(() => res(), time);
   });
 }
+/**
+ * The poll function implements a retry mechanism for asynchronous operations.
+ * It repeatedly calls the callback function to fetch data and then uses the
+ * verify function to check if the retrieved data meets the desired criteria.
+ *
+ * @param   callback  A callback function that is responsible for fetching or retrieving data. It should be an asynchronous function that returns a Promise.
+ * @param   verify    A callback function that determines if the retrieved data meets the desired criteria. It should accept the data returned by callback and return a boolean value (true if the data is valid, false otherwise).
+ * @param   retries   (optional): An integer specifying the maximum number of times the function will attempt to poll before giving up. Defaults to 100.
+ * @returns A Promise that resolves to the data retrieved by callback when the verify function returns true, or rejects with an error if the maximum number of retries is reached.
+ */
 export async function poll<T>(
   callback: CallableFunction,
+  verify: CallableFunction,
   retries = 100
 ): Promise<T> {
   let result: T;
   for (let i = 1; i <= retries; i++) {
     const output = await callback();
-    if (!output) {
-      if (i === retries) {
-        throwErr("Transaction timeout!", EKlaytnErrorCode.NETWORK_ERROR, {
-          operation: "pollTransactionInPool",
-        });
-      } else {
-        await sleep(250);
-        continue;
-      }
+
+    if (!verify(output)) {
+      assert(i < retries, "Transaction timeout!", "NETWORK_ERROR", {
+        event: "pollTransactionInPool",
+      });
+      await sleep(250);
     }
     result = output;
     break;
@@ -198,21 +213,8 @@ export async function pollTransactionInPool(
   txhash: string,
   provider: Provider
 ): Promise<TransactionResponse> {
-  return poll<TransactionResponse>(() => provider.getTransaction(txhash));
-}
-
-export function throwErr(
-  message: string,
-  code: string = EKlaytnErrorCode.UNKNOWN_ERROR,
-  params?: any
-): never {
-  const error: any = new Error(message);
-  error.reason = message;
-  error.code = code;
-
-  Object.keys(params).forEach(function (key) {
-    error[key] = params[key];
-  });
-
-  throw error;
+  return poll<TransactionResponse>(
+    () => provider.getTransaction(txhash),
+    (value: TransactionResponse) => value?.hash && value.hash === txhash
+  );
 }

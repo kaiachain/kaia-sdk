@@ -3,6 +3,7 @@ import {
   Networkish,
   JsonRpcProvider as EthersJsonRpcProvider,
   BrowserProvider as EthersWeb3Provider,
+  assert,
 } from "ethers6";
 
 import { asyncOpenApi, AsyncNamespaceApi } from "@klaytn/js-ext-core";
@@ -18,8 +19,6 @@ import {
 } from "@klaytn/web3rpc";
 
 import { JsonRpcSigner } from "./signer";
-import { throwErr } from "./txutil";
-import { EKlaytnErrorCode } from "./types";
 
 /* eslint-disable no-multi-spaces */
 export class JsonRpcProvider extends EthersJsonRpcProvider {
@@ -85,16 +84,13 @@ export class Web3Provider extends EthersWeb3Provider {
     }
     if (typeof addressOrIndex === "number") {
       const accounts = await this.provider.send("eth_accounts", []);
+      assert(
+        accounts.length > addressOrIndex,
+        "unknown account #" + addressOrIndex,
+        "UNSUPPORTED_OPERATION",
+        { operation: "getAddress" }
+      );
 
-      if (accounts.length <= addressOrIndex) {
-        throwErr(
-          "unknown account #" + addressOrIndex,
-          EKlaytnErrorCode.UNSUPPORTED_OPERATION,
-          {
-            operation: "getAddress",
-          }
-        );
-      }
       addressOrIndex = await this.provider._getAddress(
         accounts[addressOrIndex]
       );

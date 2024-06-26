@@ -1,6 +1,3 @@
-import { Logger } from "@ethersproject/logger";
-import { Deferrable } from "@ethersproject/properties";
-import { poll } from "@ethersproject/web";
 import {
   Provider,
   TransactionLike,
@@ -19,13 +16,11 @@ import {
   SignatureLike,
 } from "@klaytn/js-ext-core";
 
-import { TransactionRequest } from "./types";
-
-const logger = new Logger("@klaytn/ethers-ext");
+import { EKlaytnErrorCode, TransactionRequest } from "./types";
 
 // Normalize transaction request in Object or RLP format
 export async function getTransactionRequest(
-  transactionOrRLP: Deferrable<TransactionRequest> | string | Transaction
+  transactionOrRLP: TransactionRequest | string | Transaction
 ): Promise<TransactionLike<string>> {
   if (_.isString(transactionOrRLP)) {
     return parseTransaction(transactionOrRLP);
@@ -37,41 +32,22 @@ export async function getTransactionRequest(
   }
 }
 
-// Below populateX() methods are partial replacements to:
-// - ethers.Signer.checkTransaction()
-// - ethers.Signer.populateTransaction()
-// - ethers.JsonRpcSigner.sendUncheckedTransaction()
-
-// populateFromSync is a synchronous method so it can be used in checkTransaction().
-export function populateFromSync(
-  tx: Deferrable<TransactionRequest>,
-  expectedFrom: string | Promise<string>
-) {
-  // See @ethersproject/abstract-signer/src/index.ts:Signer.checkTransaction()
-  if (!tx.from || tx.from == "0x") {
-    tx.from = expectedFrom;
-  } else {
-    tx.from = Promise.all([Promise.resolve(tx.from), expectedFrom]).then(
-      ([from, expectedFrom]) => {
-        if (from?.toString().toLowerCase() != expectedFrom?.toLowerCase()) {
-          logger.throwArgumentError(
-            `from address mismatch (wallet address=${expectedFrom}) (tx.from=${from})`,
-            "transaction",
-            tx
-          );
-        }
-        return from;
-      }
-    );
-  }
-}
-
 export async function populateFrom(
   tx: TransactionRequest,
   expectedFrom: string
 ) {
-  populateFromSync(tx, expectedFrom);
-  tx.from = await tx.from;
+  if (!tx.from || tx.from == "0x") {
+    tx.from = expectedFrom;
+  } else {
+    if (tx.from?.toString().toLowerCase() != expectedFrom?.toLowerCase()) {
+      throwErr(
+        `from address mismatch (wallet address=${expectedFrom}) (tx.from=${tx.from})`,
+        EKlaytnErrorCode.INVALID_ARGUMENT,
+        { name: "transaction", value: tx }
+      );
+    }
+    tx.from = expectedFrom;
+  }
 }
 
 export async function populateTo(
@@ -81,15 +57,7 @@ export async function populateTo(
   if (!tx.to || tx.to == "0x") {
     tx.to = ZeroAddress;
   } else {
-    return resolveAddress(tx.to);
-    // const address = await provider?.resolveName(tx.to.toString());
-    // if (address == null) {
-    //   logger.throwArgumentError(
-    //     "provided ENS name resolves to null",
-    //     "tx.to",
-    //     tx.to
-    //   );
-    // }
+    tx.to = await resolveAddress(tx.to, provider);
   }
 }
 
@@ -108,7 +76,7 @@ export async function populateGasLimit(
   provider: Provider | null
 ) {
   if (!provider) {
-    logger.throwError("provider is undefined");
+    throwErr("provider is undefined");
   }
   if (!tx.gasLimit) {
     // Sometimes Klaytn node's eth_estimateGas may return insufficient amount.
@@ -123,9 +91,9 @@ export async function populateGasLimit(
       const gasLimit = await provider?.estimateGas(tx);
       tx.gasLimit = Math.ceil(Number(gasLimit) * bufferMultiplier); // overflow risk when gasLimit exceed Number.MAX_SAFE_INTEGER
     } catch (error) {
-      logger.throwError(
+      throwErr(
         "cannot estimate gas; transaction may fail or may require manual gas limit",
-        Logger.errors.UNPREDICTABLE_GAS_LIMIT,
+        EKlaytnErrorCode.UNPREDICTABLE_GAS_LIMIT,
         {
           error: error,
           tx: tx,
@@ -177,7 +145,10 @@ export async function populateFeePayerAndSignatures(
     tx.feePayer = expectedFeePayer;
   } else {
     if (tx.feePayer.toLowerCase() != expectedFeePayer.toLowerCase()) {
-      logger.throwArgumentError("feePayer address mismatch", "transaction", tx);
+      throwErr("feePayer address mismatch", EKlaytnErrorCode.INVALID_ARGUMENT, {
+        name: "transaction",
+        value: tx,
+      });
     }
   }
 
@@ -195,22 +166,53 @@ export async function populateFeePayerAndSignatures(
     });
   }
 }
-
+export async function sleep(time: number): Promise<void> {
+  await new Promise((res, _) => {
+    setTimeout(() => res(true), time);
+  });
+}
+export async function poll<T>(
+  callback: CallableFunction,
+  retries = 100
+): Promise<T> {
+  let result: T;
+  for (let i = 1; i <= retries; i++) {
+    const output = await callback();
+    if (!output) {
+      if (i === retries) {
+        throwErr("Transaction timeout!", EKlaytnErrorCode.NETWORK_ERROR, {
+          operation: "pollTransactionInPool",
+        });
+      } else {
+        await sleep(250);
+        continue;
+      }
+    }
+    result = output;
+    break;
+  }
+  return result!;
+}
 // Poll for `eth_getTransaction` until the transaction is found in the transaction pool.
 export async function pollTransactionInPool(
   txhash: string,
   provider: Provider
 ): Promise<TransactionResponse> {
-  // Retry until the transaction shows up in the txpool
-  // Using poll() like in the ethers.JsonRpcSigner.sendTransaction
-  // https://github.com/ethers-io/ethers.js/blob/v5.7/packages/providers/src.ts/json-rpc-provider.ts#L283
-  const pollFunc = async () => {
-    const tx = await provider.getTransaction(txhash);
-    if (tx == null) {
-      return undefined; // retry
-    } else {
-      return tx; // success
-    }
-  };
-  return poll(pollFunc) as Promise<TransactionResponse>;
+  return poll<TransactionResponse>(() => provider.getTransaction(txhash));
+}
+
+export function throwErr(
+  message: string,
+  code: string = EKlaytnErrorCode.UNKNOWN_ERROR,
+  params?: any
+): never {
+  const error: any = new Error(message);
+  error.reason = message;
+  error.code = code;
+
+  Object.keys(params).forEach(function (key) {
+    error[key] = params[key];
+  });
+
+  throw error;
 }

@@ -1,7 +1,6 @@
-import { keccak256, TransactionRequest } from "ethers6";
-import { Wallet as EthersWallet } from "ethers6";
-import chai, { assert, expect } from "chai";
+import chai, { assert } from "chai";
 import chaiAsPromised from "chai-as-promised";
+import { keccak256, Wallet as EthersWallet } from "ethers6";
 import _ from "lodash";
 import { describe, it } from "mocha";
 
@@ -86,67 +85,6 @@ describe("Wallet v6", () => {
         return keccak256(sentRawTx);
       });
     }
-  });
-
-  // checkTransaction must fill the from field
-  // - from field correctly added, either as string or Promise<string>
-  //   - respects decoupled address
-  // - If from field exists, reject if different from getAddress()
-  // - Original tx object remain untouched
-  describe("checkTransaction", () => {
-    // ethers v6 removed Wallet.checkTransaction.
-    async function testOK(W: KlaytnWallet, tx: any, expectedFrom?: any) {
-      let res = W.checkTransaction(tx);
-      expectedFrom ??= await W.getAddress();
-      assert.equal(await res.from, expectedFrom);
-    }
-    async function testErr(W: KlaytnWallet, tx: any, err: string) {
-      let trigger = async () => {
-        let res = W.checkTransaction(tx);
-        // "from address mismatch" error is lazy. await to trigger the error.
-        await res.from;
-      };
-      expect(trigger()).to.be.rejectedWith(err);
-    }
-
-    it("fill missing 'from' field", async () => {
-      // for (let W of [EW, KW]) {
-      //   // Ethereum TxType always filled with legacy address
-      //   await testOK(W, { type: 0, to, value }, from);
-      // }
-      for (let W of [KW, KWD]) {
-        await testOK(W, { type: 9, to, feePayer, value });
-      }
-    });
-    it("preserve existing 'from' field", async () => {
-      // for (let W of [EW, KW, KWD]) {
-      //   // Ethereum TxType always filled with legacy address
-      //   await testOK(W, { type: 0, from, to, value }, from);
-      // }
-      for (let W of [KW, KWD]) {
-        await testOK(W, {
-          type: 9,
-          from: await W.getAddress(),
-          to,
-          feePayer,
-          value,
-        });
-      }
-      for (let W of [EW, KW, KWD]) {
-        // await testErr(
-        //   W,
-        //   { type: 0, from: otherAddr, to, value },
-        //   "from address mismatch"
-        // );
-      }
-      for (let W of [KW, KWD]) {
-        await testErr(
-          W,
-          { type: 9, from: otherAddr, to, feePayer, value },
-          "from address mismatch"
-        );
-      }
-    });
   });
 
   // populateTransaction must fill all missing fields

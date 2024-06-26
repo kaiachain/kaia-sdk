@@ -1,4 +1,3 @@
-import { Logger } from "@ethersproject/logger";
 import {
   FetchRequest,
   Networkish,
@@ -19,8 +18,8 @@ import {
 } from "@klaytn/web3rpc";
 
 import { JsonRpcSigner } from "./signer";
-
-const logger = new Logger("@klaytn/ethers-ext");
+import { throwErr } from "./txutil";
+import { EKlaytnErrorCode } from "./types";
 
 /* eslint-disable no-multi-spaces */
 export class JsonRpcProvider extends EthersJsonRpcProvider {
@@ -81,19 +80,20 @@ export class Web3Provider extends EthersWeb3Provider {
   override async getSigner(
     addressOrIndex?: string | number
   ): Promise<JsonRpcSigner> {
-    if (!addressOrIndex) addressOrIndex = 0;
+    if (!addressOrIndex) {
+      addressOrIndex = 0;
+    }
     if (typeof addressOrIndex === "number") {
       const accounts = await this.provider.send("eth_accounts", []);
 
       if (accounts.length <= addressOrIndex) {
-        logger.throwError(
+        throwErr(
           "unknown account #" + addressOrIndex,
-          Logger.errors.UNSUPPORTED_OPERATION,
+          EKlaytnErrorCode.UNSUPPORTED_OPERATION,
           {
             operation: "getAddress",
           }
         );
-        throw new Error("not support getAddress");
       }
       addressOrIndex = await this.provider._getAddress(
         accounts[addressOrIndex]

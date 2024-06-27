@@ -1,6 +1,4 @@
-const {
-  Wallet
-} = require("@klaytn/ethers-ext");
+const { Wallet } = require("@klaytn/ethers-ext");
 
 // Eth V3. ethers.Wallet.createRandom().encrypt("password")
 const encryptedKey = `{
@@ -22,18 +20,30 @@ const encryptedKey = `{
     "mac": "d70f83824c2c30dc5cd3a244d87147b6aa713a6000165789a82a467651284ac7"
   }
 }`;
-const password = "password";
 // const address = "0x029e786304c1531aF3aC7db24A02448e543A099E";
 // const key = "0x1b33a48f58d8c85ab142a7375fcf18714d88271f6647cfa6b54f1be66b05a762";
+
+const password = "password";
+const password2 = "password2";
 
 async function main() {
   const account = Wallet.fromEncryptedJsonSync(encryptedKey, password);
 
-  console.log("decrypted address");
+  console.log("\ndecrypted address");
   console.log(account.address);
 
   console.log("\ndecrypted privateKey");
   console.log(account.privateKey);
+
+  account.encrypt(password2).then((encryptedKey2) => {
+    const account2 = Wallet.fromEncryptedJsonSync(encryptedKey2, password2);
+
+    console.log("\ndecrypted address with new password");
+    console.log( account2.address );
+
+    console.log("\ndecrypted privateKey with new password");
+    console.log(account2.privateKey);
+  });
 }
 
 main();

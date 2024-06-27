@@ -1,4 +1,3 @@
-
 import org.web3j.protocol.klaytn.core.method.response.PersonalSendValueTransferResponse;
 import org.web3j.protocol.klaytn.core.method.response.TransactionObject;
 import org.web3j.protocol.http.HttpService;

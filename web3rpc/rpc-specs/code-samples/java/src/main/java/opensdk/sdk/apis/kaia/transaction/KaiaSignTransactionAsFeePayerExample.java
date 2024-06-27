@@ -1,4 +1,3 @@
-
 import org.web3j.protocol.klaytn.core.method.response.KaiaSignTransactionAsFeePayerResponse;
 import org.web3j.protocol.klaytn.core.method.response.KaiatnTransactionTypes;
 import org.web3j.protocol.http.HttpService;

@@ -1,4 +1,3 @@
-
 import org.web3j.protocol.klaytn.core.method.response.KlaySendTransactionResponse;
 import org.web3j.protocol.klaytn.core.method.response.KlaytnTransactionTypes;
 import org.web3j.protocol.http.HttpService;

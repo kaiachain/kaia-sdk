@@ -1,4 +1,3 @@
-
 import org.web3j.protocol.klaytn.core.method.response.KlayCallObject;
 import org.web3j.protocol.klaytn.core.method.response.KlayEstimateGasResponse;
 import org.web3j.protocol.http.HttpService;

@@ -1,4 +1,3 @@
-
 import org.web3j.protocol.core.methods.response.EthChainId;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.klaytn.Web3j;

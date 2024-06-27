@@ -1,4 +1,3 @@
-
 //import org.web3j.protocol.klaytn.core.method.response.EthCreateAccessListResponse;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.klaytn.Web3j;

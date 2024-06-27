@@ -1,4 +1,3 @@
-
 import org.web3j.protocol.klaytn.core.method.response.FilterOptions;
 import org.web3j.protocol.klaytn.core.method.response.KaiaGetLogsResponse;
 import org.web3j.protocol.http.HttpService;

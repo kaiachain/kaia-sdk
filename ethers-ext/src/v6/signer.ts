@@ -222,14 +222,15 @@ export class Wallet extends EthersWallet {
     transactionOrRLP: TransactionRequest | string
   ): Promise<string> {
     const tx = await getTransactionRequest(transactionOrRLP);
-
     // Not a Klaytn FeePayerSig TxType; not supported
-    if (!isFeePayerSigTxType(parseTxType(tx.type))) {
-      throw new Error(
-        `signTransactionAsFeePayer not supported for tx type ${tx.type}`
-      );
-    }
-
+    assert(
+      isFeePayerSigTxType(parseTxType(tx.type)),
+      `signTransactionAsFeePayer not supported for tx type ${tx.type}`,
+      "UNSUPPORTED_OPERATION",
+      {
+        operation: "signTransactionAsFeePayer",
+      }
+    );
     // Because RLP-encoded tx may contain dummy fee payer fields, fix here.
     await populateFeePayerAndSignatures(tx, await this.getAddress());
     // Because RLP-encoded tx may not contain chainId, fill up here.
@@ -263,13 +264,15 @@ export class Wallet extends EthersWallet {
     transactionOrRLP: TransactionRequest | string
   ): Promise<TransactionResponse> {
     const tx = await getTransactionRequest(transactionOrRLP);
-
     // Not a Klaytn FeePayerSig TxType; not supported
-    if (!isFeePayerSigTxType(parseTxType(tx.type))) {
-      throw new Error(
-        `sendTransactionAsFeePayer not supported for tx type ${tx.type}`
-      );
-    }
+    assert(
+      isFeePayerSigTxType(parseTxType(tx.type)),
+      `sendTransactionAsFeePayer not supported for tx type ${tx.type}`,
+      "UNSUPPORTED_OPERATION",
+      {
+        operation: "sendTransactionAsFeePayer",
+      }
+    );
 
     const populatedTx = await this._populateTransaction(tx, true);
     const signedTx = await this.signTransactionAsFeePayer(populatedTx);
@@ -287,14 +290,11 @@ export class Wallet extends EthersWallet {
         operation: "_sendKlaytnRawTransaction",
       }
     );
-    if (!(this.provider instanceof EthersJsonRpcApiProvider)) {
-      throw new Error();
-    } else {
-      const txhash = await this.provider.send("klay_sendRawTransaction", [
-        signedTx,
-      ]);
-      return pollTransactionInPool(txhash, this.provider);
-    }
+
+    const txhash = await this.provider.send("klay_sendRawTransaction", [
+      signedTx,
+    ]);
+    return pollTransactionInPool(txhash, this.provider);
   }
 }
 

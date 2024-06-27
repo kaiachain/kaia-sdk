@@ -16,9 +16,9 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthChainId;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.klaytn.Web3j;
+import org.web3j.protocol.kaia.Web3j;
 import org.web3j.utils.Numeric;
-import org.web3j.protocol.klaytn.core.method.response.TransactionReceipt;
+import org.web3j.protocol.kaia.core.method.response.TransactionReceipt;
 
 public class FeeDelegatedValueTransferMemoWithRatioExample implements keySample {
 

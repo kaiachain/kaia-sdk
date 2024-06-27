@@ -11,8 +11,8 @@ import org.web3j.example.keySample;
 import org.web3j.protocol.core.methods.response.EthChainId;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.klaytn.Web3j;
-import org.web3j.protocol.klaytn.core.method.response.TransactionReceipt;
+import org.web3j.protocol.kaia.Web3j;
+import org.web3j.protocol.kaia.core.method.response.TransactionReceipt;
 import org.web3j.tx.KlayRawTransactionManager;
 
 public class KlayRawTransactionManagerExample implements keySample {

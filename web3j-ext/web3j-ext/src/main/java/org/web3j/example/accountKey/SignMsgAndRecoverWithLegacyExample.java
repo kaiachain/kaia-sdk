@@ -8,8 +8,8 @@ import org.web3j.crypto.KlayCredentials;
 import org.web3j.crypto.KlaySignatureData;
 import org.web3j.crypto.Sign.SignatureData;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.klaytn.Web3j;
-import org.web3j.protocol.klaytn.core.method.response.KlayRecoverFromMessageResponse;
+import org.web3j.protocol.kaia.Web3j;
+import org.web3j.protocol.kaia.core.method.response.KlayRecoverFromMessageResponse;
 
 /**
  * 

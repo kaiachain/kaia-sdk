@@ -16,7 +16,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import org.web3j.protocol.klaytn.Web3j;
+import org.web3j.protocol.kaia.Web3j;
 import org.web3j.crypto.transaction.account.AccountKey;
 import org.web3j.crypto.transaction.type.ITransaction;
 import org.web3j.crypto.transaction.type.TxType;

@@ -9,7 +9,7 @@ import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.example.keySample;
 import org.web3j.klayAccount.AccountStore;
 import org.web3j.klayAccount.Accounts;
-import org.web3j.protocol.klaytn.Web3j;
+import org.web3j.protocol.kaia.Web3j;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Numeric;
 

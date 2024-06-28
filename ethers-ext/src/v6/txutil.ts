@@ -189,23 +189,28 @@ export function sleep(time: number): Promise<void> {
  * @returns A Promise that resolves to the data retrieved by callback when the verify function returns true, or rejects with an error if the maximum number of retries is reached.
  */
 export async function poll<T>(
-  callback: CallableFunction,
+  callback: () => Promise<T | null>,
   verify: CallableFunction,
   retries = 100
 ): Promise<T> {
   let result: T;
-  for (let i = 1; i <= retries; i++) {
-    const output = await callback();
-
-    if (!verify(output)) {
-      assert(i < retries, "Transaction timeout!", "NETWORK_ERROR", {
-        event: "pollTransactionInPool",
-      });
-      await sleep(250);
+  for (let i = 0; i < retries; i++) {
+    try {
+      const output = await callback();
+      if (output && verify(output)) {
+        result = output;
+        break;
+      }
+    } catch (_) {
+      continue;
     }
-    result = output;
-    break;
+    await sleep(250);
   }
+
+  assert(result!, "Transaction timeout!", "NETWORK_ERROR", {
+    event: "pollTransactionInPool",
+  });
+
   return result!;
 }
 // Poll for `eth_getTransaction` until the transaction is found in the transaction pool.
@@ -214,7 +219,7 @@ export async function pollTransactionInPool(
   provider: Provider
 ): Promise<TransactionResponse> {
   return poll<TransactionResponse>(
-    () => provider.getTransaction(txhash),
-    (value: TransactionResponse) => value?.hash && value.hash === txhash
+    (): Promise<TransactionResponse | null> => provider.getTransaction(txhash),
+    (value: TransactionResponse) => typeof value?.hash === "string"
   );
 }

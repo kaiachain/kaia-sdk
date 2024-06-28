@@ -113,7 +113,7 @@ async function signMsg() {
       console.log("signature", signature);
       $("#textSignature").html(signature);
 
-      const recoveredAddress = ethers.utils.verifyMessage(message, signature);
+      const recoveredAddress = ethers.verifyMessage(message, signature);
       console.log("recoveredAddress", recoveredAddress);
       $("#textRecoveredAddress").html(recoveredAddress);
     }

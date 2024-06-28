@@ -16,11 +16,11 @@ const wallet = new Wallet(senderAddr, senderPriv, provider); // decoupled accoun
 
 async function main() {
   const msg = "hello";
-  const msghex = ethers.utils.hexlify(ethers.utils.toUtf8Bytes(msg));
+  const msghex = ethers.hexlify(ethers.toUtf8Bytes(msg));
   const sig = await wallet.signMessage(msg);
   console.log({ senderAddr, msg, msghex, sig });
 
-  const addr1 = ethers.utils.verifyMessage(msg, sig);
+  const addr1 = ethers.verifyMessage(msg, sig);
   console.log(
     "recoveredAddr lib",
     addr1,

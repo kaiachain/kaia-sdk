@@ -19,7 +19,7 @@ async function main() {
 
   // eth_ namespace JSON-RPCs are provided by the vanilla ethers.js provider methods:
   // https://docs.ethers.org/v5/api/providers/provider/
-  let gasPrice = await provider.getGasPrice();
+  let gasPrice = await (await provider.getFeeData()).gasPrice;
   console.log("gasPrice", gasPrice.toString());
 }
 

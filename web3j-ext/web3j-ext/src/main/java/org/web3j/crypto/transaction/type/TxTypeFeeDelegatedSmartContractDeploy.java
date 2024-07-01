@@ -8,7 +8,7 @@ import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
-import org.web3j.utils.KlayTransactionUtils;
+import org.web3j.utils.KaiaTransactionUtils;
 import org.web3j.utils.Numeric;
 
 public class TxTypeFeeDelegatedSmartContractDeploy extends TxTypeFeeDelegate {
@@ -81,7 +81,7 @@ public class TxTypeFeeDelegatedSmartContractDeploy extends TxTypeFeeDelegate {
      * @return Type transaction type
      */
     @Override
-    public Type getKlayType() {
+    public Type getKaiaType() {
         return Type.FEE_DELEGATED_SMART_CONTRACT_DEPLOY;
     }
 
@@ -94,7 +94,7 @@ public class TxTypeFeeDelegatedSmartContractDeploy extends TxTypeFeeDelegate {
     public static TxTypeFeeDelegatedSmartContractDeploy decodeFromRawTransaction(byte[] rawTransaction) {
         //TxHashRLP = type + encode([nonce, gasPrice, gas, to, value, from, input, humanReadable, codeFormat, txSignatures, feePayer, feePayerSignatures])
         try {
-            byte[] rawTransactionExceptType = KlayTransactionUtils.getRawTransactionNoType(rawTransaction);
+            byte[] rawTransactionExceptType = KaiaTransactionUtils.getRawTransactionNoType(rawTransaction);
 
             RlpList rlpList = RlpDecoder.decode(rawTransactionExceptType);
             List<RlpType> values = ((RlpList) rlpList.getValues().get(0)).getValues();

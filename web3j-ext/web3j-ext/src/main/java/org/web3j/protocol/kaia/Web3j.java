@@ -1,4 +1,4 @@
-package org.web3j.protocol.klaytn;
+package org.web3j.protocol.kaia;
 import java.util.Arrays;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -66,10 +66,10 @@ public class Web3j extends JsonRpc2_0Web3j implements KaiaApi, KlayApi, Governan
         } catch (NumberFormatException e) {
             // something
         }
-        // Klaytn transaction type
+        // Kaia transaction type
         if(8 <= txType && txType <= 74) {
             return new Request<>(
-                "klay_sendRawTransaction",
+                "kaia_sendRawTransaction",
                 Arrays.asList(signedTransactionData),
                 web3jService,
                 org.web3j.protocol.core.methods.response.EthSendTransaction.class);

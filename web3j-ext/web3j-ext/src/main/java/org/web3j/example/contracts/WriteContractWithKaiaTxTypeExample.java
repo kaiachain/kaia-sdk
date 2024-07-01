@@ -2,9 +2,9 @@ package org.web3j.example.contracts;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import org.web3j.crypto.KlayCredentials;
-import org.web3j.crypto.KlayRawTransaction;
-import org.web3j.crypto.KlayTransactionEncoder;
+import org.web3j.crypto.KaiaCredentials;
+import org.web3j.crypto.KaiaRawTransaction;
+import org.web3j.crypto.KaiaTransactionEncoder;
 import org.web3j.crypto.transaction.type.TxType;
 import org.web3j.crypto.transaction.type.TxTypeFeeDelegatedSmartContractExecution;
 import org.web3j.crypto.transaction.type.TxType.Type;
@@ -18,7 +18,7 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.kaia.Web3j;
 import org.web3j.utils.Numeric;
-import org.web3j.protocol.kaia.core.method.response.KlayCallResponse;
+import org.web3j.protocol.kaia.core.method.response.KaiaCallResponse;
 import org.web3j.protocol.kaia.core.method.response.TransactionReceipt;
 import org.web3j.tx.gas.StaticGasProvider;
 import org.web3j.abi.FunctionEncoder;
@@ -27,7 +27,7 @@ import org.web3j.abi.datatypes.Uint;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class WriteContractWithKlaytnTxTypeExample {
+public class WriteContractWithKaiaTxTypeExample {
         /**
          * @throws Exception
          * 
@@ -35,7 +35,7 @@ public class WriteContractWithKlaytnTxTypeExample {
         public static void run() throws Exception {
 
                 Web3j web3j = Web3j.build(new HttpService(keySample.BAOBAB_URL));
-                KlayCredentials credentials = KlayCredentials.create(keySample.LEGACY_KEY_privkey);
+                KaiaCredentials credentials = KaiaCredentials.create(keySample.LEGACY_KEY_privkey);
                 String contractAddr = "0x95Be48607498109030592C08aDC9577c7C2dD505";
                 BigInteger GAS_PRICE = BigInteger.valueOf(50000000000L);
                 BigInteger GAS_LIMIT = BigInteger.valueOf(6721950);
@@ -60,7 +60,7 @@ public class WriteContractWithKlaytnTxTypeExample {
 
                 TxType.Type type = Type.SMART_CONTRACT_EXECUTION;
 
-                KlayRawTransaction raw = KlayRawTransaction.createTransaction(
+                KaiaRawTransaction raw = KaiaRawTransaction.createTransaction(
                                 type,
                                 nonce,
                                 GAS_PRICE,
@@ -71,7 +71,7 @@ public class WriteContractWithKlaytnTxTypeExample {
                                 payload);
 
                 // Sign as sender
-                byte[] signedMessage = KlayTransactionEncoder.signMessage(raw, chainId, credentials);
+                byte[] signedMessage = KaiaTransactionEncoder.signMessage(raw, chainId, credentials);
                 String hexValue = Numeric.toHexString(signedMessage);
                 web3j.ethSendRawTransaction(hexValue).send();
                 try {

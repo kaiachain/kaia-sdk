@@ -16,9 +16,9 @@
 
 package org.web3j.crypto.transaction.type;
 
-import org.web3j.crypto.KlayCredentials;
-import org.web3j.crypto.KlaySignatureData;
-import org.web3j.crypto.KlayRawTransaction;
+import org.web3j.crypto.KaiaCredentials;
+import org.web3j.crypto.KaiaSignatureData;
+import org.web3j.crypto.KaiaRawTransaction;
 import org.web3j.rlp.RlpType;
 
 import java.util.List;
@@ -30,19 +30,19 @@ public interface TxType {
      *
      * @param credentials credential info of a signer
      * @param chainId     chain ID
-     * @return KlaySignatureData processed signature data
+     * @return KaiaSignatureData processed signature data
      */
-    KlaySignatureData getSignatureData(KlayCredentials credentials, int chainId);
+    KaiaSignatureData getSignatureData(KaiaCredentials credentials, int chainId);
 
     /**
      * rlp encoding for transaction hash(TxHash)
      *
      * @param credentials credential info of a signer
      * @param chainId     chain ID
-     * @return KlayRawTransaction this contains transaction hash and processed
+     * @return KaiaRawTransaction this contains transaction hash and processed
      *         signature data
      */
-    KlayRawTransaction sign(KlayCredentials credentials, long chainId);
+    KaiaRawTransaction sign(KaiaCredentials credentials, long chainId);
 
     /**
      * create RlpType List. List elements can be different depending on transaction
@@ -58,7 +58,7 @@ public interface TxType {
      *
      * @return Type transaction type
      */
-    Type getKlayType();
+    Type getKaiaType();
 
     /**
      * create rlp encoded value for signature component
@@ -69,7 +69,7 @@ public interface TxType {
 
     enum Type {
         /**
-         * This represents a type of transactions existed previously in Klaytn.
+         * This represents a type of transactions existed previously in Kaia.
          */
         LEGACY((byte) 0x00),
 
@@ -96,12 +96,12 @@ public interface TxType {
         FEE_DELEGATED_ACCOUNT_UPDATE_WITH_RATIO((byte) 0x22),
 
         /**
-         * This transfers KLAY only.
+         * This transfers KAIA only.
          */
         VALUE_TRANSFER((byte) 0x08),
 
         /**
-         * This transfers KLAY with a memo.
+         * This transfers KAIA with a memo.
          */
         VALUE_TRANSFER_MEMO((byte) 0x10),
 
@@ -117,12 +117,12 @@ public interface TxType {
         FEE_DELEGATED_VALUE_TRANSFER_WITH_RATIO((byte) 0x0a),
 
         /**
-         * This transfers KLAY with a data. The fee is paid by the fee payer.
+         * This transfers KAIA with a data. The fee is paid by the fee payer.
          */
         FEE_DELEGATED_VALUE_TRANSFER_MEMO((byte) 0x11),
 
         /**
-         * This transfers KLAY with a data. The given ratio of the transaction fee is
+         * This transfers KAIA with a data. The given ratio of the transaction fee is
          * paid by the fee payer.
          */
         FEE_DELEGATED_VALUE_TRANSFER_MEMO_WITH_RATIO((byte) 0x12),

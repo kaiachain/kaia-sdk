@@ -3,9 +3,9 @@ package org.web3j.example.transactions;
 import java.io.IOException;
 import java.math.BigInteger;
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.KlayCredentials;
-import org.web3j.crypto.KlayRawTransaction;
-import org.web3j.crypto.KlayTransactionEncoder;
+import org.web3j.crypto.KaiaCredentials;
+import org.web3j.crypto.KaiaRawTransaction;
+import org.web3j.crypto.KaiaTransactionEncoder;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthChainId;
@@ -25,7 +25,7 @@ public class LegacyExample implements keySample {
 
         public static void run() throws Exception {
                 Web3j web3j = Web3j.build(new HttpService(keySample.BAOBAB_URL));
-                KlayCredentials klaycredentials = KlayCredentials.create(keySample.LEGACY_KEY_privkey);
+                KaiaCredentials kaiacredentials = KaiaCredentials.create(keySample.LEGACY_KEY_privkey);
                 Credentials credentials = Credentials.create(LEGACY_KEY_privkey);
 
                 BigInteger GAS_PRICE = BigInteger.valueOf(50000000000L);
@@ -39,27 +39,27 @@ public class LegacyExample implements keySample {
                 BigInteger value = BigInteger.valueOf(100);
 
                 // send legacy transaction with web3j-credentials
-                RawTransaction raw = KlayRawTransaction.createEtherTransaction(
+                RawTransaction raw = KaiaRawTransaction.createEtherTransaction(
                                 nonce,
                                 GAS_PRICE,
                                 GAS_LIMIT,
                                 to,
                                 value);
 
-                byte[] signedMessage = KlayTransactionEncoder.signMessage(raw, chainId, credentials);
+                byte[] signedMessage = KaiaTransactionEncoder.signMessage(raw, chainId, credentials);
                 String hexValue = Numeric.toHexString(signedMessage);
                 EthSendTransaction transactionResponse = web3j.ethSendRawTransaction(hexValue).send();
                 System.out.println(transactionResponse.getResult());
 
-                // send legacy transaction with web3j-ext klaycredentials
-                raw = KlayRawTransaction.createEtherTransaction(
+                // send legacy transaction with web3j-ext kaiacredentials
+                raw = KaiaRawTransaction.createEtherTransaction(
                                 nonce,
                                 GAS_PRICE,
                                 GAS_LIMIT,
                                 to,
                                 value);
 
-                signedMessage = KlayTransactionEncoder.signMessage(raw, chainId, klaycredentials);
+                signedMessage = KaiaTransactionEncoder.signMessage(raw, chainId, kaiacredentials);
                 hexValue = Numeric.toHexString(signedMessage);
                 transactionResponse = web3j.ethSendRawTransaction(hexValue).send();
                 System.out.println("TxHash : \n " + transactionResponse.getResult());
@@ -72,8 +72,8 @@ public class LegacyExample implements keySample {
                 org.web3j.protocol.core.methods.response.TransactionReceipt ethReceipt = transactionReceiptProcessor
                                 .waitForTransactionReceipt(txHash);
                 System.out.println("Receipt from eth_getTransactionReceipt : \n" + ethReceipt);
-                TransactionReceipt receipt = web3j.klayGetTransactionReceipt(txHash).send().getResult();
-                System.out.println("Receipt from klay_getTransactionReceipt : \n" + receipt);
+                TransactionReceipt receipt = web3j.kaiaGetTransactionReceipt(txHash).send().getResult();
+                System.out.println("Receipt from kaia_getTransactionReceipt : \n" + receipt);
                 web3j.shutdown();
 
         }

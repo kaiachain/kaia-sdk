@@ -8,7 +8,7 @@ import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
-import org.web3j.utils.KlayTransactionUtils;
+import org.web3j.utils.KaiaTransactionUtils;
 import org.web3j.utils.Numeric;
 
 public class TxTypeFeeDelegatedValueTransferMemo extends TxTypeFeeDelegate {
@@ -45,7 +45,7 @@ public class TxTypeFeeDelegatedValueTransferMemo extends TxTypeFeeDelegate {
      * @return Type transaction type
      */
     @Override
-    public Type getKlayType() {
+    public Type getKaiaType() {
         return Type.FEE_DELEGATED_VALUE_TRANSFER_MEMO;
     }
 
@@ -74,7 +74,7 @@ public class TxTypeFeeDelegatedValueTransferMemo extends TxTypeFeeDelegate {
     public static TxTypeFeeDelegatedValueTransferMemo decodeFromRawTransaction(byte[] rawTransaction) {
         // TxHashRLP = type + encode([nonce, gasPrice, gas, to, value, from, input, txSignatures, feePayer, feePayerSignatures])
         try {
-            byte[] rawTransactionExceptType = KlayTransactionUtils.getRawTransactionNoType(rawTransaction);
+            byte[] rawTransactionExceptType = KaiaTransactionUtils.getRawTransactionNoType(rawTransaction);
 
             RlpList rlpList = RlpDecoder.decode(rawTransactionExceptType);
             List<RlpType> values = ((RlpList) rlpList.getValues().get(0)).getValues();

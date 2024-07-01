@@ -5,8 +5,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
-import org.web3j.crypto.KlayWalletUtils;
-import org.web3j.crypto.KlayCredentials;
+import org.web3j.crypto.KaiaWelletUtils;
+import org.web3j.crypto.KaiaCredentials;
 import java.io.IOException;
 import java.util.List;
 import org.web3j.tx.response.PollingTransactionReceiptProcessor;
@@ -16,28 +16,28 @@ import org.web3j.example.keySample;
 public class DecryptKeystoreV4Example implements keySample {
 
     public static void run() throws Exception {
-        String password = "Iloveklaytn";
+        String password = "Ilovekaia";
 
         String[] keyFiles = { "/RoleBased_V4.json", "/Multi_V4.json", "/Public_V4.json" };
         for (String keyFile : keyFiles) {
 
             String json = getResourceJSON(keyFile);
 
-            // Convert keystore to list of KlayCredentials
-            List<List<KlayCredentials>> credentialsLists = KlayWalletUtils.loadJsonKlayCredentialsFromV4(password,
+            // Convert keystore to list of KaiaCredentials
+            List<List<KaiaCredentials>> credentialsLists = KaiaWelletUtils.loadJsonKaiaCredentialsFromV4(password,
                     json);
 
-            System.out.println("Load KlayCredentials from keystore file: " + keyFile);
-            // Print KlayCredentials
+            System.out.println("Load KaiaCredentials from keystore file: " + keyFile);
+            // Print KaiaCredentials
             for (int i = 0; i < credentialsLists.size(); i++) {
-                List<KlayCredentials> credentialsList = credentialsLists.get(i);
+                List<KaiaCredentials> credentialsList = credentialsLists.get(i);
 
                 System.out.println("Array " + (i + 1) + ":");
-                for (KlayCredentials credentials : credentialsList) {
+                for (KaiaCredentials credentials : credentialsList) {
                     String address = credentials.getAddress();
                     String privateKey = credentials.getEcKeyPair().getPrivateKey().toString(16);
                     System.out
-                            .println("\tKlayCrendential : " + "Address: " + address + ", Private Key: 0x" + privateKey);
+                            .println("\tKaiaCredential : " + "Address: " + address + ", Private Key: 0x" + privateKey);
                 }
             }
         }

@@ -1,4 +1,4 @@
-package org.web3j.klayAccount;
+package org.web3j.kaiaAccount;
 
 import java.math.BigDecimal;
 import org.json.JSONArray;

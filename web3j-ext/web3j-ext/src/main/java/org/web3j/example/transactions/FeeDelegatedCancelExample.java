@@ -2,9 +2,9 @@ package org.web3j.example.transactions;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import org.web3j.crypto.KlayCredentials;
-import org.web3j.crypto.KlayRawTransaction;
-import org.web3j.crypto.KlayTransactionEncoder;
+import org.web3j.crypto.KaiaCredentials;
+import org.web3j.crypto.KaiaRawTransaction;
+import org.web3j.crypto.KaiaTransactionEncoder;
 import org.web3j.crypto.transaction.type.TxType;
 import org.web3j.crypto.transaction.type.TxTypeFeeDelegatedCancel;
 import org.web3j.crypto.transaction.type.TxType.Type;
@@ -30,8 +30,8 @@ public class FeeDelegatedCancelExample implements keySample {
     public static void run() throws Exception {
 
         Web3j web3j = Web3j.build(new HttpService(keySample.BAOBAB_URL));
-        KlayCredentials credentials = KlayCredentials.create(keySample.LEGACY_KEY_privkey);
-        KlayCredentials credentials_feepayer = KlayCredentials.create(keySample.LEGACY_KEY_FEEPAYER_privkey);
+        KaiaCredentials credentials = KaiaCredentials.create(keySample.LEGACY_KEY_privkey);
+        KaiaCredentials credentials_feepayer = KaiaCredentials.create(keySample.LEGACY_KEY_FEEPAYER_privkey);
 
         BigInteger GAS_PRICE = BigInteger.valueOf(50000000000L);
         BigInteger GAS_LIMIT = BigInteger.valueOf(6721950);
@@ -43,7 +43,7 @@ public class FeeDelegatedCancelExample implements keySample {
 
         TxType.Type type = Type.FEE_DELEGATED_CANCEL;
 
-        KlayRawTransaction raw = KlayRawTransaction.createTransaction(
+        KaiaRawTransaction raw = KaiaRawTransaction.createTransaction(
                 type,
                 nonce,
                 GAS_PRICE,
@@ -51,10 +51,10 @@ public class FeeDelegatedCancelExample implements keySample {
                 from);
 
         // Sign as sender
-        byte[] signedMessage = KlayTransactionEncoder.signMessage(raw, chainId, credentials);
+        byte[] signedMessage = KaiaTransactionEncoder.signMessage(raw, chainId, credentials);
 
         // Sign same message as Fee payer
-        signedMessage = KlayTransactionEncoder.signMessageAsFeePayer(raw, chainId, credentials_feepayer);
+        signedMessage = KaiaTransactionEncoder.signMessageAsFeePayer(raw, chainId, credentials_feepayer);
 
         String hexValue = Numeric.toHexString(signedMessage);
         EthSendTransaction transactionResponse = web3j.ethSendRawTransaction(hexValue).send();
@@ -69,13 +69,13 @@ public class FeeDelegatedCancelExample implements keySample {
         org.web3j.protocol.core.methods.response.TransactionReceipt ethReceipt = transactionReceiptProcessor
                 .waitForTransactionReceipt(txHash);
         System.out.println("Receipt from eth_getTransactionReceipt : \n" + ethReceipt);
-        TransactionReceipt receipt = web3j.klayGetTransactionReceipt(txHash).send().getResult();
-        System.out.println("Receipt from klay_getTransactionReceipt : \n" + receipt);
+        TransactionReceipt receipt = web3j.kaiaGetTransactionReceipt(txHash).send().getResult();
+        System.out.println("Receipt from kaia_getTransactionReceipt : \n" + receipt);
         web3j.shutdown();
 
         TxTypeFeeDelegatedCancel rawTransaction = TxTypeFeeDelegatedCancel.decodeFromRawTransaction(signedMessage);
 
-        System.out.println("TxType : " + rawTransaction.getKlayType());
+        System.out.println("TxType : " + rawTransaction.getKaiaType());
     }
 
 }

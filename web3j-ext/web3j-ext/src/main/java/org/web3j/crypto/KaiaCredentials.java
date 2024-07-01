@@ -23,11 +23,11 @@ package org.web3j.crypto;
 import org.web3j.utils.Numeric;
 import org.web3j.utils.Strings;
 
-public class KlayCredentials {
+public class KaiaCredentials {
     private final ECKeyPair ecKeyPair;
     private final String address;
 
-    private KlayCredentials(ECKeyPair ecKeyPair, String address) {
+    private KaiaCredentials(ECKeyPair ecKeyPair, String address) {
         this.ecKeyPair = ecKeyPair;
         this.address = !Strings.isEmpty(address) ? Numeric.toHexStringWithPrefixZeroPadded(Numeric.toBigInt(address), 40) : "";
     }
@@ -41,38 +41,38 @@ public class KlayCredentials {
     }
 
     /**
-     * Static method for creating KlayCredentials instance
+     * Static method for creating KaiaCredentials instance
      * Use address extracted from private key
      *
      * @param privateKey private key for transaction signing
-     * @return KlayCredentials
+     * @return KaiaCredentials
      */
-    public static KlayCredentials create(String privateKey) {
+    public static KaiaCredentials create(String privateKey) {
         ECKeyPair ecKeyPair = ECKeyPair.create(Numeric.toBigInt(privateKey));
         String address = Numeric.prependHexPrefix(Keys.getAddress(ecKeyPair));
         return create(ecKeyPair, address);
     }
 
     /**
-     * Static method for creating KlayCredentials instance
+     * Static method for creating KaiaCredentials instance
      * Use address extracted from private key
      *
      * @param ecKeyPair ecKeyPair for transaction signing
-     * @return KlayCredentials
+     * @return KaiaCredentials
      */
-    public static KlayCredentials create(ECKeyPair ecKeyPair) {
+    public static KaiaCredentials create(ECKeyPair ecKeyPair) {
         String address = Numeric.prependHexPrefix(Keys.getAddress(ecKeyPair));
         return create(ecKeyPair, address);
     }
 
     /**
-     * Static method for creating KlayCredentials instance
+     * Static method for creating KaiaCredentials instance
      *
      * @param privateKey private key for transaction signing
      * @param address address of account
-     * @return KlayCredentials
+     * @return KaiaCredentials
      */
-    public static KlayCredentials create(String privateKey, String address) {
+    public static KaiaCredentials create(String privateKey, String address) {
         return create(ECKeyPair.create(Numeric.toBigInt(privateKey)), Numeric.prependHexPrefix(address));
     }
 
@@ -95,20 +95,20 @@ public class KlayCredentials {
 
 
     /**
-     * Static method for creating KlayCredentials instance
+     * Static method for creating KaiaCredentials instance
      *
      * @param ecKeyPair ecKeyPair for transaction signing
      * @param address address of account
-     * @return KlayCredentials
+     * @return KaiaCredentials
      */
-    public static KlayCredentials create(ECKeyPair ecKeyPair, String address) {
-        return new KlayCredentials(ecKeyPair, address);
+    public static KaiaCredentials create(ECKeyPair ecKeyPair, String address) {
+        return new KaiaCredentials(ecKeyPair, address);
     }
 
-    public static KlayCredentials createWithKlaytnWalletKey(String klaytnWalletKey) {
-        klaytnWalletKey = Numeric.cleanHexPrefix(klaytnWalletKey);
-        String privateKey = klaytnWalletKey.substring(0, 64);
-        String address = klaytnWalletKey.substring(68);
+    public static KaiaCredentials createWithKaiaWalletKey(String kaiaWalletKey) {
+        kaiaWalletKey = Numeric.cleanHexPrefix(kaiaWalletKey);
+        String privateKey = kaiaWalletKey.substring(0, 64);
+        String address = kaiaWalletKey.substring(68);
         return create(privateKey, address);
     }
 

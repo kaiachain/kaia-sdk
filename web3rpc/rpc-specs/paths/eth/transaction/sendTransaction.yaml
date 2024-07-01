@@ -54,19 +54,19 @@ paths:
                   - $ref: "#/components/schemas/KlaySendTransactionResp"
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../../code-samples/curl/eth/transaction/sendTransaction.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/eth/transaction/EthSendTransactionExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../../code-samples/javascript/eth/transaction/sendTransaction.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref: "../../../code-samples/python/eth/transaction/sendTransaction.py"

@@ -40,19 +40,19 @@ paths:
                   - $ref: "#/components/schemas/PeersResp"
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../code-samples/curl/admin/peers.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../code-samples/java/src/main/java/opensdk/sdk/apis/admin/AdminPeersExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
            $ref: "../../code-samples/javascript/admin/peersApi.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref: "../../code-samples/python/admin/peers.py"

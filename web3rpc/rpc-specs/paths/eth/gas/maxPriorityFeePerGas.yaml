@@ -45,19 +45,19 @@ paths:
                   - $ref: "#/components/schemas/EthMaxPriorityFeePerGasResp"
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../../code-samples/curl/eth/gas/maxPriorityFeePerGas.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/eth/gas/EthMaxPriorityFeePerGasExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../../code-samples/javascript/eth/gas/maxPriorityFeePerGas.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref: "../../../code-samples/python/eth/gas/maxPriorityFeePerGas.py"

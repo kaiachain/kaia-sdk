@@ -1,0 +1,105 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/transaction/getTransactionByBlockNumberAndIndex:
+    post:
+      operationId: .getTransactionByBlockNumberAndIndex
+      summary: "[Transaction] kaia_getTransactionByBlockNumberAndIndex"
+      description: |
+        Returns information about a transaction by block number and transaction index position. This API works only on RPC call, not on JavaScript console.
+
+        **NOTE:** *In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available.*
+
+        **JSONRPC:** `kaia_getTransactionByBlockNumberAndIndex`
+      tags:
+        - kaia
+
+      parameters:
+        - name: blockNumberOrTag
+          in: query
+          description: Integer or hexadecimal block number, or the string "earliest", "latest" or "pending" as in default block parameter.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+        - name: transactionIndex
+          required: true
+          schema:
+            type: string
+            format: hex
+          description: The transaction index position.
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetTransactionByBlockNumberAndIndexReq"
+
+      responses:
+        200:
+          description: Returns information about a transaction by block number and transaction index position.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetTransactionByBlockNumberAndIndexResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/transaction/getTransactionByBlockNumberAndIndex.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/transaction/KaiaGetTransactionByBlockNumberAndIndexExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/transaction/getTransactionByBlockNumberAndIndex.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref:  "../../../code-samples/python/kaia/transaction/getTransactionByBlockNumberAndIndex.py"
+
+components:
+  schemas:
+    KaiaGetTransactionByBlockNumberAndIndexReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getTransactionByBlockNumberAndIndex'
+        params:
+          type: array
+          items:
+            properties:
+              BlockNumberOrTag:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+              TranssactionIndex:
+                type: string
+                format: hex
+                title: TransactionIndex
+                description: The transaction index position.
+          example:  [118593751, "0x0"]
+
+    KaiaGetTransactionByBlockNumberAndIndexResp:
+      type: object
+      properties:
+        result:
+          $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/TransactionObject"

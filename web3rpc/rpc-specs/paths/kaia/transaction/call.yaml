@@ -1,0 +1,107 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/transaction/call:
+    post:
+      operationId: .call
+      summary: "[Transaction] kaia_call"
+      tags:
+        - kaia
+      description: |
+        Executes a new message call immediately without creating a transaction on the block chain. It returns data or an error object of JSON RPC if error occurs.
+
+        If you deployed a contract, use kaia_getTransactionReceipt to get the contract address.
+
+        **NOTE** In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available.
+
+        **JSONRPC:** `kaia_call`
+
+      parameters:
+        - name: callObject
+          in: query
+          description: The transaction call object. See the next table for the object's properties.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaCallObject"
+        - name: blockNumberOrHash
+          in: query
+          description: Integer or hexadecimal block number, or the string "earliest", "latest" or "pending" as in default block parameter.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaCallReq"
+
+      responses:
+        200:
+          description: Return value of executed contract or returns an error object of JSON RPC if anything goes wrong
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaCallResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/transaction/call.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/transaction/KaiaCallExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/transaction/call.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/transaction/call.py"
+
+components:
+  schemas:
+    KaiaCallReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_call'
+        params:
+          type:  array
+          items:
+            anyOf:
+              - allOf:
+                  - title: CallObject
+                  - $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaCallObject"
+              - $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+          example: [{"from": "0x3f71029af4e252b25b9ab999f77182f0cd3bc085", "to": "0x87ac99835e67168d4f9a40580f8f5c33550ba88b", "gas": "0x100000", "gasPrice": "0x5d21dba00", "value": "0x0", "input": "0x8ada066e"}, "latest"]
+
+    KaiaCallResp:
+      type: object
+      properties:
+        result:
+          type: string
+          format: DATA
+          description: "The return value of executed contract."
+          example: "0x000000000000000000000000000000000000000000000000000000000000000a"
+

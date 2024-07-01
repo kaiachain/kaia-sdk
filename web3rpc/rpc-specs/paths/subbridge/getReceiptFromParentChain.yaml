@@ -48,19 +48,19 @@ paths:
                   - $ref: "#/components/schemas/SubbridgeGetReceiptFromParentChainResp"
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../code-samples/curl/subbridge/getReceiptFromParentChain.sh"
-        # - lang: "java"
+        # - lang: "Java"
         #   label: "Java"
         #   source:
         #     $ref: ""
-        # - lang: "javascript"
+        # - lang: "JavaScript"
         #   label: "Javascript"
         #   source:
         #     $ref: ""
-        # - lang: "python"
+        # - lang: "Python"
         #   label: "Python"
         #   source:
         #     $ref: ""

@@ -73,19 +73,19 @@ paths:
                         example: "0xa3f20717a250c2b0b729b7e5becbff67fdaef7e0699da4de7ca5895b02a170a12d887fd3b17bfdce3481f10bea41f45ba9f709d39ce8325427b57afcfc994cee1b"
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../../code-samples/curl/klay/account/sign.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/klay/account/KlaySignExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../../code-samples/javascript/klay/account/sign.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref: "../../../code-samples/python/klay/account/sign.py"

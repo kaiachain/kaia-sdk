@@ -57,19 +57,19 @@ paths:
                   - $ref: "#/components/schemas/EthGetTransactionByBlockNumberAndIndexResp"
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../../code-samples/curl/eth/transaction/getTransactionByBlockNumberAndIndex.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/eth/transaction/EthGetTransactionByBlockNumberAndIndexExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../../code-samples/javascript/eth/transaction/getTransactionByBlockNumberAndIndex.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
            $ref: "../../../code-samples/python/eth/transaction/getTransactionByBlockNumberAndIndex.py"

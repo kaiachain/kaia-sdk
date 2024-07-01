@@ -1,0 +1,139 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/gas/feeHistory:
+    post:
+      operationId: .feeHistory
+      summary: "[Gas] kaia_feeHistory"
+      description: |
+        Returns base fee per gas and transaction effective priority fee per gas history for the requested block range if available.
+
+        **NOTE:** This API is effective after Klaytn v1.8.0
+
+        **JSONRPC:** `kaia_feeHistory`
+      tags:
+        - kaia
+
+      parameters:
+        - name: blockCount
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockCount"
+          description: Number of blocks in the requested range in hexadecimal. Between 1 (0x1) and 1024 (0x400) blocks can be requested in a single query. Less than requested may be returned if not all blocks are available.
+          in: query
+        - name: lastBlock
+          in: query
+          description: Highest numbered block of the requested range as block number or block tag.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+        - name: rewardPercentiles
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/RewardPercentiles"
+          description: An array of floating point values between 0 and 100.
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaFeeHistoryReq"
+
+      responses:
+        200:
+          description: Returns base fee per gas and transaction effective priority fee per gas history for the requested block range if available.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaFeeHistoryResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/gas/feeHistory.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/gas/KaiaFeeHistoryExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/gas/feeHistory.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/gas/feeHistory.py"
+
+components:
+  schemas:
+    KaiaFeeHistoryReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_feeHistory'
+        params:
+          type: array
+          items:
+            properties:
+              BlockCount:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockCount"
+              BlockNumberOrTag:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+              rewardPercentiles:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/RewardPercentiles"
+          example:  ["0x10", "latest", [0.1, 0.2, 0.3]]
+
+    KaiaFeeHistoryResp:
+        type: object
+        properties:
+            result:
+              type: object
+              required:
+                - oldestBlock
+                - baseFeePerGas
+                - gasUsedRatio
+                - reward
+              properties:
+                oldestBlock:
+                  type: string
+                  format: Hexadecimal
+                  description: Lowest numbered block of the returned range in hexadecimal.
+                baseFeePerGas:
+                  $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BaseFeePerGas"
+                gasUsedRatio:
+                  type: array
+                  items:
+                    type: number
+                    format: float
+                  description: An array of the ratios of gas used per block. These are calculated as the ratio of gasUsed and gasLimit.
+                reward:
+                  $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/Reward"
+              example:
+                {
+                  "oldestBlock": "0xa5b",
+                  "reward": [
+                    [ "0x0", "0x0", "0x0" ],
+                    [ "0x5d21dba00", "0x5d21dba00", "0x5d21dba00" ]
+                  ],
+                  "baseFeePerGas": [ "0x0", ..., "0x0" ],
+                  "gasUsedRatio": [ 0, ..., 0.0002963777000002964 ]
+                }

@@ -1,0 +1,99 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/configuration/gasPriceAt:
+    post:
+      operationId: .gasPriceAt
+      summary: "[Configuration] kaia_gasPriceAt"
+      description: |
+        Returns different values based on the condition described below. The unit of the return value is peb.
+        
+        - If baseFee is undefined in the header, it returns the unit price from the governance parameter
+        
+        - If the block is a pending block, it returns the gas price of the txpool.
+        
+        - Otherwise, it returns the base fee of the given block.
+        
+        **JSONRPC:** `kaia_gasPriceAt`
+      tags:
+        - kaia
+
+      parameters:
+        - name: blockNumber
+          in: query
+          description: Block number. If omitted, latest unit price will be returned.
+          schema:
+            oneOf:
+              - $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/IntegerBlockNumber"
+              - $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/HexadecimalBlockNumber"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGasPriceAtReq"
+
+      responses:
+        200:
+          description: Integer of the current gas price in peb.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: string
+                        format: hex
+                        description: "Integer of the current gas price in peb."
+                        example: "0xAE9F7BCC00"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/configuration/gasPriceAt.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/configuration/KaiaGasPriceAtExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/configuration/gasPriceAt.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/configuration/gasPriceAt.py"
+
+components:
+  schemas:
+    KaiaGasPriceAtReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_gasPriceAt'
+        params:
+          type: array
+          items:
+            properties:
+              BlockNumberOrHex:
+                oneOf:
+                  - $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/IntegerBlockNumber"
+                  - $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/HexadecimalBlockNumber"
+          example:  ["0x64"]

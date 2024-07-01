@@ -1,0 +1,136 @@
+openapi: "3.0.2"
+info:
+  title: Kaia Open API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/block/getRewards:
+    post:
+      tags:
+        - kaia
+      operationId: .getRewards
+      summary: "[Block] kaia_getRewards"
+      description: |
+        Returns the reward distribution result about a block by block number, including the rewardees and their shares. If the parameter is not set, it returns the reward distribution at the latest block.
+
+        **JSONRPC:** `kaia_getRewards`
+
+      parameters:
+        - name: blockNumberOrTag
+          in: query
+          description: block number
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetRewardsReq"
+
+      responses:
+        200:
+          description: block rewards information
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetRewardsResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/getReward.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/block/KaiaGetRewardsExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/block/getRewards.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/block/getRewards.py"
+
+components:
+  schemas:
+    KaiaGetRewardsReq:
+      type: object
+      required:
+        - method
+      properties:
+        method:
+          type: string
+          default: 'kaia_getRewards'
+        params:
+          type: array
+          default: ["latest"]
+          items:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+
+    KaiaGetRewardsResp:
+      type: object
+      properties:
+        result:
+          type: object
+          required:
+            - burntFee
+            - kgf
+            - kir
+            - minted
+            - proposer
+            - rewards
+            - stakers
+            - totalFee
+          properties:
+            burntFee:
+              type: integer
+              format: int64
+              description: the amount burnt
+            kgf:
+              type: integer
+              format: int64
+              description: the amount allocated to KGF
+            kir:
+              type: integer
+              format: int64
+              description: the amount allocated to KIR
+            minted:
+              type: number
+              format: double
+              description: the amount newly minted
+              example: 9600000000000000000
+            proposer:
+              type: number
+              format: double
+              description: the amount allocated to the block proposer
+              example: 9600000000000000000
+            rewards:
+              type: object
+              description: mapping from reward recipient to amounts
+              additionalProperties:
+                type: number
+                format: double
+              example:
+                0xb408fc9b2512284823264aceeb50d2970533b4ff: 9600000000000000000
+            stakers:
+              type: integer
+              format: int64
+              description: total amount allocated to stakers
+            totalFee:
+              type: integer
+              format: int64
+              description: total tx fee spent

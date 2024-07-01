@@ -54,19 +54,19 @@ paths:
                         description: The size of the committee
                         example: 4
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../../code-samples/curl/klay/block/getCommitteeSize.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/klay/block/KlayGetCommitteeSizeExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../../code-samples/javascript/klay/block/getCommitteeSize.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref: "../../../code-samples/python/klay/block/getCommitteeSize.py"

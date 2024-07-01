@@ -1,0 +1,119 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/transaction/signTransaction:
+    post:
+      operationId: .signTransaction
+      summary: "[Transaction] kaia_signTransaction"
+      description: |
+        Constructs a transaction with given parameters and signs the transaction with a sender's private key. This method can be used either to generate a sender signature or to make a final raw transaction that is ready to submit to Klaytn network.
+
+        `kaia_signTransaction` will be failed to baobab/cypress network because it is signed in the EN node, which means that the EN must have the key that you want to sign with.
+        Steps to test `kaia_signTransaction`.
+          - Step 1: Setup a local EN node
+          - Step 2: <a href="#tag/personal/operation/newAccount" target="_blank">Create an account</a> into the EN node
+          - Step 3: <a href="#tag/personal/operation/unlockAccount" target="_blank">Unlock the account</a> for using in signing
+
+        **JSONRPC:** `kaia_signTransaction`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: transactionData
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/KaiaTransactionTypes.yaml#/components/schemas/KaiaTransactionTypes"
+          description: Transaction data.
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaSignTransactionReq"
+
+      responses:
+        200:
+          description: Returns signed raw transaction and transaction object including the sender's signature
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaSignTransactionResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/transaction/signTransaction.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/transaction/KaiaSignTransactionExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/transaction/signTransaction.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/transaction/signTransaction.py"
+
+components:
+  schemas:
+    KaiaSignTransactionReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_signTransaction'
+        params:
+          type: array
+          items:
+            $ref: "../../../components/schemas/common/KaiaTransactionTypes.yaml#/components/schemas/KaiaTransactionTypes"
+          example:  [{"from":"0x77982323172e5b6182539d3522d5a33a944206d4", "to":"0xcd6bfdb523a4d030890d28bf1eb6ef36307c9aaa", "value":"0x10000", "gas":"0x1000000", "nonce":"0x2", "gasprice":"0x25000000000"}]
+
+    KaiaSignTransactionResp:
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            raw:
+              type: string
+              description: Signed raw transaction
+            tx:
+              type: object
+              description: Transaction object including the sender's signature
+          example:
+            {
+              "raw":"0xf86c0286025000000000840100000094cd6bfdb523a4d030890d28bf1eb6ef36307c9aaa8301000080820fe8a056d2ddd231c3c111687ab351d339240db18cd721e5aa33c601dd4fc3927fb4d1a03443443392517aa7da082aa0a00b9ee5e3e1ee007d22e57cd9ff55b5ddbf4a64",
+              "tx":{
+                "nonce":"0x2",
+                "gasPrice":"0x5d21dba00",
+                "gas":"0x1000000",
+                "to":"0xcd6bfdb523a4d030890d28bf1eb6ef36307c9aaa",
+                "value":"0x10000",
+                "input":"0x",
+                "v":"0xfe8",
+                "r":"0x56d2ddd231c3c111687ab351d339240db18cd721e5aa33c601dd4fc3927fb4d1",
+                "s":"0x3443443392517aa7da082aa0a00b9ee5e3e1ee007d22e57cd9ff55b5ddbf4a64",
+                "hash":"0xb53cc9128a19c3916c0de1914725b7337bba84666c2556d8682c72ca34c6874c"
+              }
+            }

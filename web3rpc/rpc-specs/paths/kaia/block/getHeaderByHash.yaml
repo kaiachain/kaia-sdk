@@ -1,0 +1,97 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/block/getHeaderByHash:
+    post:
+      operationId: .getHeaderByHash
+      summary: "[Block] kaia_getHeaderByHash"
+      description: |
+        Returns information about a header by hash. This API works only on RPC call, not on JavaScript console.
+
+        **NOTE:** *This API is supported from Klaytn v1.7.0.*
+
+        **JSONRPC:** `kaia_getHeaderByHash`
+      tags:
+        - kaia
+
+      parameters:
+        - name: hashOfBlock
+          in: query
+          description: Hash of a block.
+          required: true
+          schema:
+            type: string
+            format: 32-byte DATA
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetHeaderByHashReq"
+
+      responses:
+        200:
+          description: Returns information about a header by hash.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetHeaderByHashResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/block/getHeaderByHash.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/block/KaiaGetHeaderByHashExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/block/getHeaderByHash.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/block/getHeaderByHash.py"
+
+components:
+  schemas:
+    KaiaGetHeaderByHashReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getHeaderByHash'
+        params:
+          type: array
+          description: Hash of a block.
+          items:
+              type: string
+              title: HashOfBlock
+              format: 32-byte DATA
+              description: Hash of a block.
+          example:  ["0x1b4"]
+
+    KaiaGetHeaderByHashResp:
+      type: object
+      properties:
+        result:
+          $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaHeaderObject"
+

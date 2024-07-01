@@ -1,0 +1,71 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/gas/maxPriorityFeePerGas:
+    post:
+      operationId: .maxPriorityFeePerGas
+      summary: "[Gas] kaia_maxPriorityFeePerGas"
+      description: |
+        Returns a suggestion for a gas tip cap for dynamic fee transactions in peb.
+
+        **NOTE:** This API is effective after Klaytn v1.8.0
+
+        **JSONRPC:** `kaia_maxPriorityFeePerGas`
+
+      tags:
+        - kaia
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: kaia_maxPriorityFeePerGas
+
+      responses:
+        200:
+          description: Returns a suggestion for a gas tip cap for dynamic fee transactions in peb.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: string
+                        format: hex
+                        description: "Integer of the current max priority fee per gas"
+                        example: "0xAE9F7BCC00"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/gas/maxPriorityFeePerGas.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/gas/KaiaMaxPriorityFeePerGasExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/configuration/maxPriorityFeePerGas.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/configuration/maxPriorityFeePerGas.py"

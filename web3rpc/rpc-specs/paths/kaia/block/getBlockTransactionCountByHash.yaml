@@ -1,0 +1,86 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/block/getBlockTransactionCountByHash:
+    post:
+      operationId: .getBlockTransactionCountByHash
+      summary: "[Block] kaia_getBlockTransactionCountByHash"
+      description: |
+        Returns the number of transactions in a block from a block that matches the given hash.
+        
+        **JSONRPC:** `kaia_getBlockTransactionCountByHash`
+      tags:
+        - kaia
+
+      parameters:
+        - name: hashOfBlock
+          required: true
+          schema:
+            type: string
+            format: 32-byte DATA
+          description: Hash of a block
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: kaia_getBlockTransactionCountByHash
+                    params:
+                      type: array
+                      description: Hash of a block
+                      items:
+                        title: hashOfBlock
+                        type: string
+                        format: 32-byte DATA
+                        description: Hash of a block
+                        example: ["0xba647d41423faeebe8a7c64737d284fc2eba6f0388a3e1ebf6243db509ec1577"]
+
+      responses:
+        200:
+          description: Return integer of the number of transactions in this block.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: string
+                        description: Integer of the number of transactions in this block.
+                        format: hex
+                        example: "0x0"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/block/getBlockTransactionCountByHash.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/block/KaiaGetBlockTransactionCountByHashExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/block/getBlockTransactionCountByHash.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/block/getBlockTransactionCountByHash.py"

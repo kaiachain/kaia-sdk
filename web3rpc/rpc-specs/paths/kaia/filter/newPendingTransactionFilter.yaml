@@ -1,0 +1,69 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/filter/newPendingTransactionFilter:
+    post:
+      operationId: .newPendingTransactionFilter
+      summary: "[Filter] kaia_newPendingTransactionFilter"
+      description: |
+        Creates a filter in the node, to notify when new pending transactions arrive. To check if the state has changed, call kaia_getFilterChanges.
+
+        **JSONRPC:** `kaia_newPendingTransactionFilter`
+
+      tags:
+        - kaia
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: "kaia_newPendingTransactionFilter"
+
+      responses:
+        200:
+          description: Returns a filter id.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: string
+                        format: hex
+                        description: "A filter id."
+                        example: "0x90cec22a723fcc725fb2462733c2880f"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/filter/newPendingTransactionFilter.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/filter/KaiaNewPendingTransactionFilterExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/filter/newPendingTransactionFilter.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/filter/newPendingTransactionFilter.py"

@@ -1,0 +1,82 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/filter/uninstallFilter:
+    post:
+      operationId: .uninstallFilter
+      summary: "[Filter] kaia_uninstallFilter"
+      description: |
+        Uninstalls a filter with given id. Should always be called when watch is no longer needed. Additionally, filters timeout when they are not requested with kaia_getFilterChanges for a period of time.
+
+        **JSONRPC:** `kaia_uninstallFilter`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: filter
+          required: true
+          schema:
+            type: string
+          description: The filter id
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: "kaia_uninstallFilter"
+                    params:
+                      type: array
+                      items:
+                        type: string
+                        title: Filter
+                      description: The filter id
+                      example: ["0xd32fd16b6906e67f6e2b65dcf48fc272"]
+
+      responses:
+        200:
+          description: Return true if the filter was successfully uninstalled, otherwise false.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: boolean
+                        description: true if the filter was successfully uninstalled, otherwise false.
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/filter/uninstallFilter.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/filter/KaiaUninstallFilterExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/filter/uninstallFilter.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/filter/uninstallFilter.py"

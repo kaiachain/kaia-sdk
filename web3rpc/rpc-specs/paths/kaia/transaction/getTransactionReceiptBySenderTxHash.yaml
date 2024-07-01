@@ -1,0 +1,265 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/transaction/getTransactionReceiptBySenderTxHash:
+    post:
+      operationId: .getTransactionReceiptBySenderTxHash
+      summary: "[Transaction] kaia_getTransactionReceiptBySenderTxHash"
+      tags:
+        - kaia
+      description: |
+        Returns the receipt of a transaction by sender transaction hash.
+
+        **NOTE:** The receipt is not available for pending transactions. Please note that this API returns correct result only if indexing feature is enabled by --sendertxhashindexing. This can be checked by call kaia_isSenderTxHashIndexingEnabled.
+
+        **JSONRPC:** `kaia_getTransactionReceiptBySenderTxHash`
+
+      parameters:
+        - name: Hash
+          schema:
+            type: string
+            format: 32-byte DATA
+          in: query
+          description: Hash of a transaction before signing of feePayer(senderTransactionHash).
+          required: true
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetTransactionByHashReq"
+
+      responses:
+        200:
+          description: Returns the receipt of a transaction by sender transaction hash.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetTransactionByHashResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/transaction/getTransactionReceiptBySenderTxHash.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/transaction/KaiaGetTransactionReceiptBySenderTxHashExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/transaction/getTransactionReceiptBySenderTxHash.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/transaction/getTransactionReceiptBySenderTxHash.py"
+
+components:
+  schemas:
+    KaiaGetTransactionByHashReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getTransactionReceiptBySenderTxHash'
+        params:
+          type: array
+          description: Hash of a transaction before signing of feePayer(senderTransactionHash).
+          items:
+            type: string
+            format: 32-byte DATA
+            title: Hash
+            description: Hash of a transaction before signing of feePayer(senderTransactionHash).
+          example: ["0xaca5d9a1ed8b86b1ef61431b2bedfc99a66eaefc3a7e1cffdf9ff53653956a67"]
+
+    KaiaGetTransactionByHashResp:
+      type: object
+      properties:
+        result:
+          $ref: "#/components/schemas/TransactionObject"
+
+    TransactionObject:
+      type: object
+      required:
+        - blockHash
+        - blockNumber
+        - contractAddress
+        - feePayer
+        - feePayerSignatures
+        - from
+        - gas
+        - gasPrice
+        - gasUsed
+        - logs
+        - logsBloom
+        - nonce
+        - senderTxHash
+        - signatures
+        - status
+        - to
+        - transactionHash
+        - transactionIndex
+        - type
+        - typeInt
+        - value
+      properties:
+        blockHash:
+          type: string
+          format: 32-byte DATA
+          description: Hash of the block where this transaction was in.
+        blockNumber:
+          type: string
+          format: hex
+          description: The block number where this transaction was in.
+        codeFormat:
+          type: string
+          description: (optional) The code format of smart contract code.
+        contractAddress:
+          type: string
+          format: DATA
+          description: The contract address created, if the transaction was a contract creation, otherwise null.
+        feePayer:
+          type: string
+          format: 20-byte DATA
+          description: Address of the fee payer.
+        feePayerSignatures:
+          type: array
+          items:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/Signature"
+          description: An array of fee payer's signature objects. A signature object contains three fields (V, R, and S). V contains ECDSA recovery id. R contains ECDSA signature r while S contains ECDSA signature s.
+        feeRatio:
+          type: string
+          format: hex
+          description: (optional) Fee ratio of the fee payer. If it is 30, 30% of the fee will be paid by the fee payer. 70% will be paid by the sender.
+        from:
+          type: string
+          format: 20-byte DATA
+          description: Address of the sender.
+        gas:
+          type: string
+          format: hex
+          description: Gas provided by the sender.
+        gasPrice:
+          type: string
+          format: hex
+          description: Gas price provided by the sender in peb.
+        gasUsed:
+          type: string
+          format: hex
+          description: The amount of gas used by this specific transaction alone.
+        humanReadable:
+          type: boolean
+          description: (optional) true if the address is humanReadable, false if the address is not humanReadable.
+        key:
+          type: string
+          description: (optional) Key of the newly created account.
+        input:
+          type: string
+          format: DATA
+          description: (optional) The data sent along with the transaction.
+        logs:
+          type: array
+          items:
+            type: object
+          description: Array of log objects, which this transaction generated.
+        logsBloom:
+          type: string
+          format: 256-byte DATA
+          description: Bloom filter for light clients to quickly retrieve related logs.
+        nonce:
+          type: string
+          format: hex
+          description: The number of transactions made by the sender prior to this one.
+        senderTxHash:
+          type: string
+          format: (optional) 32-byte DATA
+          description: Hash of the tx without the fee payer's address and signature. This value is always the same as the value of transactionHash for non fee-delegated transactions.
+        signature:
+          type: array
+          items:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/Signature"
+
+          description: An array of signature objects. A signature object contains three fields (V, R, and S). V contains ECDSA recovery id. R contains ECDSA signature r while S contains ECDSA signature s.
+        status:
+          type: string
+          format: hex
+          description: Either 1 (success) or 0 (failure).
+        txError:
+          type: string
+          format: hex
+          description: (optional) detailed error code if status is equal to zero.
+        to:
+          type: string
+          format: 20-byte DATA
+          description: Address of the receiver. null when it is a contract creation transaction.
+        transactionHash:
+          type: string
+          format: 32-byte DATA
+          description: Hash of the transaction.
+        transactionIndex:
+          type: string
+          format: hex
+          description: Integer of the transaction index position in the block.
+        type:
+          type: string
+          description: A string representing the type of the transaction.
+        typeInt:
+          type: number
+          description: An integer representing the type of the transaction.
+        value:
+          type: string
+          format: hex
+          description: Value transferred in peb.
+      example:
+          {
+            "blockHash": "0x4d97cf1f686a925ed4f1ad42c635cedb54974fe23a2941c7825e1ed3163c0e41",
+            "blockNumber": "0x7008",
+            "contractAddress": null,
+            "feePayer": "0xa9d2cc2bb853163b6eadfb6f962d72f7e00bc2e6",
+            "feePayerSignatures": [
+              {
+                "V": "0x4e44",
+                "R": "0xa665e17d92e1c671c8b062cecb19790d49138a21854fc15c460c91035b1884e",
+                "S": "0x17165688acc01736f1221a39399e3aac7e1ece14731fcab31631e3e4a59b7441"
+              }
+            ],
+            "from": "0xab0833d744a8943fe3c783f9cc70c13cbd70fcf4",
+            "gas": "0xdbba0",
+            "gasPrice": "0x5d21dba00",
+            "gasUsed": "0x7918",
+            "logs": [ ],
+            "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "nonce": "0x26",
+            "senderTxHash": "0x18fe9e1007da7d20aad77778557fb8acc58c80054daba65124c8c843aadd3478",
+            "signatures": [
+              {
+                "V": "0x4e44",
+                "R": "0x1b6bb3d996d903d0528565d13e8d9d122b2220ed09c5baf384114193a6977027",
+                "S": "0x20c506ce9f1bdd42183c40c44f414a3930f339f856e8be3cfcdf5ca0852fd378"
+              }
+            ],
+            "status": "0x1",
+            "to": "0x15a9119104e1bf0ec6d408b3cc188685e4402a2c",
+            "transactionHash": "0xaca5d9a1ed8b86b1ef61431b2bedfc99a66eaefc3a7e1cffdf9ff53653956a67",
+            "transactionIndex": "0x0",
+            "type": "TxTypeFeeDelegatedValueTransfer",
+            "typeInt": 9,
+            "value": "0x1"
+          }

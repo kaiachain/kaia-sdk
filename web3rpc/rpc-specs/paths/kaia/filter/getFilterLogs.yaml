@@ -1,0 +1,92 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/filter/getFilterLogs:
+    post:
+      operationId: .getFilterLogs
+      summary: "[Filter] kaia_getFilterLogs"
+      description: |
+        Returns an array of all logs matching filter with given id, which has been obtained using kaia_newFilter.Note that filter ids returned by other filter creation functions, such as kaia_newBlockFilter or kaia_newPendingTransactionFilter, cannot be used with this function.
+
+        The execution of this API can be limited by two node configurations to manage resources of Klaytn node safely.
+        
+        - The number of maximum returned results in a single query (Default: 10,000).
+        
+        - The execution duration limit of a single query (Default: 10 seconds).
+        
+        **JSONRPC:** `kaia_getFilterLogs`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: QUANTITY
+          required: true
+          schema:
+            type: string
+          description: The filter id
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: "kaia_getFilterLogs"
+                    params:
+                      type: array
+                      items:
+                        type: string
+                        title: QUANTITY
+                      description: The filter id
+                      example: ["0xd32fd16b6906e67f6e2b65dcf48fc272"]
+
+      responses:
+        200:
+          description: Returns an array of all logs matching filter with given id. See kaia_getFilterChanges.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetFilterLogsResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/filter/getFilterLogs.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/filter/KaiaGetFilterLogsExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/filter/getFilterLogs.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/filter/getFilterLogs.py"
+
+components:
+  schemas:
+    KaiaGetFilterLogsResp:
+      type: object
+      properties:
+        result:
+          $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaArrayOfLog"

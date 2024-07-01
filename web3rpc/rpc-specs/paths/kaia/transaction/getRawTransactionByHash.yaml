@@ -1,0 +1,97 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/transaction/getRawTransactionByHash:
+    post:
+      operationId: .getRawTransactionByHash
+      summary: "[Transaction] kaia_getRawTransactionByHash"
+      description: |
+        GetRawTransactionByHash returns the bytes of the transaction for the given hash.
+
+        **JSONRPC:** `kaia_getRawTransactionByHash`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: hash
+          required: true
+          schema:
+            type: string
+            format: hex
+          description: Hex representation of a Keccak 256 hash
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetRawTransactionByHashReq"
+
+      responses:
+        200:
+          description: Returns the bytes of the transaction for the given hash.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetRawTransactionByHashResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/others/getRawTransactionByHash.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/others/KaiaGetRawTransactionByHashExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/transaction/getRawTransactionByHash.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/others/getRawTransactionByHash.py"
+components:
+  schemas:
+    KaiaGetRawTransactionByHashReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getRawTransactionByHash'
+        params:
+          type: array
+          items:
+            title: hash
+            type: string
+            format: hex
+          description: Hex representation of a Keccak 256 hash
+          example:  ["0x29b6cd965c7d9a53a6f068da259dce1d3810ba79fff8eebac5d4da14754e67e6"]
+
+    KaiaGetRawTransactionByHashResp:
+      type: object
+      properties:
+        result:
+          type: string
+          format: hex
+          title: dataWord
+          description: Hex representation of some bytes
+          example: "0x"

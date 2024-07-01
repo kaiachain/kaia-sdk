@@ -18,6 +18,7 @@ then
 elif [ "$1" == "split" ]
 then
     yarn build klay@v1.0.0 -o "$RPC_SPEC_DIR"/web3rpc-klay.yaml
+    yarn build kaia@v1.0.0 -o "$RPC_SPEC_DIR"/web3rpc-kaia.yaml
     yarn build eth@v1.0.0 -o "$RPC_SPEC_DIR"/web3rpc-eth.yaml
     yarn build debug@v1.0.0 -o "$RPC_SPEC_DIR"/web3rpc-debug.yaml
     yarn build admin@v1.0.0 -o "$RPC_SPEC_DIR"/web3rpc-admin.yaml

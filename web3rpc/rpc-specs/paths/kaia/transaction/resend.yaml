@@ -1,0 +1,171 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/transaction/resend:
+    post:
+      operationId: .resend
+      summary: "[Transaction] kaia_resend"
+      description: |
+        Resend accepts an existing transaction and a new gas price and limit. It will remove the given transaction from the pool and reinsert it with the new gas price and limit.
+
+        **JSONRPC:** `kaia_resend`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: sendArgs
+          required: true
+          schema:
+            $ref: "#/components/schemas/SendArgs"
+          in: query
+        - name: gasPrice
+          in: query
+          required: true
+          description: Hex representation of the integer
+          schema:
+            type: string
+            format: hex
+        - name: gasLimit
+          in: query
+          required: true
+          description: Hex representation of a uint64
+          schema:
+            type: string
+            format: hex
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaResendReq"
+
+      responses:
+        200:
+          description: Resend accepts an existing transaction and a new gas price and limit.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: string
+                        format: hex
+                        description: Hex representation of a Keccak 256 hash
+                        example: "0xced304149857009d8767c54b7e624f700c39afe8b93d61b970902d95ac6271d1"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/others/resend.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/others/KaiaResendExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/others/resend.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/others/resend.py"
+components:
+  schemas:
+    KaiaResendReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_resend'
+        params:
+          type: array
+          items:
+            properties:
+              SendArgs:
+                $ref: "#/components/schemas/SendArgs"
+              GasPrice:
+                title: GasPrice
+                description: Hex representation of the integer
+                type: string
+                format: hex
+              GasLimit:
+                title: GasLimit
+                description: Hex representation of a uint64
+                type: string
+                format: hex
+          example: [{"from": "0xca7a99380131e6c76cfa622396347107aeedca2d", "to": "0x8c9f4468ae04fb3d79c80f6eacf0e4e1dd21deee", "value": "0x1", "gas": "0x9999", "maxFeePerGas": "0x5d21dba00", "maxPriorityPerGas": "0x5d21dba00"}, "0x5d21dba99", "0x5d21dba99"]
+
+    SendArgs:
+      type: object
+      required:
+        - nonce
+        - to
+      properties:
+        accessList:
+          type: array
+          items:
+            type: object
+            required:
+              - address
+              - storageKeys
+            properties:
+              address:
+                type: string
+                format: hex
+              storageKeys:
+                type: array
+                items:
+                  type: string
+                  format: hex
+        chainId:
+            type: string
+            format: hex
+        data:
+            type: string
+            format: hex
+        from:
+            type: string
+            format: hex
+        gas:
+            type: string
+            format: hex
+        gasPrice:
+            type: string
+            format: hex
+        input:
+            type: string
+            format: hex
+        maxFeePerGas:
+            type: string
+            format: hex
+        maxPriorityFeePerGas:
+            type: string
+            format: hex
+        nonce:
+            type: string
+            format: hex
+        to:
+            type: string
+            format: hex
+        value:
+            type: string
+            format: hex
+

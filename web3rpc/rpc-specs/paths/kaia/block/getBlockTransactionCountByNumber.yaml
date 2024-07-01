@@ -1,0 +1,94 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/block/getBlockTransactionCountByNumber:
+    post:
+      operationId: .getBlockTransactionCountByNumber
+      summary: "[Block] kaia_getBlockTransactionCountByNumber"
+      description: |
+        Returns the number of transactions in a block matching the given block number.
+        
+        **NOTE:**  In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available.
+        
+        **JSONRPC:** `kaia_getBlockTransactionCountByNumber`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: blockNumberOrTag
+          in: query
+          description: Integer or hexadecimal block number, or the string "earliest", "latest" or "pending" as in the default block parameter.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetBlockTransactionCountByNumberReq"
+
+      responses:
+        200:
+          description: Returns integer of the number of transactions in this block.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: string
+                        format: hex
+                        description: Integer of the number of transactions in this block.
+                        example: "0xa"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/block/getBlockTransactionCountByNumber.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/block/KaiaGetBlockTransactionCountByNumberExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/block/getBlockTransactionCountByNumber.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/block/getBlockTransactionCountByNumber.py"
+
+components:
+  schemas:
+    KaiaGetBlockTransactionCountByNumberReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getBlockTransactionCountByNumber'
+        params:
+          type: array
+          items:
+            properties:
+              BlockNumberOrTag:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+          example:  ["0xe8"]

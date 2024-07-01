@@ -49,19 +49,19 @@ paths:
                   - $ref: "#/components/schemas/MainbridgeConvertChildChainBlockHashToParentChainTxHashResp"
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../code-samples/curl/mainbridge/convertChildChainBlockHashToParentChainTxHash.sh"
-        # - lang: "java"
+        # - lang: "Java"
         #   label: "Java"
         #   source:
         #     $ref: ""
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../code-samples/javascript/mainbridge/ConvertChildChainBlockHashToParentChainTxHashApi.js"
-        # - lang: "python"
+        # - lang: "Python"
         #   label: "Python"
         #   source:
         #     $ref: "../../../code-samples/python/eth/miscellaneous/convertCh ildChainBlockHashToParentChainTxHash.py"

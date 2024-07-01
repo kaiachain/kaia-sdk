@@ -51,19 +51,19 @@ paths:
                         example: "0xc2f2e8168a7e38b5d979d0f7084130ee"
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../../code-samples/curl/eth/filter/newBlockFilter.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/eth/filter/EthNewBlockFilterExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../../code-samples/javascript/eth/filter/newBlockFilter.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref:  "../../../code-samples/python/eth/filter/newBlockFilter.py"

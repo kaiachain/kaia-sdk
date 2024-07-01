@@ -1,0 +1,91 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/block/getCommitteeSize:
+    post:
+      operationId: .getCommitteeSize
+      summary: "[Block] kaia_getCommitteeSize"
+      description: |
+        Returns the size of the committee at the specified block. If the parameter is not set, returns the size of the committee at the latest block.
+
+        **NOTE:** *In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available.*
+
+        **JSONRPC:** `kaia_getCommitteeSize`
+      tags:
+        - kaia
+
+      parameters:
+        - name: blockNumberOrTag
+          in: query
+          description: (optional) Integer or hexadecimal block number, or the string "earliest" or "latest" as in the default block parameter.
+          required: false
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetCommitteeSizeReq"
+
+      responses:
+        200:
+          description: Integer - The size of the committee, or -1 when no committee was found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: number
+                        description: The size of the committee
+                        example: 4
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/block/getCommitteeSize.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/block/KaiaGetCommitteeSizeExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/block/getCommitteeSize.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/block/getCommitteeSize.py"
+
+components:
+  schemas:
+    KaiaGetCommitteeSizeReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getCommitteeSize'
+        params:
+          type: array
+          items:
+            properties:
+              BlockNumberOrTag:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+          example:  ["0x1b4"]

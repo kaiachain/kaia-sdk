@@ -61,19 +61,19 @@ paths:
                         example: "0xe15cd70a41dfb05e7214004d7d054801b2a2f06b"
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../../code-samples/curl/klay/miscellaneous/recoverFromTransaction.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/klay/miscellaneous/KlayRecoverFromTransactionExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../../code-samples/javascript/klay/miscellaneous/recoverFromTransaction.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref: "../../../code-samples/python/klay/miscellaneous/recoverFromTransaction.py"

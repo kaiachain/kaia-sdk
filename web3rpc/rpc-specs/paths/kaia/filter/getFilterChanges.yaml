@@ -1,0 +1,86 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/filter/getFilterChanges:
+    post:
+      operationId: .getFilterChanges
+      summary: "[Filter] kaia_getFilterChanges"
+      description: |
+        Polling method for a filter, which returns an array of logs which occurred since last poll.
+
+        **JSONRPC:** `kaia_getFilterChanges`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: QUANTITY
+          required: true
+          schema:
+            type: string
+          description: The filter id (e.g., "0x16" // 22).
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: "kaia_getFilterChanges"
+                    params:
+                      type: array
+                      items:
+                        type: string
+                        title: QUANTITY
+                      description: The filter id (e.g., "0x16" // 22).
+                      example: ["0x16"]
+
+      responses:
+        200:
+          description: Returns an array of logs which occurred since last poll.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetFilterChangesResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/filter/getFilterChanges.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/filter/KaiaGetFilterChangesExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/filter/getFilterChanges.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/filter/getFilterChanges.py"
+
+components:
+  schemas:
+    KaiaGetFilterChangesResp:
+      type: object
+      properties:
+        result:
+          $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaArrayOfLog"

@@ -1,0 +1,100 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/filter/getLogs:
+    post:
+      operationId: .getLogs
+      summary: "[Filter] kaia_getLogs"
+      description: |
+        Returns an array of all logs matching a given filter object.
+
+        The execution of this API can be limited by two node configurations to manage resources of Klaytn node safely.
+
+        -The number of maximum returned results in a single query (Default: 10,000).
+
+        -The execution duration limit of a single query (Default: 10 seconds).
+
+        **NOTE**: In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available.
+
+        **JSONRPC:** `kaia_getLogs`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: filterOptions
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/FilterOptions"
+          description: The filter options.
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: "kaia_getLogs"
+                    params:
+                      type: array
+                      items:
+                        $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/FilterOptions"
+                      description: The filter options.
+                      example:
+                        [
+                          {
+                            "fromBlock": "0x1",
+                            "toBlock": "latest",
+                            "address": "0x87ac99835e67168d4f9a40580f8f5c33550ba88b",
+                          },
+                        ]
+
+      responses:
+        200:
+          description: Returns an array of all logs matching a given filter object.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetLogsResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/filter/getLogs.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/filter/KaiaGetLogsExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/filter/getLogs.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/filter/getLogs.py"
+
+components:
+  schemas:
+    KaiaGetLogsResp:
+      type: object
+      properties:
+        result:
+          $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaArrayOfLog"

@@ -6,4 +6,4 @@ curl -X POST \
          "params": ["latest"],
          "id": 1
      }' \
-     http://localhost:8551
+     https://api.baobab.klaytn.net:8651

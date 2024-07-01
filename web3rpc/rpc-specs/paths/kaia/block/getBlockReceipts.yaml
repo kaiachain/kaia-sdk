@@ -1,0 +1,191 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/block/getBlockReceipts:
+    post:
+      operationId: .getBlockReceipts
+      summary: "[Block] kaia_getBlockReceipts"
+      description: |
+        Returns receipts included in a block identified by block hash.
+
+        **JSONRPC:** `kaia_getBlockReceipts`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: hashOfBlock
+          required: true
+          schema:
+            type: string
+            format: 32-byte DATA
+          description: Hash of a block
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetBlockReceiptsReq"
+
+      responses:
+        200:
+          description: Receipts included in a block. If the target block contains no transaction, an empty array [] is returned.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetBlockReceiptsResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/block/getBlockReceipts.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/block/KaiaGetBlockReceiptsExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/block/getBlockReceipts.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/block/getBlockReceipts.py"
+
+components:
+  schemas:
+    KaiaGetBlockReceiptsReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getBlockReceipts'
+        params:
+          type: array
+          description: Hash of a block
+          items:
+              type: string
+              title: HashOfBlock
+              format: 32-byte DATA
+              description: Hash of a block.
+          example:  ["0xdc762ed0274496e2a42278e2648d910d82468687b5415bb5eb058a96a0b93c30"]
+
+    KaiaGetBlockReceiptsResp:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            type: object
+            description: A Block Receipts
+          example:
+            [
+              {
+                "blockHash": "0xbbf314246e4b3578790ee48ada42111bc67708a4539373ccc2feb5d88833d839",
+                "blockNumber": "0x83db764",
+                "contractAddress": null,
+                "effectiveGasPrice": "0x5d21dba00",
+                "feePayer": "0x5e6b99bca5a21818d40d12c56194674989146fc8",
+                "feePayerSignatures":
+                  [
+                    {
+                      "V": "0x7f5",
+                      "R": "0xfd3bf3bb2ee88b4a3399c0a87d21d1bd6f87f1510da495dad7d106774d882a95",
+                      "S": "0x17f88f413d72e15a0352b594bb138f5150c0eb68b673a56852f25d0d3a01f161",
+                    },
+                  ],
+                "from": "0x95b4cef2d1d6a0b22b339306cea3aff74548cf83",
+                "gas": "0x61a80",
+                "gasPrice": "0xba43b7400",
+                "gasUsed": "0x23b6e",
+                "input": "0x202ee0ed000000000000000000000000000000000000000000000000000000000000e92d000000000000000000000000000000000000000000000000000000172f6e3700",
+                "logs":
+                  [
+                    {
+                      "address": "0x5266b74a8063e08e603bfbfc1ede4d71b8245dcd",
+                      "topics":
+                        [
+                          "0x0109fc6f55cf40689f02fbaad7af7fe7bbac8a3d2186600afc7d3e10cac60271",
+                          "0x000000000000000000000000000000000000000000000000000000000000e92d",
+                          "0x00000000000000000000000095b4cef2d1d6a0b22b339306cea3aff74548cf83",
+                        ],
+                      "data": "0x0000000000000000000000000000000000000000000000000000000065518cbe",
+                      "blockNumber": "0x83db764",
+                      "transactionHash": "0x3aed1cf24976a3f89944bb06825db8a1fb3df2741e16b1b1922d6d0db9357856",
+                      "transactionIndex": "0x0",
+                      "blockHash": "0xbbf314246e4b3578790ee48ada42111bc67708a4539373ccc2feb5d88833d839",
+                      "logIndex": "0x0",
+                      "removed": false,
+                    },
+                    {
+                      "address": "0x5266b74a8063e08e603bfbfc1ede4d71b8245dcd",
+                      "topics":
+                        [
+                          "0x92e98423f8adac6e64d0608e519fd1cefb861498385c6dee70d58fc926ddc68c",
+                          "0x000000000000000000000000000000000000000000000000000000172f6e3700",
+                          "0x000000000000000000000000000000000000000000000000000000000000e92d",
+                          "0x00000000000000000000000095b4cef2d1d6a0b22b339306cea3aff74548cf83",
+                        ],
+                      "data": "0x",
+                      "blockNumber": "0x83db764",
+                      "transactionHash": "0x3aed1cf24976a3f89944bb06825db8a1fb3df2741e16b1b1922d6d0db9357856",
+                      "transactionIndex": "0x0",
+                      "blockHash": "0xbbf314246e4b3578790ee48ada42111bc67708a4539373ccc2feb5d88833d839",
+                      "logIndex": "0x1",
+                      "removed": false,
+                    },
+                    {
+                      "address": "0x5266b74a8063e08e603bfbfc1ede4d71b8245dcd",
+                      "topics":
+                        [
+                          "0x0559884fd3a460db3073b7fc896cc77986f16e378210ded43186175bf646fc5f",
+                          "0x000000000000000000000000000000000000000000000000000000172f6e3700",
+                          "0x000000000000000000000000000000000000000000000000000000000000e92d",
+                        ],
+                      "data": "0x0000000000000000000000000000000000000000000000000000000065518cbe",
+                      "blockNumber": "0x83db764",
+                      "transactionHash": "0x3aed1cf24976a3f89944bb06825db8a1fb3df2741e16b1b1922d6d0db9357856",
+                      "transactionIndex": "0x0",
+                      "blockHash": "0xbbf314246e4b3578790ee48ada42111bc67708a4539373ccc2feb5d88833d839",
+                      "logIndex": "0x2",
+                      "removed": false,
+                    },
+                  ],
+                "logsBloom": "0x00000000000000000020000000000000400000000000000000000000000000000000000000000000040000000020000000000000000200000000000000000000000000000000000000000000002000000000000001000000000100000000000000000000000000001000000000000001000000000400000000008000100000000000000000000000000000000000000000000c80000000000000000000000000000000001000000000000000000000000000000000000000000400000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000",
+                "nonce": "0xe92c",
+                "senderTxHash": "0x557b98f94afd1270ba13c9f71c0b9ab862437ff155850a63d798156641b62368",
+                "signatures":
+                  [
+                    {
+                      "V": "0x7f5",
+                      "R": "0xc8817da92672f512af1573d50f998abd785013ba077760f7496550c0b98ea200",
+                      "S": "0x16d5a6a393488f002d63596f55d7b3c2425feff71df23cf44f90d48c88841529",
+                    },
+                  ],
+                "status": "0x1",
+                "to": "0x5266b74a8063e08e603bfbfc1ede4d71b8245dcd",
+                "transactionHash": "0x3aed1cf24976a3f89944bb06825db8a1fb3df2741e16b1b1922d6d0db9357856",
+                "transactionIndex": "0x0",
+                "type": "TxTypeFeeDelegatedSmartContractExecution",
+                "typeInt": 49,
+                "value": "0x0",
+              },
+            ]

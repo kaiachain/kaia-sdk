@@ -1,0 +1,67 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/configuration/isParallelDBWrite:
+    post:
+      operationId: .isParallelDBWrite
+      summary: "[Configuration] kaia_isParallelDBWrite"
+      description: |
+        Returns true if the node is writing blockchain data in parallel manner. It is enabled by default.
+
+        **JSONRPC:** `kaia_isParallelDBWrite`
+      tags:
+        - kaia
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: "kaia_isParallelDBWrite"
+
+      responses:
+        200:
+          description: Returns true if the node is writing blockchain data in parallel manner.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: boolean
+                        description: "true means the node is writing blockchain data in parallel manner. It is false if the node is writing the data in serial manner."
+                        example: true
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/configuration/isParallelDBWrite.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/configuration/KaiaIsParallelDBWriteExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/configuration/isParallelDBWrite.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/configuration/isParallelDBWrite.py"

@@ -1,0 +1,86 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/filter/unsubscribe:
+    post:
+      operationId: .unsubscribe
+      summary: "[Filter] kaia_unsubscribe"
+      description: |
+        Cancels the subscription with a specific subscription id by using either RPC Pub/Sub over WebSockets or filters over HTTP. Only the connection that created a subscription can unsubscribe from it.
+        
+        **JSONRPC:** `kaia_unsubscribe`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: subscriptionId
+          required: true
+          schema:
+            type: string
+            format: hex
+          description: A subscription id.
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: "kaia_unsubscribe"
+                    params:
+                      type: array
+                      description: A subscription id.
+                      items:
+                        title: SubscriptionId
+                        type: string
+                        format: hex
+                        description: A subscription id.
+                      example: ["0xab8ac7a4045025d0c2807d63060eea6d"]
+
+      responses:
+        200:
+          description: Return true if the subscription was successfully canceled, otherwise false.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: boolean
+                        description: true if the subscription was successfully canceled, otherwise false.
+                        example: true
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/filter/unsubscribe.sh"
+        # - lang: "Java"
+        #   label: "Java"
+        #   source:
+        #     $ref: ""
+        #- lang: "JavaScript"
+        #  label: "Javascript"
+        #  source:
+        #    $ref: ""
+        #- lang: "Python"
+        #  label: "Python"
+        #  source:
+        #    $ref: ""

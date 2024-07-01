@@ -13,9 +13,9 @@ x-tagGroups:
     tags:
       - subbridge
 servers:
-  - url: http://localhost:8551
   - url: https://api.baobab.klaytn.net:8651
   - url: https://public-en-cypress.klaytn.net
+  - url: http://localhost:8551
 paths:
 
   # subbridge:

@@ -135,7 +135,7 @@ public class KaiaSignatureData {
     }
 
     public static byte[] getKaiaMessageHash(String message) {
-        final String preamble = "\u0019Klaytn Signed Message:\n";
+        final String preamble = "\u0019Ethereum Signed Message:\n";
 
         byte[] messageArr = BytesUtils.isHexStrict(message) ? Numeric.hexStringToByteArray(message)
                 : message.getBytes();

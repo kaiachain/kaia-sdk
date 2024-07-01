@@ -17,7 +17,7 @@ async function connect(injectedProvider) {
   }
 
   // Wrap the window.{ethereum,klaytn} object with Web3Provider.
-  provider = new ethers_ext.v6.Web3Provider(injectedProvider);
+  provider = new ethers_ext.Web3Provider(injectedProvider);
   // Uncomment to use the original ethers.js Web3Provider:
   // provider = new ethers.Web3Provider(injectedProvider);
 
@@ -30,7 +30,7 @@ async function connect(injectedProvider) {
   injectedProvider.on("networkChanged", (chainId) => {
     console.log("chainId changed", chainId);
     $("#textChainId").html(chainId);
-    provider = new ethers_ext.v6.providers.Web3Provider(injectedProvider);
+    provider = new ethers_ext.providers.Web3Provider(injectedProvider);
   });
 
   // Detect user account
@@ -161,7 +161,7 @@ async function sendLegacySC() {
 async function sendKlaytnVT() {
   doSendTx(async (address) => {
     return {
-      type: ethers_ext.v6.TxType.ValueTransfer, // 0x08
+      type: ethers_ext.TxType.ValueTransfer, // 0x08
       to: address, // send to myself
       value: 0,
     };
@@ -170,7 +170,7 @@ async function sendKlaytnVT() {
 async function sendKlaytnSC() {
   doSendTx(async () => {
     return {
-      type: ethers_ext.v6.TxType.SmartContractExecution, // 0x30
+      type: ethers_ext.TxType.SmartContractExecution, // 0x30
       to: contractAddress,
       data: contractCalldata,
     };
@@ -180,12 +180,12 @@ async function sendKlaytnSC() {
 // This operation is usually done in the backend by the dApp operator.
 // We do it here with hardcoded private key for demonstration purpose.
 async function doSendTxAsFeePayer(signedTx) {
-  const httpProvider = new ethers_ext.v6.JsonRpcProvider(
+  const httpProvider = new ethers_ext.JsonRpcProvider(
     "https://public-en-baobab.klaytn.net"
   );
   const feePayerPriv =
     "0xb3cf575dea0081563fe5482de2fe4425e025502b1f4ae7e02b2540ac0a5beda1";
-  const feePayerWallet = new ethers_ext.v6.Wallet(feePayerPriv, httpProvider);
+  const feePayerWallet = new ethers_ext.Wallet(feePayerPriv, httpProvider);
 
   const sentTx = await feePayerWallet.sendTransactionAsFeePayer(signedTx);
   console.log("sentTx", sentTx);
@@ -215,7 +215,7 @@ async function doSignTx(makeTxRequest) {
 async function sendFeeDelegatedVT() {
   doSignTx(async (address) => {
     return {
-      type: ethers_ext.v6.TxType.FeeDelegatedValueTransfer, // 0x09
+      type: ethers_ext.TxType.FeeDelegatedValueTransfer, // 0x09
       to: address, // send to myself
       value: 0,
     };
@@ -224,7 +224,7 @@ async function sendFeeDelegatedVT() {
 async function sendFeeDelegatedSC() {
   doSignTx(async () => {
     return {
-      type: ethers_ext.v6.TxType.FeeDelegatedSmartContractExecution, // 0x09
+      type: ethers_ext.TxType.FeeDelegatedSmartContractExecution, // 0x09
       to: contractAddress,
       data: contractCalldata,
     };

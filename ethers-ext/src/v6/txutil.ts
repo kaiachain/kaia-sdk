@@ -14,6 +14,7 @@ import _ from "lodash";
 import {
   getChainIdFromSignatureTuples,
   parseTransaction,
+  parseTxType,
   SignatureLike,
 } from "@klaytn/js-ext-core";
 
@@ -29,7 +30,14 @@ export async function getTransactionRequest(
     if (transactionOrRLP instanceof Transaction) {
       return transactionOrRLP.toJSON();
     }
-    return resolveProperties(transactionOrRLP) as TransactionLike<string>;
+    const resolvedTx = await resolveProperties(transactionOrRLP);
+
+    // tx values transformation
+    if (typeof resolvedTx?.type === "string") {
+      resolvedTx.type = parseTxType(resolvedTx.type);
+    }
+
+    return resolvedTx as TransactionLike<string>;
   }
 }
 

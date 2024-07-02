@@ -1,8 +1,8 @@
-import org.web3j.protocol.klaytn.core.method.response.KlaySendTransactionAsFeePayerResponse;
-import org.web3j.protocol.klaytn.core.method.response.KlaytnTransactionTypes;
-import org.web3j.protocol.klaytn.core.method.response.Signature;
+import org.web3j.protocol.kaia.core.method.response.KlaySendTransactionAsFeePayerResponse;
+import org.web3j.protocol.kaia.core.method.response.KlaytnTransactionTypes;
+import org.web3j.protocol.kaia.core.method.response.Signature;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.klaytn.Web3j;
+import org.web3j.protocol.kaia.Web3j;
 
 import java.io.IOException;
 import java.util.List;

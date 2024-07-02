@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class KAIAConvert {
     private KAIAConvert() { } 
 
-    // Klaytn units
+    // Kaia units
     public static BigDecimal fromPeb(String number, Unit unit) {
         return fromPeb(new BigDecimal(number), unit);
     }

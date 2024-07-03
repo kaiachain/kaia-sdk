@@ -10,10 +10,10 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 
 /**
- * KlayGetAccountKey
+ * KaiaGetAccountKey
  */
 @JsonPropertyOrder({"key", "keyType"})
-public class KlayGetAccountKey {
+public class KaiaGetAccountKey {
 
   private Object key = new Object();
 
@@ -36,7 +36,7 @@ public class KlayGetAccountKey {
     this.key = key;
   }
 
-  public KlayGetAccountKey keyType(Integer keyType) {
+  public KaiaGetAccountKey keyType(Integer keyType) {
     this.keyType = keyType;
     return this;
   }
@@ -66,9 +66,9 @@ public class KlayGetAccountKey {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    KlayGetAccountKey klayGetAccountKey = (KlayGetAccountKey) o;
-    return Objects.equals(this.key, klayGetAccountKey.key) &&
-        Objects.equals(this.keyType, klayGetAccountKey.keyType);
+    KaiaGetAccountKey KaiaGetAccountKey = (KaiaGetAccountKey) o;
+    return Objects.equals(this.key, KaiaGetAccountKey.key) &&
+        Objects.equals(this.keyType, KaiaGetAccountKey.keyType);
   }
 
   @Override
@@ -79,7 +79,7 @@ public class KlayGetAccountKey {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class KlayGetAccountKey {\n");
+    sb.append("class KaiaGetAccountKey {\n");
     sb.append("    key: ").append(toIndentedString(key)).append("\n");
     sb.append("    keyType: ").append(toIndentedString(keyType)).append("\n");
     sb.append("}");

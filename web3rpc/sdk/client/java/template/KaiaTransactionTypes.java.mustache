@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @JsonPropertyOrder({"from", "to", "gas", "gasPrice", "value", "data", "nonce", "typeInt", "feePayer", "signatures", "feeRatio", "input", "key", "humanReadable", "codeFormat"})
-public class KlaytnTransactionTypes {
+public class KaiaTransactionTypes {
     public static final String JSON_PROPERTY_FROM = "from";
     private String from;
     public static final String JSON_PROPERTY_TO = "to";
@@ -43,10 +43,10 @@ public class KlaytnTransactionTypes {
     public static final String JSON_PROPERTY_CODE_FORMAT = "codeFormat";
     private String codeFormat;
 
-    public KlaytnTransactionTypes() {
+    public KaiaTransactionTypes() {
     }
 
-    public KlaytnTransactionTypes from(String from) {
+    public KaiaTransactionTypes from(String from) {
         this.from = from;
         return this;
     }
@@ -64,7 +64,7 @@ public class KlaytnTransactionTypes {
         this.from = from;
     }
 
-    public KlaytnTransactionTypes to(String to) {
+    public KaiaTransactionTypes to(String to) {
         this.to = to;
         return this;
     }
@@ -82,7 +82,7 @@ public class KlaytnTransactionTypes {
         this.to = to;
     }
 
-    public KlaytnTransactionTypes gas(String gas) {
+    public KaiaTransactionTypes gas(String gas) {
         this.gas = gas;
         return this;
     }
@@ -100,7 +100,7 @@ public class KlaytnTransactionTypes {
         this.gas = gas;
     }
 
-    public KlaytnTransactionTypes gasPrice(String gasPrice) {
+    public KaiaTransactionTypes gasPrice(String gasPrice) {
         this.gasPrice = gasPrice;
         return this;
     }
@@ -118,7 +118,7 @@ public class KlaytnTransactionTypes {
         this.gasPrice = gasPrice;
     }
 
-    public KlaytnTransactionTypes value(String value) {
+    public KaiaTransactionTypes value(String value) {
         this.value = value;
         return this;
     }
@@ -136,7 +136,7 @@ public class KlaytnTransactionTypes {
         this.value = value;
     }
 
-    public KlaytnTransactionTypes data(String data) {
+    public KaiaTransactionTypes data(String data) {
         this.data = data;
         return this;
     }
@@ -154,7 +154,7 @@ public class KlaytnTransactionTypes {
         this.data = data;
     }
 
-    public KlaytnTransactionTypes nonce(String nonce) {
+    public KaiaTransactionTypes nonce(String nonce) {
     this.nonce = nonce;
         return this;
     }
@@ -172,7 +172,7 @@ public class KlaytnTransactionTypes {
         this.nonce = nonce;
     }
 
-    public KlaytnTransactionTypes typeInt(Integer typeInt) {
+    public KaiaTransactionTypes typeInt(Integer typeInt) {
     this.typeInt = typeInt;
         return this;
     }
@@ -190,7 +190,7 @@ public class KlaytnTransactionTypes {
         this.typeInt = typeInt;
     }
 
-    public KlaytnTransactionTypes feePayer(String feePayer) {
+    public KaiaTransactionTypes feePayer(String feePayer) {
     this.feePayer = feePayer;
         return this;
     }
@@ -208,12 +208,12 @@ public class KlaytnTransactionTypes {
         this.feePayer = feePayer;
     }
 
-    public KlaytnTransactionTypes signatures(List<Signature> signatures) {
+    public KaiaTransactionTypes signatures(List<Signature> signatures) {
         this.signatures = signatures;
         return this;
     }
 
-    public KlaytnTransactionTypes addSignaturesItem(Signature signaturesItem) {
+    public KaiaTransactionTypes addSignaturesItem(Signature signaturesItem) {
         if (this.signatures == null) {
             this.signatures = new ArrayList();
         }
@@ -234,7 +234,7 @@ public class KlaytnTransactionTypes {
         this.signatures = signatures;
     }
 
-    public KlaytnTransactionTypes feeRatio(Object feeRatio) {
+    public KaiaTransactionTypes feeRatio(Object feeRatio) {
         this.feeRatio = feeRatio;
         return this;
     }
@@ -252,7 +252,7 @@ public class KlaytnTransactionTypes {
         this.feeRatio = feeRatio;
     }
 
-    public KlaytnTransactionTypes input(String input) {
+    public KaiaTransactionTypes input(String input) {
         this.input = input;
         return this;
     }
@@ -270,7 +270,7 @@ public class KlaytnTransactionTypes {
         this.input = input;
     }
 
-    public KlaytnTransactionTypes key(String key) {
+    public KaiaTransactionTypes key(String key) {
         this.key = key;
         return this;
     }
@@ -288,7 +288,7 @@ public class KlaytnTransactionTypes {
         this.key = key;
     }
 
-    public KlaytnTransactionTypes humanReadable(Boolean humanReadable) {
+    public KaiaTransactionTypes humanReadable(Boolean humanReadable) {
         this.humanReadable = humanReadable;
         return this;
     }
@@ -306,7 +306,7 @@ public class KlaytnTransactionTypes {
         this.humanReadable = humanReadable;
     }
 
-    public KlaytnTransactionTypes codeFormat(String codeFormat) {
+    public KaiaTransactionTypes codeFormat(String codeFormat) {
     this.codeFormat = codeFormat;
         return this;
     }
@@ -328,8 +328,8 @@ public class KlaytnTransactionTypes {
         if (this == o) {
             return true;
         } else if (o != null && this.getClass() == o.getClass()) {
-            KlaytnTransactionTypes klaytnTransactionTypes = (KlaytnTransactionTypes)o;
-            return Objects.equals(this.from, klaytnTransactionTypes.from) && Objects.equals(this.to, klaytnTransactionTypes.to) && Objects.equals(this.gas, klaytnTransactionTypes.gas) && Objects.equals(this.gasPrice, klaytnTransactionTypes.gasPrice) && Objects.equals(this.value, klaytnTransactionTypes.value) && Objects.equals(this.data, klaytnTransactionTypes.data) && Objects.equals(this.nonce, klaytnTransactionTypes.nonce) && Objects.equals(this.typeInt, klaytnTransactionTypes.typeInt) && Objects.equals(this.feePayer, klaytnTransactionTypes.feePayer) && Objects.equals(this.signatures, klaytnTransactionTypes.signatures) && Objects.equals(this.feeRatio, klaytnTransactionTypes.feeRatio) && Objects.equals(this.input, klaytnTransactionTypes.input) && Objects.equals(this.key, klaytnTransactionTypes.key) && Objects.equals(this.humanReadable, klaytnTransactionTypes.humanReadable) && Objects.equals(this.codeFormat, klaytnTransactionTypes.codeFormat);
+            KaiaTransactionTypes KaiaTransactionTypes = (KaiaTransactionTypes)o;
+            return Objects.equals(this.from, KaiaTransactionTypes.from) && Objects.equals(this.to, KaiaTransactionTypes.to) && Objects.equals(this.gas, KaiaTransactionTypes.gas) && Objects.equals(this.gasPrice, KaiaTransactionTypes.gasPrice) && Objects.equals(this.value, KaiaTransactionTypes.value) && Objects.equals(this.data, KaiaTransactionTypes.data) && Objects.equals(this.nonce, KaiaTransactionTypes.nonce) && Objects.equals(this.typeInt, KaiaTransactionTypes.typeInt) && Objects.equals(this.feePayer, KaiaTransactionTypes.feePayer) && Objects.equals(this.signatures, KaiaTransactionTypes.signatures) && Objects.equals(this.feeRatio, KaiaTransactionTypes.feeRatio) && Objects.equals(this.input, KaiaTransactionTypes.input) && Objects.equals(this.key, KaiaTransactionTypes.key) && Objects.equals(this.humanReadable, KaiaTransactionTypes.humanReadable) && Objects.equals(this.codeFormat, KaiaTransactionTypes.codeFormat);
         } else {
             return false;
         }
@@ -341,7 +341,7 @@ public class KlaytnTransactionTypes {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class KlaytnTransactionTypes {\n");
+        sb.append("class KaiaTransactionTypes {\n");
         sb.append("    from: ").append(this.toIndentedString(this.from)).append("\n");
         sb.append("    to: ").append(this.toIndentedString(this.to)).append("\n");
         sb.append("    gas: ").append(this.toIndentedString(this.gas)).append("\n");

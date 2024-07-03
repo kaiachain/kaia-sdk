@@ -26,7 +26,7 @@ yarn install
 yarn link
 
 cd "${CURRENT_FILE_DIR}/opensdk"
-yarn link @klaytn/web3rpc
+yarn link @kaiachain/web3rpc
 yarn install
 yarn link
 

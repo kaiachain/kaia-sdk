@@ -1,5 +1,5 @@
 import org.web3j.protocol.kaia.core.method.response.KaiaSignTransactionAsFeePayerResponse;
-import org.web3j.protocol.kaia.core.method.response.KaiatnTransactionTypes;
+import org.web3j.protocol.kaia.core.method.response.KaiaTransactionTypes;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.kaia.Web3j;
 
@@ -8,7 +8,7 @@ import java.io.IOException;
 public class KaiaSignTransactionAsFeePayerExample   {
     private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
     void kaiaSignTransactionAsFeePayerExample() throws IOException {
-        KaiatnTransactionTypes type = new KaiatnTransactionTypes();
+        KaiaTransactionTypes type = new KaiaTransactionTypes();
         String address = "0x487f2dfef230c2120b8cc55c5087b103146536ec";
         String nonce = "0x1";
         type.setTypeInt(17);

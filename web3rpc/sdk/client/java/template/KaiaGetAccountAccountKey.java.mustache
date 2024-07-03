@@ -11,14 +11,14 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 
 @JsonPropertyOrder({"key", "keyType"})
-@JsonTypeName("KlayGetAccount_account_key")
-public class KlayGetAccountAccountKey {
+@JsonTypeName("KaiaGetAccount_account_key")
+public class KaiaGetAccountAccountKey {
     public static final String JSON_PROPERTY_KEY = "key";
     private Object key = null;
     public static final String JSON_PROPERTY_KEY_TYPE = "keyType";
     private BigDecimal keyType;
 
-    public KlayGetAccountAccountKey() {
+    public KaiaGetAccountAccountKey() {
     }
 
     public Object getKey() {
@@ -41,8 +41,8 @@ public class KlayGetAccountAccountKey {
         if (this == o) {
             return true;
         } else if (o != null && this.getClass() == o.getClass()) {
-            KlayGetAccountAccountKey klayGetAccountAccountKey = (KlayGetAccountAccountKey) o;
-            return Objects.equals(this.key, klayGetAccountAccountKey.key) && Objects.equals(this.keyType, klayGetAccountAccountKey.keyType);
+            KaiaGetAccountAccountKey KaiaGetAccountAccountKey = (KaiaGetAccountAccountKey) o;
+            return Objects.equals(this.key, KaiaGetAccountAccountKey.key) && Objects.equals(this.keyType, KaiaGetAccountAccountKey.keyType);
         } else {
             return false;
         }
@@ -54,7 +54,7 @@ public class KlayGetAccountAccountKey {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class KlayGetAccountAccountKey {\n");
+        sb.append("class KaiaGetAccountAccountKey {\n");
         sb.append("    key: ").append(this.toIndentedString(this.key)).append("\n");
         sb.append("    keyType: ").append(this.toIndentedString(this.keyType)).append("\n");
         sb.append("}");

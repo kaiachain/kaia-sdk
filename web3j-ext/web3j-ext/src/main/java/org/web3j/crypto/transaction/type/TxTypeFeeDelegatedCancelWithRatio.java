@@ -8,7 +8,7 @@ import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
-import org.web3j.utils.KlayTransactionUtils;
+import org.web3j.utils.KaiaTransactionUtils;
 import org.web3j.utils.Numeric;
 
 
@@ -67,7 +67,7 @@ public class TxTypeFeeDelegatedCancelWithRatio extends TxTypeFeeDelegate  {
      * @return Type transaction type
      */
     @Override
-    public TxType.Type getKlayType() {
+    public TxType.Type getKaiaType() {
         return TxType.Type.FEE_DELEGATED_CANCEL_WITH_RATIO;
     }
 
@@ -80,7 +80,7 @@ public class TxTypeFeeDelegatedCancelWithRatio extends TxTypeFeeDelegate  {
     public static TxTypeFeeDelegatedCancelWithRatio decodeFromRawTransaction(byte[] rawTransaction) {
         //TxHashRLP = type + encode([nonce, gasPrice, gas, from, feeRatio, txSignatures, feePayer, feePayerSignatures])
         try {
-            byte[] rawTransactionExceptType = KlayTransactionUtils.getRawTransactionNoType(rawTransaction);
+            byte[] rawTransactionExceptType = KaiaTransactionUtils.getRawTransactionNoType(rawTransaction);
 
             RlpList rlpList = RlpDecoder.decode(rawTransactionExceptType);
             List<RlpType> values = ((RlpList) rlpList.getValues().get(0)).getValues();

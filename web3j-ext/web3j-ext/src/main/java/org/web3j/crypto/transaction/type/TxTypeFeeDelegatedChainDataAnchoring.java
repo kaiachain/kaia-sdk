@@ -8,7 +8,7 @@ import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
-import org.web3j.utils.KlayTransactionUtils;
+import org.web3j.utils.KaiaTransactionUtils;
 import org.web3j.utils.Numeric;
 
 /**
@@ -71,7 +71,7 @@ public class TxTypeFeeDelegatedChainDataAnchoring extends TxTypeFeeDelegate   {
      * @return Type transaction type
      */
     @Override
-    public Type getKlayType() {
+    public Type getKaiaType() {
         return Type.FEE_DELEGATED_CHAIN_DATA_ANCHORING;
     }
 
@@ -82,7 +82,7 @@ public class TxTypeFeeDelegatedChainDataAnchoring extends TxTypeFeeDelegate   {
      * @return TxTypeChainDataAnchoringTransaction decoded transaction
      */
     public static TxTypeFeeDelegatedChainDataAnchoring decodeFromRawTransaction(byte[] rawTransaction) {
-        byte[] rawTransactionExceptType = KlayTransactionUtils.getRawTransactionNoType(rawTransaction);
+        byte[] rawTransactionExceptType = KaiaTransactionUtils.getRawTransactionNoType(rawTransaction);
 
         RlpList rlpList = RlpDecoder.decode(rawTransactionExceptType);
         List<RlpType> values = ((RlpList) rlpList.getValues().get(0)).getValues();

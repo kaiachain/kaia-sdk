@@ -32,22 +32,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class KlaySignatureData {
+public class KaiaSignatureData {
     private byte[] v;
     private byte[] r;
     private byte[] s;
 
-    public KlaySignatureData() {
+    public KaiaSignatureData() {
     }
 
-    public KlaySignatureData(byte[] v, byte[] r, byte[] s) {
+    public KaiaSignatureData(byte[] v, byte[] r, byte[] s) {
         this.v = v;
         this.r = r;
         this.s = s;
     }
 
-    public static KlaySignatureData getEmptySignature() {
-        KlaySignatureData emptySig = new KlaySignatureData(
+    public static KaiaSignatureData getEmptySignature() {
+        KaiaSignatureData emptySig = new KaiaSignatureData(
                 Numeric.hexStringToByteArray("0x01"),
                 Numeric.hexStringToByteArray("0x"),
                 Numeric.hexStringToByteArray("0x"));
@@ -55,8 +55,8 @@ public class KlaySignatureData {
         return emptySig;
     }
 
-    public static List<KlaySignatureData> decodeSignatures(List<RlpType> signatureRlpTypeList) {
-        List<KlaySignatureData> signatureDataList = new ArrayList<>();
+    public static List<KaiaSignatureData> decodeSignatures(List<RlpType> signatureRlpTypeList) {
+        List<KaiaSignatureData> signatureDataList = new ArrayList<>();
 
         for (RlpType signature : signatureRlpTypeList) {
             List<RlpType> vrs = ((RlpList) signature).getValues();
@@ -65,7 +65,7 @@ public class KlaySignatureData {
             byte[] v = ((RlpString) vrs.get(0)).getBytes();
             byte[] r = ((RlpString) vrs.get(1)).getBytes();
             byte[] s = ((RlpString) vrs.get(2)).getBytes();
-            signatureDataList.add(new KlaySignatureData(v, r, s));
+            signatureDataList.add(new KaiaSignatureData(v, r, s));
         }
 
         return signatureDataList;
@@ -92,7 +92,7 @@ public class KlaySignatureData {
             return false;
         }
 
-        KlaySignatureData that = (KlaySignatureData) o;
+        KaiaSignatureData that = (KaiaSignatureData) o;
 
         if (!Arrays.equals(v, that.v)) {
             return false;
@@ -117,8 +117,8 @@ public class KlaySignatureData {
                 + Numeric.toBigInt(getS());
     }
 
-    public static KlaySignatureData createKlaySignatureDataFromChainId(long chainId) {
-        return new KlaySignatureData(BigInteger.valueOf(chainId).toByteArray(), new byte[] {}, new byte[] {});
+    public static KaiaSignatureData createKaiaSignatureDataFromChainId(long chainId) {
+        return new KaiaSignatureData(BigInteger.valueOf(chainId).toByteArray(), new byte[] {}, new byte[] {});
     }
 
     public RlpList toRlpList() {
@@ -128,29 +128,29 @@ public class KlaySignatureData {
                 RlpString.create(Bytes.trimLeadingZeroes(getS())));
     }
 
-    public static KlaySignatureData createEip155KlaySignatureData(
+    public static KaiaSignatureData createEip155KaiaSignatureData(
             Sign.SignatureData signatureData, long chainId) {
         long v = (Numeric.toBigInt(signatureData.getV()).intValue() + chainId * 2) + 8;
-        return new KlaySignatureData(BigInteger.valueOf(v).toByteArray(), signatureData.getR(), signatureData.getS());
+        return new KaiaSignatureData(BigInteger.valueOf(v).toByteArray(), signatureData.getR(), signatureData.getS());
     }
 
-    public static byte[] getKlaytnMessageHash(String message) {
-        final String preamble = "\u0019Klaytn Signed Message:\n";
+    public static byte[] getKaiaMessageHash(String message) {
+        final String preamble = "\u0019Ethereum Signed Message:\n";
 
         byte[] messageArr = BytesUtils.isHexStrict(message) ? Numeric.hexStringToByteArray(message)
                 : message.getBytes();
         byte[] preambleArr = preamble.concat(String.valueOf(messageArr.length)).getBytes();
 
-        // klayMessage is concatenated array (preambleArr + messageArr)
-        byte[] klayMessage = BytesUtils.concat(preambleArr, messageArr);
-        byte[] result = Hash.sha3(klayMessage);
+        // kaiaMessage is concatenated array (preambleArr + messageArr)
+        byte[] kaiaMessage = BytesUtils.concat(preambleArr, messageArr);
+        byte[] result = Hash.sha3(kaiaMessage);
 
         // return data after converting to hex string.
         return result;
     }
 
-    public static Sign.SignatureData signPrefixedMessage(String message, KlayCredentials cred) {
-        byte[] messageBytes = getKlaytnMessageHash(message);
+    public static Sign.SignatureData signPrefixedMessage(String message, KaiaCredentials cred) {
+        byte[] messageBytes = getKaiaMessageHash(message);
         return Sign.signMessage(messageBytes, cred.getEcKeyPair(), false);
     }
 

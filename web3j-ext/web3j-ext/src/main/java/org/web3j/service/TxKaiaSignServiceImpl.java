@@ -13,33 +13,33 @@
 package org.web3j.service;
 
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.KlayCredentials;
-import org.web3j.crypto.KlayRawTransaction;
-import org.web3j.crypto.KlayTransactionEncoder;
+import org.web3j.crypto.KaiaCredentials;
+import org.web3j.crypto.KaiaRawTransaction;
+import org.web3j.crypto.KaiaTransactionEncoder;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.tx.ChainId;
 
 /** Service to base sign transaction. */
-public class TxKlaySignServiceImpl{
+public class TxKaiaSignServiceImpl{
 
-    private final KlayCredentials credentials;
+    private final KaiaCredentials credentials;
 
-    public TxKlaySignServiceImpl(KlayCredentials credentials) {
+    public TxKaiaSignServiceImpl(KaiaCredentials credentials) {
         this.credentials = credentials;
     }
 
-    public TxKlaySignServiceImpl(Credentials credentials) {
-        this.credentials = KlayCredentials.create(credentials.getEcKeyPair());
+    public TxKaiaSignServiceImpl(Credentials credentials) {
+        this.credentials = KaiaCredentials.create(credentials.getEcKeyPair());
     }
 
-    public byte[] sign(KlayRawTransaction rawTransaction, long chainId) {
+    public byte[] sign(KaiaRawTransaction rawTransaction, long chainId) {
         final byte[] signedMessage;
 
         if (chainId > ChainId.NONE) {
-            signedMessage = KlayTransactionEncoder.signMessage(rawTransaction, chainId, credentials);
+            signedMessage = KaiaTransactionEncoder.signMessage(rawTransaction, chainId, credentials);
         } else {
-            signedMessage = KlayTransactionEncoder.signMessage(rawTransaction, credentials.convertToCredentials());
+            signedMessage = KaiaTransactionEncoder.signMessage(rawTransaction, credentials.convertToCredentials());
         }
         return signedMessage;
     }

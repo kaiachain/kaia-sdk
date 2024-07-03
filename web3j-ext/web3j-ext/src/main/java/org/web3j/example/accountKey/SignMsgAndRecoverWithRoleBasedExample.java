@@ -4,12 +4,12 @@ import org.web3j.tx.response.PollingTransactionReceiptProcessor;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.example.keySample;
 import java.io.IOException;
-import org.web3j.crypto.KlayCredentials;
-import org.web3j.crypto.KlaySignatureData;
+import org.web3j.crypto.KaiaCredentials;
+import org.web3j.crypto.KaiaSignatureData;
 import org.web3j.crypto.Sign.SignatureData;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.klaytn.Web3j;
-import org.web3j.protocol.klaytn.core.method.response.KlayRecoverFromMessageResponse;
+import org.web3j.protocol.kaia.Web3j;
+import org.web3j.protocol.kaia.core.method.response.KaiaRecoverFromMessageResponse;
 
 /**
  * 
@@ -21,35 +21,35 @@ public class SignMsgAndRecoverWithRoleBasedExample implements keySample {
 
         public static void run() throws Exception {
                 Web3j web3j = Web3j.build(new HttpService(keySample.BAOBAB_URL));
-                KlayCredentials credentials1 = KlayCredentials.create(keySample.ROLEBASED_KEY_transactionkey,
+                KaiaCredentials credentials1 = KaiaCredentials.create(keySample.ROLEBASED_KEY_transactionkey,
                                 keySample.ROLEBASED_KEY_address);
-                KlayCredentials credentials2 = KlayCredentials.create(keySample.ROLEBASED_KEY_updatekey,
+                KaiaCredentials credentials2 = KaiaCredentials.create(keySample.ROLEBASED_KEY_updatekey,
                                 keySample.ROLEBASED_KEY_address);
-                KlayCredentials credentials3 = KlayCredentials.create(keySample.ROLEBASED_KEY_feepayer,
+                KaiaCredentials credentials3 = KaiaCredentials.create(keySample.ROLEBASED_KEY_feepayer,
                                 keySample.ROLEBASED_KEY_address);
                 String from = credentials1.getAddress();
                 String message = "0xdeadbeef";
                 String blockNumber = "latest";
 
-                SignatureData signature1 = KlaySignatureData.signPrefixedMessage(message, credentials1);
-                String result1 = KlaySignatureData.getSignatureString(signature1);
+                SignatureData signature1 = KaiaSignatureData.signPrefixedMessage(message, credentials1);
+                String result1 = KaiaSignatureData.getSignatureString(signature1);
 
-                SignatureData signature2 = KlaySignatureData.signPrefixedMessage(message, credentials2);
-                String result2 = KlaySignatureData.getSignatureString(signature2);
+                SignatureData signature2 = KaiaSignatureData.signPrefixedMessage(message, credentials2);
+                String result2 = KaiaSignatureData.getSignatureString(signature2);
 
-                SignatureData signature3 = KlaySignatureData.signPrefixedMessage(message, credentials3);
-                String result3 = KlaySignatureData.getSignatureString(signature3);
+                SignatureData signature3 = KaiaSignatureData.signPrefixedMessage(message, credentials3);
+                String result3 = KaiaSignatureData.getSignatureString(signature3);
 
-                KlayRecoverFromMessageResponse response1 = web3j
-                                .klayRecoverFromMessage(from, message, result1, blockNumber)
+                KaiaRecoverFromMessageResponse response1 = web3j
+                                .kaiaRecoverFromMessage(from, message, result1, blockNumber)
                                 .send();
 
-                KlayRecoverFromMessageResponse response2 = web3j
-                                .klayRecoverFromMessage(from, message, result2, blockNumber)
+                KaiaRecoverFromMessageResponse response2 = web3j
+                                .kaiaRecoverFromMessage(from, message, result2, blockNumber)
                                 .send();
 
-                KlayRecoverFromMessageResponse response3 = web3j
-                                .klayRecoverFromMessage(from, message, result3, blockNumber)
+                KaiaRecoverFromMessageResponse response3 = web3j
+                                .kaiaRecoverFromMessage(from, message, result3, blockNumber)
                                 .send();
                 System.out.println("Original address : " + from);
                 System.out.println("Result address for transaction key : " + response1.getResult());

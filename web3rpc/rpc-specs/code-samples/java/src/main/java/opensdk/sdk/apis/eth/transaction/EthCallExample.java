@@ -1,6 +1,5 @@
-
 import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.klaytn.Web3j;
+import org.web3j.protocol.kaia.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;

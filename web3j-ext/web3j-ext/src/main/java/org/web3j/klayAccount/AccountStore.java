@@ -1,4 +1,4 @@
-package org.web3j.klayAccount;
+package org.web3j.kaiaAccount;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -7,10 +7,10 @@ import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.web3j.crypto.KlayCredentials;
+import org.web3j.crypto.KaiaCredentials;
 
-import org.web3j.protocol.klaytn.Web3j;
-import org.web3j.protocol.klaytn.core.method.response.KlayGetAccount;
+import org.web3j.protocol.kaia.Web3j;
+import org.web3j.protocol.kaia.core.method.response.KaiaGetAccount;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,14 +27,14 @@ public class AccountStore {
 
         Set<String> set = new HashSet<String>();
 
-        for (KlayCredentials element : list.getList()) {
+        for (KaiaCredentials element : list.getList()) {
             set.add(element.getAddress());
         }
 
         for (String element : set) {
-            KlayGetAccount acc = web3j.klayGetAccount(element, DefaultBlockParameterName.LATEST).send().getResult();
+            KaiaGetAccount acc = web3j.kaiaGetAccount(element, DefaultBlockParameterName.LATEST).send().getResult();
             if (acc == null) {
-                KlayCredentials credentials = list.credentialsByAddress(element).get(0);
+                KaiaCredentials credentials = list.credentialsByAddress(element).get(0);
                 if (!credentials.isDeCoupled()) {
                     JSONObject jsonKey = new JSONObject();
                     jsonKey.put("keyType", 1);

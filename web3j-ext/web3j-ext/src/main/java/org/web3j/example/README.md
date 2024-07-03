@@ -1,6 +1,6 @@
 # web3j-ext examples
 
-- [accountKey](./accountKey) Klaytn AccountKey types
+- [accountKey](./accountKey) Kaia AccountKey types
 - [contracts](./contracts) Smart contract usage
-- [transactions](./transactions) Klaytn transaction types
+- [transactions](./transactions) Kaia transaction types
 - [utils](./utils) Utility functions

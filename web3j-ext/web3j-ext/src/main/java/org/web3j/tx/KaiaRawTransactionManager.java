@@ -17,8 +17,8 @@ import java.math.BigInteger;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Hash;
-import org.web3j.crypto.KlayCredentials;
-import org.web3j.crypto.KlayRawTransaction;
+import org.web3j.crypto.KaiaCredentials;
+import org.web3j.crypto.KaiaRawTransaction;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.transaction.account.AccountKey;
 import org.web3j.crypto.transaction.type.TxType;
@@ -30,7 +30,7 @@ import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.service.TxKlaySignServiceImpl;
+import org.web3j.service.TxKaiaSignServiceImpl;
 import org.web3j.service.TxSignService;
 import org.web3j.tx.exceptions.TxHashMismatchException;
 import org.web3j.tx.response.TransactionReceiptProcessor;
@@ -45,68 +45,68 @@ import org.web3j.utils.TxHashVerifier;
  * <a href="https://github.com/ethereum/EIPs/issues/155">EIP155</a>, as well as for locally signing
  * RawTransaction instances without broadcasting them.
  */
-public class KlayRawTransactionManager extends TransactionManager {
+public class KaiaRawTransactionManager extends TransactionManager {
     private final Web3j web3j;
-    private final TxKlaySignServiceImpl txSignService;
+    private final TxKaiaSignServiceImpl txSignService;
 
     private final long chainId;
 
     protected TxHashVerifier txHashVerifier = new TxHashVerifier();
 
-    public KlayRawTransactionManager(Web3j web3j, Credentials credentials, long chainId) {
+    public KaiaRawTransactionManager(Web3j web3j, Credentials credentials, long chainId) {
         super(web3j, credentials.getAddress());
         this.web3j = web3j;
         this.chainId = chainId;
-        this.txSignService = new TxKlaySignServiceImpl(credentials);
+        this.txSignService = new TxKaiaSignServiceImpl(credentials);
     }
 
-    public KlayRawTransactionManager(Web3j web3j, KlayCredentials credentials, long chainId) {
+    public KaiaRawTransactionManager(Web3j web3j, KaiaCredentials credentials, long chainId) {
         super(web3j, credentials.getAddress());
         this.web3j = web3j;
         this.chainId = chainId;
-        this.txSignService = new TxKlaySignServiceImpl(credentials);
+        this.txSignService = new TxKaiaSignServiceImpl(credentials);
     }
 
-    public KlayRawTransactionManager(Web3j web3j, TxSignService txSignService, long chainId) {
+    public KaiaRawTransactionManager(Web3j web3j, TxSignService txSignService, long chainId) {
         super(web3j, txSignService.getAddress());
         this.web3j = web3j;
         this.chainId = chainId;
-        this.txSignService = (TxKlaySignServiceImpl) txSignService;
+        this.txSignService = (TxKaiaSignServiceImpl) txSignService;
     }
 
-    public KlayRawTransactionManager(
+    public KaiaRawTransactionManager(
             Web3j web3j,
-            KlayCredentials credentials,
+            KaiaCredentials credentials,
             long chainId,
             TransactionReceiptProcessor transactionReceiptProcessor) {
         super(transactionReceiptProcessor, credentials.getAddress());
 
         this.web3j = web3j;
         this.chainId = chainId;
-        this.txSignService = new TxKlaySignServiceImpl(credentials);
+        this.txSignService = new TxKaiaSignServiceImpl(credentials);
     }
 
-    public KlayRawTransactionManager(
+    public KaiaRawTransactionManager(
             Web3j web3j, Credentials credentials, long chainId, int attempts, long sleepDuration) {
         super(web3j, attempts, sleepDuration, credentials.getAddress());
 
         this.web3j = web3j;
         this.chainId = chainId;
-        this.txSignService = new TxKlaySignServiceImpl(credentials);
+        this.txSignService = new TxKaiaSignServiceImpl(credentials);
     }
-    public KlayRawTransactionManager(
-            Web3j web3j, KlayCredentials credentials, long chainId, int attempts, long sleepDuration) {
+    public KaiaRawTransactionManager(
+            Web3j web3j, KaiaCredentials credentials, long chainId, int attempts, long sleepDuration) {
         super(web3j, attempts, sleepDuration, credentials.getAddress());
 
         this.web3j = web3j;
         this.chainId = chainId;
-        this.txSignService = new TxKlaySignServiceImpl(credentials);
+        this.txSignService = new TxKaiaSignServiceImpl(credentials);
     }
-    public KlayRawTransactionManager(Web3j web3j, Credentials credentials) {
+    public KaiaRawTransactionManager(Web3j web3j, Credentials credentials) {
         this(web3j, credentials, ChainId.NONE);
     }
 
-    public KlayRawTransactionManager(
+    public KaiaRawTransactionManager(
             Web3j web3j, Credentials credentials, int attempts, int sleepDuration) {
         this(web3j, credentials, ChainId.NONE, attempts, sleepDuration);
     }
@@ -155,14 +155,14 @@ public class KlayRawTransactionManager extends TransactionManager {
      * @param rawTransaction a RawTransaction istance to be signed
      * @return The transaction signed and encoded without ever broadcasting it
      */
-    public String sign(KlayRawTransaction rawTransaction) {
+    public String sign(KaiaRawTransaction rawTransaction) {
 
         byte[] signedMessage = txSignService.sign(rawTransaction, chainId);
 
         return Numeric.toHexString(signedMessage);
     }
 
-    public EthSendTransaction signAndSend(KlayRawTransaction rawTransaction) throws IOException {
+    public EthSendTransaction signAndSend(KaiaRawTransaction rawTransaction) throws IOException {
         String hexValue = sign(rawTransaction);
         EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
 
@@ -236,7 +236,7 @@ public class KlayRawTransactionManager extends TransactionManager {
     
     
     
-    public EthSendTransaction sendKlayTransaction(
+    public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
             BigInteger gasPrice,
             BigInteger gas,
@@ -244,7 +244,7 @@ public class KlayRawTransactionManager extends TransactionManager {
             AccountKey accountKey) throws IOException {
     	
         BigInteger nonce = getNonce();
-        KlayRawTransaction rawTransaction = KlayRawTransaction.createTransaction(
+        KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
                             type,
                             nonce,
                             gasPrice,
@@ -254,14 +254,14 @@ public class KlayRawTransactionManager extends TransactionManager {
         return signAndSend(rawTransaction);
     }
 
-    public EthSendTransaction sendKlayTransaction(
+    public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
             BigInteger gasPrice,
             BigInteger gas,
             String from) throws IOException {
 
         BigInteger nonce = getNonce();
-        KlayRawTransaction rawTransaction = KlayRawTransaction.createTransaction(
+        KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
                             type,
                             nonce,
                             gasPrice,
@@ -273,7 +273,7 @@ public class KlayRawTransactionManager extends TransactionManager {
 
     }
 
-    public EthSendTransaction sendKlayTransaction(
+    public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
             BigInteger gasPrice,
             BigInteger gas,
@@ -282,7 +282,7 @@ public class KlayRawTransactionManager extends TransactionManager {
             String from) throws IOException {
 
         BigInteger nonce = getNonce();
-        KlayRawTransaction rawTransaction = KlayRawTransaction.createTransaction(
+        KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
                             type,
                             nonce,
                             gasPrice,
@@ -295,7 +295,7 @@ public class KlayRawTransactionManager extends TransactionManager {
 
     }
 
-    public EthSendTransaction sendKlayTransaction(
+    public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
             BigInteger gasPrice,
             BigInteger gas,
@@ -305,7 +305,7 @@ public class KlayRawTransactionManager extends TransactionManager {
             byte[] payload) throws IOException {
     	
         BigInteger nonce = getNonce();
-        KlayRawTransaction rawTransaction = KlayRawTransaction.createTransaction(
+        KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
                             type,
                             nonce,
                             gasPrice,
@@ -319,7 +319,7 @@ public class KlayRawTransactionManager extends TransactionManager {
         }
 
 
-    public EthSendTransaction sendKlayTransaction(
+    public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
             BigInteger gasPrice,
             BigInteger gas,
@@ -331,7 +331,7 @@ public class KlayRawTransactionManager extends TransactionManager {
     	
 
         BigInteger nonce = getNonce();
-        KlayRawTransaction rawTransaction = KlayRawTransaction.createTransaction(
+        KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
                             type,
                             nonce,
                             gasPrice,
@@ -348,7 +348,7 @@ public class KlayRawTransactionManager extends TransactionManager {
 
     
 
-    public EthSendTransaction sendKlayTransaction(
+    public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
             BigInteger gasPrice,
             BigInteger gas,
@@ -358,7 +358,7 @@ public class KlayRawTransactionManager extends TransactionManager {
     	
 
         BigInteger nonce = getNonce();
-        KlayRawTransaction rawTransaction = KlayRawTransaction.createTransaction(
+        KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
                             type,
                             nonce,
                             gasPrice,
@@ -372,7 +372,7 @@ public class KlayRawTransactionManager extends TransactionManager {
     
 
 
-    public EthSendTransaction sendKlayTransaction(
+    public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
             BigInteger gasPrice,
             BigInteger gas,
@@ -380,7 +380,7 @@ public class KlayRawTransactionManager extends TransactionManager {
             BigInteger feeRatio) throws IOException {
     	
         BigInteger nonce = getNonce();
-        KlayRawTransaction rawTransaction = KlayRawTransaction.createTransaction(
+        KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
                             type,
                             nonce,
                             gasPrice,
@@ -392,7 +392,7 @@ public class KlayRawTransactionManager extends TransactionManager {
     }
 
         
-    public EthSendTransaction sendKlayTransaction(
+    public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
             BigInteger gasPrice,
             BigInteger gas,
@@ -403,7 +403,7 @@ public class KlayRawTransactionManager extends TransactionManager {
     	
         BigInteger nonce = getNonce();
 
-        KlayRawTransaction rawTransaction = KlayRawTransaction.createTransaction(
+        KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
                             type,
                             nonce,
                             gasPrice,
@@ -416,7 +416,7 @@ public class KlayRawTransactionManager extends TransactionManager {
         
     }
 
-    public EthSendTransaction sendKlayTransaction(
+    public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
             BigInteger gasPrice,
             BigInteger gas,
@@ -429,7 +429,7 @@ public class KlayRawTransactionManager extends TransactionManager {
     	
         BigInteger nonce = getNonce();
 
-        KlayRawTransaction rawTransaction = KlayRawTransaction.createTransaction(
+        KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
                             type,
                             nonce,
                             gasPrice,
@@ -446,7 +446,7 @@ public class KlayRawTransactionManager extends TransactionManager {
 
     }
     
-    public EthSendTransaction sendKlayTransaction(
+    public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
             BigInteger gasPrice,
             BigInteger gas,
@@ -455,7 +455,7 @@ public class KlayRawTransactionManager extends TransactionManager {
     	
         BigInteger nonce = getNonce();
 
-        KlayRawTransaction rawTransaction = KlayRawTransaction.createTransaction(
+        KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
                             type,
                             nonce,
                             gasPrice,
@@ -469,7 +469,7 @@ public class KlayRawTransactionManager extends TransactionManager {
 
     }
     
-    public EthSendTransaction sendKlayTransaction(
+    public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
             BigInteger gasPrice,
             BigInteger gas,
@@ -479,7 +479,7 @@ public class KlayRawTransactionManager extends TransactionManager {
     	
         BigInteger nonce = getNonce();
 
-        KlayRawTransaction rawTransaction = KlayRawTransaction.createTransaction(
+        KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
                             type,
                             nonce,
                             gasPrice,

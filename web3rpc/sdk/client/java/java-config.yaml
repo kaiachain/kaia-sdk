@@ -1,9 +1,9 @@
 generatorName: web3rpc-java
 outputDir: ./openapi/
 inputSpec: ../../../rpc-specs/namespaces/all-except-eth.yaml 
-groupId: foundation.klaytn
+groupId: io.kaia
 artifactId: web3rpc-java
-artifactVersion: v1.0.1
+artifactVersion: v1.0.0
 library: retrofit2
 templateDir: ./template
 globalProperties:
@@ -14,14 +14,14 @@ globalProperties:
 additionalProperties:
   # This open is related json nullable, so it should be off.
   openApiNullable: false
-  apiPackage: org.web3j.protocol.klaytn.core
-  modelPackage: org.web3j.protocol.klaytn.core.method.response
+  apiPackage: org.web3j.protocol.kaia.core
+  modelPackage: org.web3j.protocol.kaia.core.method.response
 typeMappings:
   double: java.math.BigInteger
   Long: long
   ErrorMember: Error
 importMappings:
-  GetRewardsDefaultResponse: org.web3j.protocol.klaytn.core.method.response.GetRewardsResponse
+  GetRewardsDefaultResponse: org.web3j.protocol.kaia.core.method.response.GetRewardsResponse
   AnyOfstring: java.util.Objects
   Error: java.util.Objects
 inlineSchemaNameMappings:

@@ -1,0 +1,90 @@
+name: "SDK publish on release - test"
+
+on:
+  workflow_run:
+    workflows: ["testing"]
+    branches: [main]
+    types:
+      - completed
+  push:
+    branches: ["test-publish-java"]
+
+jobs:
+  build:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: nrwl/nx-set-shas@v3
+        id: last_successful_commit_pr
+        with:
+            main-branch-name: "main"
+            workflow-id: "publish.yml"
+            last-successful-event: "pull-request"
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: generate code and namespace
+        shell: bash
+        run: |
+          cd web3rpc/codegen && gradle wrapper && gradle wrapper clean :deployJar && cd - &&\
+          cd web3rpc/rpc-specs && npm install && bash -x generate-namespace.sh && cd 
+
+      - name: Verify Changed files
+        uses: tj-actions/changed-files@v39
+        id: verify-changed-files
+        with:
+          base_sha: ${{ steps.last_successful_commit_pr.outputs.base }}
+          files_yaml: | 
+            ethers-ext:  
+              - "ethers-ext/package.json"
+            web3js-ext:  
+              - "web3js-ext/package.json"
+            web3j-ext:
+              - "web3j-ext/web3j-ext/build.gradle"
+            web3py-ext:
+              - "web3py-ext/setup.py"
+            web3rpc:
+              - "web3rpc/rpc-specs/**"
+            js-ext-core: 
+              - "js-ext-core/package.json"
+
+      - name: generate web3rpc-java sdk
+        shell: bash
+        run: |
+          cd web3rpc/sdk/client/java && bash -x java-generate.sh  && cd -
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          ORG_GRADLE_PROJECT_SIGNINGPASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
+          ORG_GRADLE_PROJECT_SIGNINGKEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
+
+      - name: Publish web3rpc-java sdk
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: publish
+          build-root-directory: web3rpc/sdk/client/java/openapi
+          gradle-version: release-candidate
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          ORG_GRADLE_PROJECT_SIGNINGPASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
+          ORG_GRADLE_PROJECT_SIGNINGKEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
+          

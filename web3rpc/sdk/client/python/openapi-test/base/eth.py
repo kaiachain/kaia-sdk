@@ -7,7 +7,7 @@ from eth_utils.address import to_checksum_address
 import random
 
 # w3 = Web3(Web3.HTTPProvider(KLAYTN_URL))
-w3 = Web3(Web3.HTTPProvider(BAOBAB_URL))
+w3 = Web3(Web3.HTTPProvider('http://3.39.84.202:8651/'))
 w3_pn = Web3(Web3.HTTPProvider(PN_RPC))
 address = to_checksum_address("0x413ba0e5f6f00664598b5c80042b1308f4ff1408")
 addressPN = to_checksum_address("0x65b47be3457ff26f2911cf89fd079cef0475a2e6")

@@ -5,8 +5,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
-import org.web3j.crypto.KlayWalletUtils;
-import org.web3j.crypto.KlayCredentials;
+import org.web3j.crypto.KaiaWelletUtils;
+import org.web3j.crypto.KaiaCredentials;
 import java.io.IOException;
 import org.web3j.tx.response.PollingTransactionReceiptProcessor;
 import org.web3j.tx.response.TransactionReceiptProcessor;
@@ -15,20 +15,20 @@ import org.web3j.example.keySample;
 public class DecryptKeystoreV3Example implements keySample {
 
     public static void run() throws Exception {
-        String password = "Iloveklaytn";
+        String password = "Ilovekaia";
 
         String[] keyFiles = { "/Legacy_V3.json", "/Public_V3.json" };
         for (String keyFile : keyFiles) {
 
             String json = getResourceJSON(keyFile);
 
-            // Convert keystore to list of KlayCredentials
-            KlayCredentials credentials = KlayWalletUtils.loadJsonKlayCredentials(password, json);
+            // Convert keystore to list of KaiaCredentials
+            KaiaCredentials credentials = KaiaWelletUtils.loadJsonKaiaCredentials(password, json);
 
-            System.out.println("Load KlayCredentials from keystore file: " + keyFile);
+            System.out.println("Load KaiaCredentials from keystore file: " + keyFile);
             String address = credentials.getAddress();
             String privateKey = credentials.getEcKeyPair().getPrivateKey().toString(16);
-            System.out.println("\tKlayCrendential : " + "Address: " + address + ", Private Key: 0x" + privateKey);
+            System.out.println("\tKaiaCredential : " + "Address: " + address + ", Private Key: 0x" + privateKey);
         }
 
     }

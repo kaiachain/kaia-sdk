@@ -1,0 +1,146 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/transaction/getDecodedAnchoringTransactionByHash:
+    post:
+      operationId: .getDecodedAnchoringTransactionByHash
+      summary: "[Transaction] kaia_getDecodedAnchoringTransactionByHash"
+      description: |
+        Returns the decoded anchored data in the transaction for the given transaction hash.
+
+        **JSONRPC:** `kaia_getDecodedAnchoringTransactionByHash`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: hashOfTransaction
+          required: true
+          schema:
+            type: string
+            format: 32-byte DATA
+          description: Hash of a transaction.
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetDecodedAnchoringTransactionByHashReq"
+
+      responses:
+        200:
+          description: Returns the decoded anchored data in the transaction for the given transaction hash.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetDecodedAnchoringTransactionByHashResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/transaction/getDecodedAnchoringTransactionByHash.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/transaction/KaiaGetDecodedAnchoringTransactionByHashExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/transaction/getDecodedAnchoringTransactionByHash.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/transaction/getDecodedAnchoringTransactionByHash.py"
+
+components:
+  schemas:
+    KaiaGetDecodedAnchoringTransactionByHashReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getDecodedAnchoringTransactionByHash'
+        params:
+          type:  array
+          description: Hash of a transaction.
+          items:
+              type: string
+              format: 32-byte DATA
+              title: HashOfTransaction
+              description: Hash of a transaction.
+          example: ["0x499350bc5e2f6fee1ba78b4d40a7a1db0a64f3c091112e6798a02ed9a4140084"]
+
+    KaiaGetDecodedAnchoringTransactionByHashResp:
+      title: KaiaGetDecodedAnchoringTransactionByHashResp
+      type: object
+      properties:
+        result:
+          type: object
+          required:
+            - BlockHash
+            - BlockNumber
+            - ParentHash
+            - TxHash
+            - StateRootHash
+            - ReceiptHash
+            - BlockCount
+            - TxCount
+          properties:
+            BlockHash:
+              type: string
+              format: 32-byte DATA
+              description: Hash of the child chain block that this anchoring transaction was performed.
+            BlockNumber:
+              type: number
+              description: The child chain block number that this anchoring transaction was performed.
+            ParentHash:
+              type: string
+              format: 32-byte DATA
+              description: Hash of the parent block.
+            TxHash:
+              type: string
+              format: 32-byte DATA
+              description: The root of the transaction trie of the block.
+            StateRootHash:
+              type: string
+              format: 32-byte DATA
+              description: The root of the final state trie of the block.
+            ReceiptHash:
+              type: string
+              format: 32-byte DATA
+              description: The root of the receipts trie of the block.
+            BlockCount:
+              type: number
+              description: The number of blocks generated during this anchoring period. In most cases, this number is equal to the child chain's SC_TX_PERIOD, with the exception of the case that this transaction was the first anchoring tx after turning on the anchoring.
+            TxCount:
+              type: number
+              description: The number of transactions generated in the child chain during this anchoring period.
+          example:
+            {
+              "BlockCount": 1,
+              "BlockHash": "0xcf5f591836d70a1da8e6bb8e5b2c5739329ca0e535b91e239b332af2e1b7f1f4",
+              "BlockNumber": 1055,
+              "ParentHash": "0x70f6115a5b597f29791d3b5e3f129df54778f69ae669842cc81ec8c432fee37c",
+              "ReceiptHash": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+              "StateRootHash": "0x654773348f77a6788c76c93946340323c9b39399d0aa173f6b23fe082848d056",
+              "TxCount": 0,
+              "TxHash": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421"
+            }

@@ -1,0 +1,106 @@
+openapi: "3.0.2"
+info:
+  title: Klay Open API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /klay/miscellaneous/getBlsInfos:
+    post:
+      summary: "[Miscellaneous] klay_getBlsInfos"
+      tags:
+        - klay
+      operationId: getBlsInfos
+      description: |
+        Returns the BLS public key information of the validators. Used to verify the RANDAO header fields.
+
+        **JSONRPC:** `klay_getBlsInfos`
+
+      parameters:
+        - name: blockNumber
+          in: query
+          description: integer block number, or the string "latest" or "earliest", see the default block parameter
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: klay_getBlsInfos
+                    params:
+                      type: array
+                      items:
+                        properties: 
+                           BlockNumberOrTag:
+                               $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+                      example: [
+                        "latest"
+                      ]
+
+      responses:
+        200:
+          description: A account object
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KlaygetBlsInfosResp"
+
+      x-codeSamples:
+        - lang: "curl"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/klay/miscellaneous/getBlsInfos.sh"
+        - lang: "java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/klay/miscellaneous/KlayGetBlsInfosExample.java"
+        - lang: "javascript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/klay/miscellaneous/getBlsInfos.js"
+        - lang: "python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/klay/miscellaneous/getBlsInfos.py"
+
+
+components:
+  schemas:
+    KlaygetBlsInfosResp:
+      type: object
+      properties:
+         result: 
+            type: object
+            description: all BLS infos of registered validators.
+            example:
+                {
+              "0x18a80d0d3a8b7348277c497105cc2163b242799a":{
+                  "publicKey":"8247754efd7aa2b02b30b6db8e1c24bb8c4207f5600470c2dafde1b46270a6c8c3fe9e7f8b939965d6a59dbe2ebd0cf7",
+                  "pop":"8c35987399eab7a98ad24e869a7d7225bdb95203167e6aa20b3db73c0a91317e805e48d33c606484b1e9db3d8c8d64b60f0c6a8816b219f43747bf201dd65193ade23434270c78441e370a95d7632a6a76f1f3a62842425f76ebc4a041fc1dbb",
+                  "verifyErr":null
+              },
+              "0x527d6d61f53305c1e1d3680b23393c3c13c8db9e":{
+                  "publicKey":"a16153b81453a9e3099728ff1d3aac3d3fca32b3594407277ec0b8df4aa66cba743916d9f2098707aecc350954b0cd4e",
+                  "pop":"a92c7ba586a12a38e3a7bbfed7f7a311664cb0dc66a7bd26ee79bed4755e7652850dff1cfabf39acd58ea8efe24ff7c217f1d5c2ac3fe948016056e99b03bc26aa8c59b89cfc9ee961bf8cfd1802295d4ff07852f93d0607a53655f15665aad9",
+                  "verifyErr":null
+              },
+              "0xa72ccdf72dc401df79805013a42b74f12b43caa1":{
+                  "publicKey":"883eb2c623a19671461bc0dadcfa17384198ff06b2e2c9cd1ca539ff554c377256624e9f5f69d27e17e4635080938d9a",
+                  "pop":"ac1bb19588b2ec7e1452486b8a4afe0ecb27847bca04b7e4919a9d6b70c1342dcfb1a6983788d3756607b84d3d7a009118246ed5b3b3449638e591ab9fe2c4ec5cafb64ddc12a5dcf48cbcf305175d5dddb48845e80f7cb9a32d5f2e67ca2163",
+                  "verifyErr":null
+              }
+            }

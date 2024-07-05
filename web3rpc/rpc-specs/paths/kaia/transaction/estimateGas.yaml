@@ -1,0 +1,95 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/transaction/estimateGas:
+    post:
+      operationId: .estimateGas
+      summary: "[Transaction] kaia_estimateGas"
+      tags:
+        - kaia
+      description: |
+        Generates and returns an estimate of how much gas is necessary to allow the transaction to complete. The transaction will not be added to the blockchain. Note that the estimate may be significantly more than the amount of gas actually used by the transaction, for a variety of reasons including Klaytn Virtual Machine mechanics and node performance.
+
+        **JSONRPC:** `kaia_estimateGas`
+
+      parameters:
+        - name: callObject
+          in: query
+          description: The transaction call object. See the next table for the object's properties.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaCallObject"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaEstimateGasReq"
+
+      responses:
+        200:
+          description: The amount of gas used.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaEstimateGasResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/transaction/estimateGas.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/transaction/KaiaEstimateGasExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/transaction/estimateGas.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref:  "../../../code-samples/python/kaia/transaction/estimateGas.py"
+
+components:
+  schemas:
+    KaiaEstimateGasReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_estimateGas'
+        params:
+          type:  array
+          items:
+            allOf:
+              - title: callObject
+              - $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaCallObject"
+          example: [{"from": "0x3f71029af4e252b25b9ab999f77182f0cd3bc085", "to": "0x87ac99835e67168d4f9a40580f8f5c33550ba88b", "gas": "0x100000", "gasPrice": "0x5d21dba00", "value": "0x0", "input": "0x8ada066e"}]
+
+    KaiaEstimateGasResp:
+      type: object
+      properties:
+        result:
+          type: string
+          format: hex
+          description: "The amount of gas used."
+          example: "0x5208"
+

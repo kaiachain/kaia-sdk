@@ -1,0 +1,117 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/block/getStorageAt:
+    post:
+      operationId: .getStorageAt
+      summary: "[Block] kaia_getStorageAt"
+      description: |
+        Returns the value from a storage position at a given address.
+
+        **NOTE:** *In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available.*
+
+        **JSONRPC:** `kaia_getStorageAt`
+      tags:
+        - kaia
+
+      parameters:
+        - name: storageAddress
+          required: true
+          schema:
+            type: string
+            format: 20-byte DATA
+          description: Address of the storage.
+          in: query
+        - name: position
+          required: true
+          schema:
+            type: string
+            format: hex
+          description: Integer of the position in the storage.
+          in: query
+        - name: blockNumberOrHash
+          in: query
+          description: Integer or hexadecimal block number, or the string "earliest", "latest" or "pending" as in the default block parameter, or block hash.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetStorageAtReq"
+
+      responses:
+        200:
+          description: Returns the value from a storage position at a given address.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: string
+                        format: DATA
+                        description: The value at this storage position.
+                        example: "0x00000000000000000000000000000000000000000000000000000000000004d2"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/block/getStorageAt.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/block/KaiaGetStorageAtExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/block/getStorageAt.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/block/getStorageAt.py"
+
+components:
+  schemas:
+    KaiaGetStorageAtReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getStorageAt'
+        params:
+          type: array
+          items:
+            properties:
+              StorageAddress:
+                type: string
+                title: StorageAddress
+                format: 20-byte DATA
+                description: Address of the storage.
+              Position:
+                type: string
+                title: Position
+                format: hex
+                description: Integer of the position in the storage.
+              BlockNumberOrHashOrTag: 
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+          example:  ["0x295a70b2de5e3953354a6a8344e616ed314d7251", "0x0", "latest"]

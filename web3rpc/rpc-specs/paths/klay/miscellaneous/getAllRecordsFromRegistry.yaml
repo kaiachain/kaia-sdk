@@ -1,0 +1,113 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /klay/miscellaneous/getAllRecordsFromRegistry:
+    post:
+      operationId: getAllRecordsFromRegistry
+      summary: "[Miscellaneous] klay_getAllRecordsFromRegistry"
+      description: |
+        Returns all records of the system contract registered as `name` if it has been registered.
+
+        **JSONRPC:** `klay_getAllRecordsFromRegistry`
+      tags:
+        - klay
+
+      parameters:
+        - name: name
+          description: Name of which active system contract registered with.
+          required: true
+          schema:
+            type: string
+          in: query
+        - name: blockNumberOrHashOrTag
+          in: query
+          description: Integer or hexadecimal block number, or the string "earliest", "latest" or "pending" as in the default block parameter, or block hash.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KlaygetAllRecordsFromRegistryReq"
+
+      responses:
+        200:
+          description: Returns all records of the system contract registered as `name` if it has been registered.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KlaygetAllRecordsFromRegistryResp"
+
+      x-codeSamples:
+        - lang: "curl"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/klay/miscellaneous/getAllRecordsFromRegistry.sh"
+        - lang: "java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/klay/miscellaneous/KlayGetAllRecordsFromRegistryExample.java"
+        - lang: "javascript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/klay/miscellaneous/getAllRecordsFromRegistry.js"
+        - lang: "python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/klay/miscellaneous/getAllRecordsFromRegistry.py"
+components:
+  schemas:
+    KlaygetAllRecordsFromRegistryReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'klay_getAllRecordsFromRegistry'
+        params:
+          type: array
+          items:
+            properties:
+              Name:
+                type: string
+                description: Name of which active system contract registered with.
+              BlockNumberOrHashOrTag:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+          example:  ["KIP113", "latest"]
+
+    KlaygetAllRecordsFromRegistryResp:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            type: object
+            properties:
+              activation:
+                type: number
+                description: The block number when the system contract is activated.
+              addr:
+                type: string
+                description: The address of the system contract.
+            description: Returns all records of the system contract registered as `name` if it has been registered.
+            example: [{
+                        activation: 0,
+                        addr: "0x3e80e75975bdb8e04b800485dd28bebec6d97679"
+                     }]

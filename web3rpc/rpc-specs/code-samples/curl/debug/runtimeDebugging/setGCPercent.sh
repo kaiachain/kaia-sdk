@@ -1,5 +1,5 @@
 curl -X 'POST' \
-  'https://api.baobab.klaytn.net:8651/debug/setGCPercent' \
+  'https://api.baobab.klaytn.net:8651' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

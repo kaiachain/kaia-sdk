@@ -1,0 +1,108 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/transaction/getTransactionByBlockHashAndIndex:
+    post:
+      operationId: .getTransactionByBlockHashAndIndex
+      summary: "[Transaction] kaia_getTransactionByBlockHashAndIndex"
+      tags:
+        - kaia
+      description: |
+        Returns information about a transaction by block hash and transaction index position. This API works only on RPC call, not on JavaScript console.
+
+        **JSONRPC:** `kaia_getTransactionByBlockHashAndIndex`
+
+      parameters:
+        - name: blockHash
+          in: query
+          description: Hash of a block.
+          required: true
+          schema:
+            type: string
+            format: 32-byte DATA
+        - name: transactionIndexPosition
+          in: query
+          description: Integer of the transaction index position.
+          required: true
+          schema:
+            type: string
+            format: hex
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetTransactionByBlockHashAndIndexReq"
+
+      responses:
+        200:
+          description: Returns information about a transaction by block hash and transaction index position.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetTransactionByBlockHashAndIndexResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/transaction/getTransactionByBlockHashAndIndex.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/transaction/KaiaGetTransactionByBlockHashAndIndexExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/transaction/getTransactionByBlockHashAndIndex.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/transaction/getTransactionByBlockHashAndIndex.py"
+
+
+components:
+  schemas:
+    KaiaGetTransactionByBlockHashAndIndexReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getTransactionByBlockHashAndIndex'
+        params:
+          type: array
+          items:
+            properties:
+              BlockHash:
+                type: string
+                format: 32-byte DATA
+                title: BlockHash
+                description: Hash of a block.
+              TransactionIndex:
+                type: string
+                format: hex
+                title: TransactionIndexPosition
+                description: Integer of the transaction index position.
+            example: ["0x451cafae98d61b7458b5cef54402830941432278184453e3ca490eb687317e68", "0x0"]
+
+    KaiaGetTransactionByBlockHashAndIndexResp:
+      type: object
+      properties:
+        result:
+          $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/TransactionObject"

@@ -1,0 +1,367 @@
+package org.web3j.protocol.kaia.core.method.response;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+@JsonPropertyOrder({"from", "to", "gas", "gasPrice", "value", "data", "nonce", "typeInt", "feePayer", "signatures", "feeRatio", "input", "key", "humanReadable", "codeFormat"})
+public class KaiaTransactionTypes {
+    public static final String JSON_PROPERTY_FROM = "from";
+    private String from;
+    public static final String JSON_PROPERTY_TO = "to";
+    private String to;
+    public static final String JSON_PROPERTY_GAS = "gas";
+    private String gas;
+    public static final String JSON_PROPERTY_GAS_PRICE = "gasPrice";
+    private String gasPrice;
+    public static final String JSON_PROPERTY_VALUE = "value";
+    private String value;
+    public static final String JSON_PROPERTY_DATA = "data";
+    private String data;
+    public static final String JSON_PROPERTY_NONCE = "nonce";
+    private String nonce;
+    public static final String JSON_PROPERTY_TYPE_INT = "typeInt";
+    private Integer typeInt;
+    public static final String JSON_PROPERTY_FEE_PAYER = "feePayer";
+    private String feePayer;
+    public static final String JSON_PROPERTY_SIGNATURES = "signatures";
+    private List<Signature> signatures = new ArrayList();
+    public static final String JSON_PROPERTY_FEE_RATIO = "feeRatio";
+    private Object feeRatio;
+    public static final String JSON_PROPERTY_INPUT = "input";
+    private String input;
+    public static final String JSON_PROPERTY_KEY = "key";
+    private String key;
+    public static final String JSON_PROPERTY_HUMAN_READABLE = "humanReadable";
+    private Boolean humanReadable;
+    public static final String JSON_PROPERTY_CODE_FORMAT = "codeFormat";
+    private String codeFormat;
+
+    public KaiaTransactionTypes() {
+    }
+
+    public KaiaTransactionTypes from(String from) {
+        this.from = from;
+        return this;
+    }
+
+    @Nonnull
+    @JsonProperty("from")
+    @JsonInclude(Include.ALWAYS)
+    public String getFrom() {
+        return this.from;
+    }
+
+    @JsonProperty("from")
+    @JsonInclude(Include.ALWAYS)
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public KaiaTransactionTypes to(String to) {
+        this.to = to;
+        return this;
+    }
+
+    @Nonnull
+    @JsonProperty("to")
+    @JsonInclude(Include.ALWAYS)
+    public String getTo() {
+        return this.to;
+    }
+
+    @JsonProperty("to")
+    @JsonInclude(Include.ALWAYS)
+    public void setTo(String to) {
+        this.to = to;
+    }
+
+    public KaiaTransactionTypes gas(String gas) {
+        this.gas = gas;
+        return this;
+    }
+
+    @Nullable
+    @JsonProperty("gas")
+    @JsonInclude(Include.USE_DEFAULTS)
+    public String getGas() {
+        return this.gas;
+    }
+
+    @JsonProperty("gas")
+    @JsonInclude(Include.USE_DEFAULTS)
+    public void setGas(String gas) {
+        this.gas = gas;
+    }
+
+    public KaiaTransactionTypes gasPrice(String gasPrice) {
+        this.gasPrice = gasPrice;
+        return this;
+    }
+
+    @Nullable
+    @JsonProperty("gasPrice")
+    @JsonInclude(Include.USE_DEFAULTS)
+    public String getGasPrice() {
+        return this.gasPrice;
+    }
+
+    @JsonProperty("gasPrice")
+    @JsonInclude(Include.USE_DEFAULTS)
+    public void setGasPrice(String gasPrice) {
+        this.gasPrice = gasPrice;
+    }
+
+    public KaiaTransactionTypes value(String value) {
+        this.value = value;
+        return this;
+    }
+
+    @Nonnull
+    @JsonProperty("value")
+    @JsonInclude(Include.ALWAYS)
+    public String getValue() {
+        return this.value;
+    }
+
+    @JsonProperty("value")
+    @JsonInclude(Include.ALWAYS)
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public KaiaTransactionTypes data(String data) {
+        this.data = data;
+        return this;
+    }
+
+    @Nonnull
+    @JsonProperty("data")
+    @JsonInclude(Include.ALWAYS)
+    public String getData() {
+        return this.data;
+    }
+
+    @JsonProperty("data")
+    @JsonInclude(Include.ALWAYS)
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public KaiaTransactionTypes nonce(String nonce) {
+    this.nonce = nonce;
+        return this;
+    }
+
+    @Nullable
+    @JsonProperty("nonce")
+    @JsonInclude(Include.USE_DEFAULTS)
+    public String getNonce() {
+        return this.nonce;
+    }
+
+    @JsonProperty("nonce")
+    @JsonInclude(Include.USE_DEFAULTS)
+    public void setNonce(String nonce) {
+        this.nonce = nonce;
+    }
+
+    public KaiaTransactionTypes typeInt(Integer typeInt) {
+    this.typeInt = typeInt;
+        return this;
+    }
+
+    @Nonnull
+    @JsonProperty("typeInt")
+    @JsonInclude(Include.ALWAYS)
+    public Integer getTypeInt() {
+        return this.typeInt;
+    }
+
+    @JsonProperty("typeInt")
+    @JsonInclude(Include.ALWAYS)
+    public void setTypeInt(Integer typeInt) {
+        this.typeInt = typeInt;
+    }
+
+    public KaiaTransactionTypes feePayer(String feePayer) {
+    this.feePayer = feePayer;
+        return this;
+    }
+
+    @Nonnull
+    @JsonProperty("feePayer")
+    @JsonInclude(Include.ALWAYS)
+    public String getFeePayer() {
+        return this.feePayer;
+    }
+
+    @JsonProperty("feePayer")
+    @JsonInclude(Include.ALWAYS)
+    public void setFeePayer(String feePayer) {
+        this.feePayer = feePayer;
+    }
+
+    public KaiaTransactionTypes signatures(List<Signature> signatures) {
+        this.signatures = signatures;
+        return this;
+    }
+
+    public KaiaTransactionTypes addSignaturesItem(Signature signaturesItem) {
+        if (this.signatures == null) {
+            this.signatures = new ArrayList();
+        }
+        this.signatures.add(signaturesItem);
+        return this;
+    }
+
+    @Nullable
+    @JsonProperty("signatures")
+    @JsonInclude(Include.USE_DEFAULTS)
+    public List<Signature> getSignatures() {
+        return this.signatures;
+    }
+
+    @JsonProperty("signatures")
+    @JsonInclude(Include.USE_DEFAULTS)
+    public void setSignatures(List<Signature> signatures) {
+        this.signatures = signatures;
+    }
+
+    public KaiaTransactionTypes feeRatio(Object feeRatio) {
+        this.feeRatio = feeRatio;
+        return this;
+    }
+
+    @Nonnull
+    @JsonProperty("feeRatio")
+    @JsonInclude(Include.ALWAYS)
+    public Object getFeeRatio() {
+        return this.feeRatio;
+    }
+
+    @JsonProperty("feeRatio")
+    @JsonInclude(Include.ALWAYS)
+    public void setFeeRatio(Object feeRatio) {
+        this.feeRatio = feeRatio;
+    }
+
+    public KaiaTransactionTypes input(String input) {
+        this.input = input;
+        return this;
+    }
+
+    @Nonnull
+    @JsonProperty("input")
+    @JsonInclude(Include.ALWAYS)
+    public String getInput() {
+        return this.input;
+    }
+
+    @JsonProperty("input")
+    @JsonInclude(Include.ALWAYS)
+    public void setInput(String input) {
+        this.input = input;
+    }
+
+    public KaiaTransactionTypes key(String key) {
+        this.key = key;
+        return this;
+    }
+
+    @Nonnull
+    @JsonProperty("key")
+    @JsonInclude(Include.ALWAYS)
+    public String getKey() {
+        return this.key;
+    }
+
+    @JsonProperty("key")
+    @JsonInclude(Include.ALWAYS)
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public KaiaTransactionTypes humanReadable(Boolean humanReadable) {
+        this.humanReadable = humanReadable;
+        return this;
+    }
+
+    @Nonnull
+    @JsonProperty("humanReadable")
+    @JsonInclude(Include.ALWAYS)
+    public Boolean getHumanReadable() {
+        return this.humanReadable;
+    }
+
+    @JsonProperty("humanReadable")
+    @JsonInclude(Include.ALWAYS)
+    public void setHumanReadable(Boolean humanReadable) {
+        this.humanReadable = humanReadable;
+    }
+
+    public KaiaTransactionTypes codeFormat(String codeFormat) {
+    this.codeFormat = codeFormat;
+        return this;
+    }
+
+    @Nonnull
+    @JsonProperty("codeFormat")
+    @JsonInclude(Include.ALWAYS)
+    public String getCodeFormat() {
+        return this.codeFormat;
+    }
+
+    @JsonProperty("codeFormat")
+    @JsonInclude(Include.ALWAYS)
+    public void setCodeFormat(String codeFormat) {
+        this.codeFormat = codeFormat;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        } else if (o != null && this.getClass() == o.getClass()) {
+            KaiaTransactionTypes KaiaTransactionTypes = (KaiaTransactionTypes)o;
+            return Objects.equals(this.from, KaiaTransactionTypes.from) && Objects.equals(this.to, KaiaTransactionTypes.to) && Objects.equals(this.gas, KaiaTransactionTypes.gas) && Objects.equals(this.gasPrice, KaiaTransactionTypes.gasPrice) && Objects.equals(this.value, KaiaTransactionTypes.value) && Objects.equals(this.data, KaiaTransactionTypes.data) && Objects.equals(this.nonce, KaiaTransactionTypes.nonce) && Objects.equals(this.typeInt, KaiaTransactionTypes.typeInt) && Objects.equals(this.feePayer, KaiaTransactionTypes.feePayer) && Objects.equals(this.signatures, KaiaTransactionTypes.signatures) && Objects.equals(this.feeRatio, KaiaTransactionTypes.feeRatio) && Objects.equals(this.input, KaiaTransactionTypes.input) && Objects.equals(this.key, KaiaTransactionTypes.key) && Objects.equals(this.humanReadable, KaiaTransactionTypes.humanReadable) && Objects.equals(this.codeFormat, KaiaTransactionTypes.codeFormat);
+        } else {
+            return false;
+        }
+    }
+
+    public int hashCode() {
+        return Objects.hash(new Object[]{this.from, this.to, this.gas, this.gasPrice, this.value, this.data, this.nonce, this.typeInt, this.feePayer, this.signatures, this.feeRatio, this.input, this.key, this.humanReadable, this.codeFormat});
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class KaiaTransactionTypes {\n");
+        sb.append("    from: ").append(this.toIndentedString(this.from)).append("\n");
+        sb.append("    to: ").append(this.toIndentedString(this.to)).append("\n");
+        sb.append("    gas: ").append(this.toIndentedString(this.gas)).append("\n");
+        sb.append("    gasPrice: ").append(this.toIndentedString(this.gasPrice)).append("\n");
+        sb.append("    value: ").append(this.toIndentedString(this.value)).append("\n");
+        sb.append("    data: ").append(this.toIndentedString(this.data)).append("\n");
+        sb.append("    nonce: ").append(this.toIndentedString(this.nonce)).append("\n");
+        sb.append("    typeInt: ").append(this.toIndentedString(this.typeInt)).append("\n");
+        sb.append("    feePayer: ").append(this.toIndentedString(this.feePayer)).append("\n");
+        sb.append("    signatures: ").append(this.toIndentedString(this.signatures)).append("\n");
+        sb.append("    feeRatio: ").append(this.toIndentedString(this.feeRatio)).append("\n");
+        sb.append("    input: ").append(this.toIndentedString(this.input)).append("\n");
+        sb.append("    key: ").append(this.toIndentedString(this.key)).append("\n");
+        sb.append("    humanReadable: ").append(this.toIndentedString(this.humanReadable)).append("\n");
+        sb.append("    codeFormat: ").append(this.toIndentedString(this.codeFormat)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    private String toIndentedString(Object o) {
+        return o == null ? "null" : o.toString().replace("\n", "\n    ");
+    }
+}

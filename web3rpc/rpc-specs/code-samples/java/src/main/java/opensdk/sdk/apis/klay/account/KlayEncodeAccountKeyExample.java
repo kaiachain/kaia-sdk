@@ -2,8 +2,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.klaytn.Web3j;
-import org.web3j.protocol.klaytn.core.method.response.KlayEncodeAccountKeyResponse;
+import org.web3j.protocol.kaia.Web3j;
+import org.web3j.protocol.kaia.core.method.response.KlayEncodeAccountKeyResponse;
 
 import java.io.IOException;
 

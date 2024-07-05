@@ -67,19 +67,19 @@ paths:
                         example: "0xfa415bb3e6231f488ff39eb2897db0ef3636dd32"
       
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../code-samples/curl/personal/replaceRawKey.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../code-samples/java/src/main/java/opensdk/sdk/apis/personal/PersonalReplaceRawKeyExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../code-samples/javascript/personal/replaceRawKey.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref: "../../code-samples/python/personal/replaceRawKey.py"

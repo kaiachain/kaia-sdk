@@ -1,8 +1,8 @@
 generatorName: web3rpc-javascript
 outputDir: ./openapi
 inputSpec: ../../../rpc-specs/namespaces/all-except-eth.yaml
-projectName: "@klaytn/web3rpc"
-projectVersion: "1.0.1"
+projectName: "@kaiachain/web3rpc"
+projectVersion: "1.0.0"
 templateDir: ./template
 sortParamsByRequiredFlag: false
 globalProperties:

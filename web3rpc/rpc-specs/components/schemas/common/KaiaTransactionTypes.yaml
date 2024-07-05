@@ -1,0 +1,896 @@
+components:
+  schemas:
+    KaiaTransactionTypes:
+      type: object
+      oneOf:
+        - $ref: "#/components/schemas/TxTypeLegacyTransaction"
+        - $ref: "#/components/schemas/TxTypeValueTransfer"
+        - $ref: "#/components/schemas/TxTypeFeeDelegatedValueTransfer"
+        - $ref: "#/components/schemas/TxTypeFeeDelegatedValueTransferWithRatio"
+        - $ref: "#/components/schemas/TxTypeValueTransferMemo"
+
+        - $ref: "#/components/schemas/TxTypeFeeDelegatedValueTransferMemo"
+        - $ref: "#/components/schemas/TxTypeFeeDelegatedValueTransferMemoWithRatio"
+        - $ref: "#/components/schemas/TxTypeAccountUpdate"
+        - $ref: "#/components/schemas/TxTypeFeeDelegatedAccountUpdate"
+        - $ref: "#/components/schemas/TxTypeFeeDelegatedAccountUpdateWithRatio"
+
+        - $ref: "#/components/schemas/TxTypeSmartContractDeploy"
+        - $ref: "#/components/schemas/TxTypeFeeDelegatedSmartContractDeploy"
+        - $ref: "#/components/schemas/TxTypeFeeDelegatedSmartContractDeployWithRatio"
+        - $ref: "#/components/schemas/TxTypeSmartContractExecution"
+        - $ref: "#/components/schemas/TxTypeFeeDelegatedSmartContractExecution"
+
+        - $ref: "#/components/schemas/TxTypeFeeDelegatedSmartContractExecutionWithRatio"
+        - $ref: "#/components/schemas/TxTypeCancel"
+        - $ref: "#/components/schemas/TxTypeFeeDelegatedCancel"
+        - $ref: "#/components/schemas/TxTypeFeeDelegatedCancelWithRatio"
+
+
+    TxTypeLegacyTransaction:
+      title: TxTypeLegacyTransaction
+      type: object
+      required:
+        - from
+        - data
+      description: TxTypeLegacyTransaction represents a type of transaction existed previously in Kaia. This transaction type exists to support compatibility. For more information, see TxTypeLegacyTransaction.
+      properties:
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        to:
+          type: string
+          format: 20-byte DATA
+          description: (optional when creating a new contract) The address to which the transaction is directed.
+        gas:
+          type: string
+          format: hex
+          description: (optional, default 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted.
+        gasPrice:
+          type: string
+          format: hex
+          description: (optional, default 25000000000 Peb) Integer of the gasPrice. The transaction fee is calculated by the multiplication of gas and gasPrice.
+        value:
+          type: string
+          format: hex
+          description: (optional) Integer of the value sent with this transaction.
+        data:
+          type: string
+          format: DATA
+          description: The compiled byte code of a contract to deploy or data (function indicator and parameter values) required to call a contract.
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+
+    TxTypeValueTransfer:
+      title: TxTypeValueTransfer
+      type: object
+      required:
+        - typeInt
+        - from
+        - to
+        - value
+      description: TxTypeValueTransfer is used when a user wants to send KLAY. For more information, see TxTypeValueTransfer.
+      properties:
+        typeInt:
+          type: number
+          format: integer
+          description: The integer indicating TxTypeValueTransfer 8
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        to:
+          type: string
+          format: 20-byte DATA
+          description: The address to which the transaction is directed.
+        gas:
+          type: string
+          format: hex
+          description: (optional, default 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted.
+        gasPrice:
+          type: string
+          format: hex
+          description: (optional, default 25000000000 Peb) Integer of the gasPrice. The transaction fee is calculated by the multiplication of gas and gasPrice.
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        value:
+          type: string
+          format: hex
+          description: Integer of the value sent with this transaction.
+
+    TxTypeFeeDelegatedValueTransfer:
+      title: TxTypeFeeDelegatedValueTransfer
+      type: object
+      required:
+        - typeInt
+        - from
+        - to
+        - value
+        - feePayer
+      description: Fee delegating version of TxTypeValueTransfer. For more information, see TxTypeFeeDelegatedValueTransfer.
+      properties:
+        typeInt:
+          type: number
+          format: integer
+          description: The integer indicating TxTypeFeeDelegatedValueTransfer 9
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        to:
+          type: string
+          format: 20-byte DATA
+          description: The address to which the transaction is directed.
+        gas:
+          type: string
+          format: hex
+          description: (optional, default 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted.
+        gasPrice:
+          type: string
+          format: hex
+          description: (optional, default 25000000000 Peb) Integer of the gasPrice. The transaction fee is calculated by the multiplication of gas and gasPrice.
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        value:
+          type: string
+          format: hex
+          description: Integer of the value sent with this transaction.
+        feePayer:
+          type: string
+          format: 20-byte DATA
+          description: The address which pays the transaction fee.
+        signatures:
+          $ref: "#/components/schemas/SignatureArray"
+
+    TxTypeFeeDelegatedValueTransferWithRatio:
+      title: TxTypeFeeDelegatedValueTransferWithRatio
+      type: object
+      required:
+        - typeInt
+        - from
+        - to
+        - value
+        - feePayer
+        - feeRatio
+      description: Partial fee delegating version of TxTypeValueTransfer. For more information, see TxTypeFeeDelegatedValueTransferWithRatio.
+      properties:
+        typeInt:
+          type: number
+          format: integer
+          description: The integer indicating TxTypeFeeDelegatedValueTransferWithRatio 10
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        to:
+          type: string
+          format: 20-byte DATA
+          description: The address to which the transaction is directed.
+        gas:
+          type: string
+          format: hex
+          description: (optional, default 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted.
+        gasPrice:
+          type: string
+          format: hex
+          description: (optional, default 25000000000 Peb) Integer of the gasPrice used for each paid gas.
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        value:
+          type: string
+          format: hex
+          description: Integer of the value sent with this transaction.
+        feePayer:
+          type: string
+          format: 20-byte DATA
+          description: The fee payer address of the transaction.
+        feeRatio:
+          type: number
+          format: integer
+          description: Fee ratio of the fee payer. If it is 30, 30% of the fee will be paid by the fee payer. 70% will be paid by the sender. The range of fee ratio is 1 ~ 99, if it is out of range, the transaction will not be accepted.
+        signatures:
+          $ref: "#/components/schemas/SignatureArray"
+
+    TxTypeValueTransferMemo:
+      title: TxTypeValueTransferMemo
+      type: object
+      required:
+        - typeInt
+        - from
+        - to
+        - value
+        - input
+      description: TxTypeValueTransferMemo is used when a user wants to send KLAY with a specific message. For more information, see TxTypeValueTransferMemo.
+      properties:
+        typeInt:
+          type: number
+          format: integer
+          description: The integer indicating TxTypeValueTransferMemo 16
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        to:
+          type: string
+          format: 20-byte DATA
+          description: The address to which the transaction is directed.
+        gas:
+          type: string
+          format: hex
+          description: (optional, default 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted.
+        gasPrice:
+          type: string
+          format: hex
+          description: (optional, default 25000000000 Peb) Integer of the gasPrice. The transaction fee is calculated by the multiplication of gas and gasPrice.
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        value:
+          type: string
+          format: hex
+          description: Integer of the value sent with this transaction.
+        input:
+          type: string
+          format: DATA
+          description: The data sent along with the transaction.
+
+    TxTypeFeeDelegatedValueTransferMemo:
+      title: TxTypeFeeDelegatedValueTransferMemo
+      type: object
+      required:
+        - typeInt
+        - from
+        - to
+        - value
+        - input
+        - feePayer
+      description:
+        Fee delegating version of TxTypeValueTransferMemo. For more information, see TxTypeFeeDelegatedValueTransferMemo.
+      properties:
+        typeInt:
+          type: number
+          format: integer
+          description: The integer indicating TxTypeFeeDelegatedValueTransferMemo 17
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        to:
+          type: string
+          format: 20-byte DATA
+          description: The address to which the transaction is directed.
+        gas:
+          type: string
+          format: hex
+          description: (optional, default 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted.
+        gasPrice:
+          type: string
+          format: hex
+          description: (optional, default 25000000000 Peb) Integer of the gasPrice used for each paid gas.
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        value:
+          type: string
+          format: hex
+          description: Integer of the value sent with this transaction.
+        input:
+          type: string
+          format: DATA
+          description: The data sent along with the transaction.
+        feePayer:
+          type: string
+          format: 20-byte DATA
+          description: The fee payer address of the transaction.
+        signatures:
+          $ref: "#/components/schemas/SignatureArray"
+
+    TxTypeFeeDelegatedValueTransferMemoWithRatio:
+      title: TxTypeFeeDelegatedValueTransferMemoWithRatio
+      type: object
+      required:
+        - typeInt
+        - from
+        - to
+        - value
+        - input
+        - feePayer
+        - feeRatio
+      description: Partial fee delegating version of TxTypeValueTransferMemo. For more information, see TxTypeFeeDelegatedValueTransferMemoWithRatio.
+      properties:
+        typeInt:
+          type: number
+          format: integer
+          description: The integer indicating TxTypeFeeDelegatedValueTransferMemoWithRatio 18
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        to:
+          type: string
+          format: 20-byte DATA
+          description: The address to which the transaction is directed.
+        gas:
+          type: string
+          format: hex
+          description: (optional, default 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted.
+        gasPrice:
+          type: string
+          format: hex
+          description: (optional, default 25000000000 Peb) Integer of the gasPrice used for each paid gas.
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        value:
+          type: string
+          format: hex
+          description: Integer of the value sent with this transaction.
+        input:
+          type: string
+          format: DATA
+          description: The data sent along with the transaction.
+        feePayer:
+          type: string
+          format: 20-byte DATA
+          description: The fee payer address of the transaction.
+        feeRatio:
+          type: string
+          format: hex
+          description: Fee ratio of the fee payer. If it is 30, 30% of the fee will be paid by the fee payer. 70% will be paid by the sender. The range of fee ratio is 1 ~ 99, if it is out of range, the transaction will not be accepted.
+        signatures:
+          $ref: "#/components/schemas/SignatureArray"
+
+    TxTypeAccountUpdate:
+      title: TxTypeAccountUpdate
+      type: object
+      required:
+        - typeInt
+        - from
+        - key
+      description: TxTypeAccountUpdate updates the key of the given account. For more information, see TxTypeAccountUpdate.
+      properties:
+        typeInt:
+          type: number
+          format: integer
+          description: The integer indicating TxTypeAccountUpdate 32
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        gas:
+          type: string
+          format: hex
+          description: (optional, default 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted.
+        gasPrice:
+          type: string
+          format: hex
+          description: (optional, default 25000000000 Peb) Integer of the gasPrice used for each paid gas.
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        key:
+          type: string
+          format: DATA
+          description: The new account key of the from account in RLP encoded format. For more information about the account key, see Account Key.
+
+    TxTypeFeeDelegatedAccountUpdate:
+      title: TxTypeFeeDelegatedAccountUpdate
+      type: object
+      required:
+        - typeInt
+        - from
+        - key
+        - feePayer
+      description: Fee delegating version of TxTypeAccountUpdate. For more information, see TxTypeFeeDelegatedAccountUpdate.
+      properties:
+        typeInt:
+          type: number
+          format: integer
+          description: The integer indicating TxTypeFeeDelegatedAccountUpdate 33
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        gas:
+          type: string
+          format: hex
+          description: (optional, default 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted.
+        gasPrice:
+          type: string
+          format: hex
+          description: (optional, default 25000000000 Peb) Integer of the gasPrice used for each paid gas.
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        key:
+          type: string
+          format: DATA
+          description: The new account key of the from account in RLP encoded format. For more information about the account key, see Account Key.
+        feePayer:
+          type: string
+          format: 20-byte DATA
+          description: The fee payer address of the transaction.
+        signatures:
+          $ref: "#/components/schemas/SignatureArray"
+
+    TxTypeFeeDelegatedAccountUpdateWithRatio:
+      title: TxTypeFeeDelegatedAccountUpdateWithRatio
+      type: object
+      required:
+        - typeInt
+        - from
+        - key
+        - feePayer
+        - feeRatio
+      properties:
+        typeInt:
+          type: number
+          description: "The integer indicating TxTypeFeeDelegatedAccountUpdateWithRatio: 34"
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        gas:
+          type: string
+          format: hex
+          description: "(optional, default: 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted."
+        gasPrice:
+          type: string
+          format: hex
+          description: "(optional, default: 25000000000 Peb) Integer of the gasPrice used for each paid gas."
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        key:
+          type: string
+          format: DATA
+          description: The new account key of the from account in RLP encoded format. For more information about the account key, see Account Key.
+        feePayer:
+          type: string
+          format: 20-byte DATA
+          description: The fee payer address of the transaction.
+        feeRatio:
+          type: string
+          format: hex
+          description: Fee ratio of the fee payer. If it is 30, 30% of the fee will be paid by the fee payer. 70% will be paid by the sender. The range of fee ratio is 1 ~ 99, if it is out of range, the transaction will not be accepted.
+        signatures:
+          $ref: "#/components/schemas/SignatureArray"
+
+    TxTypeSmartContractDeploy:
+      title: TxTypeSmartContractDeploy
+      type: object
+      required:
+        - typeInt
+        - from
+        - to
+        - value
+        - input
+        - humanReadable
+        - codeFormat
+      properties:
+        typeInt:
+          type: number
+          description: "The integer indicating TxTypeSmartContractDeploy: 40"
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        to:
+          type: string
+          format: 20-byte DATA
+          description: The address to which the transaction is directed.
+        gas:
+          type: string
+          format: hex
+          description: "(optional, default: 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted."
+        gasPrice:
+          type: string
+          format: hex
+          description: "(optional, default: 25000000000 Peb) Integer of the gasPrice used for each paid gas."
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        value:
+          type: string
+          format: hex
+          description: Integer of the value sent with this transaction.
+        input:
+          type: string
+          format: DATA
+          description: The data sent along with the transaction.
+        humanReadable:
+          type: boolean
+          description: true if the address is humanReadable, false if the address is not humanReadable. Currently, the value should be false. Human-readable addresses will be supported later.
+        codeFormat:
+          type: string
+          format: hex
+          description: The code format of smart contract code. The value 0 indicates EVM.
+
+    TxTypeFeeDelegatedSmartContractDeploy:
+      title: TxTypeFeeDelegatedSmartContractDeploy
+      type: object
+      required:
+        - typeInt
+        - from
+        - to
+        - value
+        - input
+        - humanReadable
+        - codeFormat
+        - feePayer
+      properties:
+        typeInt:
+          type: number
+          description: "The integer indicating TxTypeFeeDelegatedSmartContractDeploy: 41"
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        to:
+          type: string
+          format: 20-byte DATA
+          description: The address to which the transaction is directed.
+        gas:
+          type: string
+          format: hex
+          description: "(optional, default: 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted."
+        gasPrice:
+          type: string
+          format: hex
+          description: "(optional, default: 25000000000 Peb) Integer of the gasPrice used for each paid gas."
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        value:
+          type: string
+          format: hex
+          description: Integer of the value sent with this transaction.
+        input:
+          type: string
+          format: DATA
+          description: The data sent along with the transaction.
+        humanReadable:
+          type: boolean
+          description: true if the address is humanReadable, false if the address is not humanReadable. Currently, the value should be false. Human-readable addresses will be supported later.
+        codeFormat:
+          type: string
+          format: hex
+          description: The code format of smart contract code. The value 0 indicates EVM.
+        feePayer:
+          type: string
+          format: 20-byte DATA
+          description: The fee payer address of the transaction.
+        signatures:
+          $ref: "#/components/schemas/SignatureArray"
+
+    TxTypeFeeDelegatedSmartContractDeployWithRatio:
+      title: TxTypeFeeDelegatedSmartContractDeployWithRatio
+      type: object
+      required:
+        - typeInt
+        - from
+        - to
+        - value
+        - input
+        - humanReadable
+        - codeFormat
+        - feePayer
+        - feeRatio
+      properties:
+        typeInt:
+          type: number
+          description: "The integer indicating TxTypeFeeDelegatedSmartContractDeployWithRatio: 42"
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        to:
+          type: string
+          format: 20-byte DATA
+          description: The address to which the transaction is directed.
+        gas:
+          type: string
+          format: hex
+          description: "(optional, default: 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted."
+        gasPrice:
+          type: string
+          format: hex
+          description: "(optional, default: 25000000000 Peb) Integer of the gasPrice used for each paid gas."
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        value:
+          type: string
+          format: hex
+          description: Integer of the value sent with this transaction.
+        input:
+          type: string
+          format: DATA
+          description: The data sent along with the transaction.
+        humanReadable:
+          type: boolean
+          description: true if the address is humanReadable, false if the address is not humanReadable. Currently, the value should be false. Human-readable addresses will be supported later.
+        codeFormat:
+          type: string
+          format: hex
+          description: The code format of smart contract code. The value 0 indicates EVM.
+        feePayer:
+          type: string
+          format: 20-byte DATA
+          description: The fee payer address of the transaction.
+        signatures:
+          $ref: "#/components/schemas/SignatureArray"
+        feeRatio:
+          type: string
+          format: hex
+          description: Fee ratio of the fee payer. If it is 30, 30% of the fee will be paid by the fee payer. 70% will be paid by the sender. The range of fee ratio is 1 ~ 99, if it is out of range, the transaction will not be accepted.
+
+    TxTypeSmartContractExecution:
+      title: TxTypeSmartContractExecution
+      type: object
+      required:
+        - typeInt
+        - from
+        - to
+        - value
+        - input
+      properties:
+        typeInt:
+          type: number
+          description: "The integer indicating TxTypeSmartContractExecution: 48"
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        to:
+          type: string
+          format: 20-byte DATA
+          description: The address to which the transaction is directed.
+        gas:
+          type: string
+          format: hex
+          description: "(optional, default: 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted."
+        gasPrice:
+          type: string
+          format: hex
+          description: "(optional, default: 25000000000 Peb) Integer of the gasPrice used for each paid gas."
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        value:
+          type: string
+          format: hex
+          description: Integer of the value sent with this transaction.
+        input:
+          type: string
+          format: DATA
+          description: The data sent along with the transaction.
+
+    TxTypeFeeDelegatedSmartContractExecution:
+      title: TxTypeFeeDelegatedSmartContractExecution
+      type: object
+      required:
+        - typeInt
+        - from
+        - to
+        - value
+        - input
+        - feePayer
+      properties:
+        typeInt:
+          type: number
+          description: "The integer indicating TxTypeFeeDelegatedSmartContractExecution: 49"
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        to:
+          type: string
+          format: 20-byte DATA
+          description: The address to which the transaction is directed.
+        gas:
+          type: string
+          format: hex
+          description: "(optional, default: 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted."
+        gasPrice:
+          type: string
+          format: hex
+          description: "(optional, default: 25000000000 Peb) Integer of the gasPrice used for each paid gas."
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        value:
+          type: string
+          format: hex
+          description: Integer of the value sent with this transaction.
+        input:
+          type: string
+          format: DATA
+          description: The data sent along with the transaction.
+        feePayer:
+          type: string
+          format: 20-byte DATA
+          description: The fee payer address of the transaction.
+        signatures:
+          $ref: "#/components/schemas/SignatureArray"
+
+    TxTypeFeeDelegatedSmartContractExecutionWithRatio:
+      title: TxTypeFeeDelegatedSmartContractExecutionWithRatio
+      type: object
+      required:
+        - typeInt
+        - from
+        - to
+        - value
+        - input
+        - feePayer
+        - feeRatio
+      properties:
+        typeInt:
+          type: number
+          description: "The integer indicating TxTypeFeeDelegatedSmartContractExecutionWithRatio: 50"
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        to:
+          type: string
+          format: 20-byte DATA
+          description: The address to which the transaction is directed.
+        gas:
+          type: string
+          format: hex
+          description: "(optional, default: 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted."
+        gasPrice:
+          type: string
+          format: hex
+          description: "(optional, default: 25000000000 Peb) Integer of the gasPrice used for each paid gas."
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        value:
+          type: string
+          format: hex
+          description: Integer of the value sent with this transaction.
+        input:
+          type: string
+          format: DATA
+          description: The data sent along with the transaction.
+        feePayer:
+          type: string
+          format: 20-byte DATA
+          description: The fee payer address of the transaction.
+        feeRatio:
+          type: string
+          format: hex
+          description: Fee ratio of the fee payer. If it is 30, 30% of the fee will be paid by the fee payer. 70% will be paid by the sender. The range of fee ratio is 1 ~ 99, if it is out of range, the transaction will not be accepted.
+        signatures:
+          $ref: "#/components/schemas/SignatureArray"
+
+    TxTypeCancel:
+      title: TxTypeCancel
+      type: object
+      required:
+        - typeInt
+        - from
+      properties:
+        typeInt:
+          type: number
+          description: "The integer indicating TxTypeCancel: 56"
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        gas:
+          type: string
+          format: hex
+          description: "(optional, default: 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted."
+        gasPrice:
+          type: string
+          format: hex
+          description: "(optional, default: 25000000000 Peb) Integer of the gasPrice used for each paid gas."
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+
+    TxTypeFeeDelegatedCancel:
+      title: TxTypeFeeDelegatedCancel
+      type: object
+      required:
+        - typeInt
+        - from
+        - feePayer
+      properties:
+        typeInt:
+          type: number
+          description: "The integer indicating TxTypeFeeDelegatedCancel: 57"
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        gas:
+          type: string
+          format: hex
+          description: "(optional, default: 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted."
+        gasPrice:
+          type: string
+          format: hex
+          description: "(optional, default: 25000000000 Peb) Integer of the gasPrice used for each paid gas."
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        feePayer:
+          type: string
+          format: 20-byte DATA
+          description: The fee payer address of the transaction.
+        signatures:
+          $ref: "#/components/schemas/SignatureArray"
+
+    TxTypeFeeDelegatedCancelWithRatio:
+      title: TxTypeFeeDelegatedCancelWithRatio
+      type: object
+      required:
+        - typeInt
+        - from
+        - feePayer
+        - feeRatio
+      properties:
+        typeInt:
+          type: number
+          description: "The integer indicating TxTypeFeeDelegatedCancelWithRatio: 58"
+        from:
+          type: string
+          format: 20-byte DATA
+          description: The address from which the transaction is sent.
+        gas:
+          type: string
+          format: hex
+          description: "(optional, default: 90000) Integer of the gas provided for the transaction execution. Unused gas will be refunded to the sender. If the specified gas is not enough to execute the transaction, the transaction is reverted."
+        gasPrice:
+          type: string
+          format: hex
+          description: "(optional, default: 25000000000 Peb) Integer of the gasPrice used for each paid gas."
+        nonce:
+          type: string
+          format: hex
+          description: (optional) Integer of a nonce.
+        feePayer:
+          type: string
+          format: 20-byte DATA
+          description: The fee payer address of the transaction.
+        feeRatio:
+          type: string
+          format: hex
+          description: Fee ratio of the fee payer. If it is 30, 30% of the fee will be paid by the fee payer. 70% will be paid by the sender. The range of fee ratio is 1 ~ 99, if it is out of range, the transaction will not be accepted.
+        signatures:
+          $ref: "#/components/schemas/SignatureArray"
+
+    SignatureArray:
+      title: SignatureArray
+      type: array
+      items:
+        $ref: "./Common.yaml#/components/schemas/Signature"
+      description: (optional - only for kaia_sendTransactionAsFeePayer API) An array of signature objects. A signature object contains three fields (V, R, and S). V contains ECDSA recovery id. R contains ECDSA signature r while S contains ECDSA signature s.

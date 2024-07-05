@@ -9,6 +9,10 @@ apis:
     root: ./namespaces/klay.yaml
     labels:
       - v1.0.0
+  kaia@v1.0.0:
+    root: ./namespaces/kaia.yaml
+    labels:
+      - v1.0.0
   eth@v1.0.0:
     root: ./namespaces/eth.yaml
     labels:

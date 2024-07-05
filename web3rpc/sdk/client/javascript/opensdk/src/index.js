@@ -9,7 +9,7 @@ const {
   TxpoolApi,
   MainbridgeApi,
   SubbridgeApi,
-} = require("@klaytn/web3rpc");
+} = require("@kaiachain/web3rpc");
 
 class OpenSDK {
   static Klay = KlayApi;

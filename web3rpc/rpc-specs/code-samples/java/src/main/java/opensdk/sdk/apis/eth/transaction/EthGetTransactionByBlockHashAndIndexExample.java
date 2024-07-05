@@ -1,7 +1,6 @@
-
 import org.web3j.protocol.core.methods.response.EthTransaction;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.klaytn.Web3j;
+import org.web3j.protocol.kaia.Web3j;
 
 import java.io.IOException;
 import java.math.BigInteger;

@@ -41,19 +41,19 @@ paths:
                   - $ref: "#/components/schemas/sendChainTxslimitResp"
 
       x-codeSamples:
-        # - lang: "curl"
+        # - lang: "Shell"
         #   label: "Curl"
         #   source:
         #     $ref: "../../code-samples/curl/subbridge/sendChainTxslimit.sh"
-        # - lang: "java"
+        # - lang: "Java"
         #   label: "Java"
         #   source:
         #     $ref: ""
-        # - lang: "javascript"
+        # - lang: "JavaScript"
         #   label: "Javascript"
         #   source:
         #     $ref: "../../../code-samples/javascript/eth/miscellaneous/txPending.js"
-        # - lang: "python"
+        # - lang: "Python"
         #   label: "Python"
         #   source:
         #     $ref: "../../../code-samples/python/eth/miscellaneous/txPending.py"

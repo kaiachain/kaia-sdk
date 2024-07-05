@@ -1,0 +1,67 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/configuration/isSenderTxHashIndexingEnabled:
+    post:
+      operationId: .isSenderTxHashIndexingEnabled
+      summary: "[Configuration] kaia_isSenderTxHashIndexingEnabled"
+      description: |
+        Returns true if the node is indexing sender transaction hash to transaction hash mapping information. It is disabled by default and can be enabled by --sendertxhashindexing.
+
+        **JSONRPC:** `kaia_isSenderTxHashIndexingEnabled`
+      tags:
+        - kaia
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: kaia_isSenderTxHashIndexingEnabled
+
+      responses:
+        200:
+          description: Returns true if the node is indexing sender transaction hash to transaction hash mapping information.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: boolean
+                        description: "`true` means the node is indexing sender transaction hash to transaction hash mapping information."
+                        example: true
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/configuration/isSenderTxHashIndexingEnabled.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/configuration/KaiaIsSenderTxHashIndexingEnabledExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/configuration/isSenderTxHashIndexingEnabled.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/configuration/isSenderTxHashIndexingEnabled.py"

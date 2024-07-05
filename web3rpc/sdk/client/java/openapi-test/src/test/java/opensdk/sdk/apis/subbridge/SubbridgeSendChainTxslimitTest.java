@@ -1,11 +1,11 @@
-package opensdk.sdk.apis.net;
+package opensdk.sdk.apis.subbridge;
 
 import opensdk.sdk.apis.constant.UrlConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.web3j.protocol.core.methods.response.NetListening;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.klaytn.Web3j;
+import org.web3j.protocol.klaytn.core.method.response.SubbridgeSendChainTxslimitResponse;
 
 import java.io.IOException;
 
@@ -18,7 +18,7 @@ public class SubbridgeSendChainTxslimitTest {
     @Test
     @DisplayName("RPC main_bridge")
     void whenRequestValid_ThenCall200ResponseReturns() throws IOException {
-        NetListening response = w3.subbridgeSendChainTxslimit().send();
+        SubbridgeSendChainTxslimitResponse response = w3.subbridgeSendChainTxslimit().send();
         assertNotNull(response);
         assertNull(response.getError());
         assertNotNull(response.getResult());

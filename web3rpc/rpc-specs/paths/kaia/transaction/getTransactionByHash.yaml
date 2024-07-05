@@ -1,0 +1,95 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/transaction/getTransactionByHash:
+    post:
+      operationId: .getTransactionByHash
+      summary: "[Transaction] kaia_getTransactionByHash"
+      tags:
+        - kaia
+      description: |
+        Returns the information about a transaction requested by transaction hash. This API works only on RPC call, not on JavaScript console.
+
+        **JSONRPC:** `kaia_getTransactionByHash`
+
+      parameters:
+        - name: transactionHash
+          schema:
+            type: string
+            format: 32-byte DATA
+          in: query
+          description: Hash of a transaction.
+          required: true
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetTransactionByHashReq"
+
+      responses:
+        200:
+          description: Object - A transaction object, or null when no transaction was found.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetTransactionByHashResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/transaction/getTransactionByHash.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/transaction/KaiaGetTransactionByHashExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/transaction/getTransactionByHash.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/transaction/getTransactionByHash.py"
+
+components:
+  schemas:
+    KaiaGetTransactionByHashReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getTransactionByHash'
+        params:
+          type: array
+          description: Hash of a transaction.
+          items:
+            type: string
+            format: 32-byte DATA
+            title: TransactionHash
+            description: Hash of a transaction.
+          example: ["0xaca5d9a1ed8b86b1ef61431b2bedfc99a66eaefc3a7e1cffdf9ff53653956a67"]
+
+    KaiaGetTransactionByHashResp:
+      type: object
+      properties:
+        result:
+          $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/TransactionObject"
+

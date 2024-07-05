@@ -1,0 +1,92 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/filter/subscribe:
+    post:
+      operationId: .subscribe
+      summary: "[Filter] kaia_subscribe"
+      description: |
+        Creates a new subscription to specific events by using either RPC Pub/Sub over WebSockets or filters over HTTP. It allows clients to wait for events instead of polling for them.
+        
+        The node will return a subscription id for each subscription created. For each event that matches the subscription, a notification with relevant data is sent together with the subscription id. If a connection is closed, all subscriptions created over the connection are removed.
+        
+        **JSONRPC:** `kaia_subscribe`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: notificationType
+          required: true
+          schema:
+            type: string
+            enum:
+              - newHeads
+              - logs
+          description: 'A notification type: "newHeads" or "logs"'
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: "kaia_subscribe"
+                    params:
+                      type: array
+                      items:
+                        title: NotificationType
+                        type: string
+                        enum:
+                          - newHeads
+                          - logs
+                      description: 'A notification type: "newHeads" or "logs"'
+                      example: ["newHeads"]
+
+      responses:
+        200:
+          description: Return a subscription id when a subscription is created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: string
+                        format: hex
+                        example: "0xbdab16c8e4ae1b9e6930c78359de3e0e"
+                        description: A subscription id when a subscription is created. For each event that matches the subscription, a notification with relevant data will be delivered as well.
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/filter/subscribe.sh"
+        # - lang: "Java"
+        #   label: "Java"
+        #   source:
+        #     $ref: ""
+        #- lang: "JavaScript"
+        #  label: "Javascript"
+        #  source:
+        #    $ref: ""
+        #- lang: "Python"
+        #  label: "Python"
+        #  source:
+        #    $ref: ""

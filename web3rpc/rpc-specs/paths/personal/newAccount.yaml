@@ -66,19 +66,19 @@ paths:
                         example: "0xed1b12248aee85a32aead06c7789d3fcdcd4dae6"
       
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../code-samples/curl/personal/newAccount.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../code-samples/java/src/main/java/opensdk/sdk/apis/personal/PersonalNewAccountExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../code-samples/javascript/personal/newAccount.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref: "../../code-samples/python/personal/newAccount.py"

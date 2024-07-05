@@ -56,11 +56,13 @@ class KlaytnJavaClientCodegen : JavaClientCodegen {
 
         // ignored eth namespace]
         supportingFiles.add(SupportingFile("KlayGetAccountKey.java.mustache", modelFolder, "KlayGetAccountKey.java"))
-        supportingFiles.add(SupportingFile("FilterOptions.java.mustache", modelFolder, "FilterOptions.java"))
         supportingFiles.add(SupportingFile("KlaytnTransactionTypes.java.mustache", modelFolder, "KlaytnTransactionTypes.java"))
         supportingFiles.add(SupportingFile("KlayGetAccountAccountKey.java.mustache", modelFolder, "KlayGetAccountAccountKey.java"))
         supportingFiles.add(SupportingFile("FilterOptions.java.mustache", modelFolder, "FilterOptions.java"))
         supportingFiles.add(SupportingFile("AdminGetSpamThrottlerCandidateListResponse.java.mustache", modelFolder, "AdminGetSpamThrottlerCandidateListResponse.java"))
+        supportingFiles.add(SupportingFile("KaiaGetAccountKey.java.mustache", modelFolder, "KaiaGetAccountKey.java"))
+        supportingFiles.add(SupportingFile("KaiaTransactionTypes.java.mustache", modelFolder, "KaiaTransactionTypes.java"))
+        supportingFiles.add(SupportingFile("KaiaGetAccountAccountKey.java.mustache", modelFolder, "KaiaGetAccountAccountKey.java"))
     }
 
     override fun getUseInlineModelResolver(): Boolean {

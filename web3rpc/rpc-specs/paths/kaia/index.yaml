@@ -1,0 +1,190 @@
+openapi: "3.0.2"
+info:
+  title: kaiaTN OPEN API
+  version: "1.10.0"
+  contact:
+    name: API support
+    url: https://forum.kaiatn.foundation/
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: kaia
+    description: API for kaia namespace
+servers:
+  - url: http://localhost:7151
+  - url: https://api.baobab.kaiatn.net:8651
+  - url: https://public-en-cypress.kaiatn.net
+paths:
+  # kaia/account
+  /kaia/account/accountCreated:
+    $ref: ./account/accountCreated.yaml#/paths/~1kaia~1account~1accountCreated
+  /kaia/account/accounts:
+    $ref: ./account/accounts.yaml#/paths/~1kaia~1account~1accounts
+  /kaia/account/decodeAccountKey:
+    $ref: ./account/decodeAccountKey.yaml#/paths/~1kaia~1account~1decodeAccountKey
+  /kaia/account/getAccountKey:
+    $ref: ./account/getAccountKey.yaml#/paths/~1kaia~1account~1getAccountKey
+  /kaia/account/getCode:
+    $ref: ./account/getCode.yaml#/paths/~1kaia~1account~1getCode
+  /kaia/account/encodeAccountKey:
+    $ref: ./account/encodeAccountKey.yaml#/paths/~1kaia~1account~1encodeAccountKey
+  /kaia/account/getAccount:
+    $ref: ./account/getAccount.yaml#/paths/~1kaia~1account~1getAccount
+  /kaia/account/getBalance:
+    $ref: ./account/getBalance.yaml#/paths/~1kaia~1account~1getBalance
+  /kaia/account/sign:
+    $ref: ./account/sign.yaml#/paths/~1kaia~1account~1sign
+  /kaia/account/getTransactionCount:
+    $ref: ./account/getTransactionCount.yaml#/paths/~1kaia~1account~1getTransactionCount
+  /kaia/account/isContractAccount:
+    $ref: ./account/isContractAccount.yaml#/paths/~1kaia~1account~1isContractAccount
+
+  # kaia/block
+  /kaia/block/blockNumber:
+    $ref: ./block/blockNumber.yaml#/paths/~1kaia~1block~1blockNumber
+  /kaia/block/getBlockByHash:
+    $ref: ./block/getBlockByHash.yaml#/paths/~1kaia~1block~1getBlockByHash
+  /kaia/block/getBlockReceipts:
+    $ref: ./block/getBlockReceipts.yaml#/paths/~1kaia~1block~1getBlockReceipts
+  /kaia/block/getBlockTransactionCountByNumber:
+    $ref: ./block/getBlockTransactionCountByNumber.yaml#/paths/~1kaia~1block~1getBlockTransactionCountByNumber
+  /kaia/block/getBlockWithConsensusInfoByNumber:
+    $ref: ./block/getBlockWithConsensusInfoByNumber.yaml#/paths/~1kaia~1block~1getBlockWithConsensusInfoByNumber
+  /kaia/block/getCommittee:
+    $ref: ./block/getCommittee.yaml#/paths/~1kaia~1block~1getCommittee
+  /kaia/block/getCommitteeSize:
+    $ref: ./block/getCommitteeSize.yaml#/paths/~1kaia~1block~1getCommitteeSize
+  /kaia/block/getCouncil:
+    $ref: ./block/getCouncil.yaml#/paths/~1kaia~1block~1getCouncil
+  /kaia/block/getCouncilSize:
+    $ref: ./block/getCouncilSize.yaml#/paths/~1kaia~1block~1getCouncilSize
+  /kaia/block/getBlockByNumber:
+    $ref: ./block/getBlockByNumber.yaml#/paths/~1kaia~1block~1getBlockByNumber
+  /kaia/block/getBlockTransactionCountByHash:
+    $ref: ./block/getBlockTransactionCountByHash.yaml#/paths/~1kaia~1block~1getBlockTransactionCountByHash
+  /kaia/block/getHeaderByNumber:
+    $ref: ./block/getHeaderByNumber.yaml#/paths/~1kaia~1block~1getHeaderByNumber
+  /kaia/block/getHeaderByHash:
+    $ref: ./block/getHeaderByHash.yaml#/paths/~1kaia~1block~1getHeaderByHash
+  /kaia/getRewards:
+    $ref: ./block/getRewards.yaml#/paths/~1kaia~1block~1getRewards
+  /kaia/getStorageAt:
+    $ref: ./block/getStorageAt.yaml#/paths/~1kaia~1block~1getStorageAt
+  /kaia/block/syncing:
+    $ref: ./block/syncing.yaml#/paths/~1kaia~1block~1syncing
+  /kaia/block/getBlockWithConsensusInfoByNumberRange:
+    $ref: ./block/getBlockWithConsensusInfoByNumberRange.yaml#/paths/~1kaia~1block~1getBlockWithConsensusInfoByNumberRange
+  /kaia/block/getBlockWithConsensusInfoByHash:
+    $ref: ./block/getBlockWithConsensusInfoByHash.yaml#/paths/~1kaia~1block~1getBlockWithConsensusInfoByHash
+
+  # kaia/transaction
+  /kaia/transaction/call:
+    $ref: ./transaction/call.yaml#/paths/~1kaia~1transaction~1call
+  /kaia/transaction/getDecodedAnchoringTransactionByHash:
+    $ref: ./transaction/getDecodedAnchoringTransactionByHash.yaml#/paths/~1kaia~1transaction~1getDecodedAnchoringTransactionByHash
+  /kaia/transaction/estimateGas:
+    $ref: ./transaction/estimateGas.yaml#/paths/~1kaia~1transaction~1estimateGas
+  /kaia/transaction/getTransactionByBlockNumberAndIndex:
+    $ref: ./transaction/getTransactionByBlockNumberAndIndex.yaml#/paths/~1kaia~1transaction~1getTransactionByBlockNumberAndIndex
+  /kaia/transaction/getTransactionBySenderTxHash:
+    $ref: ./transaction/getTransactionBySenderTxHash.yaml#/paths/~1kaia~1transaction~1getTransactionBySenderTxHash
+  /kaia/transaction/getTransactionByBlockHashAndIndex:
+    $ref: ./transaction/getTransactionByBlockHashAndIndex.yaml#/paths/~1kaia~1transaction~1getTransactionByBlockHashAndIndex
+  /kaia/transaction/getTransactionByHash:
+    $ref: ./transaction/getTransactionByHash.yaml#/paths/~1kaia~1transaction~1getTransactionByHash
+  /kaia/transaction/getTransactionReceipt:
+    $ref: ./transaction/getTransactionReceipt.yaml#/paths/~1kaia~1transaction~1getTransactionReceipt
+  /kaia/transaction/sendRawTransaction:
+    $ref: ./transaction/sendRawTransaction.yaml#/paths/~1kaia~1transaction~1sendRawTransaction
+  /kaia/transaction/estimateComputationCost:
+    $ref: ./transaction/estimateComputationCost.yaml#/paths/~1kaia~1transaction~1estimateComputationCost
+  /kaia/transaction/sendTransaction:
+    $ref: ./transaction/sendTransaction.yaml#/paths/~1kaia~1transaction~1sendTransaction
+  /kaia/transaction/sendTransactionAsFeePayer:
+    $ref: ./transaction/sendTransactionAsFeePayer.yaml#/paths/~1kaia~1transaction~1sendTransactionAsFeePayer
+  /kaia/transaction/signTransaction:
+    $ref: ./transaction/signTransaction.yaml#/paths/~1kaia~1transaction~1signTransaction
+  /kaia/transaction/signTransactionAsFeePayer:
+    $ref: ./transaction/signTransactionAsFeePayer.yaml#/paths/~1kaia~1transaction~1signTransactionAsFeePayer
+  /kaia/transaction/pendingTransactions:
+    $ref: ./transaction/pendingTransactions.yaml#/paths/~1kaia~1transaction~1pendingTransactions
+  /kaia/transaction/getTransactionReceiptBySenderTxHash:
+    $ref: ./transaction/getTransactionReceiptBySenderTxHash.yaml#/paths/~1kaia~1transaction~1getTransactionReceiptBySenderTxHash
+  /kaia/createAccessList:
+    $ref: ./transaction/createAccessList.yaml#/paths/~1kaia~1transaction~1createAccessList
+  /kaia/getRawTransactionByBlockHashAndIndex:
+    $ref: ./transaction/getRawTransactionByBlockHashAndIndex.yaml#/paths/~1kaia~1transaction~1getRawTransactionByBlockHashAndIndex
+  /kaia/getRawTransactionByHash:
+    $ref: ./transaction/getRawTransactionByHash.yaml#/paths/~1kaia~1transaction~1getRawTransactionByHash
+  /kaia/resend:
+    $ref: ./transaction/resend.yaml#/paths/~1kaia~1transaction~1resend
+  /kaia/getRawTransactionByBlockNumberAndIndex:
+    $ref: ./transaction/getRawTransactionByBlockNumberAndIndex.yaml#/paths/~1kaia~1transaction~1getRawTransactionByBlockNumberAndIndex
+ 
+  # kaia/configuration
+  /kaia/configuration/chainID:
+    $ref: ./configuration/chainID.yaml#/paths/~1kaia~1configuration~1chainID
+  /kaia/configuration/clientVersion:
+    $ref: ./configuration/clientVersion.yaml#/paths/~1kaia~1configuration~1clientVersion
+  /kaia/configuration/gasPriceAt:
+    $ref: ./configuration/gasPriceAt.yaml#/paths/~1kaia~1configuration~1gasPriceAt
+  /kaia/configuration/gasPrice:
+    $ref: ./configuration/gasPrice.yaml#/paths/~1kaia~1configuration~1gasPrice
+  /kaia/configuration/isParallelDBWrite:
+    $ref: ./configuration/isParallelDBWrite.yaml#/paths/~1kaia~1configuration~1isParallelDBWrite
+  /kaia/configuration/isSenderTxHashIndexingEnabled:
+    $ref: ./configuration/isSenderTxHashIndexingEnabled.yaml#/paths/~1kaia~1configuration~1isSenderTxHashIndexingEnabled
+  /kaia/configuration/protocolVersion:
+    $ref: ./configuration/protocolVersion.yaml#/paths/~1kaia~1configuration~1protocolVersion
+  /kaia/configuration/rewardbase:
+    $ref: ./configuration/rewardBase.yaml#/paths/~1kaia~1configuration~1rewardbase
+  /kaia/configuration/getChainConfig:
+    $ref: ./configuration/getChainConfig.yaml#/paths/~1kaia~1configuration~1getChainConfig
+  /kaia/configuration/forkStatus:
+    $ref: ./configuration/forkStatus.yaml#/paths/~1kaia~1configuration~1forkStatus
+
+  # kaia/filter
+  /kaia/filter/getFilterChanges:
+    $ref: ./filter/getFilterChanges.yaml#/paths/~1kaia~1filter~1getFilterChanges
+  /kaia/filter/getFilterLogs:
+    $ref: ./filter/getFilterLogs.yaml#/paths/~1kaia~1filter~1getFilterLogs
+  /kaia/filter/newBlockFilter:
+    $ref: ./filter/newBlockFilter.yaml#/paths/~1kaia~1filter~1newBlockFilter
+  /kaia/filter/newPendingTransactionFilter:
+    $ref: ./filter/newPendingTransactionFilter.yaml#/paths/~1kaia~1filter~1newPendingTransactionFilter
+  /kaia/filter/uninstallFilter:
+    $ref: ./filter/uninstallFilter.yaml#/paths/~1kaia~1filter~1uninstallFilter
+  /kaia/filter/unsubscribe:
+    $ref: ./filter/unsubscribe.yaml#/paths/~1kaia~1filter~1unsubscribe
+  /kaia/filter/getLogs:
+    $ref: ./filter/getLogs.yaml#/paths/~1kaia~1filter~1getLogs
+  /kaia/filter/subscribe:
+    $ref: ./filter/subscribe.yaml#/paths/~1kaia~1filter~1subscribe
+  /kaia/filter/newFilter:
+    $ref: ./filter/newFilter.yaml#/paths/~1kaia~1filter~1newFilter
+
+  # kaia/gas
+  /kaia/gas/feeHistory:
+    $ref: ./gas/feeHistory.yaml#/paths/~1kaia~1gas~1feeHistory
+  /kaia/gas/lowerBoundGasPrice:
+    $ref: ./gas/lowerBoundGasPrice.yaml#/paths/~1kaia~1gas~1lowerBoundGasPrice
+  /kaia/gas/upperBoundGasPrice:
+    $ref: ./gas/upperBoundGasPrice.yaml#/paths/~1kaia~1gas~1upperBoundGasPrice
+  /kaia/gas/maxPriorityFeePerGas:
+    $ref: ./gas/maxPriorityFeePerGas.yaml#/paths/~1kaia~1gas~1maxPriorityFeePerGas
+
+  # kaia/miscellaneous
+  /kaia/miscellaneous/sha3:
+    $ref: ./miscellaneous/sha3.yaml#/paths/~1kaia~1miscellaneous~1sha3
+  /kaia/miscellaneous/getStakingInfo:
+    $ref: ./miscellaneous/getStakingInfo.yaml#/paths/~1kaia~1miscellaneous~1getStakingInfo
+  /kaia/miscellaneous/recoverFromTransaction:
+    $ref: ./miscellaneous/recoverFromTransaction.yaml#/paths/~1kaia~1miscellaneous~1recoverFromTransaction
+  /kaia/miscellaneous/recoverFromMessage:
+    $ref: ./miscellaneous/recoverFromMessage.yaml#/paths/~1kaia~1miscellaneous~1recoverFromMessage
+  /kaia/miscellaneous/getProof:
+    $ref: ./miscellaneous/getProof.yaml#/paths/~1kaia~1miscellaneous~1getProof
+  /kaia/miscellaneous/nodeAddress:
+    $ref: ./miscellaneous/nodeAddress.yaml#/paths/~1kaia~1miscellaneous~1nodeAddress
+  

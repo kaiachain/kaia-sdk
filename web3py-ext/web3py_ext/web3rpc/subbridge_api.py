@@ -17,12 +17,12 @@ class SubbridgeApi(Module):
     namespace = "subbridge"
     
     
-    _add_peer_node: Method[Callable[..., Any]] = Method(
-        namespace + "_addPeerNode", mungers=[default_root_munger]
+    _add_peer: Method[Callable[..., Any]] = Method(
+        namespace + "_addPeer", mungers=[default_root_munger]
     )
 
-    def add_peer_node(self, *args) -> Any:
-        return self._add_peer_node(*args)
+    def add_peer(self, *args) -> Any:
+        return self._add_peer(*args)
     
     
     _anchoring: Method[Callable[..., Any]] = Method(
@@ -121,6 +121,14 @@ class SubbridgeApi(Module):
         return self._list_bridge(*args)
     
     
+    _node_info: Method[Callable[..., Any]] = Method(
+        namespace + "_nodeInfo", mungers=[default_root_munger]
+    )
+
+    def node_info(self, *args) -> Any:
+        return self._node_info(*args)
+    
+    
     _parent_operator: Method[Callable[..., Any]] = Method(
         namespace + "_parentOperator", mungers=[default_root_munger]
     )
@@ -161,20 +169,12 @@ class SubbridgeApi(Module):
         return self._register_token(*args)
     
     
-    _remove_peer_node: Method[Callable[..., Any]] = Method(
-        namespace + "_removePeerNode", mungers=[default_root_munger]
+    _remove_peer: Method[Callable[..., Any]] = Method(
+        namespace + "_removePeer", mungers=[default_root_munger]
     )
 
-    def remove_peer_node(self, *args) -> Any:
-        return self._remove_peer_node(*args)
-    
-    
-    _retreive_node_info: Method[Callable[..., Any]] = Method(
-        namespace + "_retreiveNodeInfo", mungers=[default_root_munger]
-    )
-
-    def retreive_node_info(self, *args) -> Any:
-        return self._retreive_node_info(*args)
+    def remove_peer(self, *args) -> Any:
+        return self._remove_peer(*args)
     
     
     _send_chain_txslimit: Method[Callable[..., Any]] = Method(
@@ -206,12 +206,12 @@ class AsyncSubbridgeApi(Module):
     namespace = "subbridge"
     
     
-    _add_peer_node: Method[Callable[..., Awaitable[Any]]] = Method(
-        namespace + "_addPeerNode", mungers=[default_root_munger]
+    _add_peer: Method[Callable[..., Awaitable[Any]]] = Method(
+        namespace + "_addPeer", mungers=[default_root_munger]
     )
 
-    async def add_peer_node(self, *args) -> Any:
-        return await self._add_peer_node(*args)
+    async def add_peer(self, *args) -> Any:
+        return await self._add_peer(*args)
     
     
     _anchoring: Method[Callable[..., Awaitable[Any]]] = Method(
@@ -310,6 +310,14 @@ class AsyncSubbridgeApi(Module):
         return await self._list_bridge(*args)
     
     
+    _node_info: Method[Callable[..., Awaitable[Any]]] = Method(
+        namespace + "_nodeInfo", mungers=[default_root_munger]
+    )
+
+    async def node_info(self, *args) -> Any:
+        return await self._node_info(*args)
+    
+    
     _parent_operator: Method[Callable[..., Awaitable[Any]]] = Method(
         namespace + "_parentOperator", mungers=[default_root_munger]
     )
@@ -350,20 +358,12 @@ class AsyncSubbridgeApi(Module):
         return await self._register_token(*args)
     
     
-    _remove_peer_node: Method[Callable[..., Awaitable[Any]]] = Method(
-        namespace + "_removePeerNode", mungers=[default_root_munger]
+    _remove_peer: Method[Callable[..., Awaitable[Any]]] = Method(
+        namespace + "_removePeer", mungers=[default_root_munger]
     )
 
-    async def remove_peer_node(self, *args) -> Any:
-        return await self._remove_peer_node(*args)
-    
-    
-    _retreive_node_info: Method[Callable[..., Awaitable[Any]]] = Method(
-        namespace + "_retreiveNodeInfo", mungers=[default_root_munger]
-    )
-
-    async def retreive_node_info(self, *args) -> Any:
-        return await self._retreive_node_info(*args)
+    async def remove_peer(self, *args) -> Any:
+        return await self._remove_peer(*args)
     
     
     _send_chain_txslimit: Method[Callable[..., Awaitable[Any]]] = Method(

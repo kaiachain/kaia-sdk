@@ -78,19 +78,19 @@ paths:
                           }]
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../code-samples/curl/governance/myVotes.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../code-samples/java/src/main/java/opensdk/sdk/apis/governance/GovernanceMyVotesExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../code-samples/javascript/governance/myVotes.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref: "../../code-samples/python/governance/myVotes.py"

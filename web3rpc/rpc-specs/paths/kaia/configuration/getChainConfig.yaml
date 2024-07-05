@@ -1,0 +1,195 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/configuration/getChainConfig:
+    post:
+      operationId: ..getChainConfig
+      summary: "[Configuration] kaia_getChainConfig"
+      description: |
+        Returns the configuration of the chain.
+
+        **JSONRPC:** `kaia_getChainConfig`
+      tags:
+        - kaia
+
+      parameters:
+        - name: blockNumberOrTag
+          in: query
+          description: Integer or hexadecimal block number, or the string "earliest", "latest" or "pending" as in default block parameter.
+          required: false
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetChainConfigReq"
+
+      responses:
+        200:
+          description: The chain configuration of the chain.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetChainConfigResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/configuration/getChainConfig.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/configuration/KaiaGetChainConfigExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/configuration/getChainConfig.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/configuration/getChainConfig.py"
+
+components:
+  schemas:
+    KaiaGetChainConfigReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getChainConfig'
+        params:
+          type: array
+          items:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+          example:  [100]
+
+    KaiaGetChainConfigResp:
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            chainId:
+              type: integer
+            deriveShaImpl:
+              type: string
+            ethTxTypeCompatibleBlock:
+              type: integer
+            governance:
+              type: object
+              properties:
+                govParamContract:
+                  type: string
+                governanceMode:
+                  type: string
+                governingNode:
+                  type: string
+                kip71:
+                  type: object
+                  properties:
+                    basefeedenominator:
+                      type: integer
+                    gastarget:
+                      type: number
+                    lowerboundbasefee:
+                      type: number
+                    maxblockgasusedforbasefee:
+                      type: number
+                    upperboundbasefee:
+                      type: number
+                reward:
+                  type: object
+                  properties:
+                    deferredTxFee:
+                      type: boolean
+                    kip82ratio:
+                      type: string
+                    minimumStake:
+                      type: integer
+                    mintingAmount:
+                      type: number
+                    proposerUpdateInterval:
+                      type: integer
+                    ratio:
+                      type: string
+                    stakingUpdateInterval:
+                      type: integer
+                    useGiniCoeff:
+                      type: boolean
+            istanbul:
+              type: object
+              properties:
+                epoch:
+                  type: integer
+                policy:
+                  type: integer
+                sub:
+                  type: integer
+            istanbulCompatibleBlock:
+              type: integer
+            koreCompatibleBlock:
+              type: integer
+            londonCompatibleBlock:
+              type: integer
+            magmaCompatibleBlock:
+              type: integer
+            unitPrice:
+              type: number
+          example: {
+            "chainId": 1001,
+            "istanbulCompatibleBlock": 75373312,
+            "londonCompatibleBlock": 80295291,
+            "ethTxTypeCompatibleBlock": 86513895,
+            "magmaCompatibleBlock": 98347376,
+            "koreCompatibleBlock": 111736800,
+            "kip103CompatibleBlock": 119145600,
+            "kip103ContractAddress": "0xd5ad6d61dd87edabe2332607c328f5cc96aecb95",
+            "istanbul": {
+              "epoch": 604800,
+              "policy": 2,
+              "sub": 22
+              },
+            "unitPrice": 25000000000,
+            "deriveShaImpl": 2,
+            "governance": {
+              "governingNode": "0x99fb17d324fa0e07f23b49d09028ac0919414db6",
+              "governanceMode": "single",
+              "govParamContract": "0x0000000000000000000000000000000000000000",
+              "reward": {
+                "mintingAmount": 9600000000000000000,
+                "ratio": "34/54/12",
+                "kip82ratio": "20/80",
+                "useGiniCoeff": true,
+                "deferredTxFee": true,
+                "stakingUpdateInterval": 86400,
+                "proposerUpdateInterval": 3600,
+                "minimumStake": 5000000
+                },
+              "kip71": {
+                "lowerboundbasefee": 25000000000,
+                "upperboundbasefee": 750000000000,
+                "gastarget": 30000000,
+                "maxblockgasusedforbasefee": 60000000,
+                "basefeedenominator": 20
+                }
+              }
+            }

@@ -1,0 +1,162 @@
+openapi: "3.0.2"
+info:
+  title: Kaia Open API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/miscellaneous/getProof:
+    post:
+      summary: "[Miscellaneous] kaia_getProof"
+      tags:
+        - kaia
+      operationId: .getProof
+      description: |
+        Returns the account and storage values of the specified account including the Merkle-proof. This call can be used to verify that the data you are pulling from is not tampered with.
+
+        **JSONRPC:** `kaia_getProof`
+
+      parameters:
+        - name: account
+          in: query
+          description: Address of the account.
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/Address"
+        - name: keys
+          in: query
+          description: Array of storage-keys which should be proofed and included. See eth_getStorageAt
+          required: true
+          schema:
+            type: string
+            format: 32-byte DATA
+        - name: blockNumber
+          in: query
+          description: integer block number, or the string "latest" or "earliest", see the default block parameter
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: kaia_getProof
+                    params:
+                      type: array
+                      items:
+                        anyOf:
+                          - title: Address
+                            type: string
+                            format: 20-byte DATA
+                            description: Address of the account
+                          - title: Keys
+                            description: Array of storage-keys which should be proofed and included
+                            type: string
+                            format: 32-byte DATA
+                          - $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+                      example: [
+                        "0xe5cB067E90D5Cd1F8052B83562Ae670bA4A211a8",
+                        ["0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421"],
+                        "latest"
+                      ]
+
+      responses:
+        200:
+          description: A account object
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetProofResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/eth/others/getProof.sh"
+        # - lang: "Java"
+        #   label: "Java"
+        #   source:
+        #     $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/eth/others/EthGetProofExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+        #     $ref: "../../../code-samples/javascript/eth/others/getProof.js"
+        # - lang: "Python"
+        #   label: "Python"
+        #   source:
+        #     $ref: "../../../code-samples/python/eth/others/getProof.py"
+
+components:
+  schemas:
+    KaiaGetProofResp:
+      type: object
+      properties:
+        result:
+          type: object
+          required:
+            - balance
+            - codeHash
+            - nonce
+            - storageHash
+            - accountProof
+            - storageProof
+          description: Object - A account object
+          properties:
+            balance:
+              type: string
+              format: hex
+              description: the balance of the account. See eth_getBalance
+            codeHash:
+              type: string
+              format: 32-byte DATA
+              description: hash of the code of the account. For a simple Account without code it will return
+            nonce:
+              type: string
+              format: hex
+              description: nonce of the account. See eth_getTransactionCount
+            storageHash:
+              type: string
+              format: DATA
+              description: SHA3 of the StorageRoot. All storage will deliver a MerkleProof starting with this rootHash.
+            accountProof:
+              type: array
+              items:
+                type: string
+              description: Array of rlp-serialized MerkleTree-Nodes, starting with the stateRoot-Node, following the path of the SHA3 (address) as key.
+            storageProof:
+              type: array
+              items:
+                type: object
+                required:
+                  - key
+                  - value
+                  - proof
+                properties:
+                  key:
+                    type: string
+                    format: hex
+                    description: the requested storage key
+                  value:
+                    type: string
+                    format: hex
+                    description: the storage value
+                  proof:
+                    type: array
+                    items:
+                      type: string
+                    description: Array of rlp-serialized MerkleTree-Nodes, starting with the storageHash-Node, following the path of the SHA3 (key) as path.
+              description: Array of storage-entries as requested. Each entry is an object with these properties

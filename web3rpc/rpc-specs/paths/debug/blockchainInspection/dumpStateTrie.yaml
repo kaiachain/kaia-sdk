@@ -63,19 +63,19 @@ paths:
                   - $ref: "#/components/schemas/DumpStateTrieResp"
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../../code-samples/curl/debug/blockchainInspection/dumpStateTrie.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/debug/blockchainInspection/DebugDumpStateTrieExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
             $ref: "../../../code-samples/javascript/debug/blockchainInspection/dumpStateTrie.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref: "../../../code-samples/python/debug/blockchainInspection/dumpStateTrie.py"

@@ -61,19 +61,19 @@ paths:
                         example: "0x8474441674cdd47b35b875fd1a530b800b51a5264b9975fb21129eeb8c18582f"
 
       x-codeSamples:
-        - lang: "curl"
+        - lang: "Shell"
           label: "Curl"
           source:
             $ref: "../../code-samples/curl/personal/sendValueTransfer.sh"
-        - lang: "java"
+        - lang: "Java"
           label: "Java"
           source:
             $ref: "../../code-samples/java/src/main/java/opensdk/sdk/apis/personal/PersonalSendValueTransferExample.java"
-        - lang: "javascript"
+        - lang: "JavaScript"
           label: "Javascript"
           source:
            $ref: "../../code-samples/javascript/personal/sendValueTransfer.js"
-        - lang: "python"
+        - lang: "Python"
           label: "Python"
           source:
             $ref: "../../code-samples/python/personal/sendValueTransfer.py"

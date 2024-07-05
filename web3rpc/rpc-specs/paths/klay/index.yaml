@@ -127,10 +127,6 @@ paths:
     $ref: ./configuration/chainID.yaml#/paths/~1klay~1configuration~1chainID
   /klay/configuration/clientVersion:
     $ref: ./configuration/clientVersion.yaml#/paths/~1klay~1configuration~1clientVersion
-  /klay/configuration/gasPriceAt:
-    $ref: ./configuration/gasPriceAt.yaml#/paths/~1klay~1configuration~1gasPriceAt
-  /klay/configuration/gasPrice:
-    $ref: ./configuration/gasPrice.yaml#/paths/~1klay~1configuration~1gasPrice
   /klay/configuration/isParallelDBWrite:
     $ref: ./configuration/isParallelDBWrite.yaml#/paths/~1klay~1configuration~1isParallelDBWrite
   /klay/configuration/isSenderTxHashIndexingEnabled:
@@ -173,7 +169,10 @@ paths:
     $ref: ./gas/upperBoundGasPrice.yaml#/paths/~1klay~1gas~1upperBoundGasPrice
   /klay/gas/maxPriorityFeePerGas:
     $ref: ./gas/maxPriorityFeePerGas.yaml#/paths/~1klay~1gas~1maxPriorityFeePerGas
-
+  /klay/gas/gasPriceAt:
+    $ref: ./gas/gasPriceAt.yaml#/paths/~1klay~1gas~1gasPriceAt
+  /klay/gas/gasPrice:
+    $ref: ./gas/gasPrice.yaml#/paths/~1klay~1gas~1gasPrice
   # klay/miscellaneous
   /klay/miscellaneous/sha3:
     $ref: ./miscellaneous/sha3.yaml#/paths/~1klay~1miscellaneous~1sha3
@@ -187,4 +186,12 @@ paths:
     $ref: ./miscellaneous/getProof.yaml#/paths/~1klay~1miscellaneous~1getProof
   /klay/miscellaneous/nodeAddress:
     $ref: ./miscellaneous/nodeAddress.yaml#/paths/~1klay~1miscellaneous~1nodeAddress
-  
+ 
+  /klay/miscellaneous/getBlsInfos:
+    $ref: ./miscellaneous/getBlsInfos.yaml#/paths/~1klay~1miscellaneous~1getBlsInfos
+  /klay/miscellaneous/getActiveAddressFromRegistry:
+    $ref: ./miscellaneous/getActiveAddressFromRegistry.yaml#/paths/~1klay~1miscellaneous~1getActiveAddressFromRegistry
+  /klay/miscellaneous/getAllRecordsFromRegistry:
+    $ref: ./miscellaneous/getAllRecordsFromRegistry.yaml#/paths/~1klay~1miscellaneous~1getAllRecordsFromRegistry
+  /klay/miscellaneous/getTotalSupply:
+    $ref: ./miscellaneous/getTotalSupply.yaml#/paths/~1klay~1miscellaneous~1getTotalSupply

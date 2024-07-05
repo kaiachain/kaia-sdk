@@ -13,5 +13,5 @@ public class UrlConstants {
     public static final String GOVERNANCE_RPC= System.getenv().getOrDefault("GOVERNANCE_RPC", "https://dev.api.kcn191.klaytn.sotatek.works");
 
     public static final String PN_RPC = System.getenv().getOrDefault("PN_RPC", "http://172.16.1.223:8561");
-
+    public static final String KEN_RPC="http://3.39.84.202:8651/";
 }

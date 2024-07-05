@@ -8,7 +8,7 @@ import org.web3j.rlp.RlpDecoder;
 import org.web3j.rlp.RlpList;
 import org.web3j.rlp.RlpString;
 import org.web3j.rlp.RlpType;
-import org.web3j.utils.KlayTransactionUtils;
+import org.web3j.utils.KaiaTransactionUtils;
 import org.web3j.utils.Numeric;
 
 public class TxTypeSmartContractExecution  extends AbstractTxType   {
@@ -70,7 +70,7 @@ public class TxTypeSmartContractExecution  extends AbstractTxType   {
      * @return Type transaction type
      */
     @Override
-    public TxType.Type getKlayType() {
+    public TxType.Type getKaiaType() {
         return TxType.Type.SMART_CONTRACT_EXECUTION;
     }
 
@@ -83,7 +83,7 @@ public class TxTypeSmartContractExecution  extends AbstractTxType   {
     public static TxTypeSmartContractExecution decodeFromRawTransaction(byte[] rawTransaction) {
         //TxHashRLP = type + encode([nonce, gasPrice, gas, to, value, from, input, txSignatures])
         try {
-            byte[] rawTransactionExceptType = KlayTransactionUtils.getRawTransactionNoType(rawTransaction);
+            byte[] rawTransactionExceptType = KaiaTransactionUtils.getRawTransactionNoType(rawTransaction);
             RlpList rlpList = RlpDecoder.decode(rawTransactionExceptType);
             List<RlpType> values = ((RlpList) rlpList.getValues().get(0)).getValues();
 

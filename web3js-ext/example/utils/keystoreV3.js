@@ -30,26 +30,26 @@ const password = "password";
 const password2 = "password2";
 
 async function main() {
-  web3.eth.accounts.wallet.decrypt([JSON.parse(encryptedKey)], password).then((account) => {
-    console.log("\ndecrypted address");
-    console.log(account[0].address);
+  const accounts = await web3.eth.accounts.wallet.decrypt([JSON.parse(encryptedKey)], password);
 
-    console.log("\ndecrypted privateKey");
-    console.log(account[0].privateKey);
+  console.log("\ndecrypted address");
+  console.log(accounts[0].address);
 
-    web3.eth.accounts.wallet.encrypt(password2).then((encryptedKey2) => {
-      // Delete account before adding the same account already existing in the wallet.
-      web3.eth.accounts.wallet.remove(encryptedKey2[0].address);
+  console.log("\ndecrypted privateKey");
+  console.log(accounts[0].privateKey);
 
-      web3.eth.accounts.wallet.decrypt(encryptedKey2, password2).then((account2) => {
-        console.log("\ndecrypted address with new password");
-        console.log(account2[0].address);
+  const encryptedKey2 = await web3.eth.accounts.wallet.encrypt(password2);
 
-        console.log("\ndecrypted privateKey with new password");
-        console.log(account2[0].privateKey);
-      });
-    });
-  });
+  // Delete account before adding the same account already existing in the wallet.
+  web3.eth.accounts.wallet.remove(encryptedKey2[0].address);
+
+  const accounts2 = await web3.eth.accounts.wallet.decrypt(encryptedKey2, password2);
+
+  console.log("\ndecrypted address with new password");
+  console.log(accounts2[0].address);
+
+  console.log("\ndecrypted privateKey with new password");
+  console.log(accounts2[0].privateKey);
 }
 
 main();

@@ -94,7 +94,7 @@ jobs:
         run: |
           cd web3j-ext/web3j-ext && gradle build && gradle publish \
           && cd build/libs && zip -r web3j-ext.zip io \
-          && curl POST --verbose --header "Authorization: Bearer $PUBLISHER_TOKEN" --form bundle=@web3rpc-java.zip https://central.sonatype.com/api/v1/publisher/upload
+          && curl POST --verbose --header "Authorization: Bearer $PUBLISHER_TOKEN" --form bundle=@web3j-ext.zip https://central.sonatype.com/api/v1/publisher/upload
         env:
           PUBLISHER_TOKEN: ${{ secrets.PUBLISHER_TOKEN }}
           PUBLISH_TO_MAVEN_PUBLIC: true

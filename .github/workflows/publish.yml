@@ -89,15 +89,14 @@ jobs:
           packages-dir: web3py-ext/dist
 
       - name: Publish web3j-ext
-        if: steps.verify-changed-files.outputs.web3j-ext_any_changed == 'true'   
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: publish
-          build-root-directory: web3j-ext/web3j-ext
-          gradle-version: release-candidate
+        if: steps.verify-changed-files.outputs.web3j-ext_any_changed == 'true'
+        shell: bash
+        run: |
+          cd web3j-ext/web3j-ext && gradle build && gradle publish \
+          && cd build/libs && zip -r web3j-ext.zip io \
+          && curl POST --verbose --header "Authorization: Bearer $PUBLISHER_TOKEN" --form bundle=@web3rpc-java.zip https://central.sonatype.com/api/v1/publisher/upload
         env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          PUBLISHER_TOKEN: ${{ secrets.PUBLISHER_TOKEN }}
           PUBLISH_TO_MAVEN_PUBLIC: true
           ORG_GRADLE_PROJECT_SIGNINGPASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
           ORG_GRADLE_PROJECT_SIGNINGKEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}

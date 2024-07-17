@@ -136,8 +136,7 @@ jobs:
         run: |
           cd web3rpc/sdk/client/java && bash -x java-generate.sh  && cd -
         env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          PUBLISH_TO_MAVEN_PUBLIC: true
           ORG_GRADLE_PROJECT_SIGNINGPASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
           ORG_GRADLE_PROJECT_SIGNINGKEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
 
@@ -149,6 +148,7 @@ jobs:
           && curl POST --verbose --header "Authorization: Bearer $PUBLISHER_TOKEN" --form bundle=@web3rpc-java.zip https://central.sonatype.com/api/v1/publisher/upload
         env:
           PUBLISHER_TOKEN: ${{ secrets.PUBLISHER_TOKEN }}
+          PUBLISH_TO_MAVEN_PUBLIC: true
           ORG_GRADLE_PROJECT_SIGNINGPASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
           ORG_GRADLE_PROJECT_SIGNINGKEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
           

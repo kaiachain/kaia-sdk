@@ -4,6 +4,7 @@ inputSpec: ../../../rpc-specs/namespaces/all-except-eth.yaml
 groupId: io.kaia
 artifactId: web3rpc-java
 artifactVersion: v1.0.0
+description: web3rpc-java
 library: retrofit2
 templateDir: ./template
 globalProperties:

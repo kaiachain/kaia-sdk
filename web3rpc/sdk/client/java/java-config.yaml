@@ -2,6 +2,7 @@ generatorName: web3rpc-java
 outputDir: ./openapi/
 inputSpec: ../../../rpc-specs/namespaces/all-except-eth.yaml 
 groupId: io.kaia
+description: RPC API SDK for kaia blockchain node
 artifactId: web3rpc-java
 artifactVersion: v1.0.0
 library: retrofit2

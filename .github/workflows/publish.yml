@@ -136,21 +136,19 @@ jobs:
         run: |
           cd web3rpc/sdk/client/java && bash -x java-generate.sh  && cd -
         env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          PUBLISH_TO_MAVEN_PUBLIC: true
           ORG_GRADLE_PROJECT_SIGNINGPASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
           ORG_GRADLE_PROJECT_SIGNINGKEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
 
       - name: Publish web3rpc-java sdk
-        if: steps.verify-changed-files.outputs.web3rpc_any_changed   == 'true' 
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: publish
-          build-root-directory: web3rpc/sdk/client/java/openapi
-          gradle-version: release-candidate
+        if: steps.verify-changed-files.outputs.web3rpc_any_changed   == 'true'
+        run: |
+          cd web3rpc/sdk/client/java/openapi && gradle build && gradle publish \
+          && cd build/libs && zip -r web3rpc-java.zip io \
+          && curl POST --verbose --header "Authorization: Bearer $PUBLISHER_TOKEN" --form bundle=@web3rpc-java.zip https://central.sonatype.com/api/v1/publisher/upload
         env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          PUBLISHER_TOKEN: ${{ secrets.PUBLISHER_TOKEN }}
+          PUBLISH_TO_MAVEN_PUBLIC: true
           ORG_GRADLE_PROJECT_SIGNINGPASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
           ORG_GRADLE_PROJECT_SIGNINGKEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
           

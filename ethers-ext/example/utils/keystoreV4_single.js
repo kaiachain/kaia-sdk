@@ -1,6 +1,6 @@
 const {
   Wallet
-} = require("@klaytn/ethers-ext");
+} = require("@kaiachain/ethers-ext");
 
 // Klaytn V4 with one key. kcn account new --lightkdf
 const encryptedKey = `{

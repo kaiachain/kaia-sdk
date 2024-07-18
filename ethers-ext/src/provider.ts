@@ -5,9 +5,9 @@ import {
   JsonRpcSigner as EthersJsonRpcSigner } from "@ethersproject/providers";
 import { ConnectionInfo } from "@ethersproject/web";
 
-import { asyncOpenApi, AsyncNamespaceApi } from "@klaytn/js-ext-core";
-// @ts-ignore: package @klaytn/web3rpc has no .d.ts file.
-import { AdminApi, DebugApi, GovernanceApi, KlayApi, NetApi, PersonalApi, TxpoolApi } from "@klaytn/web3rpc";
+import { asyncOpenApi, AsyncNamespaceApi } from "@kaiachain/js-ext-core";
+// @ts-ignore: package @kaiachain/web3rpc has no .d.ts file.
+import { AdminApi, DebugApi, GovernanceApi, KlayApi, NetApi, PersonalApi, TxpoolApi } from "@kaiachain/web3rpc";
 
 import { JsonRpcSigner } from "./signer";
 

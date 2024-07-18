@@ -1,20 +1,20 @@
 {
-    "name": "@klaytn/web3js-ext",
-    "version": "1.0.2",
+    "name": "@kaiachain/web3js-ext",
+    "version": "1.0.0",
     "license": "MIT",
-    "description": "web3.js extension for Klaytn blockchain",
+    "description": "web3.js extension for kaiachain blockchain",
     "keywords": [
         "ethereum",
         "web3",
         "web3.js",
-        "klaytn",
-        "klaytn sdk",
-        "klaytn api"
+        "kaiachain",
+        "kaiachain sdk",
+        "kaiachain api"
     ],
-    "homepage": "https://github.com/klaytn/web3klaytn/tree/dev/web3js-ext",
+    "homepage": "https://github.com/kaiachain/kaia-sdk/tree/dev/web3js-ext",
     "repository": {
         "type": "git",
-        "url": "https://github.com/klaytn/web3klaytn"
+        "url": "https://github.com/kaiachain/kaia-sdk"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -34,7 +34,7 @@
         "prepublishOnly": "npm run build"
     },
     "devDependencies": {
-        "@klaytn/web3js-ext": "file:./",
+        "@kaiachain/web3js-ext": "file:./",
         "@types/chai": "^4.3.4",
         "@types/chai-as-promised": "^7.1.5",
         "@types/lodash": "^4.14.192",
@@ -52,8 +52,8 @@
         "webpack-cli": "^5.1.4"
     },
     "dependencies": {
-        "@klaytn/js-ext-core": "^1.0.0",
-        "@klaytn/web3rpc": "^0.9.9",
+        "@kaiachain/js-ext-core": "^1.0.0",
+        "@kaiachain/web3rpc": "^1.0.0",
         "ethereum-cryptography": "^2.1.2",
         "lodash": "^4.17.21",
         "web3": "^4.1.0"

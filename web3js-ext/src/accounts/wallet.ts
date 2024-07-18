@@ -1,5 +1,5 @@
 
-import { isKIP3Json } from "@klaytn/js-ext-core";
+import { isKIP3Json } from "@kaiachain/js-ext-core";
 import { Wallet as EthWallet } from "web3-eth-accounts";
 import { Web3BaseWalletAccount, KeyStore } from "web3-types";
 

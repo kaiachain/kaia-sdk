@@ -1,4 +1,4 @@
-const { JsonRpcProvider } = require("@klaytn/ethers-ext");
+const { JsonRpcProvider } = require("@kaiachain/ethers-ext");
 
 (async () => {
   const provider = new JsonRpcProvider("https://public-en-baobab.klaytn.net");

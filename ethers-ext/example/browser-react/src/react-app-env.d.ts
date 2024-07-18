@@ -1,5 +1,5 @@
 /// <reference types="react-scripts" />
-import { ExternalProvider } from "@klaytn/ethers-ext";
+import { ExternalProvider } from "@kaiachain/ethers-ext";
 
 declare global {
   interface Window {

@@ -1647,7 +1647,7 @@ components:
           description: Overrides the default timeout of 5 seconds for trace-enabled EVM execution. A duration string can be anything that is accepted by [Go time.ParseDuration](https://pkg.go.dev/time#ParseDuration) function such as "10s" or "300ms".
         tracer:
           type: string
-          enum: [null,"4byteTracer","callTracer","fastCallTracer","evmdisTracer","noopTracer","opcountTracer","prestateTracer","revertTracer","unigramTracer","bigramTracer","trigramTracer", "custom javascript tracer code"]
+          enum: ["null", "4byteTracer","callTracer","fastCallTracer","evmdisTracer","noopTracer","opcountTracer","prestateTracer","revertTracer","unigramTracer","bigramTracer","trigramTracer", "custom javascript tracer code"]
           description: |
             If this field is empty or null, then the structLog tracer is used where the execution of every opcode is shown in detail. This null tracer is extremely heavy and usually too verbose for any debugging purpose, so it is advised to use other predefined tracers. This field can be the name of one of the predefined tracers shown below.
             

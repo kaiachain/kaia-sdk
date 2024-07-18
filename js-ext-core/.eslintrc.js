@@ -38,7 +38,7 @@ module.exports = {
     "import/order": ["warn", {
       "alphabetize": { "order": "asc", "caseInsensitive": true },
       "pathGroups": [
-        { "pattern": "@klaytn/**", "group": "external", "position": "after" },
+        { "pattern": "@kaiachain/**", "group": "external", "position": "after" },
       ],
       "newlines-between": "always",
     }],

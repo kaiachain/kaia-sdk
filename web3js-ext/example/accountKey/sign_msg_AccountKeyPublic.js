@@ -1,7 +1,7 @@
 // AccountKeyPublic
 // https://docs.klaytn.foundation/docs/learn/accounts/
 
-const { Web3 } = require("@klaytn/web3js-ext");
+const { Web3 } = require("@kaiachain/web3js-ext");
 
 // Using senderPriv == senderNewPriv to execute this example repeatedly.
 // But you might want to register a different private key.

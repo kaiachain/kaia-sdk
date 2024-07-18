@@ -3,7 +3,7 @@ import { Bytes } from "@ethersproject/bytes";
 import { ProgressCallback, decryptKeystore, decryptKeystoreSync } from "@ethersproject/json-wallets";
 import _ from "lodash";
 
-import { isKIP3Json, splitKeystoreKIP3 } from "@klaytn/js-ext-core";
+import { isKIP3Json, splitKeystoreKIP3 } from "@kaiachain/js-ext-core";
 
 // Decrypted keystore private keys.
 export interface KeystoreAccountList {

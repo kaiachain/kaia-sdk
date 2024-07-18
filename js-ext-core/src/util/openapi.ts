@@ -70,8 +70,8 @@ export function promisifyMethod(openApi: NamespaceApi, methodName: string | symb
   //   https://github.com/klaytn/web3klaytn/blob/dev/web3rpc/sdk/client/javascript/template/libraries/javascript/api.mustache
   //   https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator/src/main/java/org/openapitools/codegen/languages/JavascriptClientCodegen.java
   // Or the generated code
-  //   https://www.npmjs.com/package/@klaytn/web3rpc?activeTab=code
-  //   @klaytn/web3rpc/dist/api/KlayApi.js
+  //   https://www.npmjs.com/package/@kaiachain/web3rpc?activeTab=code
+  //   @kaiachain/web3rpc/dist/api/KlayApi.js
   return async function (...args: any[]): Promise<any> {
     if (args.length < numRequiredArgs) {
       throw new Error(`API ${String(methodName)} expects ${numRequiredArgs} or more arguments, got ${args.length}`);

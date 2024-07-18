@@ -1,5 +1,5 @@
 import { RLP } from "@ethereumjs/rlp";
-import { KlaytnTxFactory, TxType, isFeePayerSigTxType, KlaytnTx as CoreKlaytnTx } from "@klaytn/js-ext-core";
+import { KlaytnTxFactory, TxType, isFeePayerSigTxType, KlaytnTx as CoreKlaytnTx } from "@kaiachain/js-ext-core";
 import { keccak256 } from "ethereum-cryptography/keccak.js";
 import * as ethereumCryptography from "ethereum-cryptography/secp256k1.js";
 import { Transaction as LegacyTransaction, TxOptions, ECDSASignature } from "web3-eth-accounts";

@@ -37,7 +37,7 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@kaia/ethers-ext": "file:./",
+    "@kaiachain/ethers-ext": "file:./",
     "@types/chai": "^4.3.7",
     "@types/chai-as-promised": "^7.1.5",
     "@types/lodash": "^4.14.192",

@@ -4,7 +4,7 @@ const {
   getSignatureTuple,
   formatKlayUnits, parseKlayUnits,
   formatKlay, parseKlay,
-} = require("@klaytn/ethers-ext");
+} = require("@kaiachain/ethers-ext");
 
 async function main() {
   // Transaction and AccountKey types

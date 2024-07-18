@@ -10,16 +10,16 @@ Web3.js Extension for Klaytn offers:
 
 - Install
     ```sh
-    npm install --save @klaytn/web3js-ext
+    npm install --save @kaiachain/web3js-ext
     ```
 - ESM or TypeScript
     ```ts
-    import { Web3 } from "@klaytn/web3js-ext";
+    import { Web3 } from "@kaiachain/web3js-ext";
     const web3 = new Web3("https://public-en-baobab.klaytn.net");
     ```
 - CommonJS
     ```js
-    const { Web3 } = require("@klaytn/web3js-ext");
+    const { Web3 } = require("@kaiachain/web3js-ext");
     const web3 = new Web3("https://public-en-baobab.klaytn.net");
     ```
 
@@ -28,7 +28,7 @@ Web3.js Extension for Klaytn offers:
 It is not recommended to use CDNs in production, But you can use below for quick prototyping.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@klaytn/web3js-ext@latest/dist/web3js-ext.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@kaiachain/web3js-ext@latest/dist/web3js-ext.bundle.js"></script>
 <script>
 const web3 = new web3_ext.Web3(window.klaytn);
 </script>

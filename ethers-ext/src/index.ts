@@ -1,12 +1,12 @@
 // Pass-through js-ext-core exports
-export * from "@klaytn/js-ext-core/util";
+export * from "@kaiachain/js-ext-core/util";
 export {
   AccountKey,
   AccountKeyFactory,
   KlaytnTx,
   KlaytnTxFactory,
   parseTransaction,
-} from "@klaytn/js-ext-core";
+} from "@kaiachain/js-ext-core";
 
 // ethers-ext classes and functions
 export * from "./accountStore";

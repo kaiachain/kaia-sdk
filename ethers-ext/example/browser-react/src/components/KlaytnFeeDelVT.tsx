@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Account } from '../types';
 import { doSignTx } from '../util';
-import { TxType, parseKlay } from '@klaytn/js-ext-core';
+import { TxType, parseKlay } from '@kaiachain/js-ext-core';
 
 type Props = {
   account: Account;

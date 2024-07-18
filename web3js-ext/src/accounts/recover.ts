@@ -1,4 +1,4 @@
-import { isKlaytnTxType, parseTransaction } from "@klaytn/js-ext-core";
+import { isKlaytnTxType, parseTransaction } from "@kaiachain/js-ext-core";
 import { recoverTransaction as ethRecoverTransaction } from "web3-eth-accounts";
 import { Address } from "web3-types";
 import { toChecksumAddress } from "web3-utils";

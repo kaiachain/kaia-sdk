@@ -3,7 +3,7 @@
 
 const { ethers } = require("ethers");
 
-const { Wallet, TxType, AccountKeyType } = require("@klaytn/ethers-ext");
+const { Wallet, TxType, AccountKeyType } = require("@kaiachain/ethers-ext");
 
 // Using same senderNewPriv keys to execute this example repeatedly.
 // But you might want to register the different private keys.
@@ -34,7 +34,7 @@ async function main() {
         [1, pub1],
         [1, pub2],
         [1, pub3],
-        // TODO: use { weight, key } format after @klaytn/js-ext-core v1.0.1
+        // TODO: use { weight, key } format after @kaiachain/js-ext-core v1.0.1
         // { weight: 1, key: pub1 },
         // { weight: 1, key: pub2 },
         // { weight: 1, key: pub3 },

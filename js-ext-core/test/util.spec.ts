@@ -4,8 +4,8 @@ import { assert } from "chai";
 import { describe, it } from "mocha";
 import { toWei, fromWei } from "web3-utils";
 /* eslint-disable */
-// @ts-ignore: package @klaytn/web3rpc has no .d.ts file.
-//import { ApiClient, KlayApi } from "@klaytn/web3rpc";
+// @ts-ignore: package @kaiachain/web3rpc has no .d.ts file.
+//import { ApiClient, KlayApi } from "@kaiachain/web3rpc";
 /* eslint-enable */
 
 import {
@@ -430,8 +430,8 @@ describe("util", () => {
     //* /
 
     // Uncomment to test with real OpenApi generated codes.
-    /* // (1) @klaytn/web3rpc
-    const { KlayApi } = require("@klaytn/web3rpc");
+    /* // (1) @kaiachain/web3rpc
+    const { KlayApi } = require("@kaiachain/web3rpc");
     //*/
 
     //* // (2) Test mock

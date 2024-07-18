@@ -16,8 +16,8 @@ repositories {
 }
 
 dependencies {
-        implementation "foundation.klaytn:web3j-ext:v0.9.3"
-        implementation "foundation.klaytn:web3rpc-java:v0.9.0"
+        implementation "io.kaia:web3j-ext:v1.0.0"
+        implementation "io.kaia:web3rpc-java:v1.0.0"
         implementation "org.web3j:core:4.9.8"
 }
 ````
@@ -28,7 +28,7 @@ See [example](./web3j-ext/src/main/java/org/web3j/example).
 For basic web3j usage, you can learn through [Web3j tutorial](https://docs.web3j.io/4.10.0/quickstart/) .
 
 ### Send Fee Delegated Transaction on Baobab Test network
-If you want to know more about the concept of fee delegated transaction supported by Kaia network, please refer to [Kaia docs](https://docs.klaytn.foundation/content/klaytn/design/transactions).
+If you want to know more about the concept of fee delegated transaction supported by Kaia network, please refer to [Kaia docs](https://docs.kaia.io/docs/learn/transactions/).
 
 Check FeeDelegatedValueTransferExample.java file in web3j-ext [examples](https://github.com/kaiachain/kaia-sdk/tree/dev/web3j-ext/web3j-ext/src/main/java/org/web3j/example).
 ```file

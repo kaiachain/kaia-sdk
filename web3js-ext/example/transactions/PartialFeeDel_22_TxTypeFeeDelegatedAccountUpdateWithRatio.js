@@ -1,7 +1,7 @@
 // TxTypeFeeDelegatedAccountUpdateWithRatio
 // https://docs.klaytn.foundation/docs/learn/transactions/
 
-const { Web3, TxType, AccountKeyType, getPublicKeyFromPrivate } = require("@klaytn/web3js-ext");
+const { Web3, TxType, AccountKeyType, getPublicKeyFromPrivate } = require("@kaiachain/web3js-ext");
 
 // Using senderPriv == senderNewPriv to execute this example repeatedly.
 // But you might want to register a different private key.

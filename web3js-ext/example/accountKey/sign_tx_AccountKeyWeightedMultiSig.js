@@ -1,7 +1,7 @@
 // AccountKeyWeightedMultiSig
 // https://docs.klaytn.foundation/docs/learn/accounts/
 
-const { Web3, TxType, toPeb } = require("@klaytn/web3js-ext");
+const { Web3, TxType, toPeb } = require("@kaiachain/web3js-ext");
 
 const senderAddr = "0x2bf611d14d330fd3688d10f2201321eacc8aa2ce";
 const senderPriv1 = "0x31fadf868e68fd2e3f7a1c528023c9a86a45db850e9d6b82c1a82d4c75b469d1";

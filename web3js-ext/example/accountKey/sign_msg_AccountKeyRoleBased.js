@@ -1,7 +1,7 @@
 // AccountKeyRoleBased
 // https://docs.klaytn.foundation/docs/learn/accounts/
 
-const { Web3 } = require("@klaytn/web3js-ext");
+const { Web3 } = require("@kaiachain/web3js-ext");
 
 const senderAddr = "0x334b4d3c775c45c59de54e9f0408cba25a1aece7";
 const senderRoleTransactionPriv = "0xc9668ccd35fc20587aa37a48838b48ccc13cf14dd74c8999dd6a480212d5f7ac";

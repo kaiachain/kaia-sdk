@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 NAME = "web3py_ext"
-VERSION = "1.0.2"
+VERSION = "1.0.0"
 # To install the library, run the following
 #
 # python setup.py install
@@ -15,11 +15,11 @@ REQUIRES = [
 setup(
     name=NAME,
     version=VERSION,
-    description="web3klaytn",
-    author="Klaytn Foundation",
+    description="kaia-sdk",
+    author="kaia Foundation",
     author_email="",
-    url="https://github.com/klaytn/web3klaytn",
-    keywords=["klaytn", "ethereum", "role-based", "multisig"],
+    url="https://github.com/kaiachain/kaia-sdk",
+    keywords=["kaia", "klaytn", "ethereum", "role-based", "multisig"],
     python_requires=">=3.7",
     install_requires=REQUIRES,
     packages=find_packages(exclude=["test", "tests"]),

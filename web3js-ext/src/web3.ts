@@ -1,6 +1,6 @@
-import { AsyncNamespaceApi, rpcSendFunction, asyncOpenApi } from "@klaytn/js-ext-core";
-// @ts-ignore: package @klaytn/web3rpc has no .d.ts file.
-import { AdminApi, DebugApi, GovernanceApi, KlayApi, NetApi, PersonalApi, TxpoolApi } from "@klaytn/web3rpc";
+import { AsyncNamespaceApi, rpcSendFunction, asyncOpenApi } from "@kaiachain/js-ext-core";
+// @ts-ignore: package @kaiachain/web3rpc has no .d.ts file.
+import { AdminApi, DebugApi, GovernanceApi, KlayApi, NetApi, PersonalApi, TxpoolApi } from "@kaiachain/web3rpc";
 import { Web3 } from "web3";
 import {
   Web3Context,

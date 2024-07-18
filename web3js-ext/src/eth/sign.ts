@@ -17,7 +17,7 @@ along with web3.js.  If not, see <http://www.gnu.org/licenses/>.
 // Taken from https://github.com/web3/web3.js/blob/v4.3.0/packages/web3-eth/src/rpc_method_wrappers.ts
 // Modified to support Klaytn TxTypes
 
-import { HexStr, getKaikasTxType, getRpcTxObject, isKlaytnTxType, parseTransaction } from "@klaytn/js-ext-core";
+import { HexStr, getKaikasTxType, getRpcTxObject, isKlaytnTxType, parseTransaction } from "@kaiachain/js-ext-core";
 import { Web3Context } from "web3-core";
 import {
   estimateGas,
@@ -126,7 +126,7 @@ function getTransactionSignedAPI(rawTransaction: string): TransactionSignedAPI {
     value: HexStr.fromNumber(tx.value),
     input: tx.data || "0x",
     data: tx.data || "0x",
-    chainId: HexStr.fromNumber(tx.chainId),
+    chainId: HexStr.fromNumber(tx.chainId || 0),
     // Becuase Klaytn Tx may contain multiple signatures,
     // we do not return v,r,s to avoid confusion.
     v: "",

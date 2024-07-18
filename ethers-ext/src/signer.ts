@@ -31,7 +31,7 @@ import {
   isFeePayerSigTxType,
   parseTxType,
   getKaikasTxType,
-} from "@klaytn/js-ext-core";
+} from "@kaiachain/js-ext-core";
 
 import { decryptKeystoreList, decryptKeystoreListSync } from "./keystore";
 import {
@@ -50,7 +50,7 @@ import {
 import { PrivateKeyLike, ExternalProvider } from "./types";
 
 
-const logger = new Logger("@klaytn/ethers-ext");
+const logger = new Logger("@kaiachain/ethers-ext");
 
 export class Wallet extends EthersWallet {
   // Override Wallet factories accepting keystores to support both v3 and v4 (KIP-3) formats

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Account } from '../types';
 import { doSendTx } from '../util';
-import { parseKlay } from '@klaytn/ethers-ext';
+import { parseKlay } from '@kaiachain/ethers-ext';
 
 type Props = {
   account: Account;

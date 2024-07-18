@@ -1,4 +1,4 @@
-const { Wallet, util } = require("@klaytn/ethers-ext");
+const { Wallet, util } = require("@kaiachain/ethers-ext");
 
 // Eth V3. ethers.Wallet.createRandom().encrypt("password")
 const encryptedKey = `{

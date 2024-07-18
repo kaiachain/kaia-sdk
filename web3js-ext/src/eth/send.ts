@@ -17,7 +17,7 @@ along with web3.js.  If not, see <http://www.gnu.org/licenses/>.
 // Taken from https://github.com/web3/web3.js/blob/v4.3.0/packages/web3-eth/src/rpc_method_wrappers.ts
 // Modified to support Klaytn TxTypes
 
-import { getKaikasTxType, getRpcTxObject, isKlaytnTxType, parseTransaction } from "@klaytn/js-ext-core";
+import { getKaikasTxType, getRpcTxObject, isKlaytnTxType, parseTransaction } from "@kaiachain/js-ext-core";
 import { Web3Context, Web3PromiEvent } from "web3-core";
 import {
   estimateGas,

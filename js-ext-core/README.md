@@ -2,7 +2,7 @@
 
 Sub-components of Klaytn JavaScript SDKs.
 
-For dApp developers and blockchain users, use the SDKs like [@klaytn/ethers-ext](https://www.npmjs.com/package/@klaytn/ethers-ext) and [@klaytn/web3js-ext](https://www.npmjs.com/package/@klaytn/web3js-ext).
+For dApp developers and blockchain users, use the SDKs like [@kaiachain/ethers-ext](https://www.npmjs.com/package/@kaiachain/ethers-ext) and [@kaiachain/web3js-ext](https://www.npmjs.com/package/@kaiachain/web3js-ext).
 
 - `FieldSetFactory` to easily build custom RLP-encodable types
 - `AccountKeyFactory` for Klaytn account objects
@@ -12,12 +12,12 @@ For dApp developers and blockchain users, use the SDKs like [@klaytn/ethers-ext]
 - `getCompressedPublicKey` and `getSignatureTuple` to normalize cryptographic data
 - `splitKeystoreKIP3` for handling KIP-3 JSON keystore
 - `formatKlay` and `parseKlay` to convert KLAY denominations
-- `asyncOpenApi` to promisify [@klaytn/web3rpc](https://www.npmjs.com/package/@klaytn/web3rpc) methods
+- `asyncOpenApi` to promisify [@kaiachain/web3rpc](https://www.npmjs.com/package/@kaiachain/web3rpc) methods
 
 ## Install
 
 ```
-npm install --save @klaytn/js-ext-core
+npm install --save @kaiachain/js-ext-core
 ```
 
 ## Usage

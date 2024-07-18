@@ -67,7 +67,7 @@ export function promisifyMethod(openApi: NamespaceApi, methodName: string | symb
   // But because JSON-RPC API expects all parameters to be passed, the "optional" parameters are actually "required".
   //
   // For details, see the codegen frameworks
-  //   https://github.com/klaytn/web3klaytn/blob/dev/web3rpc/sdk/client/javascript/template/libraries/javascript/api.mustache
+  //   https://github.com/kaiachain/kaia-sdk/blob/dev/web3rpc/sdk/client/javascript/template/libraries/javascript/api.mustache
   //   https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator/src/main/java/org/openapitools/codegen/languages/JavascriptClientCodegen.java
   // Or the generated code
   //   https://www.npmjs.com/package/@kaiachain/web3rpc?activeTab=code

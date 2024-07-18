@@ -1,8 +1,8 @@
-# Web3.js Extension for Klaytn
+# Web3.js Extension for kaia
 
-Web3.js Extension for Klaytn offers:
+Web3.js Extension for kaia offers:
 
-- Drop-in replacement to `new Web3(...)` that supports both Ethereum and Klaytn transaction types involving AccountKey and TxTypes. See [Modifications to the Web3 object](#modifications-to-the-web3-object) section for details
+- Drop-in replacement to `new Web3(...)` that supports both Ethereum and kaia transaction types involving AccountKey and TxTypes. See [Modifications to the Web3 object](#modifications-to-the-web3-object) section for details
 
 ## Install
 

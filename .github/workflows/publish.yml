@@ -114,21 +114,6 @@ jobs:
         run: |
           cd ethers-ext && npx pnpm --filter "@kaiachain/*" -r publish --publish-branch main --no-git-check --access=public && cd -
 
-            
-      - name: generate web3rpc-javascript sdk
-        if: steps.verify-changed-files.outputs.web3rpc_any_changed == 'true' 
-        shell: bash
-        run: |
-          cd web3rpc/sdk/client/javascript && bash -x javascript-generate.sh && cd -
-
-      - name: publish web3rpc-javascript sdk
-        if: steps.verify-changed-files.outputs.web3rpc_any_changed == 'true'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          cd web3rpc/sdk/client/javascript/openapi && npx pnpm --filter "@kaiachain/*" -r publish --publish-branch main --no-git-check --access=public && cd -
-
-
       - name: generate web3rpc-java sdk
         if: steps.verify-changed-files.outputs.web3rpc_any_changed  == 'true' 
         shell: bash
@@ -150,7 +135,20 @@ jobs:
           PUBLISH_TO_MAVEN_PUBLIC: true
           ORG_GRADLE_PROJECT_SIGNINGPASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
           ORG_GRADLE_PROJECT_SIGNINGKEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
-          
+            
+      - name: generate web3rpc-javascript sdk
+        if: steps.verify-changed-files.outputs.web3rpc_any_changed == 'true' 
+        shell: bash
+        run: |
+          cd web3rpc/sdk/client/javascript && bash -x javascript-generate.sh && cd -
+
+      - name: publish web3rpc-javascript sdk
+        if: steps.verify-changed-files.outputs.web3rpc_any_changed == 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          cd web3rpc/sdk/client/javascript/openapi && npx pnpm --filter "@kaiachain/*" -r publish --publish-branch main --no-git-check --access=public && cd -
+
       - name: generate js-ext-core sdk
         if: steps.verify-changed-files.outputs.js-ext-core_any_changed == 'true' 
         shell: bash

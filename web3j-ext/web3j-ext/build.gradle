@@ -65,7 +65,7 @@ publishing {
                         id = "jack"
                         name = "jack"
                         email = "jack.jin@klaytn.foundation"
-                    },
+                    }
                     developer {
                         id = "jay"
                         name = "jay"

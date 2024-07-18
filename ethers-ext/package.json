@@ -1,12 +1,15 @@
 {
-  "name": "@klaytn/ethers-ext",
-  "version": "1.0.2",
+  "name": "@kaiachain/ethers-ext",
+  "version": "1.0.0",
   "license": "MIT",
-  "description": "ethers.js extension for Klaytn blockchain",
+  "description": "ethers.js extension for kaia blockchain",
   "keywords": [
     "ethereum",
     "ethers",
     "ethersjs",
+    "kaia",
+    "kaia sdk",
+    "kaia api",
     "klaytn",
     "klaytn sdk",
     "klaytn api"
@@ -34,7 +37,7 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@klaytn/ethers-ext": "file:./",
+    "@kaia/ethers-ext": "file:./",
     "@types/chai": "^4.3.7",
     "@types/chai-as-promised": "^7.1.5",
     "@types/lodash": "^4.14.192",
@@ -73,8 +76,8 @@
     "@ethersproject/transactions": "^5.7.0",
     "@ethersproject/wallet": "^5.7.0",
     "@ethersproject/web": "^5.7.1",
-    "@klaytn/js-ext-core": "^1.0.0",
-    "@klaytn/web3rpc": "^0.9.9",
+    "@kaiachain/js-ext-core": "^1.0.0",
+    "@kaiachain/web3rpc": "^1.0.0",
     "lodash": "^4.17.21"
   }
 }

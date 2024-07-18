@@ -2,8 +2,8 @@ package org.web3j.utils;
 
 import java.math.BigDecimal;
 
-public class KAIAConvert {
-    private KAIAConvert() { } 
+public class KaiaConvert {
+    private KaiaConvert() { } 
 
     // Kaia units
     public static BigDecimal fromPeb(String number, Unit unit) {

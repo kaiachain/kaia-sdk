@@ -126,7 +126,7 @@ function getTransactionSignedAPI(rawTransaction: string): TransactionSignedAPI {
     value: HexStr.fromNumber(tx.value),
     input: tx.data || "0x",
     data: tx.data || "0x",
-    chainId: HexStr.fromNumber(tx.chainId),
+    chainId: HexStr.fromNumber(tx.chainId || 0),
     // Becuase Klaytn Tx may contain multiple signatures,
     // we do not return v,r,s to avoid confusion.
     v: "",

@@ -64,30 +64,6 @@ jobs:
             js-ext-core: 
               - "js-ext-core/package.json"
 
-      - name: generate web3rpc-python 
-        if: steps.verify-changed-files.outputs.web3py-ext_any_changed == 'true'
-        shell: bash
-        run: |
-          cd web3rpc/sdk/client/python && bash -x python-generate.sh && cd -
-
-      - name: generate web3py-ext sdk
-        if: steps.verify-changed-files.outputs.web3py-ext_any_changed == 'true'     
-        shell: bash
-        run: |
-          cd web3py-ext &&\
-          python -m pip install build wheel twine &&\
-          ls -ls &&\
-          python setup.py bdist_wheel &&\
-          cd -
-
-      - name: Publish web3py-ext sdk
-        if: steps.verify-changed-files.outputs.web3py-ext_any_changed == 'true'     
-        uses: pypa/gh-action-pypi-publish@release/v1
-        continue-on-error: true
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
-          packages-dir: web3py-ext/dist
-
       - name: Publish web3j-ext
         if: steps.verify-changed-files.outputs.web3j-ext_any_changed == 'true'
         shell: bash
@@ -126,7 +102,31 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           cd web3js-ext && npx pnpm --filter "@kaiachain/*" -r publish --publish-branch main --no-git-check --access=public && cd -
-          
+
+      - name: generate web3rpc-python 
+        if: steps.verify-changed-files.outputs.web3py-ext_any_changed == 'true'
+        shell: bash
+        run: |
+          cd web3rpc/sdk/client/python && bash -x python-generate.sh && cd -
+
+      - name: generate web3py-ext sdk
+        if: steps.verify-changed-files.outputs.web3py-ext_any_changed == 'true'     
+        shell: bash
+        run: |
+          cd web3py-ext &&\
+          python -m pip install build wheel twine &&\
+          ls -ls &&\
+          python setup.py bdist_wheel &&\
+          cd -
+
+      - name: Publish web3py-ext sdk
+        if: steps.verify-changed-files.outputs.web3py-ext_any_changed == 'true'     
+        uses: pypa/gh-action-pypi-publish@release/v1
+        continue-on-error: true
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          packages-dir: web3py-ext/dist
+
       - name: generate web3rpc-java sdk
         if: steps.verify-changed-files.outputs.web3rpc_any_changed  == 'true' 
         shell: bash

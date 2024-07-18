@@ -95,7 +95,6 @@ if (System.getenv("PUBLISH_TO_MAVEN_PUBLIC")) {
     }
 }
 
-
 test {
     useJUnitPlatform()
 }

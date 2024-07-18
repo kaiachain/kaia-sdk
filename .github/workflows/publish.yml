@@ -114,6 +114,19 @@ jobs:
         run: |
           cd ethers-ext && npx pnpm --filter "@kaiachain/*" -r publish --publish-branch main --no-git-check --access=public && cd -
 
+      - name: generate web3js-ext 
+        if: steps.verify-changed-files.outputs.web3js-ext_any_changed == 'true' 
+        shell: bash
+        run: |
+          cd web3js-ext && npm install && npm run build && cd -
+
+      - name: publish web3js-ext
+        if: steps.verify-changed-files.outputs.web3js-ext_any_changed == 'true' 
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          cd web3js-ext && npx pnpm --filter "@kaiachain/*" -r publish --publish-branch main --no-git-check --access=public && cd -
+          
       - name: generate web3rpc-java sdk
         if: steps.verify-changed-files.outputs.web3rpc_any_changed  == 'true' 
         shell: bash
@@ -162,15 +175,3 @@ jobs:
         run: |
           cd js-ext-core && npx pnpm --filter "@kaiachain/*" -r publish --publish-branch main --no-git-check --access=public && cd -
 
-      - name: generate web3js-ext 
-        if: steps.verify-changed-files.outputs.web3js-ext_any_changed == 'true' 
-        shell: bash
-        run: |
-          cd web3js-ext && npm install && npm run build && cd -
-
-      - name: publish web3js-ext
-        if: steps.verify-changed-files.outputs.web3js-ext_any_changed == 'true' 
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          cd web3js-ext && npx pnpm --filter "@kaiachain/*" -r publish --publish-branch main --no-git-check --access=public && cd -

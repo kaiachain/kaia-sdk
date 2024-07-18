@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 NAME = "web3py_ext"
-VERSION = "1.0.0"
+VERSION = "1.0.3"
 # To install the library, run the following
 #
 # python setup.py install

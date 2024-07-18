@@ -68,7 +68,7 @@ jobs:
         if: steps.verify-changed-files.outputs.web3j-ext_any_changed == 'true'
         shell: bash
         run: |
-          cd web3j-ext/web3j-ext && gradle build && gradle publish \
+          cd web3j-ext/web3j-ext && gradle wrapper && gradle build && gradle publish \
           && cd build/libs && zip -r web3j-ext.zip io \
           && curl POST --verbose --header "Authorization: Bearer $PUBLISHER_TOKEN" --form bundle=@web3j-ext.zip https://central.sonatype.com/api/v1/publisher/upload
         env:

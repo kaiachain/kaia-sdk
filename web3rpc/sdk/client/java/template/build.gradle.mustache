@@ -81,10 +81,8 @@ if(hasProperty('target') && target == 'android') {
 } else {
 
     apply plugin: 'java'
-    apply plugin: 'maven-publish'
     apply plugin: 'signing'
     apply plugin: 'io.codearte.nexus-staging'
-
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -97,7 +95,6 @@ if(hasProperty('target') && target == 'android') {
         archiveClassifier = 'javadoc'
         from javadoc.destinationDir
     }
-
 
     publishing {
         publications {
@@ -129,7 +126,7 @@ if(hasProperty('target') && target == 'android') {
                             id = "jack"
                             name = "jack"
                             email = "jack.jin@klaytn.foundation"
-                        },
+                        }
                         developer {
                             id = "jay"
                             name = "jay"

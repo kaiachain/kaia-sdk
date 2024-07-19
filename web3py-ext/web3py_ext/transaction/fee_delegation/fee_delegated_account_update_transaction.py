@@ -353,6 +353,8 @@ class FeeDelegatedAccountUpdateTransaction(_TypedTransactionImplementation):
             transaction_with_signatures = merge(transaction_without_signature_fields, {'signatures':[]})
         
         if vrs != {} and vrs not in transaction_with_signatures['signatures']:
+            if type(transaction_with_signatures['signatures']) is not list:
+                transaction_with_signatures['signatures'] = list(transaction_with_signatures['signatures'])
             transaction_with_signatures['signatures'].append(vrs)
         
         transaction_with_signatures = pipe(

@@ -1,21 +1,23 @@
 from setuptools import setup, find_packages
+import pathlib
+
 NAME = "web3py_ext"
-VERSION = "1.0.0"
-# To install the library, run the following
-#
-# python setup.py install
-#
-# prerequisite: setuptools
-# http://pypi.python.org/pypi/setuptools
+VERSION = "1.0.3"
+
+with open("./README.md") as readme:
+    long_description = readme.read()
 
 REQUIRES = [
-    "web3 ~= 6.3.0"
+    "web3 ~= 6.3.0",
+    "eth-account ~= 0.11.2",
 ]
 
 setup(
     name=NAME,
     version=VERSION,
     description="kaia-sdk",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author="kaia Foundation",
     author_email="",
     url="https://github.com/kaiachain/kaia-sdk",

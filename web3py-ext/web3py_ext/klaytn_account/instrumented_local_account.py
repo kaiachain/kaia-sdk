@@ -172,7 +172,7 @@ class KlaytnSignedTransaction(NamedTuple):
         except TypeError:
             return getattr(self, index)
 
-def klaytn_extended_sign_transaction(self, transaction, private_key):
+def klaytn_extended_sign_transaction(self, transaction, private_key, blobs=None):
     # case: appending sign by multisig
     if isinstance(transaction, bytes):
         transaction = Account.decode_transaction(transaction)
@@ -206,7 +206,7 @@ def klaytn_extended_sign_transaction(self, transaction, private_key):
             r,
             s,
             encoded_transaction,
-        ) = sign_transaction_dict(account._key_obj, sanitized_transaction)
+        ) = sign_transaction_dict(account._key_obj, sanitized_transaction, blobs)
         transaction_hash = keccak(encoded_transaction)
 
         return SignedTransaction(

@@ -41,7 +41,7 @@ async function main() {
   const encryptedKey2 = await web3.eth.accounts.wallet.encrypt(password2);
 
   // Delete account before adding the same account already existing in the wallet.
-  web3.eth.accounts.wallet.remove(encryptedKey2[0].address);
+  web3.eth.accounts.wallet.remove(accounts[0].address);
 
   const accounts2 = await web3.eth.accounts.wallet.decrypt(encryptedKey2, password2);
 

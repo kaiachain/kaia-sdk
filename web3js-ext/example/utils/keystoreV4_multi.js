@@ -89,8 +89,8 @@ async function main() {
   }
 
   console.log("\ndecrypted (address, privateKey) with new password");
-  for (i in accounts) {
-    const v3encryptedKey = await accounts[i].encrypt(newPassword);
+  for (const account of accounts) {
+    const v3encryptedKey = await account.encrypt(newPassword);
     const newAccount = await web3.eth.accounts.decrypt(v3encryptedKey, newPassword);
     console.log(newAccount.address, ", ", newAccount.privateKey);
   }

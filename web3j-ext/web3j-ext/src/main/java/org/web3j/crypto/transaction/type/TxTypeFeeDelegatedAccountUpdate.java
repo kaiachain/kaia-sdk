@@ -19,21 +19,25 @@ public class TxTypeFeeDelegatedAccountUpdate extends TxTypeFeeDelegate {
      */
     private final AccountKey accountKey;
 
-    public TxTypeFeeDelegatedAccountUpdate(TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey) {
+    public TxTypeFeeDelegatedAccountUpdate(TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
+            String from, AccountKey accountKey) {
         super(type, nonce, gasPrice, gasLimit, from, "", BigInteger.ZERO);
         this.accountKey = accountKey;
     }
 
-    public static TxTypeFeeDelegatedAccountUpdate createTransaction(TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey) {
+    public static TxTypeFeeDelegatedAccountUpdate createTransaction(TxType.Type type, BigInteger nonce,
+            BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey) {
         return new TxTypeFeeDelegatedAccountUpdate(type, nonce, gasPrice, gasLimit, from, accountKey);
     }
 
-    public TxTypeFeeDelegatedAccountUpdate(long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey) {
+    public TxTypeFeeDelegatedAccountUpdate(long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice,
+            BigInteger gasLimit, String from, AccountKey accountKey) {
         super(chainId, type, nonce, gasPrice, gasLimit, from, "", BigInteger.ZERO);
         this.accountKey = accountKey;
     }
 
-    public static TxTypeFeeDelegatedAccountUpdate createTransaction(long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey) {
+    public static TxTypeFeeDelegatedAccountUpdate createTransaction(long chainId, TxType.Type type, BigInteger nonce,
+            BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey) {
         return new TxTypeFeeDelegatedAccountUpdate(chainId, type, nonce, gasPrice, gasLimit, from, accountKey);
     }
 
@@ -42,7 +46,8 @@ public class TxTypeFeeDelegatedAccountUpdate extends TxTypeFeeDelegate {
     }
 
     /**
-     * create RlpType List which contains nonce, gas price, gas limit, from and accountKey.
+     * create RlpType List which contains nonce, gas price, gas limit, from and
+     * accountKey.
      * List elements can be different depending on transaction type.
      *
      * @return List RlpType List
@@ -67,13 +72,15 @@ public class TxTypeFeeDelegatedAccountUpdate extends TxTypeFeeDelegate {
     }
 
     /**
-     * decode transaction hash from sender to reconstruct transaction with fee payer signature.
+     * decode transaction hash from sender to reconstruct transaction with fee payer
+     * signature.
      *
      * @param rawTransaction RLP-encoded signed transaction from sender
      * @return TxTypeFeeDelegatedAccountUpdate decoded transaction
      */
     public static TxTypeFeeDelegatedAccountUpdate decodeFromRawTransaction(byte[] rawTransaction) {
-        //TxHashRLP = type + encode([nonce, gasPrice, gas, from, rlpEncodedKey, txSignatures, feePayer, feePayerSignatures])
+        // TxHashRLP = type + encode([nonce, gasPrice, gas, from, rlpEncodedKey,
+        // txSignatures, feePayer, feePayerSignatures])
         try {
             byte[] rawTransactionExceptType = KaiaTransactionUtils.getRawTransactionNoType(rawTransaction);
 
@@ -87,8 +94,8 @@ public class TxTypeFeeDelegatedAccountUpdate extends TxTypeFeeDelegate {
             String accountkeyRaw = ((RlpString) values.get(4)).asString();
             TxType.Type type = Type.FEE_DELEGATED_ACCOUNT_UPDATE;
 
-            TxTypeFeeDelegatedAccountUpdate tx
-                    = TxTypeFeeDelegatedAccountUpdate.createTransaction(type, nonce, gasPrice, gasLimit, from, AccountKeyDecoder.fromRlp(accountkeyRaw));
+            TxTypeFeeDelegatedAccountUpdate tx = TxTypeFeeDelegatedAccountUpdate.createTransaction(type, nonce,
+                    gasPrice, gasLimit, from, AccountKeyDecoder.fromRlp(accountkeyRaw));
             tx.addSignatureData(values, 5);
 
             return tx;

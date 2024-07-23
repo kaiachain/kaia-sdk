@@ -11,7 +11,7 @@ import org.web3j.rlp.RlpType;
 import org.web3j.utils.KaiaTransactionUtils;
 import org.web3j.utils.Numeric;
 
-public class TxTypeFeeDelegatedValueTransfer extends TxTypeFeeDelegate   {
+public class TxTypeFeeDelegatedValueTransfer extends TxTypeFeeDelegate {
 
     protected TxTypeFeeDelegatedValueTransfer(TxType.Type type, BigInteger nonce, BigInteger gasPrice,
             BigInteger gasLimit, String to, BigInteger value, String from) {
@@ -30,7 +30,7 @@ public class TxTypeFeeDelegatedValueTransfer extends TxTypeFeeDelegate   {
     }
 
     public static TxTypeFeeDelegatedValueTransfer createTransaction(
-        long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
+            long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
             String recipient, BigInteger value, String from) {
         return new TxTypeFeeDelegatedValueTransfer(chainId, type, nonce, gasPrice, gasLimit, recipient, value, from);
     }

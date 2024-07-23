@@ -86,7 +86,7 @@ public abstract class AbstractTxType implements TxType, ITransaction {
     }
 
     public AbstractTxType(long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
-    String from, String to, BigInteger value) {
+            String from, String to, BigInteger value) {
         this.chainId = chainId;
         this.type = type;
         this.nonce = nonce;

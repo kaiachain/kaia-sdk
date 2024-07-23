@@ -29,9 +29,12 @@ public class AccountUpdateWithMultiSigExample {
         public static void run() throws Exception {
 
                 Web3j web3j = Web3j.build(new HttpService(keySample.BAOBAB_URL));
-                KaiaCredentials credential1 = KaiaCredentials.create(keySample.MULTI_KEY_privkey1, keySample.MULTI_KEY_address);
-                KaiaCredentials credential2 = KaiaCredentials.create(keySample.MULTI_KEY_privkey2, keySample.MULTI_KEY_address);
-                KaiaCredentials credential3 = KaiaCredentials.create(keySample.MULTI_KEY_privkey3, keySample.MULTI_KEY_address);
+                KaiaCredentials credential1 = KaiaCredentials.create(keySample.MULTI_KEY_privkey1,
+                                keySample.MULTI_KEY_address);
+                KaiaCredentials credential2 = KaiaCredentials.create(keySample.MULTI_KEY_privkey2,
+                                keySample.MULTI_KEY_address);
+                KaiaCredentials credential3 = KaiaCredentials.create(keySample.MULTI_KEY_privkey3,
+                                keySample.MULTI_KEY_address);
 
                 BigInteger GAS_PRICE = BigInteger.valueOf(50000000000L);
                 BigInteger GAS_LIMIT = BigInteger.valueOf(6721950);

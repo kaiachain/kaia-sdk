@@ -72,7 +72,7 @@ public class LegacyExample implements keySample {
                 org.web3j.protocol.core.methods.response.TransactionReceipt ethReceipt = transactionReceiptProcessor
                                 .waitForTransactionReceipt(txHash);
                 System.out.println("Receipt from eth_getTransactionReceipt : \n" + ethReceipt);
-                
+
                 try {
                         Thread.sleep(2000);
                 } catch (Exception e) {

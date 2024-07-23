@@ -14,38 +14,46 @@ import org.web3j.utils.Numeric;
 public class TxTypeFeeDelegatedValueTransferWithRatio extends TxTypeFeeDelegate {
 
     /**
-     * Fee ratio of the fee payer. If it is 30, 30% of the fee will be paid by the fee payer.
+     * Fee ratio of the fee payer. If it is 30, 30% of the fee will be paid by the
+     * fee payer.
      * 70% will be paid by the sender.
      */
     private final BigInteger feeRatio;
 
     protected TxTypeFeeDelegatedValueTransferWithRatio(
-        TxType.Type type,BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value, String from, BigInteger feeRatio) {
+            TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value,
+            String from, BigInteger feeRatio) {
         super(type, nonce, gasPrice, gasLimit, from, to, value);
         this.feeRatio = feeRatio;
     }
 
     public static TxTypeFeeDelegatedValueTransferWithRatio createTransaction(
-        TxType.Type type,BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value, String from, BigInteger feeRatio) {
+            TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value,
+            String from, BigInteger feeRatio) {
         return new TxTypeFeeDelegatedValueTransferWithRatio(type, nonce, gasPrice, gasLimit, to, value, from, feeRatio);
     }
 
     protected TxTypeFeeDelegatedValueTransferWithRatio(
-        long chainId, TxType.Type type,BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value, String from, BigInteger feeRatio) {
+            long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
+            BigInteger value, String from, BigInteger feeRatio) {
         super(chainId, type, nonce, gasPrice, gasLimit, from, to, value);
         this.feeRatio = feeRatio;
     }
 
     public static TxTypeFeeDelegatedValueTransferWithRatio createTransaction(
-        long chainId, TxType.Type type,BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value, String from, BigInteger feeRatio) {
-        return new TxTypeFeeDelegatedValueTransferWithRatio(chainId, type, nonce, gasPrice, gasLimit, to, value, from, feeRatio);
+            long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to,
+            BigInteger value, String from, BigInteger feeRatio) {
+        return new TxTypeFeeDelegatedValueTransferWithRatio(chainId, type, nonce, gasPrice, gasLimit, to, value, from,
+                feeRatio);
     }
+
     public BigInteger getFeeRatio() {
         return feeRatio;
     }
 
     /**
-     * create RlpType List which contains nonce, gas price, gas limit, to, value, from and feeRatio.
+     * create RlpType List which contains nonce, gas price, gas limit, to, value,
+     * from and feeRatio.
      * List elements can be different depending on transaction type.
      *
      * @return List RlpType List
@@ -72,13 +80,15 @@ public class TxTypeFeeDelegatedValueTransferWithRatio extends TxTypeFeeDelegate 
     }
 
     /**
-     * decode transaction hash from sender to reconstruct transaction with fee payer signature.
+     * decode transaction hash from sender to reconstruct transaction with fee payer
+     * signature.
      *
      * @param rawTransaction RLP-encoded signed transaction from sender
      * @return TxTypeFeeDelegatedValueTransferWithRatio decoded transaction
      */
     public static TxTypeFeeDelegatedValueTransferWithRatio decodeFromRawTransaction(byte[] rawTransaction) {
-        // TxHashRLP = type + encode([nonce, gasPrice, gas, to, value, from, feeRatio, txSignatures, feePayer, feePayerSignatures])
+        // TxHashRLP = type + encode([nonce, gasPrice, gas, to, value, from, feeRatio,
+        // txSignatures, feePayer, feePayerSignatures])
         try {
             byte[] rawTransactionExceptType = KaiaTransactionUtils.getRawTransactionNoType(rawTransaction);
 
@@ -92,8 +102,8 @@ public class TxTypeFeeDelegatedValueTransferWithRatio extends TxTypeFeeDelegate 
             String from = ((RlpString) values.get(5)).asString();
             BigInteger feeRatio = ((RlpString) values.get(6)).asPositiveBigInteger();
             TxType.Type type = Type.FEE_DELEGATED_VALUE_TRANSFER_WITH_RATIO;
-            TxTypeFeeDelegatedValueTransferWithRatio tx
-                    = TxTypeFeeDelegatedValueTransferWithRatio.createTransaction(type, nonce, gasPrice, gasLimit, to, value, from, feeRatio);
+            TxTypeFeeDelegatedValueTransferWithRatio tx = TxTypeFeeDelegatedValueTransferWithRatio
+                    .createTransaction(type, nonce, gasPrice, gasLimit, to, value, from, feeRatio);
             tx.addSignatureData(values, 7);
             return tx;
         } catch (Exception e) {

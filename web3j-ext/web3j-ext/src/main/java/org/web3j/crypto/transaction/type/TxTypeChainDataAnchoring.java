@@ -13,11 +13,11 @@ import org.web3j.utils.Numeric;
 
 /**
  * Transaction class used for signing 1559 transactions locally.<br>
- * For the specification, refer to p4 of the <a href="http://gavwood.com/paper.pdf">yellow
+ * For the specification, refer to p4 of the
+ * <a href="http://gavwood.com/paper.pdf">yellow
  * paper</a>.
  */
-public class TxTypeChainDataAnchoring extends AbstractTxType   {
-
+public class TxTypeChainDataAnchoring extends AbstractTxType {
 
     /**
      * data of the child chain
@@ -25,24 +25,28 @@ public class TxTypeChainDataAnchoring extends AbstractTxType   {
     private final byte[] anchoredData;
 
     protected TxTypeChainDataAnchoring(
-            TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, byte[] anchoredData) {
+            TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from,
+            byte[] anchoredData) {
         super(type, nonce, gasPrice, gasLimit, from, "", BigInteger.ZERO);
         this.anchoredData = anchoredData;
     }
 
     public static TxTypeChainDataAnchoring createTransaction(
-    		TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, byte[] anchoredData) {
+            TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from,
+            byte[] anchoredData) {
         return new TxTypeChainDataAnchoring(type, nonce, gasPrice, gasLimit, from, anchoredData);
     }
 
     protected TxTypeChainDataAnchoring(
-        long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, byte[] anchoredData) {
+            long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from,
+            byte[] anchoredData) {
         super(chainId, type, nonce, gasPrice, gasLimit, from, "", BigInteger.ZERO);
         this.anchoredData = anchoredData;
     }
 
     public static TxTypeChainDataAnchoring createTransaction(
-        long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, byte[] anchoredData) {
+            long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from,
+            byte[] anchoredData) {
         return new TxTypeChainDataAnchoring(chainId, type, nonce, gasPrice, gasLimit, from, anchoredData);
     }
 
@@ -51,7 +55,8 @@ public class TxTypeChainDataAnchoring extends AbstractTxType   {
     }
 
     /**
-     * create RlpType List which contains nonce, gas price, gas limit, to, value, from and anchoredData.
+     * create RlpType List which contains nonce, gas price, gas limit, to, value,
+     * from and anchoredData.
      * List elements can be different depending on transaction type.
      *
      * @return List RlpType List
@@ -76,7 +81,8 @@ public class TxTypeChainDataAnchoring extends AbstractTxType   {
     }
 
     /**
-     * decode transaction hash from sender to reconstruct transaction with fee payer signature.
+     * decode transaction hash from sender to reconstruct transaction with fee payer
+     * signature.
      *
      * @param rawTransaction RLP-encoded signed transaction from sender
      * @return TxTypeChainDataAnchoringTransaction decoded transaction
@@ -91,14 +97,12 @@ public class TxTypeChainDataAnchoring extends AbstractTxType   {
         BigInteger gasLimit = ((RlpString) values.get(2)).asPositiveBigInteger();
         String from = ((RlpString) values.get(3)).asString();
         byte[] payload = ((RlpString) values.get(4)).getBytes();
-        TxType.Type type= Type.CHAIN_DATA_ANCHORING;
+        TxType.Type type = Type.CHAIN_DATA_ANCHORING;
 
-        TxTypeChainDataAnchoring tx
-                = new TxTypeChainDataAnchoring(type, nonce, gasPrice, gasLimit, from, payload);
+        TxTypeChainDataAnchoring tx = new TxTypeChainDataAnchoring(type, nonce, gasPrice, gasLimit, from, payload);
         tx.addSignatureData(values, 5);
         return tx;
     }
-    
 
     /**
      * @param rawTransaction RLP-encoded signed transaction from sender
@@ -108,22 +112,22 @@ public class TxTypeChainDataAnchoring extends AbstractTxType   {
         return decodeFromRawTransaction(Numeric.hexStringToByteArray(Numeric.cleanHexPrefix(rawTransaction)));
     }
 
-	@Override
-	public List<RlpType> asRlpValues(SignatureData signatureData) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<RlpType> asRlpValues(SignatureData signatureData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getData() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public TransactionType getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public TransactionType getType() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

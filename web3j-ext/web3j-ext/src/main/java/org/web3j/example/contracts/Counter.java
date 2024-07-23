@@ -27,13 +27,19 @@ import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
 
 /**
- * <p>Auto generated code.
- * <p><strong>Do not modify!</strong>
- * <p>Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>,
- * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
- * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
+ * <p>
+ * Auto generated code.
+ * <p>
+ * <strong>Do not modify!</strong>
+ * <p>
+ * Please use the <a href="https://docs.web3j.io/command_line.html">web3j
+ * command line tools</a>,
+ * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the
+ * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen
+ * module</a> to update.
  *
- * <p>Generated with web3j version 1.4.2.
+ * <p>
+ * Generated with web3j version 1.4.2.
  */
 @SuppressWarnings("rawtypes")
 public class Counter extends Contract {
@@ -45,30 +51,35 @@ public class Counter extends Contract {
 
     public static final String FUNC_SETNUMBER = "setNumber";
 
-    public static final Event SETNUMBER_EVENT = new Event("SetNumber", 
-            Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-    ;
+    public static final Event SETNUMBER_EVENT = new Event("SetNumber",
+            Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {
+            }));;
 
     @Deprecated
-    protected Counter(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+    protected Counter(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice,
+            BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
-    protected Counter(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+    protected Counter(String contractAddress, Web3j web3j, Credentials credentials,
+            ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
     }
 
     @Deprecated
-    protected Counter(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+    protected Counter(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice,
+            BigInteger gasLimit) {
         super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    protected Counter(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+    protected Counter(String contractAddress, Web3j web3j, TransactionManager transactionManager,
+            ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
     public static List<SetNumberEventResponse> getSetNumberEvents(TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = staticExtractEventParametersWithLog(SETNUMBER_EVENT, transactionReceipt);
+        List<Contract.EventValuesWithLog> valueList = staticExtractEventParametersWithLog(SETNUMBER_EVENT,
+                transactionReceipt);
         ArrayList<SetNumberEventResponse> responses = new ArrayList<SetNumberEventResponse>(valueList.size());
         for (Contract.EventValuesWithLog eventValues : valueList) {
             SetNumberEventResponse typedResponse = new SetNumberEventResponse();
@@ -92,7 +103,8 @@ public class Counter extends Contract {
         });
     }
 
-    public Flowable<SetNumberEventResponse> setNumberEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+    public Flowable<SetNumberEventResponse> setNumberEventFlowable(DefaultBlockParameter startBlock,
+            DefaultBlockParameter endBlock) {
         EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
         filter.addSingleTopic(EventEncoder.encode(SETNUMBER_EVENT));
         return setNumberEventFlowable(filter);
@@ -100,65 +112,80 @@ public class Counter extends Contract {
 
     public RemoteFunctionCall<TransactionReceipt> increment() {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_INCREMENT, 
-                Arrays.<Type>asList(), 
+                FUNC_INCREMENT,
+                Arrays.<Type>asList(),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteFunctionCall<BigInteger> number() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_NUMBER, 
-                Arrays.<Type>asList(), 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_NUMBER,
+                Arrays.<Type>asList(),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {
+                }));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
     public RemoteFunctionCall<TransactionReceipt> setNumber(BigInteger newNumber) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_SETNUMBER, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(newNumber)), 
+                FUNC_SETNUMBER,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(newNumber)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     @Deprecated
-    public static Counter load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
+    public static Counter load(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice,
+            BigInteger gasLimit) {
         return new Counter(contractAddress, web3j, credentials, gasPrice, gasLimit);
     }
 
     @Deprecated
-    public static Counter load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
+    public static Counter load(String contractAddress, Web3j web3j, TransactionManager transactionManager,
+            BigInteger gasPrice, BigInteger gasLimit) {
         return new Counter(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public static Counter load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+    public static Counter load(String contractAddress, Web3j web3j, Credentials credentials,
+            ContractGasProvider contractGasProvider) {
         return new Counter(contractAddress, web3j, credentials, contractGasProvider);
     }
 
-    public static Counter load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+    public static Counter load(String contractAddress, Web3j web3j, TransactionManager transactionManager,
+            ContractGasProvider contractGasProvider) {
         return new Counter(contractAddress, web3j, transactionManager, contractGasProvider);
     }
 
-    public static RemoteCall<Counter> deploy(Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider, BigInteger initNumber) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(initNumber)));
+    public static RemoteCall<Counter> deploy(Web3j web3j, Credentials credentials,
+            ContractGasProvider contractGasProvider, BigInteger initNumber) {
+        String encodedConstructor = FunctionEncoder
+                .encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(initNumber)));
         return deployRemoteCall(Counter.class, web3j, credentials, contractGasProvider, BINARY, encodedConstructor);
     }
 
-    public static RemoteCall<Counter> deploy(Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider, BigInteger initNumber) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(initNumber)));
-        return deployRemoteCall(Counter.class, web3j, transactionManager, contractGasProvider, BINARY, encodedConstructor);
+    public static RemoteCall<Counter> deploy(Web3j web3j, TransactionManager transactionManager,
+            ContractGasProvider contractGasProvider, BigInteger initNumber) {
+        String encodedConstructor = FunctionEncoder
+                .encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(initNumber)));
+        return deployRemoteCall(Counter.class, web3j, transactionManager, contractGasProvider, BINARY,
+                encodedConstructor);
     }
 
     @Deprecated
-    public static RemoteCall<Counter> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit, BigInteger initNumber) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(initNumber)));
+    public static RemoteCall<Counter> deploy(Web3j web3j, Credentials credentials, BigInteger gasPrice,
+            BigInteger gasLimit, BigInteger initNumber) {
+        String encodedConstructor = FunctionEncoder
+                .encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(initNumber)));
         return deployRemoteCall(Counter.class, web3j, credentials, gasPrice, gasLimit, BINARY, encodedConstructor);
     }
 
     @Deprecated
-    public static RemoteCall<Counter> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit, BigInteger initNumber) {
-        String encodedConstructor = FunctionEncoder.encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(initNumber)));
-        return deployRemoteCall(Counter.class, web3j, transactionManager, gasPrice, gasLimit, BINARY, encodedConstructor);
+    public static RemoteCall<Counter> deploy(Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice,
+            BigInteger gasLimit, BigInteger initNumber) {
+        String encodedConstructor = FunctionEncoder
+                .encodeConstructor(Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(initNumber)));
+        return deployRemoteCall(Counter.class, web3j, transactionManager, gasPrice, gasLimit, BINARY,
+                encodedConstructor);
     }
 
     public static class SetNumberEventResponse extends BaseEventResponse {

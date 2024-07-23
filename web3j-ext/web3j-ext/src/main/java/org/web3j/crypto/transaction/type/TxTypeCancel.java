@@ -10,25 +10,27 @@ import org.web3j.rlp.RlpType;
 import org.web3j.utils.KaiaTransactionUtils;
 import org.web3j.utils.Numeric;
 
-public class TxTypeCancel extends AbstractTxType   {
+public class TxTypeCancel extends AbstractTxType {
     protected TxTypeCancel(
             TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from) {
         super(type, nonce, gasPrice, gasLimit, from, "", BigInteger.ZERO);
     }
 
     public static TxTypeCancel createTransaction(
-        TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from) {
+            TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from) {
         return new TxTypeCancel(type, nonce, gasPrice, gasLimit, from);
     }
+
     protected TxTypeCancel(
             long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from) {
         super(chainId, type, nonce, gasPrice, gasLimit, from, "", BigInteger.ZERO);
     }
 
     public static TxTypeCancel createTransaction(
-        long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from) {
+            long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from) {
         return new TxTypeCancel(type, nonce, gasPrice, gasLimit, from);
     }
+
     /**
      * create RlpType List which contains nonce, gas price, gas limit and from.
      * List elements can be different depending on transaction type.
@@ -54,8 +56,10 @@ public class TxTypeCancel extends AbstractTxType   {
     }
 
     /**
-     * decode transaction hash from sender to reconstruct transaction with fee payer signature.
-    //  *
+     * decode transaction hash from sender to reconstruct transaction with fee payer
+     * signature.
+     * // *
+     * 
      * @param rawTransaction RLP-encoded signed transaction from sender
      * @return TxTypeCancel decoded transaction
      */
@@ -72,8 +76,7 @@ public class TxTypeCancel extends AbstractTxType   {
             String from = ((RlpString) values.get(3)).asString();
             TxType.Type type = Type.CANCEL;
 
-            TxTypeCancel tx
-                    = TxTypeCancel.createTransaction(type, nonce, gasPrice, gasLimit, from);
+            TxTypeCancel tx = TxTypeCancel.createTransaction(type, nonce, gasPrice, gasLimit, from);
             tx.addSignatureData(values, 4);
             return tx;
         } catch (Exception e) {

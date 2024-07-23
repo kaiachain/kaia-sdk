@@ -24,7 +24,8 @@ public class AccountUpdateWithPubKeyExample {
 
         public static void run() throws Exception {
 
-                KaiaCredentials credentials = KaiaCredentials.create(keySample.PUBLIC_KEY_privkey, keySample.PUBLIC_KEY_address);
+                KaiaCredentials credentials = KaiaCredentials.create(keySample.PUBLIC_KEY_privkey,
+                                keySample.PUBLIC_KEY_address);
                 Web3j web3j = Web3j.build(new HttpService(keySample.BAOBAB_URL));
 
                 BigInteger GAS_PRICE = BigInteger.valueOf(50000000000L);

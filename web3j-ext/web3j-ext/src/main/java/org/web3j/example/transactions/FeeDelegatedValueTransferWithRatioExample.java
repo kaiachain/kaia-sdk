@@ -73,7 +73,8 @@ public class FeeDelegatedValueTransferWithRatioExample implements keySample {
                 System.out.println("Receipt from kaia_getTransactionReceipt : \n" + receipt);
                 web3j.shutdown();
 
-                TxTypeFeeDelegatedValueTransferWithRatio rawTransaction = TxTypeFeeDelegatedValueTransferWithRatio.decodeFromRawTransaction(hexValue);
+                TxTypeFeeDelegatedValueTransferWithRatio rawTransaction = TxTypeFeeDelegatedValueTransferWithRatio
+                                .decodeFromRawTransaction(hexValue);
                 System.out.println("TxType : " + rawTransaction.getKaiaType());
 
         }

@@ -84,8 +84,8 @@ async function main() {
   const accounts = await web3.eth.accounts.decryptList(encryptedKey, password);
 
   console.log("decrypted (address, privateKey)");
-  for (var i in accounts) {
-    console.log(accounts[i].address, ", ", accounts[i].privateKey);
+  for (const account of accounts) {
+    console.log(account.address, ", ", account.privateKey);
   }
 
   console.log("\ndecrypted (address, privateKey) with new password");

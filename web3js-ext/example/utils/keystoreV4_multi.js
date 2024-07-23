@@ -66,41 +66,32 @@ const encryptedKey = `{
     ]
   }`;
 // const address = "0x17226c9B4e130551c258Eb7B1Cdc927c13998cd6";
-const keys = [
-  "0x278c3d035328daf04ab2597da96dd2d8868fd61a8837030f7d8a85f27b7f1bad",
-  "0xa06d13800719307ea7e2503ea441c2ea49279d0d600a2eec2887b50928869676", "0xc32f4007ffad303db99dee0d79a720e1d70c4b2babf8e33cb28170a16bac467d",
-  "0xc274d13302891d0d91a60891a48fde8c2860018f8dcb6293dcc0b28a238590b0", "0x83c127e5207b70086a702c93f1c9a041f15ce49ee5183ce848f35c64de196eff", "0x48f97204ac4886dfbd819ada04ea31a730c6fc43fcb08900566360ee7402f93b"];
+// const keys = [
+//   "0x278c3d035328daf04ab2597da96dd2d8868fd61a8837030f7d8a85f27b7f1bad",
+//   "0xa06d13800719307ea7e2503ea441c2ea49279d0d600a2eec2887b50928869676", "0xc32f4007ffad303db99dee0d79a720e1d70c4b2babf8e33cb28170a16bac467d",
+//   "0xc274d13302891d0d91a60891a48fde8c2860018f8dcb6293dcc0b28a238590b0", "0x83c127e5207b70086a702c93f1c9a041f15ce49ee5183ce848f35c64de196eff", "0x48f97204ac4886dfbd819ada04ea31a730c6fc43fcb08900566360ee7402f93b"];
 
 const password = "password";
 const newPassword = "newPassword";
 
 // Be sure that decrypted Keystore v4 object is not supported to encrypt keystore v4 again.
 // so this example shows only decrypting Keystore v4 and encrypting it as keysotre v3.
+// Be sure that the klaytn address is lost when each account of keystore v4 is encrypted as keysotre v3,
+// because keystore v3 does not support klaytn account system.
 async function main() {
-  const accounts = await web3.eth.accounts.decryptList(JSON.parse(encryptedKey), password);
-  // not added in the web3.eth.accounts.wallet
-  console.log(web3.eth.accounts);
+  const accounts = await web3.eth.accounts.decryptList(encryptedKey, password);
 
   console.log("decrypted (address, privateKey)");
-  for (var i = 0; i < 6; i++) {
-    await web3.eth.accounts.wallet.add(accounts[i].privateKey);
-    console.log(web3.eth.accounts.wallet[i].address, ", ", accounts[i].privateKey);
+  for (var i in accounts) {
+    console.log(accounts[i].address, ", ", accounts[i].privateKey);
   }
-  //   console.log(web3.eth.accounts.wallet);
 
-  const v3encryptedKey = await web3.eth.accounts.wallet.encrypt(newPassword);
-  console.log(v3encryptedKey);
-
-  // Delete all accounts before adding the same account already existing in the wallet.
-  for (i = 0; i < 6; i++) {
-    console.log(v3encryptedKey[i].address);
-    // not deleted in the web3.eth.accounts.wallet
-    await web3.eth.accounts.wallet.remove(v3encryptedKey[i].address);
+  console.log("decrypted (address, privateKey) with new password");
+  for (i in accounts) {
+    const v3encryptedKey = await accounts[i].encrypt(newPassword);
+    const newAccount = await web3.eth.accounts.decrypt(v3encryptedKey, newPassword);
+    console.log(newAccount.address, ", ", newAccount.privateKey);
   }
-  console.log(web3.eth.accounts.wallet);
-
-  const newAccount = await web3.eth.accounts.wallet.decrypt(v3encryptedKey, newPassword);
-  console.log(web3.eth.accounts.wallet);
 }
 
 main();

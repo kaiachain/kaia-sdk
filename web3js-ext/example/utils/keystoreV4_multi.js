@@ -76,8 +76,10 @@ const newPassword = "newPassword";
 
 // Be sure that decrypted Keystore v4 object is not supported to encrypt keystore v4 again.
 // so this example shows only decrypting Keystore v4 and encrypting it as keysotre v3.
-// Be sure that the klaytn address is lost when each account of keystore v4 is encrypted as keysotre v3,
-// because keystore v3 does not support klaytn account system.
+// Be sure the followings,
+//   1) klaytn address is lost when each account of keystore v4 is encrypted as keysotre v3,
+//      because keystore v3 does not support klaytn account system.
+//   2) web3.eth.accounts.decrypt & decryptList do not add account in web3.eth.accounts.wallet.
 async function main() {
   const accounts = await web3.eth.accounts.decryptList(encryptedKey, password);
 
@@ -86,7 +88,7 @@ async function main() {
     console.log(accounts[i].address, ", ", accounts[i].privateKey);
   }
 
-  console.log("decrypted (address, privateKey) with new password");
+  console.log("\ndecrypted (address, privateKey) with new password");
   for (i in accounts) {
     const v3encryptedKey = await accounts[i].encrypt(newPassword);
     const newAccount = await web3.eth.accounts.decrypt(v3encryptedKey, newPassword);

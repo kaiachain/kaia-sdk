@@ -15,7 +15,7 @@ import org.web3j.example.keySample;
 public class DecryptKeystoreV3Example implements keySample {
 
     public static void run() throws Exception {
-        String password = "Ilovekaia";
+        String password = "Iloveklaytn";
 
         String[] keyFiles = { "/Legacy_V3.json", "/Public_V3.json" };
         for (String keyFile : keyFiles) {

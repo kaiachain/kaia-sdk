@@ -72,6 +72,12 @@ public class LegacyExample implements keySample {
                 org.web3j.protocol.core.methods.response.TransactionReceipt ethReceipt = transactionReceiptProcessor
                                 .waitForTransactionReceipt(txHash);
                 System.out.println("Receipt from eth_getTransactionReceipt : \n" + ethReceipt);
+                
+                try {
+                        Thread.sleep(2000);
+                } catch (Exception e) {
+                        System.out.println(e);
+                }
                 TransactionReceipt receipt = web3j.kaiaGetTransactionReceipt(txHash).send().getResult();
                 System.out.println("Receipt from kaia_getTransactionReceipt : \n" + receipt);
                 web3j.shutdown();

@@ -10,6 +10,7 @@ import org.web3j.crypto.KaiaCredentials;
 import org.web3j.crypto.KaiaRawTransaction;
 import org.web3j.crypto.KaiaTransactionEncoder;
 import org.web3j.crypto.transaction.type.TxType;
+import org.web3j.crypto.transaction.type.TxTypeFeeDelegatedValueTransferMemoWithRatio;
 import org.web3j.crypto.transaction.type.TxTypeValueTransfer;
 import org.web3j.crypto.transaction.type.TxType.Type;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -40,7 +41,7 @@ public class FeeDelegatedValueTransferMemoWithRatioExample implements keySample 
                 String data = "Kaia Web3j";
                 byte[] payload = data.getBytes();
 
-                TxType.Type type = Type.FEE_DELEGATED_VALUE_TRANSFER_WITH_RATIO;
+                TxType.Type type = Type.FEE_DELEGATED_VALUE_TRANSFER_MEMO_WITH_RATIO;
 
                 KaiaRawTransaction raw = KaiaRawTransaction.createTransaction(
                                 type,
@@ -75,7 +76,7 @@ public class FeeDelegatedValueTransferMemoWithRatioExample implements keySample 
                 System.out.println("Receipt from kaia_getTransactionReceipt : \n" + receipt);
                 web3j.shutdown();
 
-                TxTypeValueTransfer rawTransaction = TxTypeValueTransfer.decodeFromRawTransaction(hexValue);
+                TxTypeFeeDelegatedValueTransferMemoWithRatio rawTransaction = TxTypeFeeDelegatedValueTransferMemoWithRatio.decodeFromRawTransaction(hexValue);
                 System.out.println("TxType : " + rawTransaction.getKaiaType());
 
         }

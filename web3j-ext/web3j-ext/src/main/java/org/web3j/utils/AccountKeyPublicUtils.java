@@ -14,7 +14,7 @@ public class AccountKeyPublicUtils {
     public static final X9ECParameters CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1");
     static final ECDomainParameters CURVE = new ECDomainParameters(
             CURVE_PARAMS.getCurve(), CURVE_PARAMS.getG(), CURVE_PARAMS.getN(), CURVE_PARAMS.getH());
-    
+
     public static String toCompressedPublicKey(BigInteger publicKey) {
         String hexStringPublicKey = Numeric.toHexStringNoPrefixZeroPadded(publicKey, 128);
         String publicKeyX = hexStringPublicKey.substring(0, 64);
@@ -27,11 +27,10 @@ public class AccountKeyPublicUtils {
         BigInteger xBN = Numeric.toBigInt(compressedPublicKey.substring(2));
         X9IntegerConverter x9 = new X9IntegerConverter();
         byte[] compEnc = x9.integerToBytes(xBN, 1 + x9.getByteLength(CURVE.getCurve()));
-        compEnc[0] = (byte)(yBit ? 0x03 : 0x02);
+        compEnc[0] = (byte) (yBit ? 0x03 : 0x02);
         ECPoint ecPoint = CURVE.getCurve().decodePoint(compEnc);
         return AccountKeyPublic.create(
                 Numeric.toHexStringWithPrefixZeroPadded(ecPoint.getAffineXCoord().toBigInteger(), 64),
-                Numeric.toHexStringWithPrefixZeroPadded(ecPoint.getAffineYCoord().toBigInteger(), 64)
-        );
+                Numeric.toHexStringWithPrefixZeroPadded(ecPoint.getAffineYCoord().toBigInteger(), 64));
     }
 }

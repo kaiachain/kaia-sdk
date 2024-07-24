@@ -28,20 +28,25 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * AccountKeyWeightedMultiSig is an account key type containing a threshold and WeightedPublicKeys.
- * WeightedPublicKeys contains a slice of {weight and key}. To be a valid tx for an account associated
- * with AccountKeyWeightedMultiSig, the weighted sum of signed public keys should be larger than the threshold.
+ * AccountKeyWeightedMultiSig is an account key type containing a threshold and
+ * WeightedPublicKeys.
+ * WeightedPublicKeys contains a slice of {weight and key}. To be a valid tx for
+ * an account associated
+ * with AccountKeyWeightedMultiSig, the weighted sum of signed public keys
+ * should be larger than the threshold.
  */
 public class AccountKeyWeightedMultiSig implements AccountKey {
 
     /**
-     * Validation threshold. To be a valid transaction, the weight sum of signatures should be larger than
+     * Validation threshold. To be a valid transaction, the weight sum of signatures
+     * should be larger than
      * or equal to the threshold.
      */
     private BigInteger threshold;
 
     /**
-     * A slice of weighted public keys. A weighted public key contains a weight and a public key.
+     * A slice of weighted public keys. A weighted public key contains a weight and
+     * a public key.
      */
     private List<WeightedPublicKey> weightedPublicKeys = new ArrayList<>();
 
@@ -84,7 +89,7 @@ public class AccountKeyWeightedMultiSig implements AccountKey {
         rlpTypeList.add(new RlpList(rlpWeightedPublicKeys));
 
         byte[] encodedTransaction = RlpEncoder.encode(new RlpList(rlpTypeList));
-        byte[] type = {getType().getValue()};
+        byte[] type = { getType().getValue() };
         return BytesUtils.concat(type, encodedTransaction);
     }
 
@@ -102,7 +107,8 @@ public class AccountKeyWeightedMultiSig implements AccountKey {
             RlpList rlpWeightedPublicKey = (RlpList) item;
             BigInteger weight = ((RlpString) rlpWeightedPublicKey.getValues().get(0)).asPositiveBigInteger();
             String compressedPublicKey = ((RlpString) rlpWeightedPublicKey.getValues().get(1)).asString();
-            weightedPublicKeys.add(new WeightedPublicKey(weight, AccountKeyPublicUtils.decompressKey(compressedPublicKey)));
+            weightedPublicKeys
+                    .add(new WeightedPublicKey(weight, AccountKeyPublicUtils.decompressKey(compressedPublicKey)));
         }
 
         return new AccountKeyWeightedMultiSig(threshold, weightedPublicKeys);
@@ -144,8 +150,10 @@ public class AccountKeyWeightedMultiSig implements AccountKey {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         AccountKeyWeightedMultiSig that = (AccountKeyWeightedMultiSig) o;
         return Arrays.equals(toRlp(), that.toRlp());
     }

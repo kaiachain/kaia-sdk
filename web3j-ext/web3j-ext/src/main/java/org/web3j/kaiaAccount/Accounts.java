@@ -37,7 +37,7 @@ public class Accounts {
         }
         return returnKaiaCredentials;
     }
-    
+
     public List<KaiaCredentials> credentialsByPubKey(BigInteger pubKey) {
         List<KaiaCredentials> returnKaiaCredentials = new ArrayList<>();
         for (KaiaCredentials element : CredentialLists) {
@@ -57,9 +57,5 @@ public class Accounts {
         }
         return returnKaiaCredentials;
     }
-
-
-
-
 
 }

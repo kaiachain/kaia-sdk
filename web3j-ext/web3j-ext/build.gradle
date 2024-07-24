@@ -76,7 +76,7 @@ publishing {
         }
     }
     repositories {
-           maven {
+        maven {
                 def releasesRepoUrl = layout.buildDirectory.dir('libs')
                 url = releasesRepoUrl
             }

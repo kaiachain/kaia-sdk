@@ -19,7 +19,8 @@ public class TxTypeFeeDelegatedSmartContractDeployWithRatio extends TxTypeFeeDel
     private final byte[] payload;
 
     /**
-     * Fee ratio of the fee payer. If it is 30, 30% of the fee will be paid by the fee payer.
+     * Fee ratio of the fee payer. If it is 30, 30% of the fee will be paid by the
+     * fee payer.
      * 70% will be paid by the sender.
      */
     private final BigInteger feeRatio;
@@ -30,7 +31,7 @@ public class TxTypeFeeDelegatedSmartContractDeployWithRatio extends TxTypeFeeDel
     private final BigInteger codeFormat;
 
     public TxTypeFeeDelegatedSmartContractDeployWithRatio(
-        TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, BigInteger value,
+            TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, BigInteger value,
             String from, byte[] payload, BigInteger feeRatio, BigInteger codeFormat) {
         super(type, nonce, gasPrice, gasLimit, from, "", value);
         this.payload = payload;
@@ -39,13 +40,15 @@ public class TxTypeFeeDelegatedSmartContractDeployWithRatio extends TxTypeFeeDel
     }
 
     public static TxTypeFeeDelegatedSmartContractDeployWithRatio createTransaction(
-        TxType.Type type,BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, BigInteger value,
+            TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, BigInteger value,
             String from, byte[] payload, BigInteger feeRatio, BigInteger codeFormat) {
-        return new TxTypeFeeDelegatedSmartContractDeployWithRatio(type, nonce, gasPrice, gasLimit, value, from, payload, feeRatio, codeFormat);
+        return new TxTypeFeeDelegatedSmartContractDeployWithRatio(type, nonce, gasPrice, gasLimit, value, from, payload,
+                feeRatio, codeFormat);
     }
 
     public TxTypeFeeDelegatedSmartContractDeployWithRatio(
-        long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, BigInteger value,
+            long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
+            BigInteger value,
             String from, byte[] payload, BigInteger feeRatio, BigInteger codeFormat) {
         super(chainId, type, nonce, gasPrice, gasLimit, from, "", value);
         this.payload = payload;
@@ -54,10 +57,13 @@ public class TxTypeFeeDelegatedSmartContractDeployWithRatio extends TxTypeFeeDel
     }
 
     public static TxTypeFeeDelegatedSmartContractDeployWithRatio createTransaction(
-        long chainId, TxType.Type type,BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, BigInteger value,
+            long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
+            BigInteger value,
             String from, byte[] payload, BigInteger feeRatio, BigInteger codeFormat) {
-        return new TxTypeFeeDelegatedSmartContractDeployWithRatio(chainId, type, nonce, gasPrice, gasLimit, value, from, payload, feeRatio, codeFormat);
+        return new TxTypeFeeDelegatedSmartContractDeployWithRatio(chainId, type, nonce, gasPrice, gasLimit, value, from,
+                payload, feeRatio, codeFormat);
     }
+
     public byte[] getPayload() {
         return payload;
     }
@@ -71,7 +77,8 @@ public class TxTypeFeeDelegatedSmartContractDeployWithRatio extends TxTypeFeeDel
     }
 
     /**
-     * create RlpType List which contains nonce, gas price, gas limit, to, value, from, payload, isHumanReadable and feeRatio.
+     * create RlpType List which contains nonce, gas price, gas limit, to, value,
+     * from, payload, isHumanReadable and feeRatio.
      * List elements can be different depending on transaction type.
      *
      * @return List RlpType List
@@ -90,7 +97,8 @@ public class TxTypeFeeDelegatedSmartContractDeployWithRatio extends TxTypeFeeDel
     }
 
     /**
-     * This method is overridden as FEE_DELEGATED_SMART_CONTRACT_DEPLOY_WITH_RATIO type.
+     * This method is overridden as FEE_DELEGATED_SMART_CONTRACT_DEPLOY_WITH_RATIO
+     * type.
      * The return value is used for rlp encoding.
      *
      * @return Type transaction type
@@ -101,13 +109,16 @@ public class TxTypeFeeDelegatedSmartContractDeployWithRatio extends TxTypeFeeDel
     }
 
     /**
-     * decode transaction hash from sender to reconstruct transaction with fee payer signature.
+     * decode transaction hash from sender to reconstruct transaction with fee payer
+     * signature.
      *
      * @param rawTransaction RLP-encoded signed transaction from sender
      * @return TxTypeFeeDelegatedSmartContractDeployWithRatio decoded transaction
      */
     public static TxTypeFeeDelegatedSmartContractDeployWithRatio decodeFromRawTransaction(byte[] rawTransaction) {
-        // TxHashRLP = type + encode([nonce, gasPrice, gas, to, value, from, input, humanReadable, feeRatio, codeFormat, txSignatures, feePayer, feePayerSignatures])
+        // TxHashRLP = type + encode([nonce, gasPrice, gas, to, value, from, input,
+        // humanReadable, feeRatio, codeFormat, txSignatures, feePayer,
+        // feePayerSignatures])
         try {
             byte[] rawTransactionExceptType = KaiaTransactionUtils.getRawTransactionNoType(rawTransaction);
 
@@ -122,8 +133,8 @@ public class TxTypeFeeDelegatedSmartContractDeployWithRatio extends TxTypeFeeDel
             BigInteger feeRatio = ((RlpString) values.get(8)).asPositiveBigInteger();
             BigInteger codeFormat = ((RlpString) values.get(9)).asPositiveBigInteger();
             TxType.Type type = Type.FEE_DELEGATED_SMART_CONTRACT_DEPLOY_WITH_RATIO;
-            TxTypeFeeDelegatedSmartContractDeployWithRatio tx
-                    = new TxTypeFeeDelegatedSmartContractDeployWithRatio(type, nonce, gasPrice, gasLimit, value, from, payload, feeRatio, codeFormat);
+            TxTypeFeeDelegatedSmartContractDeployWithRatio tx = new TxTypeFeeDelegatedSmartContractDeployWithRatio(type,
+                    nonce, gasPrice, gasLimit, value, from, payload, feeRatio, codeFormat);
             tx.addSignatureData(values, 10);
             return tx;
         } catch (Exception e) {

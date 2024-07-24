@@ -29,11 +29,12 @@ import java.util.Arrays;
 
 /**
  * AccountKeyPublic is used for accounts having one public key.
- * If an account has an AccountKeyPublic object, the tx validation process is done like below:
+ * If an account has an AccountKeyPublic object, the tx validation process is
+ * done like below:
  * <ul>
- * <li> Get the public key derived from ecrecover(txhash, txsig) </li>
- * <li> Check that the derived public key is the same as the corresponding </li>
- * <li> account's public key </li>
+ * <li>Get the public key derived from ecrecover(txhash, txsig)</li>
+ * <li>Check that the derived public key is the same as the corresponding</li>
+ * <li>account's public key</li>
  * </ul>
  */
 public class AccountKeyPublic implements AccountKey {
@@ -58,15 +59,14 @@ public class AccountKeyPublic implements AccountKey {
 
     public static AccountKeyPublic create(String publicKeyX, String publicKeyY) {
         return new AccountKeyPublic(
-                Numeric.prependHexPrefix(publicKeyX), Numeric.prependHexPrefix(publicKeyY)
-        );
+                Numeric.prependHexPrefix(publicKeyX), Numeric.prependHexPrefix(publicKeyY));
     }
 
     @Override
     public byte[] toRlp() {
         byte[] encodedTransaction = RlpEncoder.encode(
                 RlpString.create(Numeric.hexStringToByteArray(toCompressedPublicKey())));
-        byte[] type = {getType().getValue()};
+        byte[] type = { getType().getValue() };
         return BytesUtils.concat(type, encodedTransaction);
     }
 
@@ -111,8 +111,10 @@ public class AccountKeyPublic implements AccountKey {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         AccountKeyPublic that = (AccountKeyPublic) o;
         return Arrays.equals(toRlp(), that.toRlp());
     }

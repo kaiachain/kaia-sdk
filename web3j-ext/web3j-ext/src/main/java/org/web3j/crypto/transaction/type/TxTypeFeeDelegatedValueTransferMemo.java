@@ -18,22 +18,30 @@ public class TxTypeFeeDelegatedValueTransferMemo extends TxTypeFeeDelegate {
      */
     private final byte[] payload;
 
-    protected TxTypeFeeDelegatedValueTransferMemo(TxType.Type type,BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value, String from, byte[] payload) {
+    protected TxTypeFeeDelegatedValueTransferMemo(TxType.Type type, BigInteger nonce, BigInteger gasPrice,
+            BigInteger gasLimit, String to, BigInteger value, String from, byte[] payload) {
         super(type, nonce, gasPrice, gasLimit, from, to, value);
         this.payload = payload;
     }
 
-    public static TxTypeFeeDelegatedValueTransferMemo createTransaction(TxType.Type type,BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value, String from, byte[] payload) {
+    public static TxTypeFeeDelegatedValueTransferMemo createTransaction(TxType.Type type, BigInteger nonce,
+            BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value, String from, byte[] payload) {
         return new TxTypeFeeDelegatedValueTransferMemo(type, nonce, gasPrice, gasLimit, to, value, from, payload);
     }
-    protected TxTypeFeeDelegatedValueTransferMemo(long chainId, TxType.Type type,BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value, String from, byte[] payload) {
+
+    protected TxTypeFeeDelegatedValueTransferMemo(long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice,
+            BigInteger gasLimit, String to, BigInteger value, String from, byte[] payload) {
         super(chainId, type, nonce, gasPrice, gasLimit, from, to, value);
         this.payload = payload;
     }
 
-    public static TxTypeFeeDelegatedValueTransferMemo createTransaction(long chainId, TxType.Type type,BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value, String from, byte[] payload) {
-        return new TxTypeFeeDelegatedValueTransferMemo(chainId, type, nonce, gasPrice, gasLimit, to, value, from, payload);
+    public static TxTypeFeeDelegatedValueTransferMemo createTransaction(long chainId, TxType.Type type,
+            BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger value, String from,
+            byte[] payload) {
+        return new TxTypeFeeDelegatedValueTransferMemo(chainId, type, nonce, gasPrice, gasLimit, to, value, from,
+                payload);
     }
+
     public byte[] getPayload() {
         return payload;
     }
@@ -50,7 +58,8 @@ public class TxTypeFeeDelegatedValueTransferMemo extends TxTypeFeeDelegate {
     }
 
     /**
-     * create RlpType List which contains nonce, gas price, gas limit, to, value, from and payload.
+     * create RlpType List which contains nonce, gas price, gas limit, to, value,
+     * from and payload.
      * List elements can be different depending on transaction type.
      *
      * @return List RlpType List
@@ -66,13 +75,15 @@ public class TxTypeFeeDelegatedValueTransferMemo extends TxTypeFeeDelegate {
     }
 
     /**
-     * decode transaction hash from sender to reconstruct transaction with fee payer signature.
+     * decode transaction hash from sender to reconstruct transaction with fee payer
+     * signature.
      *
      * @param rawTransaction RLP-encoded signed transaction from sender
      * @return TxTypeFeeDelegatedValueTransferMemo decoded transaction
      */
     public static TxTypeFeeDelegatedValueTransferMemo decodeFromRawTransaction(byte[] rawTransaction) {
-        // TxHashRLP = type + encode([nonce, gasPrice, gas, to, value, from, input, txSignatures, feePayer, feePayerSignatures])
+        // TxHashRLP = type + encode([nonce, gasPrice, gas, to, value, from, input,
+        // txSignatures, feePayer, feePayerSignatures])
         try {
             byte[] rawTransactionExceptType = KaiaTransactionUtils.getRawTransactionNoType(rawTransaction);
 
@@ -86,8 +97,8 @@ public class TxTypeFeeDelegatedValueTransferMemo extends TxTypeFeeDelegate {
             String from = ((RlpString) values.get(5)).asString();
             byte[] payload = ((RlpString) values.get(6)).getBytes();
             TxType.Type type = Type.FEE_DELEGATED_VALUE_TRANSFER_MEMO;
-            TxTypeFeeDelegatedValueTransferMemo tx
-                    = TxTypeFeeDelegatedValueTransferMemo.createTransaction(type, nonce, gasPrice, gasLimit, to, value, from, payload);
+            TxTypeFeeDelegatedValueTransferMemo tx = TxTypeFeeDelegatedValueTransferMemo.createTransaction(type, nonce,
+                    gasPrice, gasLimit, to, value, from, payload);
             tx.addSignatureData(values, 7);
             return tx;
         } catch (Exception e) {

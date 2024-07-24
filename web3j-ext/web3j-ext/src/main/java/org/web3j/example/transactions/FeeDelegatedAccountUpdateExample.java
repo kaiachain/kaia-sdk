@@ -25,10 +25,10 @@ import org.web3j.protocol.kaia.core.method.response.TransactionReceipt;
  */
 public class FeeDelegatedAccountUpdateExample implements keySample {
 
-        public static void run(KaiaCredentials credentials) throws Exception {
+        public static void run() throws Exception {
 
                 Web3j web3j = Web3j.build(new HttpService(keySample.BAOBAB_URL));
-                KaiaCredentials new_credentials = KaiaCredentials.create(PUBLIC_KEY_privkey, PUBLIC_KEY_address);
+                KaiaCredentials credentials = KaiaCredentials.create(PUBLIC_KEY_privkey, PUBLIC_KEY_address);
                 KaiaCredentials credentials_feepayer = KaiaCredentials.create(keySample.LEGACY_KEY_FEEPAYER_privkey);
                 BigInteger GAS_PRICE = BigInteger.valueOf(50000000000L);
                 BigInteger GAS_LIMIT = BigInteger.valueOf(6721950);
@@ -38,7 +38,7 @@ public class FeeDelegatedAccountUpdateExample implements keySample {
                 BigInteger nonce = web3j.ethGetTransactionCount(from, DefaultBlockParameterName.LATEST).send()
                                 .getTransactionCount();
 
-                BigInteger newPubkey = new_credentials.getEcKeyPair().getPublicKey();
+                BigInteger newPubkey = credentials.getEcKeyPair().getPublicKey();
 
                 AccountKeyPublic accountkey = AccountKeyPublic.create(newPubkey);
 

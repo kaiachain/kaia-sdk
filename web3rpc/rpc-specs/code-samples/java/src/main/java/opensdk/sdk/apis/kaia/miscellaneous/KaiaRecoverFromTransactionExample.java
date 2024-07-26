@@ -1,7 +1,6 @@
-
 import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.klaytn.Web3j;
-import org.web3j.protocol.klaytn.core.method.response.KaiaRecoverFromTransactionResponse;
+import org.web3j.protocol.kaia.Web3j;
+import org.web3j.protocol.kaia.core.method.response.KaiaRecoverFromTransactionResponse;
 
 import java.io.IOException;
 

@@ -81,10 +81,8 @@ if(hasProperty('target') && target == 'android') {
 } else {
 
     apply plugin: 'java'
-    apply plugin: 'maven-publish'
     apply plugin: 'signing'
     apply plugin: 'io.codearte.nexus-staging'
-
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -98,7 +96,6 @@ if(hasProperty('target') && target == 'android') {
         from javadoc.destinationDir
     }
 
-
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -109,9 +106,9 @@ if(hasProperty('target') && target == 'android') {
 
                pom {
                    name = project.name
-                   description = project.description
+                   description = '{{description}}'
                    version = project.version
-                   url = "https://docs.klaytn.com/"
+                   url = "https://docs.kaia.io/"
                    licenses {
                        license {
                            name = "The Apache License, Version 2.0"
@@ -119,17 +116,30 @@ if(hasProperty('target') && target == 'android') {
                            distribution = "repo"
                        }
                    }
+                   scm {
+                        url = 'https://github.com/kaiachain/kaia-sdk'
+                        connection = 'scm:git:https://github.com/kaiachain/kaia-sdk.git'
+                        developerConnection = 'scm:git:ssh://github.com:kaiachain/kaia-sdk.git'
+                    }
+                    developers {
+                        developer {
+                            id = "jack"
+                            name = "jack"
+                            email = "jack.jin@klaytn.foundation"
+                        }
+                        developer {
+                            id = "jay"
+                            name = "jay"
+                            email = "jay.sep@klaytn.foundation"
+                        }
+                    }
                }
             }
         }
         repositories {
             maven {
-                name = "OSSRH"
-                url = "https://s01.oss.sonatype.org/content/repositories/releases/"
-                credentials {
-                    username = System.getenv("MAVEN_USERNAME")
-                    password = System.getenv("MAVEN_PASSWORD")
-                }
+            def releasesRepoUrl = layout.buildDirectory.dir('libs')
+            url = releasesRepoUrl
             }
         }
     }
@@ -143,12 +153,6 @@ if(hasProperty('target') && target == 'android') {
         useInMemoryPgpKeys(signingKey, signingPassword)
         sign publishing.publications.mavenJava
       }
-    }
-
-
-    nexusStaging {
-        username= System.getenv("MAVEN_USERNAME")
-        password= System.getenv("MAVEN_PASSWORD")
     }
 
     task execute(type:JavaExec) {

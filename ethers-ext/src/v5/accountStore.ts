@@ -4,7 +4,7 @@ import { JsonRpcProvider } from "@ethersproject/providers";
 import { SigningKey, computePublicKey } from "@ethersproject/signing-key";
 import { computeAddress } from "@ethersproject/transactions";
 
-import { HexStr } from "@klaytn/js-ext-core";
+import { HexStr } from "@kaiachain/js-ext-core";
 
 import { Wallet } from "./signer";
 

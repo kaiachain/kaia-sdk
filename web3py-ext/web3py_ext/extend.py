@@ -23,6 +23,8 @@ from web3._utils.method_formatters import ABI_REQUEST_FORMATTERS
 from web3py_ext.transaction.extended_transaction_utils import (
     from_peb,
     to_peb,
+    from_kei,
+    to_kei,
 )
 from web3.main import BaseWeb3
 from eth_utils import units

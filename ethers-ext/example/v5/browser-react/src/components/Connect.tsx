@@ -1,4 +1,4 @@
-import { Web3Provider } from '@klaytn/ethers-ext'
+import { Web3Provider } from '@kaiachain/ethers-ext'
 import { Account } from '../types';
 import { baobabNetworkSpec, switchNetwork } from '../util';
 

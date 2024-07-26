@@ -1,7 +1,7 @@
 package org.web3j.crypto.transaction.fee;
-import org.web3j.crypto.KlayCredentials;
-import org.web3j.crypto.KlayRawTransaction;
-import org.web3j.crypto.KlaySignatureData;
+import org.web3j.crypto.KaiaCredentials;
+import org.web3j.crypto.KaiaRawTransaction;
+import org.web3j.crypto.KaiaSignatureData;
 import org.web3j.utils.BytesUtils;
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.transaction.type.AbstractTxType;
@@ -20,21 +20,21 @@ public class FeePayer {
 
     final static String EMPTY_FEE_PAYER_ADDRESS = "0x";
     final static String ZERO_FEE_PAYER_ADDRESS = "0x0000000000000000000000000000000000000000";
-    private KlayCredentials credentials;
+    private KaiaCredentials credentials;
     private long chainId;
 
-    public FeePayer(KlayCredentials credentials, long chainId) {
+    public FeePayer(KaiaCredentials credentials, long chainId) {
         this.credentials = credentials;
         this.chainId = chainId;
     }
 
-    public KlayRawTransaction sign(TxTypeFeeDelegate txType) {
-        Set<KlaySignatureData> feePayerSignatureDataSet = getFeePayerSignatureData(txType);
+    public KaiaRawTransaction sign(TxTypeFeeDelegate txType) {
+        Set<KaiaSignatureData> feePayerSignatureDataSet = getFeePayerSignatureData(txType);
 
         List<RlpType> rlpTypeList = new ArrayList<>(txType.rlpValues());
         List<RlpType> senderSignatureList = new ArrayList<>();
 
-        for (KlaySignatureData senderSignature : txType.getSenderSignatureDataSet()) {
+        for (KaiaSignatureData senderSignature : txType.getSenderSignatureDataSet()) {
             senderSignatureList.add(senderSignature.toRlpList());
         }
         rlpTypeList.add(new RlpList(senderSignatureList));
@@ -44,25 +44,25 @@ public class FeePayer {
 
         String feePayer = txType.getFeePayer();
         if (!feePayer.equals(EMPTY_FEE_PAYER_ADDRESS) && !feePayer.equals(ZERO_FEE_PAYER_ADDRESS)) {
-            for (KlaySignatureData feePayerSignatureData : txType.getFeePayerSignatureData()) {
+            for (KaiaSignatureData feePayerSignatureData : txType.getFeePayerSignatureData()) {
                 feePayerSignatureList.add(feePayerSignatureData.toRlpList());
             }
         }
 
-        for (KlaySignatureData feePayerSignatureData : feePayerSignatureDataSet) {
+        for (KaiaSignatureData feePayerSignatureData : feePayerSignatureDataSet) {
             feePayerSignatureList.add(feePayerSignatureData.toRlpList());
         }
         rlpTypeList.add(new RlpList(feePayerSignatureList));
 
         byte[] encodedTransaction = RlpEncoder.encode(new RlpList(rlpTypeList));
-        byte[] type = {txType.getKlayType().get()};
+        byte[] type = {txType.getKaiaType().get()};
         byte[] rawTx = BytesUtils.concat(type, encodedTransaction);
-        return new KlayRawTransaction(null, rawTx, feePayerSignatureDataSet);
+        return new KaiaRawTransaction(null, rawTx, feePayerSignatureDataSet);
     }
 
     @Deprecated
-    public KlaySignatureData getSignatureData(AbstractTxType txType) {
-        KlaySignatureData signatureData = KlaySignatureData.createKlaySignatureDataFromChainId(chainId);
+    public KaiaSignatureData getSignatureData(AbstractTxType txType) {
+        KaiaSignatureData signatureData = KaiaSignatureData.createKaiaSignatureDataFromChainId(chainId);
         byte[] encodedTransaction = txType.getEncodedTransactionNoSig();
 
         List<RlpType> rlpTypeList = new ArrayList<>();
@@ -72,7 +72,7 @@ public class FeePayer {
         byte[] encodedTransaction2 = RlpEncoder.encode(new RlpList(rlpTypeList));
 
         Sign.SignatureData signedSignatureData = Sign.signMessage(encodedTransaction2, credentials.getEcKeyPair());
-        return KlaySignatureData.createEip155KlaySignatureData(signedSignatureData, chainId);
+        return KaiaSignatureData.createEip155KaiaSignatureData(signedSignatureData, chainId);
     }
 
     /**
@@ -81,9 +81,9 @@ public class FeePayer {
      * @param txType txType to extract fee payer's signature data
      * @return Set fee payer's signature data
      */
-    private Set<KlaySignatureData> getFeePayerSignatureData(AbstractTxType txType) {
-        KlaySignatureData signatureData = KlaySignatureData.createKlaySignatureDataFromChainId(chainId);
-        Set<KlaySignatureData> feePayerSignatureDataSet = new HashSet<>();
+    private Set<KaiaSignatureData> getFeePayerSignatureData(AbstractTxType txType) {
+        KaiaSignatureData signatureData = KaiaSignatureData.createKaiaSignatureDataFromChainId(chainId);
+        Set<KaiaSignatureData> feePayerSignatureDataSet = new HashSet<>();
         byte[] encodedTransactionNoSig = txType.getEncodedTransactionNoSig();
 
         List<RlpType> rlpTypeList = new ArrayList<>();
@@ -93,7 +93,7 @@ public class FeePayer {
         byte[] encodedTransaction = RlpEncoder.encode(new RlpList(rlpTypeList));
 
             Sign.SignatureData signedSignatureData = Sign.signMessage(encodedTransaction, credentials.getEcKeyPair());
-            feePayerSignatureDataSet.add(KlaySignatureData.createEip155KlaySignatureData(signedSignatureData, chainId));
+            feePayerSignatureDataSet.add(KaiaSignatureData.createEip155KaiaSignatureData(signedSignatureData, chainId));
 
         return feePayerSignatureDataSet;
     }

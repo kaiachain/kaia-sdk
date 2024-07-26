@@ -1,0 +1,101 @@
+package org.web3j.protocol.kaia.core.method.response;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import javax.annotation.Nonnull;
+
+/**
+ * KaiaGetAccountKey
+ */
+@JsonPropertyOrder({"key", "keyType"})
+public class KaiaGetAccountKey {
+
+  private Object key = new Object();
+
+  private Integer keyType;
+
+   /**
+   * A list of keys. A key can be any of AccountKeyNil, AccountKeyLegacy, AccountKeyPublic, AccountKeyFail, and AccountKeyWeightedMultiSig
+   * @return key
+  **/
+  @Nonnull
+  @JsonProperty("key")
+  @JsonInclude(Include.ALWAYS)
+  public Object getKey() {
+    return key;
+  }
+
+  @JsonProperty("key")
+  @JsonInclude(Include.ALWAYS)
+  public void setKey(Object key) {
+    this.key = key;
+  }
+
+  public KaiaGetAccountKey keyType(Integer keyType) {
+    this.keyType = keyType;
+    return this;
+  }
+
+   /**
+   * The type of AccountKeyRoleBased. This must be 0x05.
+   * @return keyType
+  **/
+  @Nonnull
+  @JsonProperty("keyType")
+  @JsonInclude(Include.ALWAYS)
+  public Integer getKeyType() {
+    return keyType;
+  }
+
+  @JsonProperty("keyType")
+  @JsonInclude(Include.ALWAYS)
+  public void setKeyType(Integer keyType) {
+    this.keyType = keyType;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    KaiaGetAccountKey KaiaGetAccountKey = (KaiaGetAccountKey) o;
+    return Objects.equals(this.key, KaiaGetAccountKey.key) &&
+        Objects.equals(this.keyType, KaiaGetAccountKey.keyType);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(key, keyType);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class KaiaGetAccountKey {\n");
+    sb.append("    key: ").append(toIndentedString(key)).append("\n");
+    sb.append("    keyType: ").append(toIndentedString(keyType)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+
+}
+

@@ -36,15 +36,15 @@ import org.web3j.crypto.transaction.type.TxTypeSmartContractDeploy;
 import org.web3j.crypto.transaction.type.TxTypeSmartContractExecution;
 import org.web3j.crypto.transaction.type.TxTypeValueTransfer;
 import org.web3j.crypto.transaction.type.TxTypeValueTransferMemo;
-import org.web3j.utils.KlayTransactionUtils;
+import org.web3j.utils.KaiaTransactionUtils;
 
 /**
  * Create RLP encoded transaction, implementation as per p4 of the <a
  * href="http://gavwood.com/paper.pdf">yellow paper</a>.
  */
-public class KlayTransactionEncoder extends TransactionEncoder{
+public class KaiaTransactionEncoder extends TransactionEncoder{
 
-    public static byte[] signMessage(RawTransaction rawTransaction, long chainId, KlayCredentials credentials) {
+    public static byte[] signMessage(RawTransaction rawTransaction, long chainId, KaiaCredentials credentials) {
         if(credentials.isDeCoupled()){
             throw new Error("a legacy transaction must be with a legacy account key");
         }
@@ -52,7 +52,7 @@ public class KlayTransactionEncoder extends TransactionEncoder{
         return signMessage(rawTransaction, chainId, credentials.convertToCredentials());
     }
 
-    public static byte[] signMessage(RawTransaction rawTransaction, KlayCredentials credentials) {
+    public static byte[] signMessage(RawTransaction rawTransaction, KaiaCredentials credentials) {
         if(credentials.isDeCoupled()){
             throw new Error("a legacy transaction must be with a legacy account key");
         }
@@ -62,11 +62,11 @@ public class KlayTransactionEncoder extends TransactionEncoder{
 
 
 
-    public static byte[] signMessage(KlayRawTransaction rawTransaction, KlayCredentials credentials) {
+    public static byte[] signMessage(KaiaRawTransaction rawTransaction, KaiaCredentials credentials) {
         AbstractTxType tx = (AbstractTxType) rawTransaction.getTransaction();
         long chainId = tx.getChainId();
 
-        if (Type.isFeeDelegated(tx.getKlayType()) || Type.isPartialFeeDelegated(tx.getKlayType())) {
+        if (Type.isFeeDelegated(tx.getKaiaType()) || Type.isPartialFeeDelegated(tx.getKaiaType())) {
             TxTypeFeeDelegate senderTx = (TxTypeFeeDelegate) rawTransaction.getTransaction();
             return senderTx.sign(credentials, chainId).getRaw();
         }
@@ -74,35 +74,35 @@ public class KlayTransactionEncoder extends TransactionEncoder{
     }
 
 
-    public static byte[] signMessage(KlayRawTransaction rawTransaction, long chainId, KlayCredentials credentials) {
+    public static byte[] signMessage(KaiaRawTransaction rawTransaction, long chainId, KaiaCredentials credentials) {
         AbstractTxType tx = (AbstractTxType) rawTransaction.getTransaction();
 
-        if (Type.isFeeDelegated(tx.getKlayType()) || Type.isPartialFeeDelegated(tx.getKlayType())) {
+        if (Type.isFeeDelegated(tx.getKaiaType()) || Type.isPartialFeeDelegated(tx.getKaiaType())) {
             TxTypeFeeDelegate senderTx = (TxTypeFeeDelegate) rawTransaction.getTransaction();
             return senderTx.sign(credentials, chainId).getRaw();
         }
         return tx.sign(credentials, chainId).getRaw();
     }
 
-    public static byte[] signMessageAsFeePayer(KlayRawTransaction rawTransaction, long chainId,
-            KlayCredentials credentials) {
+    public static byte[] signMessageAsFeePayer(KaiaRawTransaction rawTransaction, long chainId,
+            KaiaCredentials credentials) {
         TxTypeFeeDelegate senderTx = (TxTypeFeeDelegate) rawTransaction.getTransaction();
         senderTx.setFeePayer(credentials.getAddress());
-        KlayRawTransaction payerTx = new FeePayer(credentials, chainId).sign(senderTx);
+        KaiaRawTransaction payerTx = new FeePayer(credentials, chainId).sign(senderTx);
         return payerTx.getRaw();
     }
 
-    public static byte[] signMessageAsFeePayer(KlayRawTransaction rawTransaction, KlayCredentials credentials) {
+    public static byte[] signMessageAsFeePayer(KaiaRawTransaction rawTransaction, KaiaCredentials credentials) {
         TxTypeFeeDelegate senderTx = (TxTypeFeeDelegate) rawTransaction.getTransaction();
         long chainId = senderTx.getChainId();
         senderTx.setFeePayer(credentials.getAddress());
-        KlayRawTransaction payerTx = new FeePayer(credentials, chainId).sign(senderTx);
+        KaiaRawTransaction payerTx = new FeePayer(credentials, chainId).sign(senderTx);
         return payerTx.getRaw();
     }
 
-    public static byte[] signMessage(byte[] encodedSenderTransaction, long chainId, KlayCredentials credentials) {
+    public static byte[] signMessage(byte[] encodedSenderTransaction, long chainId, KaiaCredentials credentials) {
 
-        TxType.Type type = KlayTransactionUtils.getType(encodedSenderTransaction);
+        TxType.Type type = KaiaTransactionUtils.getType(encodedSenderTransaction);
         if (!Type.isFeeDelegated(type) && !Type.isPartialFeeDelegated(type)) {
             AbstractTxType encodedTx;
             switch (type) {
@@ -203,9 +203,9 @@ public class KlayTransactionEncoder extends TransactionEncoder{
     }
 
     public static byte[] signMessageAsFeePayer(byte[] encodedSenderTransaction, long chainId,
-            KlayCredentials credentials) {
+            KaiaCredentials credentials) {
 
-        TxType.Type type = KlayTransactionUtils.getType(encodedSenderTransaction);
+        TxType.Type type = KaiaTransactionUtils.getType(encodedSenderTransaction);
         TxTypeFeeDelegate senderTx;
         switch (type) {
             case FEE_DELEGATED_CANCEL:
@@ -262,7 +262,7 @@ public class KlayTransactionEncoder extends TransactionEncoder{
                 break;
         }
 
-        KlayRawTransaction payerTx = new FeePayer(credentials, chainId).sign(senderTx);
+        KaiaRawTransaction payerTx = new FeePayer(credentials, chainId).sign(senderTx);
         
         return payerTx.getRaw();
     }

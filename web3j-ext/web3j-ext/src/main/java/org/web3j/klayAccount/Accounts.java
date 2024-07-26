@@ -1,61 +1,61 @@
-package org.web3j.klayAccount;
+package org.web3j.kaiaAccount;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.web3j.crypto.KlayCredentials;
+import org.web3j.crypto.KaiaCredentials;
 
 public class Accounts {
-    private final List<KlayCredentials> CredentialLists = new ArrayList<>();
+    private final List<KaiaCredentials> CredentialLists = new ArrayList<>();
 
     public Accounts() {
     }
 
-    public boolean add(KlayCredentials credentials) {
+    public boolean add(KaiaCredentials credentials) {
         return CredentialLists.add(credentials);
     }
 
     public boolean add(String privKey) {
-        return CredentialLists.add(KlayCredentials.create(privKey));
+        return CredentialLists.add(KaiaCredentials.create(privKey));
     }
 
-    public boolean remove(KlayCredentials credentials) {
+    public boolean remove(KaiaCredentials credentials) {
         return CredentialLists.remove(credentials);
     }
 
-    public List<KlayCredentials> getList() {
+    public List<KaiaCredentials> getList() {
         return this.CredentialLists;
     }
 
-    public List<KlayCredentials> credentialsByKey(BigInteger privKey) {
-        List<KlayCredentials> returnKlayCredentials = new ArrayList<>();
-        for (KlayCredentials element : CredentialLists) {
+    public List<KaiaCredentials> credentialsByKey(BigInteger privKey) {
+        List<KaiaCredentials> returnKaiaCredentials = new ArrayList<>();
+        for (KaiaCredentials element : CredentialLists) {
             if (element.getEcKeyPair().getPrivateKey().equals(privKey)) {
-                returnKlayCredentials.add(element);
+                returnKaiaCredentials.add(element);
             }
         }
-        return returnKlayCredentials;
+        return returnKaiaCredentials;
     }
     
-    public List<KlayCredentials> credentialsByPubKey(BigInteger pubKey) {
-        List<KlayCredentials> returnKlayCredentials = new ArrayList<>();
-        for (KlayCredentials element : CredentialLists) {
+    public List<KaiaCredentials> credentialsByPubKey(BigInteger pubKey) {
+        List<KaiaCredentials> returnKaiaCredentials = new ArrayList<>();
+        for (KaiaCredentials element : CredentialLists) {
             if (element.getEcKeyPair().getPublicKey().equals(pubKey)) {
-                returnKlayCredentials.add(KlayCredentials.create(element.getEcKeyPair(), element.getAddress()));
+                returnKaiaCredentials.add(KaiaCredentials.create(element.getEcKeyPair(), element.getAddress()));
             }
         }
-        return returnKlayCredentials;
+        return returnKaiaCredentials;
     }
 
-    public List<KlayCredentials> credentialsByAddress(String address) {
-        List<KlayCredentials> returnKlayCredentials = new ArrayList<>();
-        for (KlayCredentials element : CredentialLists) {
+    public List<KaiaCredentials> credentialsByAddress(String address) {
+        List<KaiaCredentials> returnKaiaCredentials = new ArrayList<>();
+        for (KaiaCredentials element : CredentialLists) {
             if (address.equals(element.getAddress())) {
-                returnKlayCredentials.add(element);
+                returnKaiaCredentials.add(element);
             }
         }
-        return returnKlayCredentials;
+        return returnKaiaCredentials;
     }
 
 

@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.web3j.crypto.transaction.type.TxType;
 
-public class KlayTransactionUtils {
+public class KaiaTransactionUtils {
     
     public static TxType.Type getType(byte[] rawTransaction) {
         return TxType.Type.findByValue(rawTransaction[0]);

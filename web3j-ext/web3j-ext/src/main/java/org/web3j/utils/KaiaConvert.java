@@ -2,10 +2,10 @@ package org.web3j.utils;
 
 import java.math.BigDecimal;
 
-public class KlayConvert {
-    private KlayConvert() { } 
+public class KaiaConvert {
+    private KaiaConvert() { } 
 
-    // Klaytn units
+    // Kaia units
     public static BigDecimal fromPeb(String number, Unit unit) {
         return fromPeb(new BigDecimal(number), unit);
     }

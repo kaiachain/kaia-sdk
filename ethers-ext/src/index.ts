@@ -1,5 +1,12 @@
-// require("@klaytn/ethers-ext") exports the extension for ethers v5
-export * from "./v5";
+// Pass-through js-ext-core exports
+export * from "@kaiachain/js-ext-core/util";
+export {
+  AccountKey,
+  AccountKeyFactory,
+  KlaytnTx,
+  KlaytnTxFactory,
+  parseTransaction,
+} from "@kaiachain/js-ext-core";
 
 // require("@klaytn/ethers-ext").v5 exports the extension for ethers v5
 // require("@klaytn/ethers-ext").v6 exports the extension for ethers v6

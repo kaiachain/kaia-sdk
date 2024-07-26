@@ -64,6 +64,45 @@ jobs:
             js-ext-core: 
               - "js-ext-core/package.json"
 
+      - name: Publish web3j-ext
+        if: steps.verify-changed-files.outputs.web3j-ext_any_changed == 'true'
+        shell: bash
+        run: |
+          cd web3j-ext/web3j-ext && gradle wrapper && gradle build && gradle publish \
+          && cd build/libs && zip -r web3j-ext.zip io \
+          && curl POST --verbose --header "Authorization: Bearer $PUBLISHER_TOKEN" --form bundle=@web3j-ext.zip https://central.sonatype.com/api/v1/publisher/upload
+        env:
+          PUBLISHER_TOKEN: ${{ secrets.PUBLISHER_TOKEN }}
+          PUBLISH_TO_MAVEN_PUBLIC: true
+          ORG_GRADLE_PROJECT_SIGNINGPASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
+          ORG_GRADLE_PROJECT_SIGNINGKEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
+
+      - name: generate ethers-ext sdk
+        if: steps.verify-changed-files.outputs.ethers-ext_any_changed == 'true' 
+        shell: bash
+        run: |
+          cd ethers-ext && npm install && npm run build && cd -
+
+      - name: publish ethers-ext sdk
+        if: steps.verify-changed-files.outputs.ethers-ext_any_changed == 'true' 
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          cd ethers-ext && npx pnpm --filter "@kaiachain/*" -r publish --publish-branch main --no-git-check --access=public && cd -
+
+      - name: generate web3js-ext 
+        if: steps.verify-changed-files.outputs.web3js-ext_any_changed == 'true' 
+        shell: bash
+        run: |
+          cd web3js-ext && npm install && npm run build && cd -
+
+      - name: publish web3js-ext
+        if: steps.verify-changed-files.outputs.web3js-ext_any_changed == 'true' 
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          cd web3js-ext && npx pnpm --filter "@kaiachain/*" -r publish --publish-branch main --no-git-check --access=public && cd -
+
       - name: generate web3rpc-python 
         if: steps.verify-changed-files.outputs.web3py-ext_any_changed == 'true'
         shell: bash
@@ -88,33 +127,27 @@ jobs:
           password: ${{ secrets.PYPI_API_TOKEN }}
           packages-dir: web3py-ext/dist
 
-      - name: Publish web3j-ext
-        if: steps.verify-changed-files.outputs.web3j-ext_any_changed == 'true'   
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: publish
-          build-root-directory: web3j-ext/web3j-ext
-          gradle-version: release-candidate
+      - name: generate web3rpc-java sdk
+        if: steps.verify-changed-files.outputs.web3rpc_any_changed  == 'true' 
+        shell: bash
+        run: |
+          cd web3rpc/sdk/client/java && bash -x java-generate.sh  && cd -
         env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
           PUBLISH_TO_MAVEN_PUBLIC: true
           ORG_GRADLE_PROJECT_SIGNINGPASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
           ORG_GRADLE_PROJECT_SIGNINGKEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
 
-      - name: generate ethers-ext sdk
-        if: steps.verify-changed-files.outputs.ethers-ext_any_changed == 'true' 
-        shell: bash
+      - name: Publish web3rpc-java sdk
+        if: steps.verify-changed-files.outputs.web3rpc_any_changed   == 'true'
         run: |
-          cd ethers-ext && npm install && npm run build && cd -
-
-      - name: publish ethers-ext sdk
-        if: steps.verify-changed-files.outputs.ethers-ext_any_changed == 'true' 
+          cd web3rpc/sdk/client/java/openapi && gradle build && gradle publish \
+          && cd build/libs && zip -r web3rpc-java.zip io \
+          && curl POST --verbose --header "Authorization: Bearer $PUBLISHER_TOKEN" --form bundle=@web3rpc-java.zip https://central.sonatype.com/api/v1/publisher/upload
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          cd ethers-ext && npx pnpm --filter "@klaytn/*" -r publish --publish-branch main --no-git-check --access=public && cd -
-
+          PUBLISHER_TOKEN: ${{ secrets.PUBLISHER_TOKEN }}
+          PUBLISH_TO_MAVEN_PUBLIC: true
+          ORG_GRADLE_PROJECT_SIGNINGPASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
+          ORG_GRADLE_PROJECT_SIGNINGKEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
             
       - name: generate web3rpc-javascript sdk
         if: steps.verify-changed-files.outputs.web3rpc_any_changed == 'true' 
@@ -127,33 +160,8 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          cd web3rpc/sdk/client/javascript/openapi && npx pnpm --filter "@klaytn/*" -r publish --publish-branch main --no-git-check --access=public && cd -
+          cd web3rpc/sdk/client/javascript/openapi && npx pnpm --filter "@kaiachain/*" -r publish --publish-branch main --no-git-check --access=public && cd -
 
-
-      - name: generate web3rpc-java sdk
-        if: steps.verify-changed-files.outputs.web3rpc_any_changed  == 'true' 
-        shell: bash
-        run: |
-          cd web3rpc/sdk/client/java && bash -x java-generate.sh  && cd -
-        env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
-          ORG_GRADLE_PROJECT_SIGNINGPASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
-          ORG_GRADLE_PROJECT_SIGNINGKEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
-
-      - name: Publish web3rpc-java sdk
-        if: steps.verify-changed-files.outputs.web3rpc_any_changed   == 'true' 
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: publish
-          build-root-directory: web3rpc/sdk/client/java/openapi
-          gradle-version: release-candidate
-        env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
-          ORG_GRADLE_PROJECT_SIGNINGPASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
-          ORG_GRADLE_PROJECT_SIGNINGKEY: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
-          
       - name: generate js-ext-core sdk
         if: steps.verify-changed-files.outputs.js-ext-core_any_changed == 'true' 
         shell: bash
@@ -165,17 +173,5 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          cd js-ext-core && npx pnpm --filter "@klaytn/*" -r publish --publish-branch main --no-git-check --access=public && cd -
+          cd js-ext-core && npx pnpm --filter "@kaiachain/*" -r publish --publish-branch main --no-git-check --access=public && cd -
 
-      - name: generate web3js-ext 
-        if: steps.verify-changed-files.outputs.web3js-ext_any_changed == 'true' 
-        shell: bash
-        run: |
-          cd web3js-ext && npm install && npm run build && cd -
-
-      - name: publish web3js-ext
-        if: steps.verify-changed-files.outputs.web3js-ext_any_changed == 'true' 
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          cd web3js-ext && npx pnpm --filter "@klaytn/*" -r publish --publish-branch main --no-git-check --access=public && cd -

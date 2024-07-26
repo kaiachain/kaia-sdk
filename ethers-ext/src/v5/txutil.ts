@@ -7,11 +7,11 @@ import { SigningKey } from "@ethersproject/signing-key";
 import { poll } from "@ethersproject/web";
 import _ from "lodash";
 
-import { getChainIdFromSignatureTuples, parseTransaction } from "@klaytn/js-ext-core";
+import { getChainIdFromSignatureTuples, parseTransaction } from "@kaiachain/js-ext-core";
 
 import { TransactionRequest } from "./types";
 
-const logger = new Logger("@klaytn/ethers-ext");
+const logger = new Logger("@kaiachain/ethers-ext");
 
 // Normalize transaction request in Object or RLP format
 export async function getTransactionRequest(transactionOrRLP: Deferrable<TransactionRequest> | string): Promise<TransactionRequest> {

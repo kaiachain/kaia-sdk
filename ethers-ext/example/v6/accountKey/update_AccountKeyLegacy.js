@@ -3,7 +3,7 @@
 
 const { ethers } = require("ethers6");
 
-const { Wallet, TxType, AccountKeyType } = require("@klaytn/ethers-ext/v6");
+const { Wallet, TxType, AccountKeyType} = require("@kaiachain/ethers-ext");
 
 // Using legacy AccountKey to execute this example repeatedly.
 // But you might want to register a different Accountkey.

@@ -108,3 +108,9 @@ jobs:
         run: |
           cd web3js-ext && npm install && npm run build && cd -
 
+      - name: generate web3j-ext
+        if: steps.verify-changed-files.outputs.web3j-ext_any_changed == 'true'
+        shell: bash
+        run: |
+          cd web3j-ext/web3j-ext && gradle wrapper && gradle build && cd -
+

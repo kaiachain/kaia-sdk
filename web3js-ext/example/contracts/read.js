@@ -1,4 +1,4 @@
-const { Web3 } = require("@klaytn/web3js-ext");
+const { Web3 } = require("@kaiachain/web3js-ext");
 
 const provider = new Web3.providers.HttpProvider("https://public-en-baobab.klaytn.net");
 const web3 = new Web3(provider);

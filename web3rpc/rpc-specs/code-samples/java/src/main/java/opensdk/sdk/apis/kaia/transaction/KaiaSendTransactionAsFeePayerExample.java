@@ -1,9 +1,8 @@
-
-import org.web3j.protocol.klaytn.core.method.response.KaiaSendTransactionAsFeePayerResponse;
-import org.web3j.protocol.klaytn.core.method.response.KaiatnTransactionTypes;
-import org.web3j.protocol.klaytn.core.method.response.Signature;
+import org.web3j.protocol.kaia.core.method.response.KaiaSendTransactionAsFeePayerResponse;
+import org.web3j.protocol.kaia.core.method.response.KaiaTransactionTypes;
+import org.web3j.protocol.kaia.core.method.response.Signature;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.klaytn.Web3j;
+import org.web3j.protocol.kaia.Web3j;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.List;
 public class KaiaSendTransactionAsFeePayerExample {
     private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
   void kaiaSendTransactionAsFeePayerExample() throws IOException {
-    KaiatnTransactionTypes tx = new KaiatnTransactionTypes();
+    KaiaTransactionTypes tx = new KaiaTransactionTypes();
     Signature signature = new Signature();
     signature.setV("0x4e43");
     signature.setR("0xd3ff5ca7bdd0120d79e8aa875593d05022fe74ce2b7a0594218d53c0fdca7fa9");

@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KlayWalletUtils {
+public class KaiaWelletUtils {
 
     private static final int CURRENT_VERSION = 3;
     private static final String CIPHER = "aes-128-ctr";
@@ -24,46 +24,46 @@ public class KlayWalletUtils {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public KlayCredentials loadKlayCredentials(String password, String source)
+    public KaiaCredentials loadKaiaCredentials(String password, String source)
             throws IOException, CipherException {
         return loadCredentials(password, new File(source));
     }
 
-    public KlayCredentials loadCredentials(String password, File source)
+    public KaiaCredentials loadCredentials(String password, File source)
             throws IOException, CipherException {
         WalletFile walletFile = objectMapper.readValue(source, WalletFile.class);
-        return KlayCredentials.create(Wallet.decrypt(password, walletFile), walletFile.getAddress());
+        return KaiaCredentials.create(Wallet.decrypt(password, walletFile), walletFile.getAddress());
     }
 
-    public static KlayCredentials loadJsonKlayCredentials(String password, String content)
+    public static KaiaCredentials loadJsonKaiaCredentials(String password, String content)
             throws IOException, CipherException {
         WalletFile walletFile = objectMapper.readValue(content, WalletFile.class);
-        return KlayCredentials.create(Wallet.decrypt(password, walletFile), walletFile.getAddress());
+        return KaiaCredentials.create(Wallet.decrypt(password, walletFile), walletFile.getAddress());
     }
 
-    public static List<List<KlayCredentials>> loadKlayCredentialsFromV4(String password, String source)
+    public static List<List<KaiaCredentials>> loadKaiaCredentialsFromV4(String password, String source)
             throws Exception {
-        return loadKlayCredentialsFromV4(password, new File(source));
+        return loadKaiaCredentialsFromV4(password, new File(source));
     }
 
-    public static List<List<KlayCredentials>> loadKlayCredentialsFromV4(String password, File jsonFile)
+    public static List<List<KaiaCredentials>> loadKaiaCredentialsFromV4(String password, File jsonFile)
             throws Exception {
         JsonNode rootNode = objectMapper.readTree(jsonFile);
-        return loadKlayCredentialsV4(password, rootNode);
+        return loadKaiaCredentialsV4(password, rootNode);
     }
 
-    public static List<List<KlayCredentials>> loadJsonKlayCredentialsFromV4(String password, String content)
+    public static List<List<KaiaCredentials>> loadJsonKaiaCredentialsFromV4(String password, String content)
             throws Exception {
         JsonNode rootNode = objectMapper.readTree(content);
-        return loadKlayCredentialsV4(password, rootNode);
+        return loadKaiaCredentialsV4(password, rootNode);
     }
 
-    static List<List<KlayCredentials>> loadKlayCredentialsV4(String password, JsonNode rootNode) throws Exception {
+    static List<List<KaiaCredentials>> loadKaiaCredentialsV4(String password, JsonNode rootNode) throws Exception {
 
         // Extracting the address
         String address = rootNode.get("address").asText();
 
-        List<List<KlayCredentials>> cryptoLists = new ArrayList<>();
+        List<List<KaiaCredentials>> cryptoLists = new ArrayList<>();
         JsonNode keyringNode = rootNode.get("keyring");
 
         // Check if 'keyring' is an array of arrays(=roleBased) or a single array
@@ -71,19 +71,19 @@ public class KlayWalletUtils {
             if (keyringNode.has(0) && keyringNode.get(0).isArray()) {
                 // It's a nested array
                 for (JsonNode arrayNode : keyringNode) {
-                    List<KlayCredentials> cryptos = new ArrayList<>();
+                    List<KaiaCredentials> cryptos = new ArrayList<>();
                     for (JsonNode cryptoNode : arrayNode) {
                         Crypto crypto = objectMapper.treeToValue(cryptoNode, Crypto.class);
-                        cryptos.add(decryptKlayCredentials(crypto, password, address));
+                        cryptos.add(decryptKaiaCredentials(crypto, password, address));
                     }
                     cryptoLists.add(cryptos);
                 }
             } else {
                 // It's a single array, create one list with all the elements
-                List<KlayCredentials> cryptos = new ArrayList<>();
+                List<KaiaCredentials> cryptos = new ArrayList<>();
                 for (JsonNode cryptoNode : keyringNode) {
                     Crypto crypto = objectMapper.treeToValue(cryptoNode, Crypto.class);
-                    cryptos.add(decryptKlayCredentials(crypto, password, address));
+                    cryptos.add(decryptKaiaCredentials(crypto, password, address));
                 }
                 cryptoLists.add(cryptos);
             }
@@ -92,14 +92,14 @@ public class KlayWalletUtils {
         return cryptoLists;
     }
 
-    static KlayCredentials decryptKlayCredentials(Crypto crypto, String password, String address)
+    static KaiaCredentials decryptKaiaCredentials(Crypto crypto, String password, String address)
             throws CipherException {
         WalletFile temp = new WalletFile();
         temp.setCrypto(crypto);
         temp.setVersion(CURRENT_VERSION);
         ECKeyPair privkey = Wallet.decrypt(password, temp);
 
-        return KlayCredentials.create(privkey, address);
+        return KaiaCredentials.create(privkey, address);
 
     }
 }

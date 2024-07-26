@@ -1,8 +1,7 @@
-
-import org.web3j.protocol.klaytn.core.method.response.KaiaCallObject;
-import org.web3j.protocol.klaytn.core.method.response.KaiaCallResponse;
+import org.web3j.protocol.kaia.core.method.response.KaiaCallObject;
+import org.web3j.protocol.kaia.core.method.response.KaiaCallResponse;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.protocol.klaytn.Web3j;
+import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class KaiaCallExample {

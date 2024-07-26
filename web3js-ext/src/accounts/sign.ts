@@ -1,4 +1,4 @@
-import { isKlaytnTxType, KlaytnTxFactory, parseTxType, getChainIdFromSignatureTuples, isFeePayerSigTxType } from "@klaytn/js-ext-core";
+import { isKlaytnTxType, KlaytnTxFactory, parseTxType, getChainIdFromSignatureTuples, isFeePayerSigTxType } from "@kaiachain/js-ext-core";
 import _ from "lodash";
 import { Web3Context } from "web3-core";
 import { TransactionSigningError } from "web3-errors";

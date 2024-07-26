@@ -21,15 +21,19 @@ const encryptedKey = `{
 const password = "password";
 // const address = "0xEc5eAa07b4d3CbAfe7bf437a1Ea9A898209F617c";
 // const key = "0x4062512193ef1dab8ccf3e3d7a4862e3c740bdf11d852954ed48bc73643e354f";
+const newPassword = "newPassword";
 
 async function main() {
   const account = Wallet.fromEncryptedJsonSync(encryptedKey, password);
 
-  console.log("decrypted address");
-  console.log(account.address);
+  console.log("decrypted (address, privateKey)");
+  console.log(account.klaytnAddr, ", ", account.privateKey);
 
-  console.log("\ndecrypted privateKey");
-  console.log(account.privateKey);
+  const v3encryptedKey = await account.encrypt(newPassword);
+  const newAccount = Wallet.fromEncryptedJsonSync(v3encryptedKey, newPassword);
+
+  console.log("\ndecrypted (address, privateKey) with new password");
+  console.log(newAccount.address, ", ", newAccount.privateKey);
 }
 
 main();

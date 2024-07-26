@@ -20,29 +20,37 @@ public class TxTypeFeeDelegatedAccountUpdateWithRatio extends TxTypeFeeDelegate 
     private final AccountKey accountKey;
 
     /**
-     * Fee ratio of the fee payer. If it is 30, 30% of the fee will be paid by the fee payer.
+     * Fee ratio of the fee payer. If it is 30, 30% of the fee will be paid by the
+     * fee payer.
      * 70% will be paid by the sender
      */
     private final BigInteger feeRatio;
 
-    public TxTypeFeeDelegatedAccountUpdateWithRatio(TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey, BigInteger feeRatio) {
+    public TxTypeFeeDelegatedAccountUpdateWithRatio(TxType.Type type, BigInteger nonce, BigInteger gasPrice,
+            BigInteger gasLimit, String from, AccountKey accountKey, BigInteger feeRatio) {
         super(type, nonce, gasPrice, gasLimit, from, "", BigInteger.ZERO);
         this.accountKey = accountKey;
         this.feeRatio = feeRatio;
     }
 
-    public static TxTypeFeeDelegatedAccountUpdateWithRatio createTransaction(TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey, BigInteger feeRatio) {
-        return new TxTypeFeeDelegatedAccountUpdateWithRatio(type, nonce, gasPrice, gasLimit, from, accountKey, feeRatio);
+    public static TxTypeFeeDelegatedAccountUpdateWithRatio createTransaction(TxType.Type type, BigInteger nonce,
+            BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey, BigInteger feeRatio) {
+        return new TxTypeFeeDelegatedAccountUpdateWithRatio(type, nonce, gasPrice, gasLimit, from, accountKey,
+                feeRatio);
     }
 
-    public TxTypeFeeDelegatedAccountUpdateWithRatio(long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey, BigInteger feeRatio) {
+    public TxTypeFeeDelegatedAccountUpdateWithRatio(long chainId, TxType.Type type, BigInteger nonce,
+            BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey, BigInteger feeRatio) {
         super(chainId, type, nonce, gasPrice, gasLimit, from, "", BigInteger.ZERO);
         this.accountKey = accountKey;
         this.feeRatio = feeRatio;
     }
 
-    public static TxTypeFeeDelegatedAccountUpdateWithRatio createTransaction(long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey, BigInteger feeRatio) {
-        return new TxTypeFeeDelegatedAccountUpdateWithRatio(chainId, type, nonce, gasPrice, gasLimit, from, accountKey, feeRatio);
+    public static TxTypeFeeDelegatedAccountUpdateWithRatio createTransaction(long chainId, TxType.Type type,
+            BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey,
+            BigInteger feeRatio) {
+        return new TxTypeFeeDelegatedAccountUpdateWithRatio(chainId, type, nonce, gasPrice, gasLimit, from, accountKey,
+                feeRatio);
     }
 
     public AccountKey getAccountKey() {
@@ -54,7 +62,8 @@ public class TxTypeFeeDelegatedAccountUpdateWithRatio extends TxTypeFeeDelegate 
     }
 
     /**
-     * create RlpType List which contains nonce, gas price, gas limit, from, accountKey and feeRatio.
+     * create RlpType List which contains nonce, gas price, gas limit, from,
+     * accountKey and feeRatio.
      * List elements can be different depending on transaction type.
      *
      * @return List RlpType List
@@ -80,13 +89,15 @@ public class TxTypeFeeDelegatedAccountUpdateWithRatio extends TxTypeFeeDelegate 
     }
 
     /**
-     * decode transaction hash from sender to reconstruct transaction with fee payer signature.
+     * decode transaction hash from sender to reconstruct transaction with fee payer
+     * signature.
      *
      * @param rawTransaction RLP-encoded signed transaction from sender
      * @return TxTypeFeeDelegatedAccountUpdateWithRatio decoded transaction
      */
     public static TxTypeFeeDelegatedAccountUpdateWithRatio decodeFromRawTransaction(byte[] rawTransaction) {
-        // TxHashRLP = type + encode([nonce, gasPrice, gas, to, value, from, feeRatio, txSignatures, feePayer, feePayerSignatures])
+        // TxHashRLP = type + encode([nonce, gasPrice, gas, to, value, from, feeRatio,
+        // txSignatures, feePayer, feePayerSignatures])
         try {
             byte[] rawTransactionExceptType = KaiaTransactionUtils.getRawTransactionNoType(rawTransaction);
 
@@ -101,8 +112,8 @@ public class TxTypeFeeDelegatedAccountUpdateWithRatio extends TxTypeFeeDelegate 
             BigInteger feeRatio = ((RlpString) values.get(5)).asPositiveBigInteger();
             TxType.Type type = Type.FEE_DELEGATED_ACCOUNT_UPDATE_WITH_RATIO;
 
-            TxTypeFeeDelegatedAccountUpdateWithRatio tx
-                    = TxTypeFeeDelegatedAccountUpdateWithRatio.createTransaction(type, nonce, gasPrice, gasLimit, from, AccountKeyDecoder.fromRlp(accountkeyRaw), feeRatio);
+            TxTypeFeeDelegatedAccountUpdateWithRatio tx = TxTypeFeeDelegatedAccountUpdateWithRatio.createTransaction(
+                    type, nonce, gasPrice, gasLimit, from, AccountKeyDecoder.fromRlp(accountkeyRaw), feeRatio);
 
             tx.addSignatureData(values, 6);
             return tx;

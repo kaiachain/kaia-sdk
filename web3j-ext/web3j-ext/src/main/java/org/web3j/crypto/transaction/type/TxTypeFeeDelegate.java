@@ -31,10 +31,10 @@ public abstract class TxTypeFeeDelegate extends AbstractTxType {
     }
 
     public TxTypeFeeDelegate(long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
-        String from, String to, BigInteger value) {
-    super(chainId, type, nonce, gasPrice, gasLimit, from, to, value);
-    this.feePayerSignatureData = new HashSet<>();
-    this.feePayer = EMPTY_FEE_PAYER_ADDRESS;
+            String from, String to, BigInteger value) {
+        super(chainId, type, nonce, gasPrice, gasLimit, from, to, value);
+        this.feePayerSignatureData = new HashSet<>();
+        this.feePayer = EMPTY_FEE_PAYER_ADDRESS;
     }
 
     public Set<KaiaSignatureData> getFeePayerSignatureData() {

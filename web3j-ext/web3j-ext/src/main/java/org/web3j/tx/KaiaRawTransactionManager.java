@@ -1,15 +1,3 @@
-/*
- * Copyright 2019 Web3 Labs Ltd.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
 package org.web3j.tx;
 
 import java.io.IOException;
@@ -38,11 +26,15 @@ import org.web3j.utils.Numeric;
 import org.web3j.utils.TxHashVerifier;
 
 /**
- * TransactionManager implementation using Ethereum wallet file to create and sign transactions
+ * TransactionManager implementation using Ethereum wallet file to create and
+ * sign transactions
  * locally.
  *
- * <p>This transaction manager provides support for specifying the chain id for transactions as per
- * <a href="https://github.com/ethereum/EIPs/issues/155">EIP155</a>, as well as for locally signing
+ * <p>
+ * This transaction manager provides support for specifying the chain id for
+ * transactions as per
+ * <a href="https://github.com/ethereum/EIPs/issues/155">EIP155</a>, as well as
+ * for locally signing
  * RawTransaction instances without broadcasting them.
  */
 public class KaiaRawTransactionManager extends TransactionManager {
@@ -94,6 +86,7 @@ public class KaiaRawTransactionManager extends TransactionManager {
         this.chainId = chainId;
         this.txSignService = new TxKaiaSignServiceImpl(credentials);
     }
+
     public KaiaRawTransactionManager(
             Web3j web3j, KaiaCredentials credentials, long chainId, int attempts, long sleepDuration) {
         super(web3j, attempts, sleepDuration, credentials.getAddress());
@@ -102,6 +95,7 @@ public class KaiaRawTransactionManager extends TransactionManager {
         this.chainId = chainId;
         this.txSignService = new TxKaiaSignServiceImpl(credentials);
     }
+
     public KaiaRawTransactionManager(Web3j web3j, Credentials credentials) {
         this(web3j, credentials, ChainId.NONE);
     }
@@ -112,10 +106,9 @@ public class KaiaRawTransactionManager extends TransactionManager {
     }
 
     protected BigInteger getNonce() throws IOException {
-        EthGetTransactionCount ethGetTransactionCount =
-                web3j.ethGetTransactionCount(
-                                this.getFromAddress(), DefaultBlockParameterName.PENDING)
-                        .send();
+        EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
+                this.getFromAddress(), DefaultBlockParameterName.PENDING)
+                .send();
 
         return ethGetTransactionCount.getTransactionCount();
     }
@@ -128,15 +121,13 @@ public class KaiaRawTransactionManager extends TransactionManager {
         this.txHashVerifier = txHashVerifier;
     }
 
-
     @Override
     public String sendCall(String to, String data, DefaultBlockParameter defaultBlockParameter)
             throws IOException {
-        EthCall ethCall =
-                web3j.ethCall(
-                                Transaction.createEthCallTransaction(getFromAddress(), to, data),
-                                defaultBlockParameter)
-                        .send();
+        EthCall ethCall = web3j.ethCall(
+                Transaction.createEthCallTransaction(getFromAddress(), to, data),
+                defaultBlockParameter)
+                .send();
 
         assertCallNotReverted(ethCall);
         return ethCall.getValue();
@@ -149,10 +140,9 @@ public class KaiaRawTransactionManager extends TransactionManager {
         return web3j.ethGetCode(contractAddress, defaultBlockParameter).send();
     }
 
-
-
     /*
      * @param rawTransaction a RawTransaction istance to be signed
+     * 
      * @return The transaction signed and encoded without ever broadcasting it
      */
     public String sign(KaiaRawTransaction rawTransaction) {
@@ -176,9 +166,10 @@ public class KaiaRawTransactionManager extends TransactionManager {
 
         return ethSendTransaction;
     }
-    
+
     /*
      * @param rawTransaction a RawTransaction istance to be signed
+     * 
      * @return The transaction signed and encoded without ever broadcasting it
      */
     public String sign(RawTransaction rawTransaction) {
@@ -208,8 +199,7 @@ public class KaiaRawTransactionManager extends TransactionManager {
             BigInteger value, boolean constructor) throws IOException {
         BigInteger nonce = getNonce();
 
-        RawTransaction rawTransaction =
-                RawTransaction.createTransaction(nonce, gasPrice, gasLimit, to, value, data);
+        RawTransaction rawTransaction = RawTransaction.createTransaction(nonce, gasPrice, gasLimit, to, value, data);
 
         return signAndSend(rawTransaction);
     }
@@ -220,37 +210,34 @@ public class KaiaRawTransactionManager extends TransactionManager {
             throws IOException {
         BigInteger nonce = getNonce();
 
-        RawTransaction rawTransaction =
-                RawTransaction.createTransaction(
-                        chainId,
-                        nonce,
-                        gasLimit,
-                        to,
-                        value,
-                        data,
-                        maxPriorityFeePerGas,
-                        maxFeePerGas);
+        RawTransaction rawTransaction = RawTransaction.createTransaction(
+                chainId,
+                nonce,
+                gasLimit,
+                to,
+                value,
+                data,
+                maxPriorityFeePerGas,
+                maxFeePerGas);
 
         return signAndSend(rawTransaction);
     }
-    
-    
-    
+
     public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
             BigInteger gasPrice,
             BigInteger gas,
             String from,
             AccountKey accountKey) throws IOException {
-    	
+
         BigInteger nonce = getNonce();
         KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
-                            type,
-                            nonce,
-                            gasPrice,
-                            gas,
-                            from,
-                            accountKey);
+                type,
+                nonce,
+                gasPrice,
+                gas,
+                from,
+                accountKey);
         return signAndSend(rawTransaction);
     }
 
@@ -262,14 +249,13 @@ public class KaiaRawTransactionManager extends TransactionManager {
 
         BigInteger nonce = getNonce();
         KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
-                            type,
-                            nonce,
-                            gasPrice,
-                            gas,
-                            from);
-                            
+                type,
+                nonce,
+                gasPrice,
+                gas,
+                from);
+
         return signAndSend(rawTransaction);
-        
 
     }
 
@@ -283,15 +269,14 @@ public class KaiaRawTransactionManager extends TransactionManager {
 
         BigInteger nonce = getNonce();
         KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
-                            type,
-                            nonce,
-                            gasPrice,
-                            gas,
-                            to,
-                            value,
-                            from);
+                type,
+                nonce,
+                gasPrice,
+                gas,
+                to,
+                value,
+                from);
         return signAndSend(rawTransaction);
-        
 
     }
 
@@ -303,21 +288,20 @@ public class KaiaRawTransactionManager extends TransactionManager {
             BigInteger value,
             String from,
             byte[] payload) throws IOException {
-    	
+
         BigInteger nonce = getNonce();
         KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
-                            type,
-                            nonce,
-                            gasPrice,
-                            gas,
-                            to,
-                            value,
-                            from,
-                            payload);
+                type,
+                nonce,
+                gasPrice,
+                gas,
+                to,
+                value,
+                from,
+                payload);
         return signAndSend(rawTransaction);
-        
-        }
 
+    }
 
     public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
@@ -328,25 +312,21 @@ public class KaiaRawTransactionManager extends TransactionManager {
             String from,
             byte[] payload,
             BigInteger option) throws IOException {
-    	
 
         BigInteger nonce = getNonce();
         KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
-                            type,
-                            nonce,
-                            gasPrice,
-                            gas,
-                            to,
-                            value,
-                            from,
-                            payload,
-                            option);
+                type,
+                nonce,
+                gasPrice,
+                gas,
+                to,
+                value,
+                from,
+                payload,
+                option);
         return signAndSend(rawTransaction);
-        
+
     }
-
-
-    
 
     public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
@@ -355,22 +335,19 @@ public class KaiaRawTransactionManager extends TransactionManager {
             String from,
             AccountKey accountKey,
             BigInteger feeRatio) throws IOException {
-    	
 
         BigInteger nonce = getNonce();
         KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
-                            type,
-                            nonce,
-                            gasPrice,
-                            gas,
-                            from,
-                            accountKey,
-                            feeRatio);
-        
-        return signAndSend(rawTransaction);    
-    }
-    
+                type,
+                nonce,
+                gasPrice,
+                gas,
+                from,
+                accountKey,
+                feeRatio);
 
+        return signAndSend(rawTransaction);
+    }
 
     public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
@@ -378,20 +355,19 @@ public class KaiaRawTransactionManager extends TransactionManager {
             BigInteger gas,
             String from,
             BigInteger feeRatio) throws IOException {
-    	
+
         BigInteger nonce = getNonce();
         KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
-                            type,
-                            nonce,
-                            gasPrice,
-                            gas,
-                            from,
-                            feeRatio);
+                type,
+                nonce,
+                gasPrice,
+                gas,
+                from,
+                feeRatio);
         return signAndSend(rawTransaction);
-        
+
     }
 
-        
     public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
             BigInteger gasPrice,
@@ -400,20 +376,20 @@ public class KaiaRawTransactionManager extends TransactionManager {
             BigInteger value,
             String from,
             BigInteger feeRatio) throws IOException {
-    	
+
         BigInteger nonce = getNonce();
 
         KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
-                            type,
-                            nonce,
-                            gasPrice,
-                            gas,
-                            to,
-                            value,
-                            from,
-                            feeRatio);
+                type,
+                nonce,
+                gasPrice,
+                gas,
+                to,
+                value,
+                from,
+                feeRatio);
         return signAndSend(rawTransaction);
-        
+
     }
 
     public EthSendTransaction sendKaiaTransaction(
@@ -426,49 +402,46 @@ public class KaiaRawTransactionManager extends TransactionManager {
             byte[] payload,
             BigInteger codeFormat,
             BigInteger feeRatio) throws IOException {
-    	
+
         BigInteger nonce = getNonce();
 
         KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
-                            type,
-                            nonce,
-                            gasPrice,
-                            gas,
-                            to,
-                            value,
-                            from,
-                            payload,
-                            codeFormat,
-                            feeRatio);
-        
+                type,
+                nonce,
+                gasPrice,
+                gas,
+                to,
+                value,
+                from,
+                payload,
+                codeFormat,
+                feeRatio);
 
         return signAndSend(rawTransaction);
 
     }
-    
+
     public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
             BigInteger gasPrice,
             BigInteger gas,
             String from,
             byte[] payload) throws IOException {
-    	
+
         BigInteger nonce = getNonce();
 
         KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
-                            type,
-                            nonce,
-                            gasPrice,
-                            gas,
-                            from,
-                            payload);
-        
-    	return signAndSend(rawTransaction);
-    	
+                type,
+                nonce,
+                gasPrice,
+                gas,
+                from,
+                payload);
 
+        return signAndSend(rawTransaction);
 
     }
-    
+
     public EthSendTransaction sendKaiaTransaction(
             TxType.Type type,
             BigInteger gasPrice,
@@ -476,17 +449,17 @@ public class KaiaRawTransactionManager extends TransactionManager {
             String from,
             byte[] payload,
             BigInteger feeRatio) throws IOException {
-    	
+
         BigInteger nonce = getNonce();
 
         KaiaRawTransaction rawTransaction = KaiaRawTransaction.createTransaction(
-                            type,
-                            nonce,
-                            gasPrice,
-                            gas,
-                            from,
-                            payload,
-                            feeRatio);
+                type,
+                nonce,
+                gasPrice,
+                gas,
+                from,
+                payload,
+                feeRatio);
         return signAndSend(rawTransaction);
     }
 

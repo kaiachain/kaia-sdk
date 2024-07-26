@@ -26,7 +26,7 @@ public class FeeDelegatedSmartContractDeployWithRatioExample implements keySampl
         /**
          *   
         */
-        public void run() throws Exception {
+        public static void run() throws Exception {
 
                 Web3j web3j = Web3j.build(new HttpService(keySample.BAOBAB_URL));
                 KaiaCredentials credentials = KaiaCredentials.create(keySample.LEGACY_KEY_privkey);

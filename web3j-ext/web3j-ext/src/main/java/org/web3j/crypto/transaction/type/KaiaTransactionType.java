@@ -40,4 +40,3 @@ public enum KaiaTransactionType {
         return this.equals(KaiaTransactionType.EIP2930);
     }
 }
-

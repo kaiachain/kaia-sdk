@@ -30,16 +30,23 @@ import java.util.List;
 public class AccountKeyRoleBased implements AccountKey {
 
     /**
-     * <p>First Key : roleTransaction<br>
-     * Default key. Transactions other than TxTypeAccountUpdate should be signed by the key of this role.
+     * <p>
+     * First Key : roleTransaction<br>
+     * Default key. Transactions other than TxTypeAccountUpdate should be signed by
+     * the key of this role.
      *
-     * <p>Second Key : roleUpdate<br>
-     * TxTypeAccountUpdate transaction should be signed by this key. If this key is not present in the account,
+     * <p>
+     * Second Key : roleUpdate<br>
+     * TxTypeAccountUpdate transaction should be signed by this key. If this key is
+     * not present in the account,
      * TxTypeAccountUpdate transaction is validated using RoleTransaction key.
      *
-     * <p>Third Key : roleFeePayer<br>
-     * If this account wants to send tx fee instead of the sender, the transaction should be signed by this key.
-     * If this key is not present in the account, a fee-delegated transaction is validated using RoleTransaction key.
+     * <p>
+     * Third Key : roleFeePayer<br>
+     * If this account wants to send tx fee instead of the sender, the transaction
+     * should be signed by this key.
+     * If this key is not present in the account, a fee-delegated transaction is
+     * validated using RoleTransaction key.
      */
     private List<AccountKey> accountKeys;
 
@@ -91,7 +98,7 @@ public class AccountKeyRoleBased implements AccountKey {
         }
 
         byte[] encodedTransaction = RlpEncoder.encode(new RlpList(rlpTypeList));
-        byte[] type = {getType().getValue()};
+        byte[] type = { getType().getValue() };
         return BytesUtils.concat(type, encodedTransaction);
     }
 
@@ -102,8 +109,10 @@ public class AccountKeyRoleBased implements AccountKey {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         AccountKeyRoleBased that = (AccountKeyRoleBased) o;
         return Arrays.equals(toRlp(), that.toRlp());
     }

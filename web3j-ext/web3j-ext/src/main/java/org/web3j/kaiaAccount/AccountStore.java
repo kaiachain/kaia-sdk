@@ -51,7 +51,8 @@ public class AccountStore {
             JSONObject jsonKey = AccountInfo.getKeyJSON(jsonAccount.getJSONObject("key"), list);
 
             if (jsonKey != null) {
-                AccountInfo accountInfo = new AccountInfo(element, acc.getAccount().getBalance(), acc.getAccount().getNonce(), jsonKey);
+                AccountInfo accountInfo = new AccountInfo(element, acc.getAccount().getBalance(),
+                        acc.getAccount().getNonce(), jsonKey);
                 this.AccountLists.put(element, accountInfo);
             }
         }

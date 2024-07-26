@@ -25,12 +25,12 @@ public interface AccountKey {
     byte[] toRlp();
 
     enum Type {
-        NIL((byte)0x0, AccountKeyNil.class),
-        LEGACY((byte)0x01, AccountKeyLegacy.class),
-        PUBLIC((byte)0x02, AccountKeyPublic.class),
-        FAIL((byte)0x03, AccountKeyFail.class),
-        MULTISIG((byte)0x04, AccountKeyWeightedMultiSig.class),
-        ROLEBASED((byte)0x05, AccountKeyRoleBased.class);
+        NIL((byte) 0x0, AccountKeyNil.class),
+        LEGACY((byte) 0x01, AccountKeyLegacy.class),
+        PUBLIC((byte) 0x02, AccountKeyPublic.class),
+        FAIL((byte) 0x03, AccountKeyFail.class),
+        MULTISIG((byte) 0x04, AccountKeyWeightedMultiSig.class),
+        ROLEBASED((byte) 0x05, AccountKeyRoleBased.class);
 
         private byte value;
         private Class keyClass;
@@ -48,9 +48,9 @@ public interface AccountKey {
             return keyClass;
         }
 
-        public static AccountKey.Type findByValue(byte value){
-            for(AccountKey.Type v : values()){
-                if( v.getValue() == value ){
+        public static AccountKey.Type findByValue(byte value) {
+            for (AccountKey.Type v : values()) {
+                if (v.getValue() == value) {
                     return v;
                 }
             }

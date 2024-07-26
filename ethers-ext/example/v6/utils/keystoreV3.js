@@ -1,4 +1,4 @@
-const { Wallet } = require("@kaiachain/ethers-ext/v6");
+const { Wallet, util } = require("@kaiachain/ethers-ext/v6");
 
 // Eth V3. ethers.Wallet.createRandom().encrypt("password")
 const encryptedKey = `{
@@ -35,15 +35,14 @@ async function main() {
   console.log("\ndecrypted privateKey");
   console.log(account.privateKey);
 
-  account.encrypt(password2).then((encryptedKey2) => {
-    const account2 = Wallet.fromEncryptedJsonSync(encryptedKey2, password2);
+  const encryptedKey2 = await account.encrypt(password2);
+  const account2 = Wallet.fromEncryptedJsonSync(encryptedKey2, password2);
 
-    console.log("\ndecrypted address with new password");
-    console.log(account2.address);
+  console.log("\ndecrypted address with new password");
+  console.log(account2.address);
 
-    console.log("\ndecrypted privateKey with new password");
-    console.log(account2.privateKey);
-  });
+  console.log("\ndecrypted privateKey with new password");
+  console.log(account2.privateKey);
 }
 
 main();

@@ -3,7 +3,7 @@
 
 const { ethers } = require("ethers6");
 
-const { Wallet } = require("@klaytn/ethers-ext/v6");
+const { Wallet } = require("@kaiachain/ethers-ext/v6");
 
 const senderAddr = "0x82c6a8d94993d49cfd0c1d30f0f8caa65782cc7e";
 const senderPriv =

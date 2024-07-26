@@ -6,7 +6,7 @@ import {
   SigningKey,
 } from "ethers6";
 
-import { HexStr } from "@klaytn/js-ext-core";
+import { HexStr } from "@kaiachain/js-ext-core";
 
 import { Wallet } from "./signer";
 

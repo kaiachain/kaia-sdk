@@ -14,10 +14,10 @@
     "klaytn sdk",
     "klaytn api"
   ],
-  "homepage": "https://github.com/klaytn/web3klaytn/tree/dev/ethers-ext",
+  "homepage": "https://github.com/kaiachain/kaia-sdk/tree/dev/ethers-ext",
   "repository": {
     "type": "git",
-    "url": "https://github.com/klaytn/web3klaytn"
+    "url": "https://github.com/kaiachain/kaia-sdk"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

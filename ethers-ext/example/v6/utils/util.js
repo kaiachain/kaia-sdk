@@ -7,7 +7,7 @@ const {
   parseKlayUnits,
   formatKlay,
   parseKlay,
-} = require("@klaytn/ethers-ext/v6");
+} = require("@kaiachain/ethers-ext/v6");
 
 async function main() {
   // Transaction and AccountKey types

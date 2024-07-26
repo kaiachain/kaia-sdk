@@ -1,5 +1,5 @@
 import { BrowserProvider, JsonRpcProvider } from "ethers6";
-import { Wallet } from "@klaytn/ethers-ext/v6";
+import { Wallet } from "@kaiachain/ethers-ext/v6";
 import { Account } from "./types";
 
 export async function doSendTx(account: Account, txRequest: any): Promise<any> {

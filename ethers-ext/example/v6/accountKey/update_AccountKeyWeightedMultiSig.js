@@ -3,7 +3,7 @@
 
 const { ethers } = require("ethers6");
 
-const { Wallet, TxType, AccountKeyType } = require("@klaytn/ethers-ext/v6");
+const { Wallet, TxType, AccountKeyType } = require("@kaiachain/ethers-ext/v6");
 
 // Using same senderNewPriv keys to execute this example repeatedly.
 // But you might want to register the different private keys.

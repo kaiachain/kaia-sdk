@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Account } from '../types';
 import { doSendTx } from '../util';
-import { TxType } from '@klaytn/js-ext-core';
+import { TxType } from '@kaiachain/js-ext-core';
 
 type Props = {
   account: Account;

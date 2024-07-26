@@ -1,4 +1,4 @@
-const { Wallet } = require("@klaytn/ethers-ext/v6");
+const { Wallet } = require("@kaiachain/ethers-ext/v6");
 
 // Klaytn V4 with multiple role-based keys. https://toolkit.klaytn.foundation/misc/generateKeystore
 const encryptedKey = `{

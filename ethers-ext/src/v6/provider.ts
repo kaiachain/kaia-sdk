@@ -6,7 +6,7 @@ import {
   assert,
 } from "ethers6";
 
-import { asyncOpenApi, AsyncNamespaceApi } from "@klaytn/js-ext-core";
+import { asyncOpenApi, AsyncNamespaceApi } from "@kaiachain/js-ext-core";
 import {
   AdminApi,
   DebugApi,
@@ -15,8 +15,8 @@ import {
   NetApi,
   PersonalApi,
   TxpoolApi,
-  // @ts-ignore: package @klaytn/web3rpc has no .d.ts file.
-} from "@klaytn/web3rpc";
+  // @ts-ignore: package @kaiachain/web3rpc has no .d.ts file.
+} from "@kaiachain/web3rpc";
 
 import { JsonRpcSigner } from "./signer";
 

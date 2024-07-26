@@ -28,7 +28,7 @@ import {
   isFeePayerSigTxType,
   parseTxType,
   getKaikasTxType,
-} from "@klaytn/js-ext-core";
+} from "@kaiachain/js-ext-core";
 
 import { decryptKeystoreList, decryptKeystoreListSync } from "./keystore";
 import {

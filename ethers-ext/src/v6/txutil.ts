@@ -16,7 +16,7 @@ import {
   parseTransaction,
   parseTxType,
   SignatureLike,
-} from "@klaytn/js-ext-core";
+} from "@kaiachain/js-ext-core";
 
 import { TransactionRequest } from "./types";
 

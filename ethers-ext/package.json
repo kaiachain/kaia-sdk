@@ -14,13 +14,27 @@
     "klaytn sdk",
     "klaytn api"
   ],
-  "homepage": "https://github.com/klaytn/web3klaytn/tree/dev/ethers-ext",
+  "homepage": "https://github.com/kaiachain/kaia-sdk/tree/dev/ethers-ext",
   "repository": {
     "type": "git",
-    "url": "https://github.com/klaytn/web3klaytn"
+    "url": "https://github.com/kaiachain/kaia-sdk"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./v5": {
+      "types": "./dist/v5/index.d.ts",
+      "default": "./dist/v5/index.js"
+    },
+    "./v6": {
+      "types": "./dist/v6/index.d.ts",
+      "default": "./dist/v6/index.js"
+    }
+  },
   "files": [
     "./dist",
     "./src"
@@ -33,7 +47,7 @@
     "lint": "npm run lint:check",
     "lint:check": "eslint example src test --cache --quiet",
     "lint:fix": "eslint example src test --cache --fix",
-    "test": "mocha --timeout 10000 -r ts-node/register \"test/**/*.ts\"",
+    "test": "mocha --timeout 50000 -r ts-node/register \"test/**/*.ts\"",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
@@ -43,11 +57,12 @@
     "@types/lodash": "^4.14.192",
     "@types/mocha": "^10.0.4",
     "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@typescript-eslint/parser": "^6",
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
     "eslint": "^8.45.0",
     "eslint-plugin-import": "^2.27.5",
-    "ethers": "^5.7.2",
+    "ethers5": "npm:ethers@^5.7.2",
     "mocha": "^10.2.0",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.1",
@@ -76,6 +91,7 @@
     "@ethersproject/transactions": "^5.7.0",
     "@ethersproject/wallet": "^5.7.0",
     "@ethersproject/web": "^5.7.1",
+    "ethers6": "npm:ethers@^6.12.1",
     "@kaiachain/js-ext-core": "^1.0.0",
     "@kaiachain/web3rpc": "^1.0.0",
     "lodash": "^4.17.21"

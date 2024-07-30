@@ -1,23 +1,7 @@
 // Pass-through js-ext-core exports
 export * from "@kaiachain/js-ext-core/util";
-export {
-  AccountKey,
-  AccountKeyFactory,
-  KlaytnTx,
-  KlaytnTxFactory,
-  parseTransaction,
-} from "@kaiachain/js-ext-core";
+export * from './v5'
 
-// ethers-ext classes and functions
-export * from "./accountStore";
-export * from "./keystore";
-export * from "./signer";
-
-// Follow ethers v6 convention like `ethers.JsonRpcProvider`
-export * from "./provider";
-// Follow ethers v5 convention like `ethers.providers.JsonRpcProvider`
-import { JsonRpcProvider, Web3Provider } from "./provider";
-export const providers = {
-  JsonRpcProvider,
-  Web3Provider,
-};
+import * as v5 from "./v5";
+import * as v6 from "./v6";
+export { v5, v6 };

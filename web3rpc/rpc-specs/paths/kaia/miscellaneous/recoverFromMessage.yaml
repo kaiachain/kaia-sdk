@@ -15,7 +15,11 @@ paths:
       operationId: .recoverFromMessage
       summary: "[Miscellaneous] kaia_recoverFromMessage"
       description: |
-        Using this API, users can recover from message data.
+        This method recovers or verifies an ECDSA signature signed by a private key associated with the given address.
+ 
+        The signature has to be signed by the private key that constitutes the account, e.g. "natural" private key of a Legacy account, one of the keys of a WeightedMultisig account.
+        
+        Both [EIP-191](https://eips.ethereum.org/EIPS/eip-191) and [KIP-97](https://kips.kaia.io/KIPs/kip-97) signatures are accepted.
 
         **JSONRPC:** `kaia_recoverFromMessage`
       tags:

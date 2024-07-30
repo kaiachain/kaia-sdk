@@ -169,8 +169,6 @@ paths:
     $ref: ./gas/upperBoundGasPrice.yaml#/paths/~1klay~1gas~1upperBoundGasPrice
   /klay/gas/maxPriorityFeePerGas:
     $ref: ./gas/maxPriorityFeePerGas.yaml#/paths/~1klay~1gas~1maxPriorityFeePerGas
-  /klay/gas/gasPriceAt:
-    $ref: ./gas/gasPriceAt.yaml#/paths/~1klay~1gas~1gasPriceAt
   /klay/gas/gasPrice:
     $ref: ./gas/gasPrice.yaml#/paths/~1klay~1gas~1gasPrice
   # klay/miscellaneous

@@ -15,7 +15,11 @@ paths:
       operationId: .maxPriorityFeePerGas
       summary: "[Gas] kaia_maxPriorityFeePerGas"
       description: |
-        Returns a suggestion for a gas tip cap for dynamic fee transactions in peb.
+        Returns a recommended maxPriorityFeePerGas for a new transaction.
+
+        - Before Magma, returns the fixed UnitPrice
+        - After Magma, returns zero
+        - After Kaia, returns zero if network is uncongested (i.e. next baseFee at its lower bound), otherwise 60% percentile effective tip from previous 20 blocks (under default setting)
 
         **NOTE:** This API is effective after Klaytn v1.8.0
 
@@ -38,7 +42,7 @@ paths:
 
       responses:
         200:
-          description: Returns a suggestion for a gas tip cap for dynamic fee transactions in peb.
+          description: Recommended maxPriorityFeePerGas in kei.
           content:
             application/json:
               schema:
@@ -49,7 +53,7 @@ paths:
                       result:
                         type: string
                         format: hex
-                        description: "Integer of the current max priority fee per gas"
+                        description: Recommended maxPriorityFeePerGas in kei.
                         example: "0xAE9F7BCC00"
 
       x-codeSamples:

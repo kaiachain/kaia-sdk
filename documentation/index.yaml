@@ -140,8 +140,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/clientVersion.yaml#/paths/~1kaia~1configuration~1clientVersion
   /kaia/configuration/gasPrice:
     $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/gasPrice.yaml#/paths/~1kaia~1configuration~1gasPrice
-  /kaia/configuration/gasPriceAt:
-    $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/gasPriceAt.yaml#/paths/~1kaia~1configuration~1gasPriceAt
+  # /kaia/configuration/gasPriceAt: # removed
+  #   $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/gasPriceAt.yaml#/paths/~1kaia~1configuration~1gasPriceAt
   /kaia/configuration/getChainConfig:
     $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/getChainConfig.yaml#/paths/~1kaia~1configuration~1getChainConfig
   /kaia/configuration/isParallelDBWrite:
@@ -350,8 +350,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/klay/gas/upperBoundGasPrice.yaml#/paths/~1klay~1gas~1upperBoundGasPrice
   /klay/gas/gasPrice:
     $ref: ../web3rpc/rpc-specs/paths/klay/gas/gasPrice.yaml#/paths/~1klay~1gas~1gasPrice
-  /klay/gas/gasPriceAt:
-    $ref: ../web3rpc/rpc-specs/paths/klay/gas/gasPriceAt.yaml#/paths/~1klay~1gas~1gasPriceAt
+  # /klay/gas/gasPriceAt: // removed
+  #   $ref: ../web3rpc/rpc-specs/paths/klay/gas/gasPriceAt.yaml#/paths/~1klay~1gas~1gasPriceAt
   # klay/miscellaneous
   /klay/miscellaneous/getStakingInfo:
     $ref: ../web3rpc/rpc-specs/paths/klay/miscellaneous/getStakingInfo.yaml#/paths/~1klay~1miscellaneous~1getStakingInfo

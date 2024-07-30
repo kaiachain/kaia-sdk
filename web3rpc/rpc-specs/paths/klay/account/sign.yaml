@@ -15,17 +15,11 @@ paths:
       operationId: sign
       summary: "[Account] klay_sign"
       description: |
-        The sign method calculates a Klaytn-specific signature with:
+        The method calculates an [EIP-191](https://eips.ethereum.org/EIPS/eip-191) signature: ```sign(keccak256("\x19Ethereum Signed Message:\n" + len(message) + message)))```
 
-        sign(keccak256("\x19Klaytn Signed Message:\n" + len(message) + message)))
+        **NOTE**: In versions earlier than Kaia v1.0.1, the method calculates an [KIP-97](https://kips.kaia.io/KIPs/kip-97) signature: sign(keccak256("\x19Klaytn Signed Message:\n" + len(message) + message)))
 
-        Adding a prefix to the message makes the calculated signature recognizable as a Klaytn-specific signature. This prevents misuse where a malicious dApp can sign arbitrary data, e.g., transaction, and use the signature to impersonate the victim.
-
-        `klay_sign` will be failed to baobab/cypress network because it is signed in the EN node, which means that the EN must have the key that you want to sign with.
-        Steps to test `klay_sign`.
-          - Step 1: Setup a local EN node
-          - Step 2: <a href="#tag/personal/operation/newAccount" target="_blank">Create an account</a> into the EN node
-          - Step 3: <a href="#tag/personal/operation/unlockAccount" target="_blank">Unlock the account</a> for using in signing
+        The personal_ecRecover and kaia_recoverFromMessage methods can verify the signature.
 
         **JSONRPC:** `klay_sign`
 

@@ -171,8 +171,6 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/klay/gas/upperBoundGasPrice.yaml#/paths/~1klay~1gas~1upperBoundGasPrice
   /klay/gas/maxPriorityFeePerGas:
     $ref: ../../web3rpc/rpc-specs/paths/klay/gas/maxPriorityFeePerGas.yaml#/paths/~1klay~1gas~1maxPriorityFeePerGas
-  /klay/gas/gasPriceAt:
-    $ref: ../../web3rpc/rpc-specs/paths/klay/gas/gasPriceAt.yaml#/paths/~1klay~1gas~1gasPriceAt
   /klay/gas/gasPrice:
     $ref: ../../web3rpc/rpc-specs/paths/klay/gas/gasPrice.yaml#/paths/~1klay~1gas~1gasPrice
   # klay/miscellaneous

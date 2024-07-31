@@ -129,8 +129,6 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/configuration/chainID.yaml#/paths/~1kaia~1configuration~1chainID
   /kaia/configuration/clientVersion:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/configuration/clientVersion.yaml#/paths/~1kaia~1configuration~1clientVersion
-  /kaia/configuration/gasPriceAt:
-    $ref: ../../web3rpc/rpc-specs/paths/kaia/configuration/gasPriceAt.yaml#/paths/~1kaia~1configuration~1gasPriceAt
   /kaia/configuration/gasPrice:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/configuration/gasPrice.yaml#/paths/~1kaia~1configuration~1gasPrice
   /kaia/configuration/isParallelDBWrite:

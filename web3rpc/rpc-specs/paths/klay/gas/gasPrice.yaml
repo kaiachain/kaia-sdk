@@ -15,11 +15,12 @@ paths:
       operationId: gasPrice
       summary: "[Gas] klay_gasPrice"
       description: |
-        Returns a suggested gasPrice or maxFeePerGas. The suggested price depends on the hardfork status.
-        - Fixed unit price before Magma
-        - Twice the base fee before Kaia
-        - Base fee plus suggested priority fee after Kaia
-        
+        Returns a recommended gasPrice for a new transaction.
+
+        - Before Magma, returns the fixed UnitPrice
+        - After Magma, returns the twice of next baseFee (2*baseFee)
+        - After Kaia, returns slightly buffered baseFee plus recommended tip (BaseFee * (1.10 or 1.15) + eth_maxPriorityFeePerGas)
+                
         **JSONRPC:** `klay_gasPrice`
       tags:
         - klay
@@ -38,7 +39,7 @@ paths:
 
       responses:
         200:
-          description: Suggested price in kei.
+          description: Recommended gas price in kei.
           content:
             application/json:
               schema:
@@ -49,7 +50,7 @@ paths:
                       result:
                         type: string
                         format: hex
-                        description: Suggested price in kei.
+                        description: Recommended gas price in kei.
                         example: "0xAE9F7BCC00"
 
       x-codeSamples:

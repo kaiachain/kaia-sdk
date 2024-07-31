@@ -127,8 +127,6 @@ paths:
     $ref: ./configuration/chainID.yaml#/paths/~1kaia~1configuration~1chainID
   /kaia/configuration/clientVersion:
     $ref: ./configuration/clientVersion.yaml#/paths/~1kaia~1configuration~1clientVersion
-  /kaia/configuration/gasPriceAt:
-    $ref: ./configuration/gasPriceAt.yaml#/paths/~1kaia~1configuration~1gasPriceAt
   /kaia/configuration/gasPrice:
     $ref: ./configuration/gasPrice.yaml#/paths/~1kaia~1configuration~1gasPrice
   /kaia/configuration/isParallelDBWrite:

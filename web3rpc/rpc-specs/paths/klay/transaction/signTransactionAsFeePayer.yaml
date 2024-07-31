@@ -17,12 +17,6 @@ paths:
       description: |
         Constructs a transaction with given parameters and signs the transaction with a fee payer's private key. This method can be used either to generate a fee payer signature or to make a final raw transaction that is ready to submit to Klaytn network. In case you just want to extract the fee-payer signature, simply take the feePayerSignatures from the result. Note that the raw transaction is not final if the sender's signature is not attached (that is, signatures in tx is empty).
 
-        `klay_signTransactionAsFeePayer` will be failed to baobab/cypress network because it is signed in the EN node, which means that the EN must have the key that you want to sign with.
-        Steps to test `klay_signTransactionAsFeePayer`.
-          - Step 1: Setup a local EN node
-          - Step 2: <a href="#tag/personal/operation/newAccount" target="_blank">Create an account</a> into the EN node
-          - Step 3: <a href="#tag/personal/operation/unlockAccount" target="_blank">Unlock the account</a> for using in signing
-
         **JSONRPC:** `klay_signTransactionAsFeePayer`
 
       tags:

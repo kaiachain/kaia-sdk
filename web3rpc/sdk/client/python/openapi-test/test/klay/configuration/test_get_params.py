@@ -11,3 +11,5 @@ class TestGetParams(KlaytnBaseTesting):
         self.response = self.w3.klay.get_params(
             self.blockTag
         )
+        self.assertIsInstance(self.response['governance.governancemode'],str)
+

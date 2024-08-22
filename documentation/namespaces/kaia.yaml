@@ -17,7 +17,6 @@ servers:
   - url: https://public-en-cypress.klaytn.net
   - url: http://localhost:8551
 paths:
-
   # kaia/account
   /kaia/account/accountCreated:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/account/accountCreated.yaml#/paths/~1kaia~1account~1accountCreated
@@ -123,7 +122,7 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/transaction/resend.yaml#/paths/~1kaia~1transaction~1resend
   /kaia/getRawTransactionByBlockNumberAndIndex:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/transaction/getRawTransactionByBlockNumberAndIndex.yaml#/paths/~1kaia~1transaction~1getRawTransactionByBlockNumberAndIndex
- 
+
   # kaia/configuration
   /kaia/configuration/chainID:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/configuration/chainID.yaml#/paths/~1kaia~1configuration~1chainID
@@ -143,6 +142,8 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/configuration/getChainConfig.yaml#/paths/~1kaia~1configuration~1getChainConfig
   /kaia/configuration/forkStatus:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/configuration/forkStatus.yaml#/paths/~1kaia~1configuration~1forkStatus
+  /kaia/configuration/getParams:
+    $ref: ../../web3rpc/rpc-specs/paths/kaia/configuration/getParams.yaml#/paths/~1kaia~1configuration~1getParams
 
   # kaia/filter
   /kaia/filter/getFilterChanges:
@@ -187,3 +188,5 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/miscellaneous/getProof.yaml#/paths/~1kaia~1miscellaneous~1getProof
   /kaia/miscellaneous/nodeAddress:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/miscellaneous/nodeAddress.yaml#/paths/~1kaia~1miscellaneous~1nodeAddress
+  /kaia/miscellaneous/getTotalSupply:
+    $ref: ../../web3rpc/rpc-specs/paths/kaia/miscellaneous/getTotalSupply.yaml#/paths/~1kaia~1miscellaneous~1getTotalSupply

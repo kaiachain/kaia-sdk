@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: Klay Open API
+  title: Kaia Open API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -10,16 +10,16 @@ servers:
   - url: http://localhost:7151
 
 paths:
-  /klay/miscellaneous/getTotalSupply:
+  /kaia/miscellaneous/getTotalSupply:
     post:
-      summary: "[Miscellaneous] klay_getTotalSupply"
+      summary: "[Miscellaneous] kaia_getTotalSupply"
       tags:
-        - klay
-      operationId: getTotalSupply
+        - kaia
+      operationId: .getTotalSupply
       description: |
         Returns the native token token supply by tracking block rewards and various burning mechanisms. If some components are not available then a partial result is returned.
 
-        **JSONRPC:** `klay_getTotalSupply`
+        **JSONRPC:** `kaia_getTotalSupply`
 
       parameters:
         - name: blockNumber
@@ -38,7 +38,7 @@ paths:
                   properties:
                     method:
                       type: string
-                      default: klay_getTotalSupply
+                      default: kaia_getTotalSupply
                     params:
                       type: array
                       items:
@@ -59,29 +59,29 @@ paths:
               schema:
                 allOf:
                   - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
-                  - $ref: "#/components/schemas/KlaygetTotalSupplyResp"
+                  - $ref: "#/components/schemas/KaiaGetTotalSupplyResp"
 
       x-codeSamples:
         - lang: "curl"
           label: "Curl"
           source:
-            $ref: "../../../code-samples/curl/klay/miscellaneous/getTotalSupply.sh"
+            $ref: "../../../code-samples/curl/kaia/miscellaneous/getTotalSupply.sh"
         - lang: "java"
           label: "Java"
           source:
-            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/klay/miscellaneous/KlayGetTotalSupplyExample.java"
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/miscellaneous/KaiaGetTotalSupplyExample.java"
         - lang: "javascript"
           label: "Javascript"
           source:
-            $ref: "../../../code-samples/javascript/klay/miscellaneous/getTotalSupply.js"
+            $ref: "../../../code-samples/javascript/kaia/miscellaneous/getTotalSupply.js"
         - lang: "python"
           label: "Python"
           source:
-            $ref: "../../../code-samples/python/klay/miscellaneous/getTotalSupply.py"
+            $ref: "../../../code-samples/python/kaia/miscellaneous/getTotalSupply.py"
 
 components:
   schemas:
-    KlaygetTotalSupplyResp:
+    KaiaGetTotalSupplyResp:
       type: object
       properties:
         result:

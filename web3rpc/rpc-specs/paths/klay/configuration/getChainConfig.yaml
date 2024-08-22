@@ -12,7 +12,7 @@ servers:
 paths:
   /klay/configuration/getChainConfig:
     post:
-      operationId: .getChainConfig
+      operationId: $getChainConfig
       summary: "[Configuration] klay_getChainConfig"
       description: |
         Returns the configuration of the chain.
@@ -75,12 +75,12 @@ components:
       properties:
         method:
           type: string
-          default: 'klay_getChainConfig'
+          default: "klay_getChainConfig"
         params:
           type: array
           items:
             $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
-          example:  [100]
+          example: [100]
 
     KlayGetChainConfigResp:
       type: object
@@ -154,42 +154,42 @@ components:
               type: integer
             unitPrice:
               type: number
-          example: {
-            "chainId": 1001,
-            "istanbulCompatibleBlock": 75373312,
-            "londonCompatibleBlock": 80295291,
-            "ethTxTypeCompatibleBlock": 86513895,
-            "magmaCompatibleBlock": 98347376,
-            "koreCompatibleBlock": 111736800,
-            "kip103CompatibleBlock": 119145600,
-            "kip103ContractAddress": "0xd5ad6d61dd87edabe2332607c328f5cc96aecb95",
-            "istanbul": {
-              "epoch": 604800,
-              "policy": 2,
-              "sub": 22
-              },
-            "unitPrice": 25000000000,
-            "deriveShaImpl": 2,
-            "governance": {
-              "governingNode": "0x99fb17d324fa0e07f23b49d09028ac0919414db6",
-              "governanceMode": "single",
-              "govParamContract": "0x0000000000000000000000000000000000000000",
-              "reward": {
-                "mintingAmount": 9600000000000000000,
-                "ratio": "34/54/12",
-                "kip82ratio": "20/80",
-                "useGiniCoeff": true,
-                "deferredTxFee": true,
-                "stakingUpdateInterval": 86400,
-                "proposerUpdateInterval": 3600,
-                "minimumStake": 5000000
+          example:
+            {
+              "chainId": 1001,
+              "istanbulCompatibleBlock": 75373312,
+              "londonCompatibleBlock": 80295291,
+              "ethTxTypeCompatibleBlock": 86513895,
+              "magmaCompatibleBlock": 98347376,
+              "koreCompatibleBlock": 111736800,
+              "kip103CompatibleBlock": 119145600,
+              "kip103ContractAddress": "0xd5ad6d61dd87edabe2332607c328f5cc96aecb95",
+              "istanbul": { "epoch": 604800, "policy": 2, "sub": 22 },
+              "unitPrice": 25000000000,
+              "deriveShaImpl": 2,
+              "governance":
+                {
+                  "governingNode": "0x99fb17d324fa0e07f23b49d09028ac0919414db6",
+                  "governanceMode": "single",
+                  "govParamContract": "0x0000000000000000000000000000000000000000",
+                  "reward":
+                    {
+                      "mintingAmount": 9600000000000000000,
+                      "ratio": "34/54/12",
+                      "kip82ratio": "20/80",
+                      "useGiniCoeff": true,
+                      "deferredTxFee": true,
+                      "stakingUpdateInterval": 86400,
+                      "proposerUpdateInterval": 3600,
+                      "minimumStake": 5000000,
+                    },
+                  "kip71":
+                    {
+                      "lowerboundbasefee": 25000000000,
+                      "upperboundbasefee": 750000000000,
+                      "gastarget": 30000000,
+                      "maxblockgasusedforbasefee": 60000000,
+                      "basefeedenominator": 20,
+                    },
                 },
-              "kip71": {
-                "lowerboundbasefee": 25000000000,
-                "upperboundbasefee": 750000000000,
-                "gastarget": 30000000,
-                "maxblockgasusedforbasefee": 60000000,
-                "basefeedenominator": 20
-                }
-              }
             }

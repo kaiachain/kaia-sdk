@@ -17,14 +17,6 @@ class KlayApi(Module):
     namespace = "klay"
     
     
-    __get_chain_config: Method[Callable[..., Any]] = Method(
-        namespace + "_getChainConfig", mungers=[default_root_munger]
-    )
-
-    def _get_chain_config(self, *args) -> Any:
-        return self.__get_chain_config(*args)
-    
-    
     _account_created: Method[Callable[..., Any]] = Method(
         namespace + "_accountCreated", mungers=[default_root_munger]
     )
@@ -135,14 +127,6 @@ class KlayApi(Module):
 
     def gas_price(self, *args) -> Any:
         return self._gas_price(*args)
-    
-    
-    _gas_price_at: Method[Callable[..., Any]] = Method(
-        namespace + "_gasPriceAt", mungers=[default_root_munger]
-    )
-
-    def gas_price_at(self, *args) -> Any:
-        return self._gas_price_at(*args)
     
     
     _get_account: Method[Callable[..., Any]] = Method(
@@ -257,6 +241,14 @@ class KlayApi(Module):
         return self._get_bls_infos(*args)
     
     
+    _get_chain_config: Method[Callable[..., Any]] = Method(
+        namespace + "_getChainConfig", mungers=[default_root_munger]
+    )
+
+    def get_chain_config(self, *args) -> Any:
+        return self._get_chain_config(*args)
+    
+    
     _get_code: Method[Callable[..., Any]] = Method(
         namespace + "_getCode", mungers=[default_root_munger]
     )
@@ -343,6 +335,14 @@ class KlayApi(Module):
 
     def get_logs(self, *args) -> Any:
         return self._get_logs(*args)
+    
+    
+    _get_params: Method[Callable[..., Any]] = Method(
+        namespace + "_getParams", mungers=[default_root_munger]
+    )
+
+    def get_params(self, *args) -> Any:
+        return self._get_params(*args)
     
     
     _get_proof: Method[Callable[..., Any]] = Method(
@@ -686,14 +686,6 @@ class AsyncKlayApi(Module):
     namespace = "klay"
     
     
-    __get_chain_config: Method[Callable[..., Awaitable[Any]]] = Method(
-        namespace + "_getChainConfig", mungers=[default_root_munger]
-    )
-
-    async def _get_chain_config(self, *args) -> Any:
-        return await self.__get_chain_config(*args)
-    
-    
     _account_created: Method[Callable[..., Awaitable[Any]]] = Method(
         namespace + "_accountCreated", mungers=[default_root_munger]
     )
@@ -804,14 +796,6 @@ class AsyncKlayApi(Module):
 
     async def gas_price(self, *args) -> Any:
         return await self._gas_price(*args)
-    
-    
-    _gas_price_at: Method[Callable[..., Awaitable[Any]]] = Method(
-        namespace + "_gasPriceAt", mungers=[default_root_munger]
-    )
-
-    async def gas_price_at(self, *args) -> Any:
-        return await self._gas_price_at(*args)
     
     
     _get_account: Method[Callable[..., Awaitable[Any]]] = Method(
@@ -926,6 +910,14 @@ class AsyncKlayApi(Module):
         return await self._get_bls_infos(*args)
     
     
+    _get_chain_config: Method[Callable[..., Awaitable[Any]]] = Method(
+        namespace + "_getChainConfig", mungers=[default_root_munger]
+    )
+
+    async def get_chain_config(self, *args) -> Any:
+        return await self._get_chain_config(*args)
+    
+    
     _get_code: Method[Callable[..., Awaitable[Any]]] = Method(
         namespace + "_getCode", mungers=[default_root_munger]
     )
@@ -1012,6 +1004,14 @@ class AsyncKlayApi(Module):
 
     async def get_logs(self, *args) -> Any:
         return await self._get_logs(*args)
+    
+    
+    _get_params: Method[Callable[..., Awaitable[Any]]] = Method(
+        namespace + "_getParams", mungers=[default_root_munger]
+    )
+
+    async def get_params(self, *args) -> Any:
+        return await self._get_params(*args)
     
     
     _get_proof: Method[Callable[..., Awaitable[Any]]] = Method(

@@ -1,0 +1,106 @@
+openapi: "3.0.2"
+info:
+  title: KLAY OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/configuration/getParams:
+    post:
+      operationId: .getParams
+      summary: "kaia_getParams"
+      description: |
+        Returns the governance parameters effective at the given block.
+
+        NOTE: The block number can be larger than the latest block number, in which case the API returns the tentative value based on the current chain state. The future kaia parameters are subject to change via additional governance votes or GovParam contract state changes.
+
+        **JSONRPC:** `kaia_getParams`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: blockNumber
+          required: true
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+          description: Integer or hexadecimal block number, or the string "earliest", "latest" or "pending" as in the default block parameter.
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  required:
+                    - method
+                    - params
+                  properties:
+                    method:
+                      type: string
+                      default: "kaia_getParams"
+                    params:
+                      type: array
+                      items:
+                        $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+                      example: [0]
+
+      responses:
+        200:
+          description: governance items
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        description: governance items
+                        example:
+                          {
+                            governance.governancemode: "single",
+                            governance.governingnode: "0x7bf29f69b3a120dae17bca6cf344cf23f2daf208",
+                            governance.unitprice: 25000000000,
+                            istanbul.committeesize: 13,
+                            istanbul.epoch: 30,
+                            istanbul.policy: 2,
+                            kip71.basefeedenominator: 20,
+                            kip71.gastarget: 30000000,
+                            kip71.lowerboundbasefee: 25000000000,
+                            kip71.maxblockgasusedforbasefee: 60000000,
+                            kip71.upperboundbasefee: 750000000000,
+                            reward.deferredtxfee: true,
+                            reward.minimumstake: "5000000",
+                            reward.mintingamount: "9600000000000000000",
+                            reward.proposerupdateinterval: 30,
+                            reward.ratio: "34/54/12",
+                            reward.stakingupdateinterval: 60,
+                            reward.useginicoeff: true,
+                          }
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/configuration/getParams.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/configuration/KaiaGetParamsExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/configuration/getParams.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/configuration/getParams.py"

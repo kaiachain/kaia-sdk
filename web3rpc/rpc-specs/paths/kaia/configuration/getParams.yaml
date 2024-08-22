@@ -13,7 +13,7 @@ paths:
   /kaia/configuration/getParams:
     post:
       operationId: .getParams
-      summary: "kaia_getParams"
+      summary: "[Configuration] kaia_getParams"
       description: |
         Returns the governance parameters effective at the given block.
 

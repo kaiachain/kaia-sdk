@@ -35,6 +35,7 @@ from eth_account._utils.typed_transactions import (
 from eth_utils.curried import (
     hexstr_if_str,
     to_int,
+    is_hexstr
 )
 from eth_account._utils.transaction_utils import (
     set_transaction_type_if_needed,
@@ -206,6 +207,9 @@ def from_bytes(cls, encoded_transaction: HexBytes) -> "TypedTransaction":
 
 def method_choice_depends_on_transaction_type(value):
     tx_type = value[0]
+    # if tx_type is hex string, then convert it to int.
+    if is_hexstr(tx_type):
+        tx_type = int(tx_type, 16)
     if 0 <= tx_type and tx_type <= 0x7f and tx_type in KLAYTN_TYPED_TRANSACTION_GROUP:
         return RPCEndpoint("klay_sendRawTransaction")
     return RPCEndpoint("eth_sendRawTransaction")

@@ -9,7 +9,7 @@ const senderAddr = "0xfb60ded0ae96fe04eed6450aead860aa9d57128e";
 const senderPriv = "0x0e4ca6d38096ad99324de0dde108587e5d7c600165ae4cd6c2462c597458c2b8";
 const receiverAddr = "0xc40b6909eb7085590e1c26cb3becc25368e249e9";
 
-const provider = new Web3.providers.HttpProvider("https://public-en-baobab.klaytn.net");
+const provider = new Web3.providers.HttpProvider("https://public-en-kairos.node.kaia.io");
 const web3 = new Web3(provider);
 const senderAccount = web3.eth.accounts.privateKeyToAccount(senderPriv);
 

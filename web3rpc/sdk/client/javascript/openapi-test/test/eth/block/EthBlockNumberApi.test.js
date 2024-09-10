@@ -1,7 +1,7 @@
 const OpenSDK = require("opensdk-javascript");
 const { expect } = require("@jest/globals");
 
-const sdk = new OpenSDK(new OpenSDK.ApiClient("https://api.baobab.klaytn.net:8651"));
+const sdk = new OpenSDK(new OpenSDK.ApiClient("https://public-en-kairos.node.kaia.io"));
 describe('Eth block number API', () => {
     test('using eth namespace, should return block number', (done) => {
 

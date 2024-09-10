@@ -6,7 +6,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class KlayCreateAccessListExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void klayCreateAccessListExample() throws IOException {
         KlayCallObject object = new KlayCallObject();
         object.setFrom("0x3bc5885c2941c5cda454bdb4a8c88aa7f248e312");

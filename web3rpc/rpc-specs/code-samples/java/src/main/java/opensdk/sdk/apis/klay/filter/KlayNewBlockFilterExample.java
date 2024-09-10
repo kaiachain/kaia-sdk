@@ -5,7 +5,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class KlayNewBlockFilterExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));    void klayNewBlockFilterExample() throws IOException {
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));    void klayNewBlockFilterExample() throws IOException {
         KlayNewBlockFilterResponse response = w3.klayNewBlockFilter().send();
         response.getResult();
     }

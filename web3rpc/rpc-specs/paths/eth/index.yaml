@@ -13,8 +13,8 @@ tags:
     description: API for eth namespace
 servers:
   - url: http://localhost:7151
-  - url: https://api.baobab.klaytn.net:8651
-  - url: https://public-en-cypress.klaytn.net
+  - url: https://public-en-kairos.node.kaia.io
+  - url: https://public-en.node.kaia.io
 paths:
   # eth/account
   /eth/account/accounts:

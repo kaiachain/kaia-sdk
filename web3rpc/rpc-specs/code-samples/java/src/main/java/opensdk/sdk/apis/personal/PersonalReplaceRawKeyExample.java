@@ -5,7 +5,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class PersonalReplaceRawKeyExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void personalReplaceRawKeyExample() throws IOException {
         String key = "5b49a622d8360b719ed45b75f3db77c04d32224800c8ea113bd03bb1d35562cd";
         String oldPassphrase = "mypassword";

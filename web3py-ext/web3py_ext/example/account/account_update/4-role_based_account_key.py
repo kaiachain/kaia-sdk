@@ -15,7 +15,7 @@ from web3py_ext.utils.klaytn_utils import (
 )
 from cytoolz import merge
 
-w3 = Web3(Web3.HTTPProvider('https://public-en-baobab.klaytn.net'))
+w3 = Web3(Web3.HTTPProvider('https://public-en-kairos.node.kaia.io'))
 
 def web3_account_update_role_based():
     # Just for testing, user1 and user2 have the same key

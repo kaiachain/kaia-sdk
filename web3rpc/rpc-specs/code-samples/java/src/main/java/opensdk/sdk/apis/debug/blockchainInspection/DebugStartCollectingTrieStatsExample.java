@@ -5,7 +5,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class DebugStartCollectingTrieStatsExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void whenRequestValid_ThenCall200ResponseReturns() throws IOException {
         String address = "0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b";
 

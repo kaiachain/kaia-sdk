@@ -1,6 +1,6 @@
 const { Web3 } = require("@kaiachain/web3js-ext");
 
-const provider = new Web3.providers.HttpProvider("https://public-en-baobab.klaytn.net");
+const provider = new Web3.providers.HttpProvider("https://public-en-kairos.node.kaia.io");
 const web3 = new Web3(provider);
 
 // Web3 V3. web3.eth.accounts.create(1).encrypt("password")

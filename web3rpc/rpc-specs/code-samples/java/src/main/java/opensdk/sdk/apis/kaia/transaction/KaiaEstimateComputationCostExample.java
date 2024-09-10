@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class KaiaEstimateComputationCostExample {
 
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void kaiaEstimateComputationCostExample() throws IOException {
         KaiaCallObject callObject = new KaiaCallObject();
         callObject.setFrom("0x73718c4980728857f3aa5148e9d1b471efa3a7dd");

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 public class KlaySignTransactionExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));    void klaySignTransactionExample() throws IOException, ExecutionException, InterruptedException {
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));    void klaySignTransactionExample() throws IOException, ExecutionException, InterruptedException {
         KlaytnTransactionTypes type = new KlaytnTransactionTypes();
         String address = "0x487f2dfef230c2120b8cc55c5087b103146536ec";
         String nonce = "0x20";

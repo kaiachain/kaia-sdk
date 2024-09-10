@@ -9,7 +9,7 @@ const senderRoleAccountUpdatePriv = "0x9ba8cb8f60044058a9e6f815c5c42d3a216f47044
 const senderRoleFeePayerPriv = "0x0e4ca6d38096ad99324de0dde108587e5d7c600165ae4cd6c2462c597458c2b8";
 const receiverAddr = "0xc40b6909eb7085590e1c26cb3becc25368e249e9";
 
-const provider = new Web3.providers.HttpProvider("https://public-en-baobab.klaytn.net");
+const provider = new Web3.providers.HttpProvider("https://public-en-kairos.node.kaia.io");
 const web3 = new Web3(provider);
 const txAccount = web3.eth.accounts.privateKeyToAccount(senderRoleTransactionPriv);
 

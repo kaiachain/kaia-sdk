@@ -6,7 +6,7 @@ from web3 import Web3
 from eth_account import Account
 from web3py_ext.utils.klaytn_utils import to_pretty
 
-w3 = Web3(Web3.HTTPProvider('https://public-en-baobab.klaytn.net'))
+w3 = Web3(Web3.HTTPProvider('https://public-en-kairos.node.kaia.io'))
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
     server_socket.bind(('', 5555)) # localhost:5555
     server_socket.listen()

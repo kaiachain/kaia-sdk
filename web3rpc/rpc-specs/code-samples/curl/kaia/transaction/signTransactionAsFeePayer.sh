@@ -1,5 +1,5 @@
 curl -X 'POST' \
-  'https://api.baobab.klaytn.net:8651/kaia/signTransactionAsFeePayer' \
+  'https://public-en-kairos.node.kaia.io/kaia/signTransactionAsFeePayer' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

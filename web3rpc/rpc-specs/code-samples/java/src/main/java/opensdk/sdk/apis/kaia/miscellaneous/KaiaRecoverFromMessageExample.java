@@ -5,7 +5,7 @@ import org.web3j.protocol.kaia.core.method.response.KaiaRecoverFromMessageRespon
 import java.io.IOException;
 
 public class KaiaRecoverFromMessageExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void kaiaRecoverFromMessage() throws IOException {
         String address = "0xA2a8854b1802D8Cd5De631E690817c253d6a9153";
         String message = "0xdeadbeef";

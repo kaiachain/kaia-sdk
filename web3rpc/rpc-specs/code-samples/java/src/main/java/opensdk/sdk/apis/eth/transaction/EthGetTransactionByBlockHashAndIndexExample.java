@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 public class EthGetTransactionByBlockHashAndIndexExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void ethGetTransactionByBlockHashAndIndexExample() throws IOException {
         EthTransaction response = w3.ethGetTransactionByBlockHashAndIndex(
                         "0x451cafae98d61b7458b5cef54402830941432278184453e3ca490eb687317e68",

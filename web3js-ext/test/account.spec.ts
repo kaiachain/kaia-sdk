@@ -12,7 +12,7 @@ import { MockProvider } from "./mock_provider";
 // Dummy values.
 
 /* eslint-disable quotes */
-const url = "https://public-en-baobab.klaytn.net";
+const url = "https://public-en-kairos.node.kaia.io";
 const from = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 const to = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
 const feePayer = "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC";

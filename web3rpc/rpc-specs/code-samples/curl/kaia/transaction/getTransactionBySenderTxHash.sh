@@ -1,5 +1,5 @@
 curl -X 'POST' \
-  'https://api.baobab.klaytn.net:8651/kaia/getTransactionBySenderTxHash' \
+  'https://public-en-kairos.node.kaia.io/kaia/getTransactionBySenderTxHash' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

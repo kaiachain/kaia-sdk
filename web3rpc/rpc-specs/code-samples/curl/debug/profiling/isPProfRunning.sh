@@ -1,5 +1,5 @@
 curl -X 'POST' \
-  'https://public-en-baobab.klaytn.net/debug/isPProfRunning' \
+  'https://public-en-kairos.node.kaia.io/debug/isPProfRunning' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

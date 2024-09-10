@@ -6,4 +6,4 @@ curl -X POST \
          "params": ["KIP113", "latest"],
          "id": 1
      }' \
-     https://api.baobab.klaytn.net:8651
+     https://public-en-kairos.node.kaia.io

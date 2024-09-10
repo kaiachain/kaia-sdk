@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 public class EthCreateAccessListExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));    
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));    
     void ethCreateAccessListExample() throws IOException {
         Transaction args = Transaction.createFunctionCallTransaction("0x3bc5885c2941c5cda454bdb4a8c88aa7f248e312",null
                 ,new BigInteger("3b9aca00",16)

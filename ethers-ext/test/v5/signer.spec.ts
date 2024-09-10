@@ -16,7 +16,7 @@ import { MockEthersProvider, MockKlaytnProvider } from "./mock_provider";
 chai.use(chaiAsPromised);
 
 // Dummy values.
-const url = "https://public-en-baobab.klaytn.net";
+const url = "https://public-en-kairos.node.kaia.io";
 const priv =
   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 const value = 0;

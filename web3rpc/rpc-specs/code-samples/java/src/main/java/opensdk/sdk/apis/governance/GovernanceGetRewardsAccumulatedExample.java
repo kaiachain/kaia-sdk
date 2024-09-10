@@ -5,7 +5,7 @@ import org.web3j.protocol.kaia.core.method.response.GovernanceGetRewardsAccumula
 import java.io.IOException;
 
 public class GovernanceGetRewardsAccumulatedExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void governanceGetRewardsAccumulatedExample() throws IOException {
         int firstBlock = 123400489;
         int lastBlock = 123416489;

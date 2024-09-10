@@ -46,7 +46,7 @@ export async function doSignTx(account: Account, txRequest: any): Promise<any> {
 // We do it here with hardcoded private key for demonstration purpose.
 async function doSendTxAsFeePayer(signedTx: string) {
   try {
-    const httpProvider = new JsonRpcProvider("https://public-en-baobab.klaytn.net");
+    const httpProvider = new JsonRpcProvider("https://public-en-kairos.node.kaia.io");
     const feePayerPriv = "0x9435261ed483b6efa3886d6ad9f64c12078a0e28d8d80715c773e16fc000cff4";
     const feePayerWallet = new Wallet(feePayerPriv, httpProvider);
     console.log("feePayer", feePayerWallet.address)
@@ -89,6 +89,6 @@ export const baobabNetworkSpec = {
     symbol: "KLAY",
     decimals: 18,
   },
-  rpcUrls: ["https://public-en-baobab.klaytn.net"],
+  rpcUrls: ["https://public-en-kairos.node.kaia.io"],
   blockExplorerUrls: ["https://baobab.klaytnscope.com/"],
 }

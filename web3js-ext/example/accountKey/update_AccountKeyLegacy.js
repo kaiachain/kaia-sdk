@@ -8,7 +8,7 @@ const { Web3, TxType, AccountKeyType, getPublicKeyFromPrivate } = require("@kaia
 const senderAddr = "0xecbf243ac167a3b5097fef758e07881582a89027";
 const senderPriv = "0xc696ccd259792f2ffb87e0012e4a37ae3526a3224686225af679e3aaa2aeab0d";
 
-const provider = new Web3.providers.HttpProvider("https://public-en-baobab.klaytn.net");
+const provider = new Web3.providers.HttpProvider("https://public-en-kairos.node.kaia.io");
 const web3 = new Web3(provider);
 const senderAccount = web3.eth.accounts.privateKeyToAccount(senderPriv);
 

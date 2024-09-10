@@ -33,8 +33,8 @@ tags:
     description: namespace
 servers:
   - url: http://localhost:8551
-  - url: https://api.baobab.klaytn.net:8651
-  - url: https://public-en-cypress.klaytn.net
+  - url: https://public-en-kairos.node.kaia.io
+  - url: https://public-en.node.kaia.io
 paths:
   # kaia/account
   /kaia/account/accountCreated:

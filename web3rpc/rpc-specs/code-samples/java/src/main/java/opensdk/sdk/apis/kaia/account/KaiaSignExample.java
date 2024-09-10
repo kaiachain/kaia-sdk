@@ -6,7 +6,7 @@ import java.io.IOException;
 
 
 public class KaiaSignExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void kaiaSignExample() throws IOException {
         String address = "0x487f2dfef230c2120b8cc55c5087b103146536ec";
         String message = "0xdeadbeaf";

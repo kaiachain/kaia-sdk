@@ -7,7 +7,7 @@ import org.web3j.protocol.core.methods.response.EthCall;
 import java.io.IOException;
 
 public class EthCallExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void ethCallExample() throws IOException {
         EthCall cr = w3.ethCall(
                         Transaction.createEthCallTransaction(

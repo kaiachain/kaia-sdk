@@ -1,5 +1,5 @@
 curl -X 'POST' \
-  'https://api.baobab.klaytn.net:8651/kaia/forkStatus' \
+  'https://public-en-kairos.node.kaia.io/kaia/forkStatus' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

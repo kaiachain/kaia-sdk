@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SignerTest extends BaseTesting {
     @Test
     @DisplayName("test signPrefixedMessage")
-    void exampleTestCase() {
+    void testSignPrefixedMessage() {
         String message = "0xdeadbeef";
 
         Sign.SignatureData signature = KaiaSignatureData.signPrefixedMessage(message, this.getCredentials());

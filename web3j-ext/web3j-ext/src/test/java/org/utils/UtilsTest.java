@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Utils Tests")
 public class UtilsTest extends BaseTesting {
   @Test
-  @DisplayName("example test utils")
-  void testUnitConversion() {
+  @DisplayName("test Type")
+  void testType() {
     assertNotNull(Type.ACCOUNT_UPDATE);
   }
 }

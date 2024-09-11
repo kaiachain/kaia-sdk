@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """Unittest."""
-
+from web3py_ext import extend
 import unittest
+from base_testing.base_testing import BaseTesting
 
 
 def setUpModule():
@@ -14,13 +15,7 @@ def tearDownModule():
     pass
 
 
-class TestSignerExample(unittest.TestCase):
-
-    """Unittest."""
-    
-    def setUp(self):
-        """Method to prepare the test fixture. Run BEFORE the test methods."""
-        pass
+class TestProvider(BaseTesting):
 
     def tearDown(self):
         """Method to tear down the test fixture. Run AFTER the test methods."""
@@ -41,12 +36,10 @@ class TestSignerExample(unittest.TestCase):
         pass  # Probably you may not use this one. See tearDown().
 
     # tests. method starts with test_
-    def test_example_ok(self):
-        self.assertEqual(1,1)
-
-    @unittest.expectedFailure
-    def test_example_failed(self):
-        self.assertEqual(1,2)
+    def test_kaia_namespace(self):
+        # test if kaia namespace is intergrated by calling one of its functions.
+        block_number = self.web3.kaia.chain_id()
+        self.assertEqual(block_number, '0x3e9')
 
 
 if __name__.__contains__("__main__"):

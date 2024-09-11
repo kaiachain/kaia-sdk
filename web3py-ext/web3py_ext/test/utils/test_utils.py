@@ -2,9 +2,18 @@
 # -*- coding: utf-8 -*-
 
 """Unittest."""
-
+from web3py_ext import extend
+from web3 import Web3
+from eth_account import Account
+from web3py_ext.transaction.transaction import (
+    fill_transaction,
+)
+from web3py_ext.transaction.transaction import (
+    TxType
+)
 import unittest
-from base_testing.mock_provider import MockProvider
+from base_testing.base_testing import BaseTesting
+
 
 def setUpModule():
     pass
@@ -14,15 +23,7 @@ def tearDownModule():
     pass
 
 
-class TestProviderExample(unittest.TestCase):
-
-    """Unittest."""
-    
-    maxDiff, __slots__ = None, ()
-
-    def setUp(self):
-        """Method to prepare the test fixture. Run BEFORE the test methods."""
-        pass
+class TestUtils(BaseTesting):
 
     def tearDown(self):
         """Method to tear down the test fixture. Run AFTER the test methods."""
@@ -43,12 +44,8 @@ class TestProviderExample(unittest.TestCase):
         pass  # Probably you may not use this one. See tearDown().
 
     # tests. method starts with test_
-    def test_example_ok(self):
-        self.assertEqual(1,1)
-
-    @unittest.expectedFailure
-    def test_example_failed(self):
-        self.assertEqual(1,2)
+    def test_units_conversion(self):
+        self.assertEqual(Web3.to_peb(0.1, "klay"), 100000000000000000)
 
 
 if __name__.__contains__("__main__"):

@@ -7,7 +7,7 @@ import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.kaia.Web3j;
 
 public class KaiaResendExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void kaiaResendExample() throws IOException {
         SendArgs oldTrx = new SendArgs();
         oldTrx.setFrom("0x65b47be3457ff26f2911cf89fd079cef0475a2e6");

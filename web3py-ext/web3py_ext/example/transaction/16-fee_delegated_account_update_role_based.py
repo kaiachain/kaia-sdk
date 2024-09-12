@@ -16,7 +16,7 @@ from web3py_ext.utils.klaytn_utils import (
 from cytoolz import merge
 from eth_utils.address import to_checksum_address
 
-w3 = Web3(Web3.HTTPProvider('https://public-en-baobab.klaytn.net'))
+w3 = Web3(Web3.HTTPProvider('https://public-en-kairos.node.kaia.io'))
 
 def web3_fee_delegated_account_update_multisig():
     transaction_key = Account.from_key('0xc9668ccd35fc20587aa37a48838b48ccc13cf14dd74c8999dd6a480212d5f7ac')

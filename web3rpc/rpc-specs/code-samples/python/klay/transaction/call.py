@@ -1,7 +1,7 @@
 from web3 import Web3
 from web3py_ext import extend
 
-host = "https://api.baobab.klaytn.net:8651"
+host = "https://public-en-kairos.node.kaia.io"
 
 callObject = {
     "from": "0x3f71029af4e252b25b9ab999f77182f0cd3bc085",

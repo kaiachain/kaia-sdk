@@ -10,7 +10,7 @@ from web3py_ext.transaction.transaction import (
 from web3py_ext.utils.klaytn_utils import to_pretty
 from cytoolz import merge
 
-w3 = Web3(Web3.HTTPProvider('https://public-en-baobab.klaytn.net'))
+w3 = Web3(Web3.HTTPProvider('https://public-en-kairos.node.kaia.io'))
 
 def web3_fee_delegated_chaindata_anchoring_sign_recover():
     user1 = Account.from_key('0x8b0164c3a59d2b1a00a9934f85ae77c14e21094132c34cc3daacd9e632c90807')

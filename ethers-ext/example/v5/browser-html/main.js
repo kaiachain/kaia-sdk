@@ -75,7 +75,7 @@ async function switchBaobab() {
       symbol: "KLAY",
       decimals: 18,
     },
-    rpcUrls: ["https://public-en-baobab.klaytn.net"],
+    rpcUrls: ["https://public-en-kairos.node.kaia.io"],
     blockExplorerUrls: ["https://baobab.klaytnscope.com/"],
   });
 }
@@ -167,7 +167,7 @@ async function sendKlaytnSC() {
 // This operation is usually done in the backend by the dApp operator.
 // We do it here with hardcoded private key for demonstration purpose.
 async function doSendTxAsFeePayer(signedTx) {
-  const httpProvider = new ethers_ext.JsonRpcProvider("https://public-en-baobab.klaytn.net");
+  const httpProvider = new ethers_ext.JsonRpcProvider("https://public-en-kairos.node.kaia.io");
   const feePayerPriv = "0xb3cf575dea0081563fe5482de2fe4425e025502b1f4ae7e02b2540ac0a5beda1";
   const feePayerWallet = new ethers_ext.Wallet(feePayerPriv, httpProvider);
 

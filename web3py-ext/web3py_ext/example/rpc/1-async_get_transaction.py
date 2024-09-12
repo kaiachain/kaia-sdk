@@ -6,7 +6,7 @@ from web3py_ext.utils.klaytn_utils import to_pretty
 from aiohttp import ClientSession
 
 # w3 = AsyncWeb3(AsyncWeb3.AsyncHTTPProvider('http://127.0.0.1:8551'))
-w3 = AsyncWeb3(AsyncWeb3.AsyncHTTPProvider('https://public-en-baobab.klaytn.net', request_kwargs={'ssl':False}))
+w3 = AsyncWeb3(AsyncWeb3.AsyncHTTPProvider('https://public-en-kairos.node.kaia.io', request_kwargs={'ssl':False}))
 
 async def async_get_transaction_request():
     try:

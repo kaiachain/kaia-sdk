@@ -6,7 +6,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class EthNewFilterExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void whenRequestValid_ThenCall200ResponseReturns() throws IOException {
         EthFilter filterOption = new EthFilter(DefaultBlockParameter.valueOf("earliest"),DefaultBlockParameter.valueOf("latest")
                 ,"0x87ac99835e67168d4f9a40580f8f5c33550ba88b");

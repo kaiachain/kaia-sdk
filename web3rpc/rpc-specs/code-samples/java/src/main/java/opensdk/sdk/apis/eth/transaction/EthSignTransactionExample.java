@@ -5,7 +5,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class EthSignTransactionExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void ethSignTransactionExample() throws IOException {
 //        TransactionArgs tx = new TransactionArgs();
 //        tx.setFrom("0x487f2dfef230c2120b8cc55c5087b103146536ec");

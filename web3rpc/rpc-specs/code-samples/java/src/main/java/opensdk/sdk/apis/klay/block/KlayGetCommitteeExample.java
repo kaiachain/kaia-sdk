@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class KlayGetCommitteeExample {
 
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void klayGetCommitteeExample() throws IOException {
         KlayGetCommitteeResponse gr = w3.klayGetCommittee(
             "0x1b4")

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class KaiaEncodeAccountKeyExample {
 
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void kaiaEncodeAccountKeyExample() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode node = objectMapper.createObjectNode();

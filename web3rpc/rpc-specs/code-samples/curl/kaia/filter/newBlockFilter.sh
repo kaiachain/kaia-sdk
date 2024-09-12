@@ -1,5 +1,5 @@
 curl -X 'POST' \
-  'https://api.baobab.klaytn.net:8651/kaia/newBlockFilter' \
+  'https://public-en-kairos.node.kaia.io/kaia/newBlockFilter' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

@@ -17,7 +17,7 @@ const feePayerPriv =
   "0x9435261ed483b6efa3886d6ad9f64c12078a0e28d8d80715c773e16fc000cff4";
 
 const provider = new ethers.JsonRpcProvider(
-  "https://public-en-baobab.klaytn.net"
+  "https://public-en-kairos.node.kaia.io"
 );
 const senderWallet = new Wallet(senderAddr, senderPriv, provider); // decoupled account
 const feePayerWallet = new Wallet(feePayerPriv, provider);

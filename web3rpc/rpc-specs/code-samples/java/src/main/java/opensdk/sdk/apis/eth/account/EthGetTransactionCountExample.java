@@ -5,7 +5,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class EthGetTransactionCountExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));    
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));    
     void ethGetTransactionCountExample() throws IOException {
         String address = "0xc94770007dda54cF92009BFF0dE90c06F603a09f";
         DefaultBlockParameter blockTag = DefaultBlockParameter.valueOf("latest");

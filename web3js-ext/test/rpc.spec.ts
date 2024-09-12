@@ -8,7 +8,7 @@ import { KlaytnWeb3 } from "../src";
 import { MockProvider } from "./mock_provider";
 
 // Dummy values
-const url = "https://public-en-baobab.klaytn.net";
+const url = "https://public-en-kairos.node.kaia.io";
 
 const rawTx0 = "0xf86c80850ba43b740083015f909470997970c51812dc3a010c7d01b50e0d17dc79c885e8d4a510008082f4f6a0e0695a8467fca213751d5f31082ebcce69b14d1398d02978fb989744027c2414a04edf04c0bae5326942edc512a6fa793f01a09c14f9a6c1ef526cea75f7afcd97";
 const rc0 = {

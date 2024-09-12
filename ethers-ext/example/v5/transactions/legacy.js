@@ -11,7 +11,7 @@ const senderPriv =
   "0x0e4ca6d38096ad99324de0dde108587e5d7c600165ae4cd6c2462c597458c2b8";
 
 const provider = new ethers.providers.JsonRpcProvider(
-  "https://public-en-baobab.klaytn.net"
+  "https://public-en-kairos.node.kaia.io"
 );
 const wallet = new Wallet(senderPriv, provider);
 

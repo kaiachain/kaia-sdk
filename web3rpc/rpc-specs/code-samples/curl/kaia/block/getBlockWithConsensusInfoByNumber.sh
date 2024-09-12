@@ -1,5 +1,5 @@
 curl -X 'POST' \
-  'https://api.baobab.klaytn.net:8651/kaia/getBlockWithConsensusInfoByNumber' \
+  'https://public-en-kairos.node.kaia.io/kaia/getBlockWithConsensusInfoByNumber' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

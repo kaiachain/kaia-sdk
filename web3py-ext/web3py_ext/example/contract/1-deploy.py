@@ -5,7 +5,7 @@ from web3.middleware import construct_sign_and_send_raw_middleware
 
 user = Account.from_key('0x0e4ca6d38096ad99324de0dde108587e5d7c600165ae4cd6c2462c597458c2b8')
 acc_list = [user]
-w3 = Web3(Web3.HTTPProvider('https://public-en-baobab.klaytn.net'))
+w3 = Web3(Web3.HTTPProvider('https://public-en-kairos.node.kaia.io'))
 w3.middleware_onion.add(construct_sign_and_send_raw_middleware(acc_list))
 
 def contract_deploy_with_legacy():

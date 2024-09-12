@@ -5,7 +5,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class KaiaGetRawTransactionByBlockNumberAndIndexExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));    void kaiaGetRawTransactionByBlockNumberAndIndexExample() throws IOException {
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));    void kaiaGetRawTransactionByBlockNumberAndIndexExample() throws IOException {
         String blockTag = "0x27";
         String index = "0x0";
 

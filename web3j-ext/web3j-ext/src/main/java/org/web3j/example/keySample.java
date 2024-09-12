@@ -1,7 +1,7 @@
 package org.web3j.example;
 
 public interface keySample {
-    String BAOBAB_URL = "https://public-en-baobab.klaytn.net";
+    String BAOBAB_URL = "https://public-en-kairos.node.kaia.io";
     String LEGACY_KEY_address = "0xa2a8854b1802d8cd5de631e690817c253d6a9153";
     String LEGACY_KEY_privkey = "0x0e4ca6d38096ad99324de0dde108587e5d7c600165ae4cd6c2462c597458c2b8";
     String LEGACY_KEY_FEEPAYER_address = "0xcb0eb737dfda52756495a5e08a9b37aab3b271da";

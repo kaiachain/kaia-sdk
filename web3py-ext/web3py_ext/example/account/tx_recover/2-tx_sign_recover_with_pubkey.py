@@ -9,7 +9,7 @@ from web3py_ext.transaction.transaction import (
 )
 from cytoolz import merge
 
-w3 = Web3(Web3.HTTPProvider('https://public-en-baobab.klaytn.net'))
+w3 = Web3(Web3.HTTPProvider('https://public-en-kairos.node.kaia.io'))
 
 def web3_tx_sign_recover_pubkey():
     user = Account.from_key_pair(

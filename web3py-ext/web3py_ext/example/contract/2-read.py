@@ -2,7 +2,7 @@
 from web3py_ext import extend
 from web3 import Web3
 
-w3 = Web3(Web3.HTTPProvider('https://public-en-baobab.klaytn.net'))
+w3 = Web3(Web3.HTTPProvider('https://public-en-kairos.node.kaia.io'))
 
 def contract_interaction():
     c = w3.eth.contract(

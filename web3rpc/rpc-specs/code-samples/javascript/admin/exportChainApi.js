@@ -1,6 +1,6 @@
 const { JsonRpcProvider } = require("@kaiachain/ethers-ext");
 (() => {
-  const provider = new JsonRpcProvider("https://public-en-baobab.klaytn.net");
+  const provider = new JsonRpcProvider("https://public-en-kairos.node.kaia.io");
   const fileName = "/tmp/chain.txt";
   const startBlock = 1;
   const endBlock = 1000;

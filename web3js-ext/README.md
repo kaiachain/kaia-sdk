@@ -15,12 +15,12 @@ Web3.js Extension for kaia offers:
 - ESM or TypeScript
     ```ts
     import { Web3 } from "@kaiachain/web3js-ext";
-    const web3 = new Web3("https://public-en-baobab.klaytn.net");
+    const web3 = new Web3("https://public-en-kairos.node.kaia.io");
     ```
 - CommonJS
     ```js
     const { Web3 } = require("@kaiachain/web3js-ext");
-    const web3 = new Web3("https://public-en-baobab.klaytn.net");
+    const web3 = new Web3("https://public-en-kairos.node.kaia.io");
     ```
 
 ### Browser

@@ -1,7 +1,7 @@
 from web3 import Web3
 from web3py_ext import extend
 
-host = "https://api.baobab.klaytn.net:8651"
+host = "https://public-en-kairos.node.kaia.io"
 
 blockHash = "0x451cafae98d61b7458b5cef54402830941432278184453e3ca490eb687317e68"
 transactionIndexPosition = "0x0"

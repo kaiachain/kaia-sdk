@@ -13,7 +13,7 @@ const senderNewPriv =
 const recieverAddr = "0xc40b6909eb7085590e1c26cb3becc25368e249e9";
 
 const provider = new ethers.JsonRpcProvider(
-  "https://public-en-baobab.klaytn.net"
+  "https://public-en-kairos.node.kaia.io"
 );
 const newWallet = new Wallet(senderAddr, senderNewPriv, provider); // decoupled account
 

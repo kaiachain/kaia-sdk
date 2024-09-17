@@ -7,7 +7,7 @@ import java.util.List;
 
 public class KaiaFeeHistoryExample {
 
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void kaiaFeeHistoryExample() throws IOException {
         KaiaFeeHistoryResponse fr = w3.kaiaFeeHistory(
             "0x10",

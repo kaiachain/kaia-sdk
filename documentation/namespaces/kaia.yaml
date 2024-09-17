@@ -13,8 +13,8 @@ x-tagGroups:
     tags:
       - kaia
 servers:
-  - url: https://api.baobab.klaytn.net:8651
-  - url: https://public-en-cypress.klaytn.net
+  - url: https://public-en-kairos.node.kaia.io
+  - url: https://public-en.node.kaia.io
   - url: http://localhost:8551
 paths:
   # kaia/account

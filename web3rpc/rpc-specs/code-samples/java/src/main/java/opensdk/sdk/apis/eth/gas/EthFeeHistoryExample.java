@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class EthFeeHistoryExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));    
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));    
     void ethFeeHistoryExample() throws IOException {
         EthFeeHistory br = w3.ethFeeHistory(
             16,

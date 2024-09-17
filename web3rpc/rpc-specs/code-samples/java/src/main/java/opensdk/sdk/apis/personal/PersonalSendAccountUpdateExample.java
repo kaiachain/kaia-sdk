@@ -6,7 +6,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class PersonalSendAccountUpdateExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void personalSendAccountUpdateExample() throws IOException {
         TransactionObject transactionObject = new TransactionObject();
         transactionObject.setFrom("0x1d4e05bb72677cb8fa576149c945b57d13f855e4");

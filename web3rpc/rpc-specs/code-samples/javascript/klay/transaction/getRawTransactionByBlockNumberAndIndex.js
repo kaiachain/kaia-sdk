@@ -1,6 +1,6 @@
 const { JsonRpcProvider } = require("@kaiachain/ethers-ext");
 (() => {
-  const provider = new JsonRpcProvider("https://public-en-baobab.klaytn.net");
+  const provider = new JsonRpcProvider("https://public-en-kairos.node.kaia.io");
 
   const blockNumber = 118593751;
   const transactionIndexPosition = "0x0";

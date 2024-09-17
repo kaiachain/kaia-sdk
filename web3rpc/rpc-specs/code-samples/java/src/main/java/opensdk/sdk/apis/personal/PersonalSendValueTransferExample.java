@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 public class PersonalSendValueTransferExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void personalSendValueTransferExample() throws IOException, ExecutionException, InterruptedException {
         TransactionObject transactionObject = new TransactionObject();
         transactionObject.setFrom("0x1d4e05bb72677cb8fa576149c945b57d13f855e4");

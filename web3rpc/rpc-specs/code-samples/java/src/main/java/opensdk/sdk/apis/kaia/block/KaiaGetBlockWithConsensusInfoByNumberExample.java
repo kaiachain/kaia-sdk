@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class KaiaGetBlockWithConsensusInfoByNumberExample {
 
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void kaiaGetBlockWithConsensusInfoByNumberExample() throws IOException {
         KaiaGetBlockWithConsensusInfoByNumberResponse gr = w3.kaiaGetBlockWithConsensusInfoByNumber(
             "0xe8")

@@ -1,5 +1,5 @@
 curl -X 'POST' \
-  'https://api.baobab.klaytn.net:8651/kaia/getTransactionCount' \
+  'https://public-en-kairos.node.kaia.io/kaia/getTransactionCount' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

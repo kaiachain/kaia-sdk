@@ -1,6 +1,6 @@
 const { JsonRpcProvider } = require("@kaiachain/ethers-ext");
 (() => {
-  const provider = new JsonRpcProvider("https://public-en-baobab.klaytn.net");
+  const provider = new JsonRpcProvider("https://public-en-kairos.node.kaia.io");
   const callObject = {
     from: "0xca7a99380131e6c76cfa622396347107aeedca2d",
     to: "0xbE3892d33620bE5aca8c75D39e7401871194d290",

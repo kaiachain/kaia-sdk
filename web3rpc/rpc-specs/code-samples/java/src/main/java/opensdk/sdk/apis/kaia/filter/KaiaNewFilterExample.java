@@ -8,7 +8,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class KaiaNewFilterExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));    void kaiaNewFilterExample() throws IOException {
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));    void kaiaNewFilterExample() throws IOException {
         FilterOptions filterOptions = new FilterOptions();
         filterOptions.setFromBlock("latest");
         filterOptions.setToBlock("latest");

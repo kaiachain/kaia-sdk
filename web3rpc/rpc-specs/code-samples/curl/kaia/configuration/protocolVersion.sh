@@ -1,5 +1,5 @@
 curl -X 'POST' \
-  'https://api.baobab.klaytn.net:8651/kaia/protocolVersion' \
+  'https://public-en-kairos.node.kaia.io/kaia/protocolVersion' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

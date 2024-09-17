@@ -17,7 +17,7 @@ Ethers.js Extension for Klaytn offers:
     const ethers = require("ethers");
     const { Wallet } = require("@kaiachain/ethers-ext");
 
-    const provider = new ethers.JsonRpcProvider("https://public-en-baobab.klaytn.net");
+    const provider = new ethers.JsonRpcProvider("https://public-en-kairos.node.kaia.io");
     const wallet = new Wallet("<private key>", provider);
     ```
 - **Do**: mix ethers v5 and ethers-ext
@@ -25,14 +25,14 @@ Ethers.js Extension for Klaytn offers:
     const ethers = require("ethers");
     const { Wallet } = require("@kaiachain/ethers-ext");
 
-    const provider = new ethers.providers.JsonRpcProvider("https://public-en-baobab.klaytn.net");
+    const provider = new ethers.providers.JsonRpcProvider("https://public-en-kairos.node.kaia.io");
     const wallet = new Wallet("<private key>", provider);
     ```
 - **Do**: ethers-ext only
     ```js
     const { Wallet, JsonRpcProvider } = require("@kaiachain/ethers-ext");
 
-    const provider = new JsonRpcProvider("https://public-en-baobab.klaytn.net");
+    const provider = new JsonRpcProvider("https://public-en-kairos.node.kaia.io");
     const wallet = new Wallet("<private key>", provider);
     ```
 
@@ -47,13 +47,13 @@ Ethers.js Extension for Klaytn offers:
 - ESM or TypeScript
     ```ts
     import { Wallet, JsonRpcProvider } from "@kaiachain/ethers-ext";
-    const provider = new JsonRpcProvider("https://public-en-baobab.klaytn.net");
+    const provider = new JsonRpcProvider("https://public-en-kairos.node.kaia.io");
     const wallet = new Wallet("<private key>", provider);
     ```
 - CommonJS
     ```js
     const { Wallet, JsonRpcProvider } = require("@kaiachain/ethers-ext");
-    const provider = new JsonRpcProvider("https://public-en-baobab.klaytn.net");
+    const provider = new JsonRpcProvider("https://public-en-kairos.node.kaia.io");
     const wallet = new Wallet("<private key>", provider);
     ```
 

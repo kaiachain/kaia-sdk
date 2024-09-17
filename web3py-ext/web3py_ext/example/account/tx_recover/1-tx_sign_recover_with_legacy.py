@@ -6,7 +6,7 @@ from web3py_ext.transaction.transaction import (
     fill_transaction,
 )
 
-w3 = Web3(Web3.HTTPProvider('https://public-en-baobab.klaytn.net'))
+w3 = Web3(Web3.HTTPProvider('https://public-en-kairos.node.kaia.io'))
 
 def web3_tx_sign_recover_legacy():
     user = Account.from_key('0x0e4ca6d38096ad99324de0dde108587e5d7c600165ae4cd6c2462c597458c2b8')

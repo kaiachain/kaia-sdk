@@ -10,8 +10,8 @@ info:
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 servers:
   - url: http://localhost:7151
-  - url: https://api.baobab.klaytn.net:8651
-  - url: https://public-en-cypress.klaytn.net
+  - url: https://public-en-kairos.node.kaia.io
+  - url: https://public-en.node.kaia.io
 tags:
   - name: debug
     description: API for debug namespace

@@ -5,7 +5,7 @@ import org.web3j.protocol.kaia.core.method.response.GovernanceGetChainConfigResp
 import java.io.IOException;
 
 public class GovernanceGetChainConfigExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void governanceGetChainConfigExample() throws IOException {
         GovernanceGetChainConfigResponse response = w3.governanceGetChainConfig().send();
         response.getResult();

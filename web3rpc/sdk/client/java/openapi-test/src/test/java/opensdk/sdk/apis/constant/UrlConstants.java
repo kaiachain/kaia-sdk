@@ -4,7 +4,7 @@ public class UrlConstants {
 
     private UrlConstants() {}
 
-    public static final String BAOBAB_RPC = System.getenv().getOrDefault("BAOBAB_RPC", "https://api.baobab.klaytn.net:8651");
+    public static final String BAOBAB_RPC = System.getenv().getOrDefault("BAOBAB_RPC", "https://public-en-kairos.node.kaia.io");
 
     public static final String RPC = System.getenv().getOrDefault("RPC", "https://dev.api.klaytn.sotatek.works");
 

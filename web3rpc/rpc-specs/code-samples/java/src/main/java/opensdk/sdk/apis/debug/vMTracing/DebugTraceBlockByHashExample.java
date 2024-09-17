@@ -5,7 +5,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class DebugTraceBlockByHashExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void debugTraceBlockByHashExample() throws IOException {
         String blockHash = "0xed110b330152df2022d40fa3c38987643034aa56fc96079fb6c67b66a6ed4f19";
 

@@ -7,7 +7,7 @@ from web3py_ext.transaction.transaction import (
     TxType
 )
 
-w3 = Web3(Web3.HTTPProvider('https://public-en-baobab.klaytn.net'))
+w3 = Web3(Web3.HTTPProvider('https://public-en-kairos.node.kaia.io'))
 user = Account.from_key('0x4a72b3d09c3d5e28e8652e0111f9c4ce252e8299aad95bb219a38eb0a3f4da49')
 
 def contract_interaction_with_klaytn_type():

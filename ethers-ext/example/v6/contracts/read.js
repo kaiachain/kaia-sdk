@@ -1,7 +1,7 @@
 const ethers = require("ethers6");
 
 const provider = new ethers.JsonRpcProvider(
-  "https://public-en-baobab.klaytn.net"
+  "https://public-en-kairos.node.kaia.io"
 );
 
 /* compiled in remix.ethereum.org (compiler: 0.8.18, optimizer: false)

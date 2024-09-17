@@ -1,4 +1,4 @@
-curl 'https://api.baobab.klaytn.net:8651' \
+curl 'https://public-en-kairos.node.kaia.io' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

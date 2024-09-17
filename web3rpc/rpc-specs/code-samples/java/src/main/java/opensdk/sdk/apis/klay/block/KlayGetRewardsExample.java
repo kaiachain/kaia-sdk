@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class KlayGetRewardsExample {
 
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void klayGetRewardsExample() throws IOException {
         KlayGetRewardsResponse gr = w3.klayGetRewards(
             "0x1000")

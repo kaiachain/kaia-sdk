@@ -14,7 +14,8 @@ import org.web3j.utils.Numeric;
 import java.io.IOException;
 import java.math.BigInteger;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("Signer Tests")
 public class SignerTest extends BaseTesting {
@@ -60,6 +61,7 @@ public class SignerTest extends BaseTesting {
 
         assertNotNull(hexValue);
     }
+
     @Test
     @DisplayName("test signTransactionAsFeePayer")
     void testSignTransactionAsFeePayer() throws IOException {
@@ -97,6 +99,7 @@ public class SignerTest extends BaseTesting {
 
         assertNotNull(hexValue);
     }
+
     @Test
     @DisplayName("test sendTransaction")
     void testSendTransaction() throws IOException {
@@ -129,6 +132,7 @@ public class SignerTest extends BaseTesting {
         String txHash = transactionResponse.getResult();
         assertNotNull(txHash);
     }
+
     @Test
     @DisplayName("test sendTransactionAsFeePayer")
     void testSendTransactionAsFeePayer() throws IOException {
@@ -167,6 +171,32 @@ public class SignerTest extends BaseTesting {
         EthSendTransaction transactionResponse = this.getWeb3j().ethSendRawTransaction(hexValue).send();
         String txHash = transactionResponse.getResult();
         assertNotNull(txHash);
+    }
+
+    @Test
+    @DisplayName("test fillTransaction")
+    void testFillTransaction() throws IOException {
+        BigInteger GAS_PRICE = BigInteger.ZERO;
+        BigInteger GAS_LIMIT = BigInteger.ZERO;
+        String from = keySample.LEGACY_KEY_address;
+        String to = "0x000000000000000000000000000000000000dead";
+        BigInteger value = BigInteger.valueOf(100);
+
+        TxType.Type type = TxType.Type.FEE_DELEGATED_VALUE_TRANSFER;
+
+        KaiaRawTransaction raw = KaiaRawTransaction.createTransaction(
+                type,
+                BigInteger.ZERO,
+                GAS_PRICE,
+                GAS_LIMIT,
+                to,
+                value,
+                from);
+
+        KaiaRawTransaction filledTransaction = raw.fillTransaction(this.getWeb3j());
+
+        assertNotEquals(filledTransaction.getNonce(), BigInteger.ZERO);
+        assertNotEquals(filledTransaction.getGasPrice(), BigInteger.ZERO);
     }
 
 

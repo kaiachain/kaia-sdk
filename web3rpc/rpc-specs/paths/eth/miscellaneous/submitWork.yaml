@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: Klay Open API
+  title: Kaia Open API
   version: "1.10.0"
   license:
     name: Apache 2.0

@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -17,7 +17,7 @@ paths:
       description: |
         Returns the governance parameters effective at the given block.
 
-        NOTE: The block number can be larger than the latest block number, in which case the API returns the tentative value based on the current chain state. The future klay parameters are subject to change via additional governance votes or GovParam contract state changes.
+        NOTE: The block number can be larger than the latest block number, in which case the API returns the tentative value based on the current chain state. The future kaia parameters are subject to change via additional governance votes or GovParam contract state changes.
 
         **JSONRPC:** `klay_getParams`
 

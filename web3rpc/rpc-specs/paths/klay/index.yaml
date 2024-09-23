@@ -10,7 +10,7 @@ info:
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 tags:
   - name: klay
-    description: API for klay namespace
+    description: API for kaia namespace
 servers:
   - url: http://localhost:7151
   - url: https://public-en-kairos.node.kaia.io

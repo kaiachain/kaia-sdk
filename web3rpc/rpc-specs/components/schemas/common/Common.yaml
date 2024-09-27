@@ -1233,7 +1233,7 @@ components:
         accounts:
           type: array
           items:
-            type: object
+            type: string
           description: The list of account addresses.
 
     EthBlockHeader:

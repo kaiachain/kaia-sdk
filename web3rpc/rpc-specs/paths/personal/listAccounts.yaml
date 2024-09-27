@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -46,7 +46,9 @@ paths:
                   - type: object
                     properties:
                       result:
-                        type: string
+                        type: array
+                        items:
+                          type: string
                         description: The list of all the Klaytn account addresses
                         example: ["0x5e97870f263700f46aa00d967821199b9bc5a120", "0x3d80b31a78c30fc628f20b2c89d7ddbf6e53cedc"]
 

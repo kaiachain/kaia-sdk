@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -20,7 +20,7 @@ paths:
         - CouncilNodeAddrs: The addresses of the consensus node.
         - CouncilRewardAddrs: The addresses to which the block reward of the associated nodes is sent.
         - CouncilStakingAddrs: The contract addresses in which the associated nodes deploy for staking.
-        - CouncilStakingAmounts: The amount of KLAY which the associated nodes stake.
+        - CouncilStakingAmounts: The amount of KAIA which the associated nodes stake.
         - Gini: Gini coefficient.
         - KIRAddr: The contract address of KIR.
         - PoCAddr: The contract address of KGF. PoC is the previous name of KGF.

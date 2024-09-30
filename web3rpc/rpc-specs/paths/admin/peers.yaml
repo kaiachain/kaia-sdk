@@ -80,7 +80,7 @@ components:
             [
               {
                 "id":"144af69d2bb030c6a2a5ceee7445dc613e200f19358547cffc353d56e6c8a5b4186a6953c028b6afd0ab3c2bfc4c86f24b0bf855d0686b964ec65cefd3deec37",
-                "name":"Klaytn/vvX.X.X/XXXX-XXXX/goX.X.X",
+                "name":"Kaia/vvX.X.X/XXXX-XXXX/goX.X.X",
                 "caps":["istanbul/64"],
                 "network":
                   {
@@ -102,7 +102,7 @@ components:
                 },
                   {
                     "id":"a875620f67f0b12edb97d0ec269e7940f2505b1f62576f39858c37e1d7f956318c3a619239f03f806a79ccaa8e7e9b5def343c24a9fd2e9d715964e0952dd995",
-                    "name":"Klaytn/vvX.X.X/XXXX-XXXX/goX.X.X",
+                    "name":"Kaia/vvX.X.X/XXXX-XXXX/goX.X.X",
                     "caps":["istanbul/64"],
                     "networks":
                       [
@@ -126,7 +126,7 @@ components:
                 },
                 {
                   "id":"e18d6d4e0ffac0a51028a8d49a548295ac8ac50d064f3581600799a3ae761a61f0b39c38b4195e163e01f30db616debf61b5b2ddea716bc8fb1c907ce7a1de26",
-                  "name":"Klaytn/vvX.X.X/XXXX-XXXX/goX.X.X",
+                  "name":"Kaia/vvX.X.X/XXXX-XXXX/goX.X.X",
                   "caps":["istanbul/64"],
                   "network":
                     {

@@ -17,7 +17,7 @@ paths:
         - eth
       operationId: getUncleByBlockHashAndIndex
       description: |
-        Returns information about a uncle of a block by hash and the uncle's index position. Since there are no uncles in Klaytn, it always returns null.
+        Returns information about a uncle of a block by hash and the uncle's index position. Since there are no uncles in Kaia, it always returns null.
 
         **JSONRPC:** `eth_getUncleByBlockHashAndIndex`
 

@@ -15,7 +15,7 @@ paths:
       operationId: .signTransaction
       summary: "[Transaction] kaia_signTransaction"
       description: |
-        Constructs a transaction with given parameters and signs the transaction with a sender's private key. This method can be used either to generate a sender signature or to make a final raw transaction that is ready to submit to Klaytn network.
+        Constructs a transaction with given parameters and signs the transaction with a sender's private key. This method can be used either to generate a sender signature or to make a final raw transaction that is ready to submit to Kaia network.
 
         `kaia_signTransaction` will be failed to baobab/cypress network because it is signed in the EN node, which means that the EN must have the key that you want to sign with.
         Steps to test `kaia_signTransaction`.

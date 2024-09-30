@@ -30,7 +30,7 @@ public class UtilsTest extends BaseTesting {
     @Test
     @DisplayName("test Keystore v3")
     void testKeystoreV3() throws CipherException, IOException {
-        String password = "Iloveklaytn";
+        String password = "Ilovekaia";
 
         String[] keyFiles = {"/Legacy_V3.json", "/Public_V3.json"};
         for (String keyFile : keyFiles) {
@@ -49,8 +49,7 @@ public class UtilsTest extends BaseTesting {
     @Test
     @DisplayName("test Keystore v4")
     void testKeyStoreV4() throws Exception {
-        String password = "Iloveklaytn";
-
+        String password = "Ilovekaia";
         String[] keyFiles = {"/RoleBased_V4.json", "/Multi_V4.json", "/Public_V4.json"};
         for (String keyFile : keyFiles) {
 

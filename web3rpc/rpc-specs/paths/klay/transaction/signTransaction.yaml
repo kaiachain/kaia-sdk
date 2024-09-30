@@ -15,7 +15,7 @@ paths:
       operationId: signTransaction
       summary: "[Transaction] klay_signTransaction"
       description: |
-        Constructs a transaction with given parameters and signs the transaction with a sender's private key. This method can be used either to generate a sender signature or to make a final raw transaction that is ready to submit to Klaytn network.
+        Constructs a transaction with given parameters and signs the transaction with a sender's private key. This method can be used either to generate a sender signature or to make a final raw transaction that is ready to submit to Kaia network.
 
         **JSONRPC:** `klay_signTransaction`
 

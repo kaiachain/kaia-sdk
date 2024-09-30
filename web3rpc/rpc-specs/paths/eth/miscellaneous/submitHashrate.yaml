@@ -19,7 +19,7 @@ paths:
       description: |
         Used for submitting mining hashrate.
         
-        Please note that it always return false because there is no PoW mechanism in Klaytn.
+        Please note that it always return false because there is no PoW mechanism in Kaia.
         
         **JSONRPC:** `eth_submitHashrate`
 

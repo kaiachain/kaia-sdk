@@ -15,7 +15,7 @@ paths:
       operationId: importRawKey
       summary: "personal_importRawKey"
       description: |
-        Imports the given unencrypted private key (hex string without leading '0x') or a Klaytn wallet key into the key store, encrypting it with the passphrase.
+        Imports the given unencrypted private key (hex string without leading '0x') or a Kaia wallet key into the key store, encrypting it with the passphrase.
         
         Returns the address of the imported account.
 
@@ -28,7 +28,7 @@ paths:
           required: true
           schema:
             type: string
-          description: The unencrypted private key (hex string without leading '0x') or a Klaytn wallet key.
+          description: The unencrypted private key (hex string without leading '0x') or a Kaia wallet key.
           in: query
         - name: passphrase
           required: true
@@ -96,7 +96,7 @@ components:
               Keydata:
                 type: string
                 title: Keydata
-                description: The unencrypted private key (hex string without leading '0x') or a Klaytn wallet key.
+                description: The unencrypted private key (hex string without leading '0x') or a Kaia wallet key.
               Passphrase:
                 type: string
                 title: Passphrase

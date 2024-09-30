@@ -21,7 +21,7 @@ paths:
         
         *kaia_getValidators is replaced with this method and is not supported anymore.*
         
-        *In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available.*
+        *In versions earlier than Kaia v1.7.0, only integer block number, the string "earliest" and "latest" are available.*
 
         **JSONRPC:** `kaia_getCouncil`
       tags:

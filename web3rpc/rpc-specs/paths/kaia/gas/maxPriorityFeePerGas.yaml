@@ -21,7 +21,7 @@ paths:
         - After Magma, returns zero
         - After Kaia, returns zero if network is uncongested (i.e. next baseFee at its lower bound), otherwise 60% percentile effective tip from previous 20 blocks (under default setting)
 
-        **NOTE:** This API is effective after Klaytn v1.8.0
+        **NOTE:** This API is effective after Kaia v1.8.0
 
         **JSONRPC:** `kaia_maxPriorityFeePerGas`
 

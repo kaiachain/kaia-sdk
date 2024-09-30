@@ -15,9 +15,9 @@ paths:
       operationId: .getAccount
       summary: "[Account] kaia_getAccount"
       description: |
-        Returns the account information of a given address. There are two different account types in Klaytn: Externally Owned Account (EOA) and Smart Contract Account. See Klaytn Accounts.
+        Returns the account information of a given address. There are two different account types in Kaia: Externally Owned Account (EOA) and Smart Contract Account. See Kaia Accounts.
 
-        **NOTE:** *In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available.*`
+        **NOTE:** *In versions earlier than Kaia v1.7.0, only integer block number, the string "earliest" and "latest" are available.*`
 
         **JSONRPC:** `kaia_getAccount`
       tags:

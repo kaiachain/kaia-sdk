@@ -17,7 +17,7 @@ paths:
       description: |
         Retrieves a block and returns its pretty printed form.
 
-        **NOTE:** *In versions earlier than Klaytn v1.7.0, only integer type is available.*
+        **NOTE:** *In versions earlier than Kaia v1.7.0, only integer type is available.*
 
         **JSONRPC:** `debug_printBlock`
       tags:

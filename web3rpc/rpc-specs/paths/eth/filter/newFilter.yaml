@@ -26,7 +26,7 @@ paths:
         - [A, B] "A in first position AND B in second position (and anything after)"
         - [[A, B], [A, B]] "(A OR B) in first position AND (A OR B) in second position (and anything after)"
 
-        **NOTE**: In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available.
+        **NOTE**: In versions earlier than Kaia v1.7.0, only integer block number, the string "earliest" and "latest" are available.
 
         **JSONRPC:** `eth_newFilter`
 

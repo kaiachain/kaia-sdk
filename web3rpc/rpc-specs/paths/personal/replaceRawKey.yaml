@@ -15,7 +15,7 @@ paths:
       operationId: replaceRawKey
       summary: "personal_replaceRawKey"
       description: |
-        Replaces the encrypted key file in the key store with the given unencrypted private key (hex string without leading '0x') or a Klaytn wallet key, encrypting it with the new passphrase. It also receives the old passphrase to decrypt the old private key before replacement. If it is failed to decrypt, or can not find the matching account, it throws an error.
+        Replaces the encrypted key file in the key store with the given unencrypted private key (hex string without leading '0x') or a Kaia wallet key, encrypting it with the new passphrase. It also receives the old passphrase to decrypt the old private key before replacement. If it is failed to decrypt, or can not find the matching account, it throws an error.
         
         Returns the address of the replaced account if successful.
 
@@ -28,7 +28,7 @@ paths:
           required: true
           schema:
             type: string
-          description: The unencrypted private key (hex string without leading '0x') or a Klaytn wallet key.
+          description: The unencrypted private key (hex string without leading '0x') or a Kaia wallet key.
           in: query
         - name: oldPassphrase
           required: true
@@ -102,7 +102,7 @@ components:
               Keydata:
                 type: string
                 title: Keydata
-                description: The unencrypted private key (hex string without leading '0x') or a Klaytn wallet key.
+                description: The unencrypted private key (hex string without leading '0x') or a Kaia wallet key.
               OldPassphrase:
                 type: string
                 title: OldPassphrase

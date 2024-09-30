@@ -19,7 +19,7 @@ paths:
       description: |
         Returns the hash of the current block, the seedHash, and the boundary condition to be met ("target").
 
-        Please note that it always return `errNoMiningWork` because there is no PoW mechanism in Klaytn.
+        Please note that it always return `errNoMiningWork` because there is no PoW mechanism in Kaia.
 
         **JSONRPC:** `eth_getWork`
 

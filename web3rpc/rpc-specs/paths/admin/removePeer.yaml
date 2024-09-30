@@ -17,7 +17,7 @@ paths:
       description: |
         The removePeer is an administrative method that requests removing a node from the list of tracked static nodes.
        
-        The method accepts a single argument kni, which means "Klaytn Network Identifier". It is similar to the enode concept in the geth. It is URL of the remote peer to be removed from a list and returns a BOOL indicating whether the peer was removed or some error occurred.        
+        The method accepts a single argument kni, which means "Kaia Network Identifier". It is similar to the enode concept in the geth. It is URL of the remote peer to be removed from a list and returns a BOOL indicating whether the peer was removed or some error occurred.        
 
         **JSONRPC:** `admin_removePeer`
 

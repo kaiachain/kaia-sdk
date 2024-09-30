@@ -13,7 +13,7 @@ tags:
     description: API for kaia namespace
 servers:
   - url: http://localhost:7151
-  - url: https://api.baobab.kaiatn.net:8651
+  - url: https://public-en-kairos.node.kaia.io
   - url: https://public-en-cypress.kaiatn.net
 paths:
   # kaia/account

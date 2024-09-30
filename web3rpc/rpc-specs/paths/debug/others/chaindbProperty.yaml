@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -85,4 +85,4 @@ components:
           type: array
           items:
             type: string
-          example: ["string"]
+          example: ["0xe17d821e9a8a8736b9aea8c2de1f3a4934ac0a2f"]

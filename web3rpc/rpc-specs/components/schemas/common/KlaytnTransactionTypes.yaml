@@ -209,7 +209,7 @@ components:
         - to
         - value
         - input
-      description: TxTypeValueTransferMemo is used when a user wants to send KLAY with a specific message. For more information, see TxTypeValueTransferMemo.
+      description: TxTypeValueTransferMemo is used when a user wants to send KAIA with a specific message. For more information, see TxTypeValueTransferMemo.
       properties:
         typeInt:
           type: number

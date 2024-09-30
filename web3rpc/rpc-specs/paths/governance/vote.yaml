@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -168,7 +168,7 @@ components:
                 </tr>
                 <tr>
                     <td>"reward.minimumstake"</td>
-                    <td>STRING. Amount of Klay required to be a CN (Consensus Node). Double quotation marks are needed for a value. e.g., "5000000"</td>
+                    <td>STRING. Amount of Kaia required to be a CN (Consensus Node). Double quotation marks are needed for a value. e.g., "5000000"</td>
                 </tr>
                 <tr>
                     <td>"kip71.lowerboundbasefee"</td>

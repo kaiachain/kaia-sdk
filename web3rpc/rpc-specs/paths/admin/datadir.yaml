@@ -15,7 +15,7 @@ paths:
       operationId: datadir
       summary: "admin_datadir"
       description: |
-        The datadir administrative property can be queried for the absolute path the running Klaytn node currently uses to store all its databases. The default path is different depending on the node types (kcn, kpn, and ken) and the OS type.
+        The datadir administrative property can be queried for the absolute path the running Kaia node currently uses to store all its databases. The default path is different depending on the node types (kcn, kpn, and ken) and the OS type.
         
         **JSONRPC:** `admin_datadir`
 

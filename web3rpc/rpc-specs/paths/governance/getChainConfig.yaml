@@ -17,7 +17,7 @@ paths:
       description: |
         The getChainConfig property provides the latest chain configuration. This is equivalent to chainConfigAt() with an empty parameter.
 
-        **NOTE:** In versions earlier than Klaytn v1.10.0, this API returned the initial chain configuration. However, due to its confusing name, it is updated since Klaytn v1.10.0. To query the initial chain configuration, use getChainConfigAt(0) instead.
+        **NOTE:** In versions earlier than Kaia v1.10.0, this API returned the initial chain configuration. However, due to its confusing name, it is updated since Kaia v1.10.0. To query the initial chain configuration, use getChainConfigAt(0) instead.
 
         **JSONRPC:** `governance_getChainConfig`
 

@@ -17,7 +17,7 @@ paths:
         - eth
       operationId: getUncleCountByBlockHash
       description: |
-        Returns the number of uncles in a block from a block matching the given block hash. Since there are no uncles in Klaytn, it returns 0x0. It returns null if there is no matching block.
+        Returns the number of uncles in a block from a block matching the given block hash. Since there are no uncles in Kaia, it returns 0x0. It returns null if there is no matching block.
 
         **JSONRPC:** `eth_getUncleCountByBlockHash`
 

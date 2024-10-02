@@ -38,7 +38,7 @@ paths:
 
       responses:
         200:
-          description: Returns bridge node information including the KNI (Klaytn Network Identifier) of the node.
+          description: Returns bridge node information including the KNI (Kaia Network Identifier) of the node.
           content:
             application/json:
               schema:

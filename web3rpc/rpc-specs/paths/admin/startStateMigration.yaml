@@ -15,7 +15,7 @@ paths:
       operationId: startStateMigration
       summary: "admin_startStateMigration"
       description: |
-        The startStateMigration is an administrative method that starts a state migration and removes old state/storage trie nodes. This can save the storage space of a Klaytn node. The method returns an error if it fails to start a state migration, or null if it succeeds to start. NOTE: After the state migration, the node cannot serve APIs with previous states.
+        The startStateMigration is an administrative method that starts a state migration and removes old state/storage trie nodes. This can save the storage space of a Kaia node. The method returns an error if it fails to start a state migration, or null if it succeeds to start. NOTE: After the state migration, the node cannot serve APIs with previous states.
 
         **JSONRPC:** `admin_startStateMigration`
 

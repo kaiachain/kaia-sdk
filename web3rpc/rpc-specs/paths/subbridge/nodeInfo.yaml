@@ -17,7 +17,7 @@ paths:
         - subbridge
       operationId: nodeInfo
       description: |
-        Returns bridge node information including the KNI (Klaytn Network Identifier) of the node. A subbridge node can connect to a mainbridge node via the KNI.
+        Returns bridge node information including the KNI (Kaia Network Identifier) of the node. A subbridge node can connect to a mainbridge node via the KNI.
 
         **JSONRPC:** `subbridge_nodeInfo`
 

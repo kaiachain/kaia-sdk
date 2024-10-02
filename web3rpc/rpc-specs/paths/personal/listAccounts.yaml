@@ -15,7 +15,7 @@ paths:
       operationId: listAccounts
       summary: "personal_listAccounts"
       description: |
-        Returns all the Klaytn account addresses of all keys in the key store.
+        Returns all the Kaia account addresses of all keys in the key store.
 
         **JSONRPC:** `personal_listAccounts`
       tags:
@@ -37,7 +37,7 @@ paths:
 
       responses:
         200:
-          description: Returns all the Klaytn account addresses of all keys in the key store.
+          description: Returns all the Kaia account addresses of all keys in the key store.
           content:
             application/json:
               schema:

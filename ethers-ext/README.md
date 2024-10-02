@@ -15,7 +15,7 @@ Ethers.js Extension for Klaytn offers:
 > **_NOTE:_**
 > If the import path has no version sub-path (`@kaiachain/ethers-ext`), ethers v5 will be used by default.
 
-- **Don't**: mix ethers v6 and ethers-ext for ethers v5
+- **Don't**: Mixing ethers v6 and ethers-ext for ethers v5
 
   ```js
   const ethers = require("ethers"); // ethers v6
@@ -51,7 +51,7 @@ Ethers.js Extension for Klaytn offers:
   const wallet = new Wallet("<private key>", provider);
   ```
 
-- **Do**: ethers-ext only
+- **Do**: Using ethers-ext only
 
   ```js
   const { Wallet, JsonRpcProvider } = require("@kaiachain/ethers-ext/v5");

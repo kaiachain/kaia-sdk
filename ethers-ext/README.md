@@ -13,7 +13,7 @@ Ethers.js Extension for Klaytn offers:
 `@kaiachain/ethers-ext` supports both ethers v5 and v6. However, you need to use the right packages which are specified for each `ethers` version. So ethers v5 must be used with packages from `@kaiachain/ethers-ext/v5` and ethers v6 is only compatible with `@kaiachain/ethers-ext/v6`.
 
 > **_NOTE:_**
-> If the import path has no version sub-path (`@kaiachain/ethers-ext`) ethers v5 is used by default.
+> If the import path has no version sub-path (`@kaiachain/ethers-ext`), ethers v5 will be used by default.
 
 - **Don't**: mix ethers v6 and ethers-ext for ethers v5
 

@@ -4,7 +4,7 @@ inputSpec: ../../../rpc-specs/namespaces/all-except-eth.yaml
 groupId: io.kaia
 description: RPC API SDK for kaia blockchain node
 artifactId: web3rpc-java
-artifactVersion: v1.0.0
+artifactVersion: v1.0.1
 library: retrofit2
 templateDir: ./template
 globalProperties:

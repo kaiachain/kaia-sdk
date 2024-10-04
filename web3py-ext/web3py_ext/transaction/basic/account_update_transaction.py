@@ -96,7 +96,7 @@ signatures = CountableList(
 class AccountUpdateTransaction(_TypedTransactionImplementation):
     """
     Represents a klaytn value transafer transaction type.
-    https://docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypeaccountupdate
+    https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypeaccountupdate
     """
 
     transaction_type = 32  # '0x08'
@@ -251,7 +251,7 @@ class AccountUpdateTransaction(_TypedTransactionImplementation):
 
     def hash(self) -> bytes:
         """
-        https://docs.klaytn.foundation/content/klaytn/design/transactions/basic#rlp-encoding-for-sendertxhash-5
+        https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#rlp-encoding-for-sendertxhash-5
         """
         if "key" not in self.dictionary:
             raise KeyError("not found key field in AccountUpdateTransaction")

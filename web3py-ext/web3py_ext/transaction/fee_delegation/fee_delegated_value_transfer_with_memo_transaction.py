@@ -113,7 +113,7 @@ signatures = CountableList(
 class FeeDelegatedValueTransferWithMemoTransaction(_TypedTransactionImplementation):
     """
     Represents a klaytn value transafer transaction type.
-    https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedvaluetransfermemo
+    https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedvaluetransfermemo
     """
     transaction_type = 17  # '0x11'
     
@@ -283,7 +283,7 @@ class FeeDelegatedValueTransferWithMemoTransaction(_TypedTransactionImplementati
 
     def hash(self) -> bytes:
         """
-        https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#rlp-encoding-for-signature-of-the-sender
+        https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#rlp-encoding-for-signature-of-the-sender
         """
         # Remove signature fields.
         transaction_without_signature_fields = dissoc(self.dictionary, "signatures", "feePayerSignatures", "chainId", "feePayer")
@@ -299,7 +299,7 @@ class FeeDelegatedValueTransferWithMemoTransaction(_TypedTransactionImplementati
 
     def feepayer_hash(self) -> bytes:
         """
-        https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#rlp-encoding-for-signature-of-the-fee-payer
+        https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#rlp-encoding-for-signature-of-the-fee-payer
         """
         # Remove signature fields.
         transaction_without_signature_fields = dissoc(self.dictionary, "signatures", "feePayerSignatures", "chainId", "feePayer")

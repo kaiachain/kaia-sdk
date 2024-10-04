@@ -5,7 +5,7 @@ import { AccountKeyType, HexStr, RLP } from "../util";
 
 import { AccountKey } from "./factory";
 
-// https://docs.klaytn.foundation/content/klaytn/design/accounts#accountkeynil
+// https://archive-docs.klaytn.foundation/content/klaytn/design/accounts#accountkeynil
 export class AccountKeyNil extends AccountKey {
   static type = AccountKeyType.Nil;
   static typeName = "AccountKeyNil";
@@ -25,7 +25,7 @@ export class AccountKeyNil extends AccountKey {
   }
 }
 
-// https://docs.klaytn.foundation/content/klaytn/design/accounts#accountkeylegacy
+// https://archive-docs.klaytn.foundation/content/klaytn/design/accounts#accountkeylegacy
 export class AccountKeyLegacy extends AccountKey {
   static type = AccountKeyType.Legacy;
   static typeName = "AccountKeyLegacy";
@@ -45,7 +45,7 @@ export class AccountKeyLegacy extends AccountKey {
   }
 }
 
-// https://docs.klaytn.foundation/content/klaytn/design/accounts#accountkeypublic
+// https://archive-docs.klaytn.foundation/content/klaytn/design/accounts#accountkeypublic
 export class AccountKeyPublic extends AccountKey {
   static type = AccountKeyType.Public;
   static typeName = "AccountKeyPublic";
@@ -72,7 +72,7 @@ export class AccountKeyPublic extends AccountKey {
   }
 }
 
-// https://docs.klaytn.foundation/content/klaytn/design/accounts#accountkeyfail
+// https://archive-docs.klaytn.foundation/content/klaytn/design/accounts#accountkeyfail
 export class AccountKeyFail extends AccountKey {
   static type = AccountKeyType.Fail;
   static typeName = "AccountKeyFail";
@@ -92,7 +92,7 @@ export class AccountKeyFail extends AccountKey {
   }
 }
 
-// https://docs.klaytn.foundation/content/klaytn/design/accounts#accountkeyweightedmultisig
+// https://archive-docs.klaytn.foundation/content/klaytn/design/accounts#accountkeyweightedmultisig
 export class AccountKeyWeightedMultiSig extends AccountKey {
   static type = AccountKeyType.WeightedMultiSig;
   static typeName = "AccountKeyWeightedMultiSig";
@@ -124,7 +124,7 @@ export class AccountKeyWeightedMultiSig extends AccountKey {
 }
 
 
-// https://docs.klaytn.foundation/content/klaytn/design/accounts#accountkeyrolebased
+// https://archive-docs.klaytn.foundation/content/klaytn/design/accounts#accountkeyrolebased
 export class AccountKeyRoleBased extends AccountKey {
   static type = AccountKeyType.RoleBased;
   static typeName = "AccountKeyRoleBased";

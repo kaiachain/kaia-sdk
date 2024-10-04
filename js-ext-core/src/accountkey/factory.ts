@@ -4,7 +4,7 @@ import { FieldSet, FieldSetFactory, Fields } from "../field";
 import { AccountKeyType, HexStr, RLP, getTypePrefix, isKlaytnAccountKeyType } from "../util";
 
 // A typed AccountKey for Klatyn is a FieldSet.
-// https://docs.klaytn.foundation/content/klaytn/design/accounts
+// https://archive-docs.klaytn.foundation/content/klaytn/design/accounts
 export abstract class AccountKey extends FieldSet {
   // RLP encoding for constructing AccountUpdate transactions.
   abstract toRLP(): string;

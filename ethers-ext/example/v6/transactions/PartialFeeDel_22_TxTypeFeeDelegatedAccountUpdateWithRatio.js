@@ -1,5 +1,5 @@
 // TxTypeFeeDelegatedAccountUpdateWithRatio
-// https://docs.klaytn.foundation/docs/learn/transactions/
+// https://docs.kaia.io/docs/learn/transactions/
 
 const ethers = require("ethers6");
 

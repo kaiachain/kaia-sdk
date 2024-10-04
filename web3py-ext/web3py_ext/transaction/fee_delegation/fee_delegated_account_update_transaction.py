@@ -111,7 +111,7 @@ signatures = CountableList(
 class FeeDelegatedAccountUpdateTransaction(_TypedTransactionImplementation):
     """
     Represents a klaytn value transafer transaction type.
-    https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedvaluetransfermemo
+    https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedvaluetransfermemo
     """
 
     transaction_type = 33  # '0x21'
@@ -283,7 +283,7 @@ class FeeDelegatedAccountUpdateTransaction(_TypedTransactionImplementation):
 
     def hash(self) -> bytes:
         """
-        https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#rlp-encoding-for-signature-of-the-sender
+        https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#rlp-encoding-for-signature-of-the-sender
         """
         # encode account key in forms of rlp
         key = self.dictionary["key"]
@@ -305,7 +305,7 @@ class FeeDelegatedAccountUpdateTransaction(_TypedTransactionImplementation):
 
     def feepayer_hash(self) -> bytes:
         """
-        https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#rlp-encoding-for-signature-of-the-fee-payer
+        https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#rlp-encoding-for-signature-of-the-fee-payer
         """
         # encode account key in forms of rlp
         key = self.dictionary["key"]

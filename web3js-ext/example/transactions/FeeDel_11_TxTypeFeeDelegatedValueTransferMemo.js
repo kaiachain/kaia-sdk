@@ -1,5 +1,5 @@
 // TxTypeFeeDelegatedValueTransferMemo
-// https://docs.klaytn.foundation/docs/learn/transactions/
+// https://docs.kaia.io/docs/learn/transactions/
 const { Web3, TxType, toPeb } = require("@kaiachain/web3js-ext");
 
 const senderAddr = "0xa2a8854b1802d8cd5de631e690817c253d6a9153";

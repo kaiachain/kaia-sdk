@@ -7,7 +7,7 @@ const { JsonRpcProvider } = require("@kaiachain/ethers-ext");
     const endBlock = "1001";
     const options = { tracer: "revertTracer" };
     // The full list of JSON-RPC is available at:
-    // https://docs.klaytn.foundation/content/dapp/json-rpc/api-references
+    // https://archive-docs.klaytn.foundation/content/dapp/json-rpc/api-references
     provider.debug.traceChain(
         startBlock,
         endBlock,

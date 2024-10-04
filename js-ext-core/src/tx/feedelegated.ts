@@ -12,7 +12,7 @@ import { RLP, TxType } from "../util";
 
 import { KlaytnTx } from "./factory";
 
-// https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedvaluetransfer
+// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedvaluetransfer
 export class TxTypeFeeDelegatedValueTransfer extends KlaytnTx {
   static type = TxType.FeeDelegatedValueTransfer;
   static typeName = "TxTypeFeeDelegatedValueTransfer";
@@ -65,7 +65,7 @@ export class TxTypeFeeDelegatedValueTransfer extends KlaytnTx {
   }
 }
 
-// https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedvaluetransfermemo
+// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedvaluetransfermemo
 export class TxTypeFeeDelegatedValueTransferMemo extends KlaytnTx {
   static type = TxType.FeeDelegatedValueTransferMemo;
   static typeName = "TxTypeFeeDelegatedValueTransferMemo";
@@ -119,7 +119,7 @@ export class TxTypeFeeDelegatedValueTransferMemo extends KlaytnTx {
   }
 }
 
-// https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedsmartcontractdeploy
+// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedsmartcontractdeploy
 export class TxTypeFeeDelegatedSmartContractDeploy extends KlaytnTx {
   static type = TxType.FeeDelegatedSmartContractDeploy;
   static typeName = "TxTypeFeeDelegatedSmartContractDeploy";
@@ -176,7 +176,7 @@ export class TxTypeFeeDelegatedSmartContractDeploy extends KlaytnTx {
 }
 
 
-// https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedsmartcontractexecution
+// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedsmartcontractexecution
 export class TxTypeFeeDelegatedSmartContractExecution extends KlaytnTx {
   static type = TxType.FeeDelegatedSmartContractExecution;
   static typeName = "TxTypeFeeDelegatedSmartContractExecution";
@@ -230,7 +230,7 @@ export class TxTypeFeeDelegatedSmartContractExecution extends KlaytnTx {
   }
 }
 
-// https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedaccountupdate
+// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedaccountupdate
 export class TxTypeFeeDelegatedAccountUpdate extends KlaytnTx {
   static type = TxType.FeeDelegatedAccountUpdate;
   static typeName = "TxTypeFeeDelegatedAccountUpdate";
@@ -282,7 +282,7 @@ export class TxTypeFeeDelegatedAccountUpdate extends KlaytnTx {
   }
 }
 
-// https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedcancel
+// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedcancel
 export class TxTypeFeeDelegatedCancel extends KlaytnTx {
   static type = TxType.FeeDelegatedCancel;
   static typeName = "TxTypeFeeDelegatedCancel";

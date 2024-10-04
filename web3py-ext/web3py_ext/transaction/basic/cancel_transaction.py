@@ -96,7 +96,7 @@ signatures = CountableList(
 class CancelTransaction(_TypedTransactionImplementation):
     """
     Represents a klaytn value transafer transaction type.
-    https://docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypecancel
+    https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypecancel
     """
 
     transaction_type = 56  # '0x38'
@@ -240,7 +240,7 @@ class CancelTransaction(_TypedTransactionImplementation):
 
     def hash(self) -> bytes:
         """
-        https://docs.klaytn.foundation/content/klaytn/design/transactions/basic#rlp-encoding-for-signature-1
+        https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#rlp-encoding-for-signature-1
         """
         # Remove signature and chainId fields.
         transaction_without_signature_fields = dissoc(self.dictionary, "signatures", "chainId")

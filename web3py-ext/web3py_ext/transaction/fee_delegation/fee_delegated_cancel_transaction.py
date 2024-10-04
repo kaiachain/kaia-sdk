@@ -109,7 +109,7 @@ signatures = CountableList(
 class FeeDelegatedCancelTransaction(_TypedTransactionImplementation):
     """
     Represents a klaytn value transafer transaction type.
-    https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedvaluetransfer
+    https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedvaluetransfer
     """
 
     transaction_type = 57  # '0x39'
@@ -270,7 +270,7 @@ class FeeDelegatedCancelTransaction(_TypedTransactionImplementation):
 
     def hash(self) -> bytes:
         """
-        https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#rlp-encoding-for-signature-of-the-sender
+        https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#rlp-encoding-for-signature-of-the-sender
         """
         # Remove signature fields.
         transaction_without_signature_fields = dissoc(self.dictionary, "signatures", "feePayerSignatures", "chainId", "feePayer")
@@ -286,7 +286,7 @@ class FeeDelegatedCancelTransaction(_TypedTransactionImplementation):
 
     def feepayer_hash(self) -> bytes:
         """
-        https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#rlp-encoding-for-signature-of-the-fee-payer
+        https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#rlp-encoding-for-signature-of-the-fee-payer
         """
         # Remove signature fields.
         transaction_without_signature_fields = dissoc(self.dictionary, "signatures", "feePayerSignatures", "chainId", "feePayer")

@@ -6,7 +6,7 @@ const { JsonRpcProvider } = require("@kaiachain/ethers-ext");
     "0xba647d41423faeebe8a7c64737d284fc2eba6f0388a3e1ebf6243db509ec1577";
 
   // The full list of JSON-RPC is available at:
-  // https://docs.klaytn.foundation/content/dapp/json-rpc/api-references
+  // https://archive-docs.klaytn.foundation/content/dapp/json-rpc/api-references
   const data = await provider.eth.getBlockReceipts(blockHash);
   console.log("Block receipts", data);
 })();

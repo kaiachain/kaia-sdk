@@ -1,5 +1,5 @@
 // AccountKeyWeightedMultiSig
-// https://docs.klaytn.foundation/docs/learn/accounts/
+// https://docs.kaia.io/docs/learn/accounts/
 
 const { Web3, TxType, AccountKeyType, getPublicKeyFromPrivate } = require("@kaiachain/web3js-ext");
 

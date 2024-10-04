@@ -13,7 +13,7 @@ import { RLP, TxType } from "../util";
 import { KlaytnTx } from "./factory";
 
 
-// https://docs.klaytn.foundation/content/klaytn/design/transactions/partial-fee-delegation#txtypefeedelegatedvaluetransferwithratio
+// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/partial-fee-delegation#txtypefeedelegatedvaluetransferwithratio
 export class TxTypeFeeDelegatedValueTransferWithRatio extends KlaytnTx {
   static type = TxType.FeeDelegatedValueTransferWithRatio;
   static typeName = "TxTypeFeeDelegatedValueTransferWithRatio";
@@ -67,7 +67,7 @@ export class TxTypeFeeDelegatedValueTransferWithRatio extends KlaytnTx {
   }
 }
 
-// https://docs.klaytn.foundation/content/klaytn/design/transactions/partial-fee-delegation#txtypefeedelegatedvaluetransfermemowithratio
+// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/partial-fee-delegation#txtypefeedelegatedvaluetransfermemowithratio
 export class TxTypeFeeDelegatedValueTransferMemoWithRatio extends KlaytnTx {
   static type = TxType.FeeDelegatedValueTransferMemoWithRatio;
   static typeName = "TxTypeFeeDelegatedValueTransferMemoWithRatio";
@@ -122,7 +122,7 @@ export class TxTypeFeeDelegatedValueTransferMemoWithRatio extends KlaytnTx {
   }
 }
 
-// https://docs.klaytn.foundation/content/klaytn/design/transactions/partial-fee-delegation#txtypefeedelegatedsmartcontractdeploywithratio
+// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/partial-fee-delegation#txtypefeedelegatedsmartcontractdeploywithratio
 export class TxTypeFeeDelegatedSmartContractDeployWithRatio extends KlaytnTx {
   static type = TxType.FeeDelegatedSmartContractDeployWithRatio;
   static typeName = "TxTypeFeeDelegatedSmartContractDeployWithRatio";
@@ -179,7 +179,7 @@ export class TxTypeFeeDelegatedSmartContractDeployWithRatio extends KlaytnTx {
   }
 }
 
-// https://docs.klaytn.foundation/content/klaytn/design/transactions/partial-fee-delegation#txtypefeedelegatedsmartcontractexecutionwithratio
+// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/partial-fee-delegation#txtypefeedelegatedsmartcontractexecutionwithratio
 export class TxTypeFeeDelegatedSmartContractExecutionWithRatio extends KlaytnTx {
   static type = TxType.FeeDelegatedSmartContractExecutionWithRatio;
   static typeName = "TxTypeFeeDelegatedSmartContractExecutionWithRatio";
@@ -235,7 +235,7 @@ export class TxTypeFeeDelegatedSmartContractExecutionWithRatio extends KlaytnTx 
 }
 
 
-// https://docs.klaytn.foundation/content/klaytn/design/transactions/partial-fee-delegation#txtypefeedelegatedaccountupdatewithratio
+// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/partial-fee-delegation#txtypefeedelegatedaccountupdatewithratio
 export class TxTypeFeeDelegatedAccountUpdateWithRatio extends KlaytnTx {
   static type = TxType.FeeDelegatedAccountUpdateWithRatio;
   static typeName = "TxTypeFeeDelegatedAccountUpdateWithRatio";
@@ -288,7 +288,7 @@ export class TxTypeFeeDelegatedAccountUpdateWithRatio extends KlaytnTx {
   }
 }
 
-// https://docs.klaytn.foundation/content/klaytn/design/transactions/partial-fee-delegation#txtypefeedelegatedcancelwithratio
+// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/partial-fee-delegation#txtypefeedelegatedcancelwithratio
 export class TxTypeFeeDelegatedCancelWithRatio extends KlaytnTx {
   static type = TxType.FeeDelegatedCancelWithRatio;
   static typeName = "TxTypeFeeDelegatedCancelWithRatio";

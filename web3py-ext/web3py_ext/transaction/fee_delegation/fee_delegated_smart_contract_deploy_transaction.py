@@ -117,7 +117,7 @@ signatures = CountableList(
 class FeeDelegatedSmartContractDeployTransaction(_TypedTransactionImplementation):
     """
     Represents a klaytn value transafer transaction type.
-    https://docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypevaluetransfer
+    https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypevaluetransfer
     """
 
     transaction_type = 41  # '0x29'
@@ -310,7 +310,7 @@ class FeeDelegatedSmartContractDeployTransaction(_TypedTransactionImplementation
 
     def hash(self) -> bytes:
         """
-        https://docs.klaytn.foundation/content/klaytn/design/transactions/basic#rlp-encoding-for-sendertxhash-3
+        https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#rlp-encoding-for-sendertxhash-3
         """
         # Remove signature fields.
         transaction_without_signature_fields = dissoc(self.dictionary, "signatures", "feePayerSignatures", "chainId", "feePayer")
@@ -326,7 +326,7 @@ class FeeDelegatedSmartContractDeployTransaction(_TypedTransactionImplementation
 
     def feepayer_hash(self) -> bytes:
         """
-        https://docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedsmartcontractdeploy
+        https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedsmartcontractdeploy
         """
         # Remove signature fields.
         transaction_without_signature_fields = dissoc(self.dictionary, "signatures", "feePayerSignatures", "chainId", "feePayer")

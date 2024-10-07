@@ -2041,3 +2041,12 @@ components:
           "transactionsRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
           "voteData": "0x"
         }
+    StateOverrideSet:
+      type: string
+      # additionalProperties:
+      #   type: object
+      #   properties:
+      #     balance:
+      #       type: string
+      #       description: "Hexadecimal balance value"
+      #       example: "0xde0b6b3a7640000"

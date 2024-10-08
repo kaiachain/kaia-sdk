@@ -30,16 +30,9 @@ paths:
             $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KlayCallObject"
         - name: BlockNumberOrHashOrTag
           in: query
-          description:
           required: false
           schema:
             $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag" 
-        - name: StateOverrideSet
-          in: query
-          description:
-          required: false
-          schema:
-             $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/StateOverrideSet"
       requestBody:
         content:
           application/json:

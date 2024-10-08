@@ -40,6 +40,7 @@ paths:
               allOf:
                 - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
                 - $ref: "#/components/schemas/KaiaEstimateGasReq"
+                
 
       responses:
         200:
@@ -50,6 +51,7 @@ paths:
                 allOf:
                   - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
                   - $ref: "#/components/schemas/KaiaEstimateGasResp"
+                 
 
       x-codeSamples:
         - lang: "Shell"
@@ -83,9 +85,13 @@ components:
         params:
           type:  array
           items:
-            allOf:
-              - title: callObject
-              - $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaCallObject"
+            properties:
+              CallObject:
+                  $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaCallObject"
+              blockNumberOrHashOrTag:
+                  $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+              stateOverrideSet:
+                  $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/StateOverrideSet"  
           example: [{"from": "0x3f71029af4e252b25b9ab999f77182f0cd3bc085", "to": "0x87ac99835e67168d4f9a40580f8f5c33550ba88b", "gas": "0x100000", "gasPrice": "0x5d21dba00", "value": "0x0", "input": "0x8ada066e"}]
 
     KaiaEstimateGasResp:

@@ -85,9 +85,12 @@ components:
           type: array
           items:
             properties:
-              EthCallObject:
-                description: The transaction call object. See the next table for the object's properties.
-                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/EthCallObject"
+              CallObject:
+                  $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaCallObject"
+              blockNumberOrHashOrTag:
+                  $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+              stateOverrideSet:
+                  $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/StateOverrideSet"
           example:
             [
               {

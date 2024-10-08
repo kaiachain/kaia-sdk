@@ -39,7 +39,7 @@ paths:
           description: The state override set is an optional address-to-state mapping, where each entry specifies some state to be ephemerally overridden prior to executing the call.
           required: false
           schema:
-            $ref: "#/components/schemas/StateOverrideSet"
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/StateOverrideSet"
 
       requestBody:
         content:

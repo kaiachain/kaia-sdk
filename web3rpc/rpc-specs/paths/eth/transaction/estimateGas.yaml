@@ -87,9 +87,9 @@ components:
             properties:
               CallObject:
                   $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaCallObject"
-              blockNumberOrHashOrTag:
+              BlockNumberOrHashOrTag:
                   $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
-              stateOverrideSet:
+              StateOverrideSet:
                   $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/StateOverrideSet"
           example:
             [

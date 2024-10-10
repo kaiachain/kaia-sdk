@@ -2041,3 +2041,25 @@ components:
           "transactionsRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
           "voteData": "0x"
         }
+    StateOverrideSet:
+      type: object
+      description: The state override set is an optional address-to-state mapping, where each entry specifies some state to be ephemerally overridden prior to executing the call.
+      properties:
+        balance:
+          type: integer
+          format: int64
+          description: (optional) Fake balance to set for the account before executing the call.
+        nonce:
+          type: integer
+          format: int64
+          description: (optional) Fake nonce to set for the account before executing the call.
+        code:
+          type: string
+          format: DATA
+          description: (optional) Fake EVM bytecode to inject into the account before executing the call.
+        state:
+          type: object
+          description: (optional) Fake key-value mapping to override all slots in the account storage before executing the call.
+        stateDiff:
+          type: object
+          description: (optional) Fake key-value mapping to override individual slots in the account storage before executing the call.

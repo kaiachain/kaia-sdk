@@ -18,26 +18,6 @@ paths:
         The vote method submits a new vote. If the node has the right to vote based on governance mode, the vote can be placed. If not, an error message will be returned and the vote will be ignored.
 
         **JSONRPC:** `governance_vote`
-        The vote method submits a new vote. If the node has the right to vote based on governance mode, the vote can be placed. If not, an error message will be returned and the vote will be ignored.
-
-        You can vote for the parameters listed in kaia_getParams, except immutable items. Immutable items are first decided at the genesis configuration and remain unchanged.
-
-        In addition to the parameters described in kaia_getParams, you can vote for validator council changes using the values below.
-        
-        <table>
-        <tr>
-            <th>Key<</th>
-            <th>Value</th>
-        </tr>
-        <tr>
-            <td><code>governance.addvalidator</code></td>
-            <td>ADDRESS. An address or comma-separated list of addresses of a new validator candidate. e.g., <code>0xe733cb4d279da696f30d470f8c04decb54fcb0d2</code>, <code>0xf39fd6e51aad88f6f4ce6a88827279cFfB92266</code></td>
-        </tr>
-        <tr>
-            <td><code>governance.removevalidator</code></td>
-            <td>ADDRESS. An address or comma-separated list of addresses of a current validator to be removed. e.g., <code>0xe733cb4d279da696f30d470f8c04decb54fcb0d2</code></td>
-        </tr>
-        </table>
 
       tags:
         - governance
@@ -120,6 +100,97 @@ components:
   schemas:
     Value:
       type: string
-      description: Various types of value for each key.
+      description: |
+        Various types of value for each key.
+        <table>
+            <thead>
+                <tr>
+                    <th>Key</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>"governance.governancemode"</td>
+                    <td>STRING. One of the three governance modes. "none", "single", "ballot"</td>
+                </tr>
+                <tr>
+                    <td>"governance.governingnode"</td>
+                    <td>ADDRESS. Designated governing node's address. It only works if the governance mode is "single" e.g.,"0xe733cb4d279da696f30d470f8c04decb54fcb0d2"</td>
+                </tr>
+                <tr>
+                    <td>"governance.unitprice"</td>
+                    <td>NUMBER. Price of unit gas. e.g., 25000000000</td>
+                </tr>
+                <tr>
+                    <td>"governance.addvalidator"</td>
+                    <td>ADDRESS. Address of a new validator candidate. e.g., 0xe733cb4d279da696f30d470f8c04decb54fcb0d2</td>
+                </tr>
+                <tr>
+                    <td>"governance.removevalidator"</td>
+                    <td>ADDRESS. Address of a current validator which need to be removed. e.g., 0xe733cb4d279da696f30d470f8c04decb54fcb0d2</td>
+                </tr>
+                <tr>
+                    <td>"governance.deriveshaimpl"</td>
+                    <td>NUMBER. Policy to generate the transaction hash and receipt hash in a block header. See here for available options. e.g., 2 (DeriveShaConcat)</td>
+                </tr>
+                <tr>
+                    <td>"governance.govparamcontract"</td>
+                    <td>ADDRESS. Address of the GovParam contract. e.g., 0xe733cb4d279da696f30d470f8c04decb54fcb0d2</td>
+                </tr>
+                <tr>
+                    <td>"istanbul.epoch"</td>
+                    <td>NUMBER. A period in which votes are gathered in blocks. When an epoch end, all votes which haven't been passed will be cleared. e.g., 86400</td>
+                </tr>
+                <tr>
+                    <td>"istanbul.committeesize"</td>
+                    <td>NUMBER. The number of validators in a committee.(sub in chain configuration) e.g., 7</td>
+                </tr>
+                <tr>
+                    <td>"reward.mintingamount"</td>
+                    <td>STRING. Amount of Peb minted when a block is generated. Double quotation marks are needed for a value. e.g., "9600000000000000000"</td>
+                </tr>
+                <tr>
+                    <td>"reward.ratio"</td>
+                    <td>STRING. Distribution rate for a CN/KGF/KIR separated by "/". The sum of all values has to be 100. e.g., "50/40/10" meaning CN 50%, KGF 40%, KIR 10%</td>
+                </tr>
+                <tr>
+                    <td>"reward.kip82ratio"</td>
+                    <td>STRING. Distribution ratio of the block proposer to stakers separated by "/". The sum of all values has to be "100". See KIP-82 for further details. e.g., "20/80" means that the proposer takes 20% while stakers take 80%.</td>
+                </tr>
+                <tr>
+                    <td>"reward.useginicoeff"</td>
+                    <td>BOOL. Use the Gini coefficient or not. true, false</td>
+                </tr>
+                <tr>
+                    <td>"reward.deferredtxfee"</td>
+                    <td>BOOL. The way of giving transaction fee to a proposer. If true, it means the tx fee will be summed up with block reward and distributed to the proposer, KIR and KGF. If not, all tx fee will be given to the proposer. true, false</td>
+                </tr>
+                <tr>
+                    <td>"reward.minimumstake"</td>
+                    <td>STRING. Amount of Kaia required to be a CN (Consensus Node). Double quotation marks are needed for a value. e.g., "5000000"</td>
+                </tr>
+                <tr>
+                    <td>"kip71.lowerboundbasefee"</td>
+                    <td>NUMBER. The lowest possible base fee. See KIP-71 for further details. e.g., 25000000000</td>
+                </tr>
+                <tr>
+                    <td>"kip71.upperboundbasefee"</td>
+                    <td>NUMBER. The highest possible base fee. e.g., 750000000000</td>
+                </tr>
+                <tr>
+                    <td>"kip71.gastarget"</td>
+                    <td>NUMBER. The block gas that base fee wants to achieve. The base fee increases when parent block contains more than gas target, and decreases when parent block contains less than gas target. e.g., 30000000</td>
+                </tr>
+                <tr>
+                    <td>"kip71.basefeedenominator"</td>
+                    <td>NUMBER. Controls how fast base fee changes. e.g., 20</td>
+                </tr>
+                <tr>
+                    <td>"kip71.maxblockgasusedforbasefee"</td>
+                    <td>NUMBER. The maximum block gas perceived in base fee calculation. e.g., 60000000</td>
+                </tr>
+            </tbody>
+        </table>
 
         

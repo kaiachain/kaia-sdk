@@ -2,7 +2,7 @@ const {
   Wallet
 } = require("@kaiachain/ethers-ext/v5");
 
-// Klaytn V4 with multiple role-based keys. https://toolkit.klaytn.foundation/misc/generateKeystore
+// Klaytn V4 with multiple role-based keys. https://toolkit.kaia.io/misc/generateKeystore
 const encryptedKey = `{
   "version": 4,
   "id":"2d7ad5c1-880f-4920-9b8e-51f852c4802c",

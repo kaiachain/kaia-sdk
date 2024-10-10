@@ -4,7 +4,7 @@ info:
   version: "0.9.0"
   contact:
     name: API support
-    url: https://forum.klaytn.foundation/
+    url: https://devforum.kaia.io/
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html

@@ -12,7 +12,7 @@ import { TxType } from "../util";
 
 import { KlaytnTx } from "./factory";
 
-// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypevaluetransfer
+// https://docs.kaia.io/learn/transactions/basic#txtypevaluetransfer-
 export class TxTypeValueTransfer extends KlaytnTx {
   static type = TxType.ValueTransfer;
   static typeName = "TxTypeValueTransfer";
@@ -48,7 +48,7 @@ export class TxTypeValueTransfer extends KlaytnTx {
   }
 }
 
-// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypevaluetransfermemo
+// https://docs.kaia.io/learn/transactions/basic#txtypevaluetransfermemo-
 export class TxTypeValueTransferMemo extends KlaytnTx {
   static type = TxType.ValueTransferMemo;
   static typeName = "TxTypeValueTransferMemo";
@@ -85,7 +85,7 @@ export class TxTypeValueTransferMemo extends KlaytnTx {
   }
 }
 
-// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypesmartcontractdeploy
+// https://docs.kaia.io/learn/transactions/basic#txtypesmartcontractdeploy-
 export class TxTypeSmartContractDeploy extends KlaytnTx {
   static type = TxType.SmartContractDeploy;
   static typeName = "TxTypeSmartContractDeploy";
@@ -124,7 +124,7 @@ export class TxTypeSmartContractDeploy extends KlaytnTx {
   }
 }
 
-// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypesmartcontractexecution
+// https://docs.kaia.io/learn/transactions/basic#txtypesmartcontractexecution-
 export class TxTypeSmartContractExecution extends KlaytnTx {
   static type = TxType.SmartContractExecution;
   static typeName = "TxTypeSmartContractExecution";
@@ -161,7 +161,7 @@ export class TxTypeSmartContractExecution extends KlaytnTx {
   }
 }
 
-// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypeaccountupdate
+// https://docs.kaia.io/learn/transactions/basic#txtypeaccountupdate-
 export class TxTypeAccountUpdate extends KlaytnTx {
   static type = TxType.AccountUpdate;
   static typeName = "TxTypeAccountUpdate";
@@ -196,7 +196,7 @@ export class TxTypeAccountUpdate extends KlaytnTx {
   }
 }
 
-// https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypecancel
+// https://docs.kaia.io/learn/transactions/basic#txtypecancel-
 export class TxTypeCancel extends KlaytnTx {
   static type = TxType.Cancel;
   static typeName = "TxTypeCancel";

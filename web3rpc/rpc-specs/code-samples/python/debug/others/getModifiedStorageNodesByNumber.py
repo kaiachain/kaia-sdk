@@ -1,7 +1,7 @@
 from web3 import Web3
 from web3py_ext import extend
 
-host = "https://dev.api.klaytn.sotatek.works"
+host = "https://public-en-kairos.node.kaia.io"
 
 address = "0x73a7d19d14f7dfac5b799e405e22133b2adc57a6"
 startBlockNum = 100

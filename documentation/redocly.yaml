@@ -1,5 +1,5 @@
 # See https://redocly.com/docs/cli/configuration/ for more information.
-organization: klaytn.foundation
+organization: kaia.io
 apis:
   index@v1.0.0:
     root: ./index.yaml

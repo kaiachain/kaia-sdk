@@ -330,7 +330,7 @@ export class JsonRpcSigner extends EthersJsonRpcSigner {
 
   // If underlying EIP-1193 provider is Kaikas, return the KIP-97 signed message in which
   // the message is prefixed with "\x19Klaytn Signed Message:\n" + len(message) before signing.
-  // https://kips.klaytn.foundation/KIPs/kip-97
+  // https://kips.kaia.io/KIPs/kip-97
   //
   // Otherwise, return the ERC-191 signed message in which the message is prefixed with
   // "\x19Ethereum Signed Message:\n" + len(message) before signing.

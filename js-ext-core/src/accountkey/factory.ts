@@ -3,8 +3,8 @@ import { hexValue } from "@ethersproject/bytes";
 import { FieldSet, FieldSetFactory, Fields } from "../field";
 import { AccountKeyType, HexStr, RLP, getTypePrefix, isKlaytnAccountKeyType } from "../util";
 
-// A typed AccountKey for Klatyn is a FieldSet.
-// https://archive-docs.klaytn.foundation/content/klaytn/design/accounts
+// A typed AccountKey for Kaia is a FieldSet.
+// https://docs.kaia.io/learn/accounts/
 export abstract class AccountKey extends FieldSet {
   // RLP encoding for constructing AccountUpdate transactions.
   abstract toRLP(): string;

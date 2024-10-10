@@ -109,7 +109,7 @@ signatures = CountableList(
 class FeeDelegatedSmartContractExecutionTransaction(_TypedTransactionImplementation):
     """
     Represents a klaytn value transafer transaction type.
-    https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypevaluetransfermemo
+    https://docs.kaia.io/learn/transactions/basic#txtypevaluetransfermemo-
     """
 
     transaction_type = 49  # '0x31'
@@ -293,7 +293,7 @@ class FeeDelegatedSmartContractExecutionTransaction(_TypedTransactionImplementat
 
     def hash(self) -> bytes:
         """
-        https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#rlp-encoding-for-sendertxhash-4
+        https://docs.kaia.io/learn/transactions/basic#rlp-encoding-for-sendertxhash-4-
         """
         # Remove signature and chainId fields.
         transaction_without_signature_fields = dissoc(self.dictionary, "signatures", "feePayerSignatures", "chainId", "feePayer")
@@ -309,7 +309,7 @@ class FeeDelegatedSmartContractExecutionTransaction(_TypedTransactionImplementat
     
     def feepayer_hash(self) -> bytes:
         """
-        https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/fee-delegation#txtypefeedelegatedsmartcontractexecution
+        https://docs.kaia.io/learn/transactions/fee-delegation#txtypefeedelegatedsmartcontractexecution-
         """
         # Remove signature fields.
         transaction_without_signature_fields = dissoc(self.dictionary, "signatures", "feePayerSignatures", "chainId", "feePayer")

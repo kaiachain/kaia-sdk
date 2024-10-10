@@ -4,7 +4,7 @@ async function main() {
   let provider = new JsonRpcProvider("https://public-en-kairos.node.kaia.io/");
 
   // The full list of JSON-RPC is available at:
-  // https://archive-docs.klaytn.foundation/content/dapp/json-rpc/api-references
+  // https://docs.kaia.io/references/json-rpc/references
   const num = await provider.klay.blockNumber();
   console.log("klay.blockNumber", num);
 

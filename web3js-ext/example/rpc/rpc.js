@@ -5,7 +5,7 @@ const web3 = new Web3(provider);
 
 async function main() {
   // The full list of JSON-RPC is available at:
-  // https://archive-docs.klaytn.foundation/content/dapp/json-rpc/api-references
+  // https://docs.kaia.io/references/json-rpc/references
   const num = await web3.klay.blockNumber();
   console.log("klay.blockNumber", num);
 

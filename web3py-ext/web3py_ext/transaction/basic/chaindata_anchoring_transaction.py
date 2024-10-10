@@ -97,7 +97,7 @@ signatures = CountableList(
 class ChaindataAnchoringTransaction(_TypedTransactionImplementation):
     """
     Represents a klaytn value transafer transaction type.
-    https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypechaindataanchoring
+    https://docs.kaia.io/learn/transactions/basic#txtypechaindataanchoring-
     """
 
     transaction_type = 72  # '0x48'
@@ -246,7 +246,7 @@ class ChaindataAnchoringTransaction(_TypedTransactionImplementation):
 
     def hash(self) -> bytes:
         """
-        https://archive-docs.klaytn.foundation/content/klaytn/design/transactions/basic#rlp-encoding-for-signature-1
+        https://docs.kaia.io/learn/transactions/basic#rlp-encoding-for-signature-1-
         """
         # Remove signature and chainId fields.
         transaction_without_signature_fields = dissoc(self.dictionary, "signatures", "chainId")

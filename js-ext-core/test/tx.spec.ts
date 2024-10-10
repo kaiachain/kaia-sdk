@@ -40,7 +40,7 @@ interface TestCase {
   txHashRLP: string,
 }
 
-// Test cases from https://archive-docs.klaytn.foundation/content/klaytn/design/transactions
+// Test cases from https://docs.kaia.io/learn/transactions-
 const testcases: TestCase[] = [
   {
     clazz: TxTypeValueTransfer,

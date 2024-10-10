@@ -28,12 +28,6 @@ paths:
           required: true
           schema:
             $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/EthCallObject"
-        - name: BlockNumberOrHashOrTag
-          in: query
-          required: false
-          schema:
-            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
-       
 
       requestBody:
         content:
@@ -80,28 +74,15 @@ components:
       properties:
         method:
           type: string
-          default: "eth_estimateGas"
+          default: 'eth_estimateGas'
         params:
           type: array
           items:
             properties:
-              CallObject:
-                  $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/KaiaCallObject"
-              BlockNumberOrHashOrTag:
-                  $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
-              StateOverrideSet:
-                  $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/StateOverrideSet"
-          example:
-            [
-              {
-                "from": "0x3f71029af4e252b25b9ab999f77182f0cd3bc085",
-                "to": "0x87ac99835e67168d4f9a40580f8f5c33550ba88b",
-                "gas": "0x100000",
-                "gasPrice": "0x5d21dba00",
-                "value": "0x0",
-                "input": "0x8ada066e",
-              },
-            ]
+              EthCallObject:
+                description: The transaction call object. See the next table for the object's properties.
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/EthCallObject"
+          example: [{"from": "0x3f71029af4e252b25b9ab999f77182f0cd3bc085", "to": "0x87ac99835e67168d4f9a40580f8f5c33550ba88b", "gas": "0x100000", "gasPrice": "0x5d21dba00", "value": "0x0", "input": "0x8ada066e"}]
 
     EthEstimateGasResp:
       type: object
@@ -111,3 +92,4 @@ components:
           format: hex
           description: The amount of gas used.
           example: "0x5208"
+

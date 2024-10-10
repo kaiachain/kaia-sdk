@@ -23,12 +23,6 @@ paths:
 
         **NOTE:** The block number can be larger than the latest block number, in which case the API returns the tentative value based on the current chain state. The future governance parameters are subject to change via additional governance votes or GovParam contract state changes.
 
-        NOTE: If the requested block has Kore hardfork enabled, the value of `reward.useginicoeff` will be `false` because all council members have an equal chance of being elected as a block proposer and thus Gini coefficient is not relevant.
-
-        NOTE: If the requested block has Randao hardfork enabled, the value of `reward.proposerupdateinterval` will be `1` because proposers are no longer selected at batch.
-
-        NOTE: If the requested block has Kaia hardfork enabled, the value of `reward.stakingupdateinterval` will be `1` because staking information is every block, effectively deprecating the interval. 
-
         **JSONRPC:** `governance_getParams`
 
       tags:

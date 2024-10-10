@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -15,7 +15,7 @@ paths:
       operationId: .clientVersion
       summary: "[Configuration] kaia_clientVersion"
       description: |
-        Returns the current client version of a Klaytn node.
+        Returns the current client version of a Kaia node.
 
         **JSONRPC:** `kaia_clientVersion`
       tags:
@@ -35,7 +35,7 @@ paths:
 
       responses:
         200:
-          description: The current client version of a Klaytn node.
+          description: The current client version of a Kaia node.
           content:
             application/json:
               schema:
@@ -45,8 +45,8 @@ paths:
                     properties:
                       result:
                         type: string
-                        description: "The current client version of a Klaytn node."
-                        example: "Klaytn/v0.9.1+3518232250/linux-amd64/go1.11.2"
+                        description: "The current client version of a Kaia node."
+                        example: "Kaia/v0.9.1+3518232250/linux-amd64/go1.11.2"
 
       x-codeSamples:
         - lang: "Shell"

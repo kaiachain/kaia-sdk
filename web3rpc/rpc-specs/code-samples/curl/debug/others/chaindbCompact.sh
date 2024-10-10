@@ -1,5 +1,5 @@
 curl -X 'POST' \
-  'https://public-en-baobab.klaytn.net/debug/chaindbCompact' \
+  'https://public-en-kairos.node.kaia.io/debug/chaindbCompact' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

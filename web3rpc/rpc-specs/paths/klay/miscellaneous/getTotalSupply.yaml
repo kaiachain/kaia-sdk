@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: Klay Open API
+  title: KAIA Open API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -18,7 +18,7 @@ paths:
       operationId: getTotalSupply
       description: |
         Returns the native token token supply by tracking block rewards and various burning mechanisms. If some components are not available then a partial result is returned.
-       
+
         **JSONRPC:** `klay_getTotalSupply`
 
       parameters:
@@ -43,11 +43,13 @@ paths:
                       type: array
                       items:
                         properties:
-                           BlockNumberOrTag:
+                          BlockNumberOrTag:
                             $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
-                      example: [
-                        "latest"
-                      ]
+                          ShowPartial:
+                            type: boolean
+                            nullable: true
+                            description: If specified and equals true, the API will return a best-effort partial information even if block states or TreasuryRebalance memos are missing. Otherwise, the API will fail when some information is unavailable.
+                      example: ["latest"]
 
       responses:
         200:
@@ -132,7 +134,7 @@ components:
               format: hex
               description: The calculated total supply of the native token at the given block. Difference between totalMinted and totalBurnt. It is null if some components cannot be determined.
       example:
-         {
+        {
           "burntFee": "0x29ec817ffd11a9cd3a4b3",
           "deadBurn": "0x40c166a428511ad626d306",
           "kip103Burn": "0x111d0449fb2a238eca3b1720",
@@ -141,5 +143,5 @@ components:
           "totalBurnt": "0x11606478b75245c43d358ed9",
           "totalMinted": "0x249a79581de10f4cd3000000",
           "totalSupply": "0x133a14df668ec98895ca7127",
-          "zeroBurn": "0x0"
+          "zeroBurn": "0x0",
         }

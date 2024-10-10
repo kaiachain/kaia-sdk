@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -19,7 +19,7 @@ paths:
         
         Both passphrase and unlock duration are optional when using the JavaScript console. If the passphrase is not supplied as an argument, the console will prompt for the passphrase interactively.
         
-        The unencrypted key will be held in memory until the unlock duration expires. If the unlock duration defaults to 300 seconds. An explicit duration of zero seconds unlocks the key until the Klaytn local node exits.
+        The unencrypted key will be held in memory until the unlock duration expires. If the unlock duration defaults to 300 seconds. An explicit duration of zero seconds unlocks the key until the Kaia local node exits.
         
         The account can be used with klay_sign and klay_sendTransaction while it is unlocked.
 

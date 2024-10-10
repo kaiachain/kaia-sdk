@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: Klay Open API
+  title: KAIA Open API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -17,12 +17,11 @@ paths:
         - eth
       operationId: gasPrice
       description: |
-        Returns a suggested gasPrice or maxFeePerGas. The suggested price depends on the hardfork status.
-        - Fixed unit price before Magma
-        - Twice the base fee before Kaia
-        - Base fee plus suggested priority fee after Kaia
+        Returns a recommended gasPrice for a new transaction.
 
-        **NOTE:** This API has different behavior from Ethereum's and returns a gas price of Klaytn instead of suggesting a gas price as in Ethereum.
+        - Before Magma, returns the fixed UnitPrice
+        - After Magma, returns the twice of next baseFee (2*baseFee)
+        - After Kaia, returns slightly buffered baseFee plus recommended tip (BaseFee * (1.10 or 1.15) + eth_maxPriorityFeePerGas)
 
         **JSONRPC:** `eth_gasPrice`
 
@@ -40,7 +39,7 @@ paths:
 
       responses:
         200:
-          description: Suggested price in kei.
+          description: Recommended gas price in kei.
           content:
             application/json:
               schema:
@@ -74,5 +73,5 @@ components:
         result:
           type: string
           format: hex
-          description: Suggested price in kei.
+          description: Recommended gas price in kei.
           example: "0xAE9F7BCC00"

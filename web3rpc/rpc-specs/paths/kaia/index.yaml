@@ -121,14 +121,12 @@ paths:
     $ref: ./transaction/resend.yaml#/paths/~1kaia~1transaction~1resend
   /kaia/getRawTransactionByBlockNumberAndIndex:
     $ref: ./transaction/getRawTransactionByBlockNumberAndIndex.yaml#/paths/~1kaia~1transaction~1getRawTransactionByBlockNumberAndIndex
- 
+
   # kaia/configuration
   /kaia/configuration/chainID:
     $ref: ./configuration/chainID.yaml#/paths/~1kaia~1configuration~1chainID
   /kaia/configuration/clientVersion:
     $ref: ./configuration/clientVersion.yaml#/paths/~1kaia~1configuration~1clientVersion
-  /kaia/configuration/gasPriceAt:
-    $ref: ./configuration/gasPriceAt.yaml#/paths/~1kaia~1configuration~1gasPriceAt
   /kaia/configuration/gasPrice:
     $ref: ./configuration/gasPrice.yaml#/paths/~1kaia~1configuration~1gasPrice
   /kaia/configuration/isParallelDBWrite:
@@ -143,6 +141,8 @@ paths:
     $ref: ./configuration/getChainConfig.yaml#/paths/~1kaia~1configuration~1getChainConfig
   /kaia/configuration/forkStatus:
     $ref: ./configuration/forkStatus.yaml#/paths/~1kaia~1configuration~1forkStatus
+  /kaia/configuration/getParams:
+    $ref: ./configuration/getParams.yaml#/paths/~1kaia~1configuration~1getParams
 
   # kaia/filter
   /kaia/filter/getFilterChanges:
@@ -187,4 +187,5 @@ paths:
     $ref: ./miscellaneous/getProof.yaml#/paths/~1kaia~1miscellaneous~1getProof
   /kaia/miscellaneous/nodeAddress:
     $ref: ./miscellaneous/nodeAddress.yaml#/paths/~1kaia~1miscellaneous~1nodeAddress
-  
+  /kaia/miscellaneous/getTotalSupply:
+    $ref: ./miscellaneous/getTotalSupply.yaml#/paths/~1kaia~1miscellaneous~1getTotalSupply

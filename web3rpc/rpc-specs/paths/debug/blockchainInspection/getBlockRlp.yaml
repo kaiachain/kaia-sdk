@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -17,7 +17,7 @@ paths:
       description: |
         Retrieves and returns the RLP-encoded block by the block number.
 
-        **NOTE**: In versions earlier than Klaytn v1.7.0, only integer type is available.
+        **NOTE**: In versions earlier than Kaia v1.7.0, only integer type is available.
 
         **JSONRPC:** `debug_getBlockRlp`
 

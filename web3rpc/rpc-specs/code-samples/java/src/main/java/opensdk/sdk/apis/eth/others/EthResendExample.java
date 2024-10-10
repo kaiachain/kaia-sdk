@@ -7,7 +7,7 @@ import org.web3j.protocol.kaia.Web3j;
 import org.web3j.protocol.core.methods.request.Transaction;
 
 public class EthResendExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
   void ethResendExample() throws IOException {
     String gasPrice = "0xba43b7500";
     String gasLimit = "0xe8d4a50fff";

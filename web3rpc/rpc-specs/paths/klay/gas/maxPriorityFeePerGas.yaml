@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -15,12 +15,11 @@ paths:
       operationId: maxPriorityFeePerGas
       summary: "[Gas] klay_maxPriorityFeePerGas"
       description: |
-       Returns a suggested gasPrice or maxPriorityFeePerGas. The suggested price depends on the hardfork status.
-        - Fixed unit price before Magma
-        - Zero before Kaia
-        - Suggested priority fee from fee history, after Kaia
+        Returns a recommended maxPriorityFeePerGas for a new transaction.
 
-        **NOTE:** This API is effective after Klaytn v1.8.0
+        - Before Magma, returns the fixed UnitPrice
+        - After Magma, returns zero
+        - After Kaia, returns zero if network is uncongested (i.e. next baseFee at its lower bound), otherwise 60% percentile effective tip from previous 20 blocks (under default setting)
 
         **JSONRPC:** `klay_maxPriorityFeePerGas`
 
@@ -41,7 +40,7 @@ paths:
 
       responses:
         200:
-          description: Suggested price in kei
+          description: Recommended maxPriorityFeePerGas in kei.
           content:
             application/json:
               schema:
@@ -52,7 +51,7 @@ paths:
                       result:
                         type: string
                         format: hex
-                        description: "Integer of the current max priority fee per gas"
+                        description: Recommended maxPriorityFeePerGas in kei.
                         example: "0xAE9F7BCC00"
 
       x-codeSamples:

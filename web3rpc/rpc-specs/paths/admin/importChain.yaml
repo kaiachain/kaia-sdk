@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -15,7 +15,7 @@ paths:
       operationId: importChain
       summary: "admin_importChain"
       description: |
-        The importChain is an administrative method that imports an exported chain from a file into a node. This method imports only blocks that haven't existed in a Klaytn node. This method does not delete any data of the existing chain.
+        The importChain is an administrative method that imports an exported chain from a file into a node. This method imports only blocks that haven't existed in a Kaia node. This method does not delete any data of the existing chain.
        
         **JSONRPC:** `admin_importChain`
 

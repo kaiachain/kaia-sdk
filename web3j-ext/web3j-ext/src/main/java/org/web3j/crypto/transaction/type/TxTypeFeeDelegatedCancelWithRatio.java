@@ -11,34 +11,38 @@ import org.web3j.rlp.RlpType;
 import org.web3j.utils.KaiaTransactionUtils;
 import org.web3j.utils.Numeric;
 
-
-public class TxTypeFeeDelegatedCancelWithRatio extends TxTypeFeeDelegate  {
+public class TxTypeFeeDelegatedCancelWithRatio extends TxTypeFeeDelegate {
 
     /**
-     * Fee ratio of the fee payer. If it is 30, 30% of the fee will be paid by the fee payer.
+     * Fee ratio of the fee payer. If it is 30, 30% of the fee will be paid by the
+     * fee payer.
      * 70% will be paid by the sender.
      */
     private final BigInteger feeRatio;
 
     protected TxTypeFeeDelegatedCancelWithRatio(
-        TxType.Type type,BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, BigInteger feeRatio) {
+            TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from,
+            BigInteger feeRatio) {
         super(type, nonce, gasPrice, gasLimit, from, "", BigInteger.ZERO);
         this.feeRatio = feeRatio;
     }
 
     public static TxTypeFeeDelegatedCancelWithRatio createTransaction(
-        TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, BigInteger feeRatio) {
+            TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from,
+            BigInteger feeRatio) {
         return new TxTypeFeeDelegatedCancelWithRatio(type, nonce, gasPrice, gasLimit, from, feeRatio);
     }
 
     protected TxTypeFeeDelegatedCancelWithRatio(
-        long chainId, TxType.Type type,BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, BigInteger feeRatio) {
+            long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from,
+            BigInteger feeRatio) {
         super(chainId, type, nonce, gasPrice, gasLimit, from, "", BigInteger.ZERO);
         this.feeRatio = feeRatio;
     }
 
     public static TxTypeFeeDelegatedCancelWithRatio createTransaction(
-        long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, BigInteger feeRatio) {
+            long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from,
+            BigInteger feeRatio) {
         return new TxTypeFeeDelegatedCancelWithRatio(chainId, type, nonce, gasPrice, gasLimit, from, feeRatio);
     }
 
@@ -47,7 +51,8 @@ public class TxTypeFeeDelegatedCancelWithRatio extends TxTypeFeeDelegate  {
     }
 
     /**
-     * create RlpType List which contains nonce, gas price, gas limit, from and feeRatio.
+     * create RlpType List which contains nonce, gas price, gas limit, from and
+     * feeRatio.
      * List elements can be different depending on transaction type.
      *
      * @return List RlpType List
@@ -72,13 +77,15 @@ public class TxTypeFeeDelegatedCancelWithRatio extends TxTypeFeeDelegate  {
     }
 
     /**
-     * decode transaction hash from sender to reconstruct transaction with fee payer signature.
+     * decode transaction hash from sender to reconstruct transaction with fee payer
+     * signature.
      *
      * @param rawTransaction RLP-encoded signed transaction from sender
      * @return TxTypeFeeDelegatedCancelWithRatio decoded transaction
      */
     public static TxTypeFeeDelegatedCancelWithRatio decodeFromRawTransaction(byte[] rawTransaction) {
-        //TxHashRLP = type + encode([nonce, gasPrice, gas, from, feeRatio, txSignatures, feePayer, feePayerSignatures])
+        // TxHashRLP = type + encode([nonce, gasPrice, gas, from, feeRatio,
+        // txSignatures, feePayer, feePayerSignatures])
         try {
             byte[] rawTransactionExceptType = KaiaTransactionUtils.getRawTransactionNoType(rawTransaction);
 
@@ -91,8 +98,8 @@ public class TxTypeFeeDelegatedCancelWithRatio extends TxTypeFeeDelegate  {
             BigInteger feeRatio = ((RlpString) values.get(4)).asPositiveBigInteger();
             TxType.Type type = Type.FEE_DELEGATED_CANCEL_WITH_RATIO;
 
-            TxTypeFeeDelegatedCancelWithRatio tx
-                    = TxTypeFeeDelegatedCancelWithRatio.createTransaction(type, nonce, gasPrice, gasLimit, from, feeRatio);
+            TxTypeFeeDelegatedCancelWithRatio tx = TxTypeFeeDelegatedCancelWithRatio.createTransaction(type, nonce,
+                    gasPrice, gasLimit, from, feeRatio);
             tx.addSignatureData(values, 5);
             return tx;
         } catch (Exception e) {
@@ -107,8 +114,6 @@ public class TxTypeFeeDelegatedCancelWithRatio extends TxTypeFeeDelegate  {
     public static TxTypeFeeDelegatedCancelWithRatio decodeFromRawTransaction(String rawTransaction) {
         return decodeFromRawTransaction(Numeric.hexStringToByteArray(Numeric.cleanHexPrefix(rawTransaction)));
     }
-
-
 
     @Override
     public List<RlpType> asRlpValues(SignatureData signatureData) {

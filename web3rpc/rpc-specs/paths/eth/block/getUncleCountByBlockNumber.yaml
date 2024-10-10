@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: Klay Open API
+  title: KAIA Open API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -17,7 +17,7 @@ paths:
         - eth
       operationId: getUncleCountByBlockNumber
       description: |
-        Returns the number of uncles in a block from a block matching the given block number. Since there are no uncles in Klaytn, it returns 0x0. It returns null if there is no matching block.
+        Returns the number of uncles in a block from a block matching the given block number. Since there are no uncles in Kaia, it returns 0x0. It returns null if there is no matching block.
 
         **JSONRPC:** `eth_getUncleCountByBlockNumber`
 

@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: Klay Open API
+  title: KAIA Open API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -18,7 +18,7 @@ paths:
       operationId: getHashrate
       description: |
         Returns the number of hashes per second that the node is mining with.
-        Please note that it always return 0x0 because there is no PoW mechanism in Klaytn.
+        Please note that it always return 0x0 because there is no PoW mechanism in Kaia.
 
         **JSONRPC:** `eth_getHashrate`
 

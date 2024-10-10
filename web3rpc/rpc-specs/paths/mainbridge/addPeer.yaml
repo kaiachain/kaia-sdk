@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: Klay Open API
+  title: KAIA Open API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -38,7 +38,7 @@ paths:
 
       responses:
         200:
-          description: Returns bridge node information including the KNI (Klaytn Network Identifier) of the node.
+          description: Returns bridge node information including the KNI (Kaia Network Identifier) of the node.
           content:
             application/json:
               schema:

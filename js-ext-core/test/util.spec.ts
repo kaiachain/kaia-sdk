@@ -414,13 +414,13 @@ describe("util", () => {
     // Uncomment to test with real HTTP Providers.
     /* // (1) ethers.JsonRpcProvider
     const { JsonRpcProvider } = require("@ethersproject/providers");
-    const provider = new JsonRpcProvider("https://public-en-baobab.klaytn.net");
+    const provider = new JsonRpcProvider("https://public-en-kairos.node.kaia.io");
     const send = (method: string, params: any[]) => provider.send(method, params);
     //*/
 
     /* // (2) web3.HttpProvider
     const { Web3, HttpProvider } = require("web3");
-    const provider = new HttpProvider("https://public-en-baobab.klaytn.net");
+    const provider = new HttpProvider("https://public-en-kairos.node.kaia.io");
     const web3 = new Web3(provider);
     const send = (method: string, params: any[]) => web3.requestManager.send({ method, params });
     //*/

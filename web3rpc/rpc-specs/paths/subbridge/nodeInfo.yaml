@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: Klay Open API
+  title: KAIA Open API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -17,7 +17,7 @@ paths:
         - subbridge
       operationId: nodeInfo
       description: |
-        Returns bridge node information including the KNI (Klaytn Network Identifier) of the node. A subbridge node can connect to a mainbridge node via the KNI.
+        Returns bridge node information including the KNI (Kaia Network Identifier) of the node. A subbridge node can connect to a mainbridge node via the KNI.
 
         **JSONRPC:** `subbridge_nodeInfo`
 

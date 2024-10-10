@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -15,11 +15,11 @@ paths:
       operationId: sign
       summary: "personal_sign"
       description: |
-        The sign method calculates a Klaytn-specific signature with: sign(keccak256("\x19Klaytn Signed Message:\n" + len(message) + message)))
-        
-        Adding a prefix to the message makes the calculated signature recognizable as a Klaytn-specific signature. This prevents misuse where a malicious DApp can sign arbitrary data (e.g., transaction) and use the signature to impersonate the victim.
-        
-        See personal_ecRecover to verify the signature.
+        The method calculates an [EIP-191](https://eips.ethereum.org/EIPS/eip-191) signature: ```sign(keccak256("\x19Ethereum Signed Message:\n" + len(message) + message)))```
+
+        **NOTE**: In versions earlier than Kaia v1.0.1, the method calculates an [KIP-97](https://kips.kaia.io/KIPs/kip-97) signature: sign(keccak256("\x19Klaytn Signed Message:\n" + len(message) + message)))
+
+        The personal_ecRecover and kaia_recoverFromMessage methods can verify the signature.
 
         **JSONRPC:** `personal_sign`
       tags:

@@ -2,7 +2,7 @@
 
 const { Web3 } = require("@kaiachain/web3js-ext");
 
-const provider = new Web3.providers.HttpProvider("https://public-en-baobab.klaytn.net");
+const provider = new Web3.providers.HttpProvider("https://public-en-kairos.node.kaia.io");
 const web3 = new Web3(provider);
 
 async function main() {

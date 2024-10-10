@@ -58,7 +58,7 @@ import java.io.IOException;
  * paper</a>.
  */
 public class KaiaRawTransaction extends RawTransaction {
-    private byte[] value;
+    private byte[] value; 
     private Set<KaiaSignatureData> signatureData;
 
     public KaiaRawTransaction(ITransaction transaction, Set<KaiaSignatureData> signatureData) {

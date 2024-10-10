@@ -13,7 +13,7 @@ from web3py_ext.utils.klaytn_utils import (
 from cytoolz import merge
 from eth_utils.address import to_checksum_address
 
-w3 = Web3(Web3.HTTPProvider('https://public-en-baobab.klaytn.net'))
+w3 = Web3(Web3.HTTPProvider('https://public-en-kairos.node.kaia.io'))
 
 def example_scenario_multisig_value_transfer():
     multisig_addr = to_checksum_address('0x82c6a8d94993d49cfd0c1d30f0f8caa65782cc7e')

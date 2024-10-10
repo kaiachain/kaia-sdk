@@ -23,60 +23,61 @@ import org.web3j.example.keySample;
  * 
  */
 public class ValueTransferMemoExample implements keySample {
-    /**
-     * 
-     */
+        /**
+         * 
+         */
 
-    public static void run() throws Exception {
+        public static void run() throws Exception {
 
-        Web3j web3j = Web3j.build(new HttpService(keySample.BAOBAB_URL));
-        KaiaCredentials credentials = KaiaCredentials.create(keySample.LEGACY_KEY_privkey);
+                Web3j web3j = Web3j.build(new HttpService(keySample.BAOBAB_URL));
+                KaiaCredentials credentials = KaiaCredentials.create(keySample.LEGACY_KEY_privkey);
 
-        BigInteger GAS_PRICE = BigInteger.valueOf(50000000000L);
-        BigInteger GAS_LIMIT = BigInteger.valueOf(6721950);
-        String from = credentials.getAddress();
-        EthChainId EthchainId = web3j.ethChainId().send();
-        long chainId = EthchainId.getChainId().longValue();
-        String to = "0x000000000000000000000000000000000000dead";
-        BigInteger nonce = web3j.ethGetTransactionCount(from, DefaultBlockParameterName.LATEST).send()
-                .getTransactionCount();
-        BigInteger value = BigInteger.valueOf(100);
+                BigInteger GAS_PRICE = BigInteger.valueOf(50000000000L);
+                BigInteger GAS_LIMIT = BigInteger.valueOf(6721950);
+                String from = credentials.getAddress();
+                EthChainId EthchainId = web3j.ethChainId().send();
+                long chainId = EthchainId.getChainId().longValue();
+                String to = "0x000000000000000000000000000000000000dead";
+                BigInteger nonce = web3j.ethGetTransactionCount(from, DefaultBlockParameterName.LATEST).send()
+                                .getTransactionCount();
+                BigInteger value = BigInteger.valueOf(100);
 
-        String data = "Kaia Web3j";
-        byte[] payload = data.getBytes();
+                String data = "Kaia Web3j";
+                byte[] payload = data.getBytes();
 
-        TxType.Type type = Type.VALUE_TRANSFER_MEMO;
+                TxType.Type type = Type.VALUE_TRANSFER_MEMO;
 
-        KaiaRawTransaction raw = KaiaRawTransaction.createTransaction(
-                type,
-                nonce,
-                GAS_PRICE,
-                GAS_LIMIT,
-                to,
-                value,
-                from,
-                payload);
+                KaiaRawTransaction raw = KaiaRawTransaction.createTransaction(
+                                type,
+                                nonce,
+                                GAS_PRICE,
+                                GAS_LIMIT,
+                                to,
+                                value,
+                                from,
+                                payload);
 
-        byte[] signedMessage = KaiaTransactionEncoder.signMessage(raw, chainId, credentials);
-        String hexValue = Numeric.toHexString(signedMessage);
-        EthSendTransaction transactionResponse = web3j.ethSendRawTransaction(hexValue).send();
-        System.out.println("TxHash : \n " + transactionResponse.getResult());
-        String txHash = transactionResponse.getResult();
+                byte[] signedMessage = KaiaTransactionEncoder.signMessage(raw, chainId, credentials);
+                String hexValue = Numeric.toHexString(signedMessage);
+                EthSendTransaction transactionResponse = web3j.ethSendRawTransaction(hexValue).send();
+                System.out.println("TxHash : \n " + transactionResponse.getResult());
+                String txHash = transactionResponse.getResult();
 
-        int DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH = 40;
-        int DEFAULT_BLOCK_TIME = 1 * 1000;
-        long DEFAULT_POLLING_FREQUENCY = DEFAULT_BLOCK_TIME;
-        TransactionReceiptProcessor transactionReceiptProcessor = new PollingTransactionReceiptProcessor(web3j,
-                DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH);
-        org.web3j.protocol.core.methods.response.TransactionReceipt ethReceipt = transactionReceiptProcessor
-                .waitForTransactionReceipt(txHash);
-        System.out.println("Receipt from eth_getTransactionReceipt : \n" + ethReceipt);
-        TransactionReceipt receipt = web3j.kaiaGetTransactionReceipt(txHash).send().getResult();
-        System.out.println("Receipt from kaia_getTransactionReceipt : \n" + receipt);
-        web3j.shutdown();
+                int DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH = 40;
+                int DEFAULT_BLOCK_TIME = 1 * 1000;
+                long DEFAULT_POLLING_FREQUENCY = DEFAULT_BLOCK_TIME;
+                TransactionReceiptProcessor transactionReceiptProcessor = new PollingTransactionReceiptProcessor(web3j,
+                                DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH);
+                org.web3j.protocol.core.methods.response.TransactionReceipt ethReceipt = transactionReceiptProcessor
+                                .waitForTransactionReceipt(txHash);
+                System.out.println("Receipt from eth_getTransactionReceipt : \n" + ethReceipt);
+                TransactionReceipt receipt = web3j.kaiaGetTransactionReceipt(txHash).send().getResult();
+                System.out.println("Receipt from kaia_getTransactionReceipt : \n" + receipt);
+                web3j.shutdown();
 
-        TxTypeValueTransferMemo rawTransaction = TxTypeValueTransferMemo.decodeFromRawTransaction(signedMessage);
-        System.out.println("TxType : " + rawTransaction.getKaiaType());
-    }
+                TxTypeValueTransferMemo rawTransaction = TxTypeValueTransferMemo
+                                .decodeFromRawTransaction(signedMessage);
+                System.out.println("TxType : " + rawTransaction.getKaiaType());
+        }
 
 }

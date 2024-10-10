@@ -5,7 +5,7 @@ from eth_account.messages import encode_defunct
 from eth_utils.curried import to_hex
 from web3py_ext import extend
 
-w3 = Web3(Web3.HTTPProvider('https://public-en-baobab.klaytn.net'))
+w3 = Web3(Web3.HTTPProvider('https://public-en-kairos.node.kaia.io'))
 
 def web3_role_based_value_transfer_sign_recover():
     user = Account.from_key_pair(

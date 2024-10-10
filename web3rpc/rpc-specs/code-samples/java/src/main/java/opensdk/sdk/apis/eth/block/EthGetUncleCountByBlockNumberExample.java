@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 public class EthGetUncleCountByBlockNumberExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));    
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));    
     void ethGetUncleCountByBlockNumberExample() throws IOException {
         EthGetUncleCountByBlockNumber response = w3.ethGetUncleCountByBlockNumber(
             DefaultBlockParameter.valueOf(new BigInteger("e8", 16))

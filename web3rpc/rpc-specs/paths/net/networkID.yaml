@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -46,7 +46,7 @@ paths:
                       result:
                         type: string
                         format: hex
-                        description: The integer of the network identifier. "1001" Klaytn Baobab testnet."8217" Klaytn Cypress mainnet.
+                        description: The integer of the network identifier. "1001" Kaia Baobab testnet."8217" Kaia Cypress mainnet.
                         example: "1001"
 
       x-codeSamples:

@@ -14,39 +14,42 @@ import org.web3j.utils.KaiaTransactionUtils;
 import org.web3j.utils.Numeric;
 
 public class TxTypeAccountUpdate extends AbstractTxType {
-   
+
     /**
      * newly created accountKey
      */
     private final AccountKey accountKey;
 
-    public TxTypeAccountUpdate(TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey) {
+    public TxTypeAccountUpdate(TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit,
+            String from, AccountKey accountKey) {
         super(type, nonce, gasPrice, gasLimit, from, "", BigInteger.ZERO);
         this.accountKey = accountKey;
     }
 
-    public static TxTypeAccountUpdate createTransaction(TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey) {
+    public static TxTypeAccountUpdate createTransaction(TxType.Type type, BigInteger nonce, BigInteger gasPrice,
+            BigInteger gasLimit, String from, AccountKey accountKey) {
         return new TxTypeAccountUpdate(type, nonce, gasPrice, gasLimit, from, accountKey);
     }
 
-    public TxTypeAccountUpdate(long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey) {
+    public TxTypeAccountUpdate(long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice,
+            BigInteger gasLimit, String from, AccountKey accountKey) {
         super(chainId, type, nonce, gasPrice, gasLimit, from, "", BigInteger.ZERO);
         this.accountKey = accountKey;
-        
+
     }
 
-    public static TxTypeAccountUpdate createTransaction(long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey) {
+    public static TxTypeAccountUpdate createTransaction(long chainId, TxType.Type type, BigInteger nonce,
+            BigInteger gasPrice, BigInteger gasLimit, String from, AccountKey accountKey) {
         return new TxTypeAccountUpdate(chainId, type, nonce, gasPrice, gasLimit, from, accountKey);
     }
-
-
 
     public AccountKey getAccountKey() {
         return accountKey;
     }
 
     /**
-     * create RlpTyp List which contains nonce, gas price, gas limit, from and accountKey
+     * create RlpTyp List which contains nonce, gas price, gas limit, from and
+     * accountKey
      * List elements can be different depending on transaction type.
      *
      * @return List RlpType List
@@ -71,13 +74,15 @@ public class TxTypeAccountUpdate extends AbstractTxType {
     }
 
     /**
-     * decode transaction hash from sender to reconstruct transaction with fee payer signature.
+     * decode transaction hash from sender to reconstruct transaction with fee payer
+     * signature.
      *
      * @param rawTransaction RLP-encoded signed transaction from sender
      * @return TxTypeAccountUpdate decoded transaction
      */
     public static TxTypeAccountUpdate decodeFromRawTransaction(byte[] rawTransaction) {
-        //TxHashRLP = type + encode([nonce, gasPrice, gas, from, rlpEncodedKey, txSignatures])
+        // TxHashRLP = type + encode([nonce, gasPrice, gas, from, rlpEncodedKey,
+        // txSignatures])
         try {
             byte[] rawTransactionExceptType = KaiaTransactionUtils.getRawTransactionNoType(rawTransaction);
             RlpList rlpList = RlpDecoder.decode(rawTransactionExceptType);
@@ -90,8 +95,8 @@ public class TxTypeAccountUpdate extends AbstractTxType {
             String rawAccountKey = ((RlpString) values.get(4)).asString();
             TxType.Type type = Type.ACCOUNT_UPDATE;
 
-            TxTypeAccountUpdate tx
-                    = TxTypeAccountUpdate.createTransaction(type, nonce, gasPrice, gasLimit, from, AccountKeyDecoder.fromRlp(rawAccountKey));
+            TxTypeAccountUpdate tx = TxTypeAccountUpdate.createTransaction(type, nonce, gasPrice, gasLimit, from,
+                    AccountKeyDecoder.fromRlp(rawAccountKey));
 
             tx.addSignatureData(values, 5);
             return tx;
@@ -125,5 +130,4 @@ public class TxTypeAccountUpdate extends AbstractTxType {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getType'");
     }
-} 
-
+}

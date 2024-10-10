@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -15,7 +15,7 @@ paths:
       operationId: version
       summary: "net_version"
       description: |
-        Return the current klaytn protocol version.
+        Return the current kaia protocol version.
         
         **JSONRPC:** `net_version`
       tags:
@@ -34,7 +34,7 @@ paths:
 
       responses:
         200:
-          description: Return the current klaytn protocol version.
+          description: Return the current kaia protocol version.
           content:
             application/json:
               schema:
@@ -45,7 +45,7 @@ paths:
                       result:
                         type: string
                         format: hex
-                        description: The integer of the klaytn protocol version. "1001" Klaytn Baobab testnet."8217" Klaytn Cypress mainnet.
+                        description: The integer of the kaia protocol version. "1001" Kaia Baobab testnet."8217" Kaia Cypress mainnet.
                         example: "1001"
 
       x-codeSamples:

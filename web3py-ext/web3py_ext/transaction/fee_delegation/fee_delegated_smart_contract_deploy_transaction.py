@@ -92,6 +92,13 @@ KLAYTN_TYPED_TRANSACTION_FORMATTERS = merge(
                 (is_bytes, identity),
             )
         ),
+         "feePayerSignatures": apply_formatter_to_array(
+            apply_formatters_to_dict({
+                "v": hexstr_if_str(to_int),
+                "r": hexstr_if_str(to_int),
+                "s": hexstr_if_str(to_int),
+            }),
+        ),
     },
 )
 
@@ -348,10 +355,14 @@ class FeeDelegatedSmartContractDeployTransaction(_TypedTransactionImplementation
 
         # when signing at first time
         transaction_with_signatures = transaction_without_signature_fields
-        if 'feePayerSignatures' not in transaction_without_signature_fields or transaction_with_signatures['feePayerSignatures'][0]['v'] == 1:
-            transaction_with_signatures = merge(transaction_without_signature_fields, {'feePayerSignatures':[]})
+        if 'signatures' not in transaction_without_signature_fields:
+            transaction_with_signatures = merge(transaction_without_signature_fields, {'signatures':[]})
         
-        transaction_with_signatures['feePayerSignatures'].append(vrs)
+        if vrs != {} and vrs not in transaction_with_signatures['signatures']:
+            if type(transaction_with_signatures['signatures']) is not list:
+                transaction_with_signatures['signatures'] = list(transaction_with_signatures['signatures'])
+            transaction_with_signatures['signatures'].append(vrs)
+
         transaction_with_signatures = pipe(
             transaction_with_signatures,
             apply_formatters_to_dict(KLAYTN_TYPED_TRANSACTION_FORMATTERS),

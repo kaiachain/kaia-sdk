@@ -4,7 +4,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class EthSubmitWorkExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));    
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));    
     void ethSubmitWorkExample() throws IOException {
         EthSubmitWork response = w3.ethSubmitWork(
             "0x0000000000000001", 

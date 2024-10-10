@@ -1,5 +1,5 @@
 curl -X 'POST' \
-  'https://api.baobab.klaytn.net:8651/kaia/gasPriceAt' \
+  'https://public-en-kairos.node.kaia.io/kaia/gasPriceAt' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

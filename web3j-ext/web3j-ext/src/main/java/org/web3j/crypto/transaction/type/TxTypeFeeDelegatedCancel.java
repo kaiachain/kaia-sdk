@@ -14,22 +14,22 @@ import org.web3j.utils.Numeric;
 public class TxTypeFeeDelegatedCancel extends TxTypeFeeDelegate {
 
     protected TxTypeFeeDelegatedCancel(
-        TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from) {
+            TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from) {
         super(type, nonce, gasPrice, gasLimit, from, "", BigInteger.ZERO);
     }
 
     public static TxTypeFeeDelegatedCancel createTransaction(
-        TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from) {
+            TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from) {
         return new TxTypeFeeDelegatedCancel(type, nonce, gasPrice, gasLimit, from);
     }
 
     protected TxTypeFeeDelegatedCancel(
-        long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from) {
+            long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from) {
         super(chainId, type, nonce, gasPrice, gasLimit, from, "", BigInteger.ZERO);
     }
 
     public static TxTypeFeeDelegatedCancel createTransaction(
-        long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from) {
+            long chainId, TxType.Type type, BigInteger nonce, BigInteger gasPrice, BigInteger gasLimit, String from) {
         return new TxTypeFeeDelegatedCancel(chainId, type, nonce, gasPrice, gasLimit, from);
     }
 
@@ -58,13 +58,15 @@ public class TxTypeFeeDelegatedCancel extends TxTypeFeeDelegate {
     }
 
     /**
-     * decode transaction hash from sender to reconstruct transaction with fee payer signature.
+     * decode transaction hash from sender to reconstruct transaction with fee payer
+     * signature.
      *
      * @param rawTransaction RLP-encoded signed transaction from sender
      * @return TxTypeFeeDelegatedCancel decoded transaction
      */
     public static TxTypeFeeDelegatedCancel decodeFromRawTransaction(byte[] rawTransaction) {
-        //TxHashRLP = type + encode([nonce, gasPrice, gas, from, txSignatures, feePayer, feePayerSignatures])
+        // TxHashRLP = type + encode([nonce, gasPrice, gas, from, txSignatures,
+        // feePayer, feePayerSignatures])
         try {
             byte[] rawTransactionExceptType = KaiaTransactionUtils.getRawTransactionNoType(rawTransaction);
 
@@ -74,10 +76,10 @@ public class TxTypeFeeDelegatedCancel extends TxTypeFeeDelegate {
             BigInteger gasPrice = ((RlpString) values.get(1)).asPositiveBigInteger();
             BigInteger gasLimit = ((RlpString) values.get(2)).asPositiveBigInteger();
             String from = ((RlpString) values.get(3)).asString();
-            TxType.Type type= Type.FEE_DELEGATED_CANCEL;
+            TxType.Type type = Type.FEE_DELEGATED_CANCEL;
 
-            TxTypeFeeDelegatedCancel tx
-                    = TxTypeFeeDelegatedCancel.createTransaction(type, nonce, gasPrice, gasLimit, from);
+            TxTypeFeeDelegatedCancel tx = TxTypeFeeDelegatedCancel.createTransaction(type, nonce, gasPrice, gasLimit,
+                    from);
             tx.addSignatureData(values, 4);
             return tx;
         } catch (Exception e) {

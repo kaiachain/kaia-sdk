@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -17,7 +17,7 @@ paths:
       description: |
         Returns an array of all logs matching filter with given id, which has been obtained using klay_newFilter.Note that filter ids returned by other filter creation functions, such as klay_newBlockFilter or klay_newPendingTransactionFilter, cannot be used with this function.
 
-        The execution of this API can be limited by two node configurations to manage resources of Klaytn node safely.
+        The execution of this API can be limited by two node configurations to manage resources of Kaia node safely.
         
         - The number of maximum returned results in a single query (Default: 10,000).
         

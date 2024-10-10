@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -15,7 +15,7 @@ paths:
       operationId: importChainFromString
       summary: "admin_importChainFromString"
       description: |
-        The importChainFromString is an administrative method that imports a chain from a RLP-encoded string of blocks into a Klaytn node. This only works if there is no existing chain in a Klaytn node. This method does not delete any data of the existing chain.       
+        The importChainFromString is an administrative method that imports a chain from a RLP-encoded string of blocks into a Kaia node. This only works if there is no existing chain in a Kaia node. This method does not delete any data of the existing chain.       
         
         **JSONRPC:** `admin_importChainFromString`
 

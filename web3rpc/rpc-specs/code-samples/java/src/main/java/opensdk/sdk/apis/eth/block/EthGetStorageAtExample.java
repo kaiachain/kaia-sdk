@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 public class EthGetStorageAtExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));    
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));    
     void ethGetStorageAtExample() throws IOException {
         String address = "0x295a70b2de5e3953354a6a8344e616ed314d7251";
         BigInteger position = BigInteger.valueOf(0);

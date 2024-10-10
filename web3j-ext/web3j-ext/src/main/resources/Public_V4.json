@@ -1,23 +1,21 @@
 {
   "version": 4,
-  "id": "fa42ad5d-d8bf-4508-8e30-b1ff6f6f659a",
-  "address": "0xe15cd70a41dfb05e7214004d7d054801b2a2f06b",
-  "keyring": [
-    {
-      "ciphertext": "a6e941470090476fd37a72c82c789de8ceece73bef9272ff994166a62295dc2b",
-      "cipherparams": {
-        "iv": "eae71af6f63ea0142a9a744cf50dabd6"
-      },
-      "cipher": "aes-128-ctr",
-      "kdf": "scrypt",
-      "kdfparams": {
-        "dklen": 32,
-        "salt": "40b7a6a1b20799e17efd7682cd37a2f5305b628ecf5ced72913ea2d6f29ddd9e",
-        "n": 4096,
-        "r": 8,
-        "p": 1
-      },
-      "mac": "c94f50c185d3fb8faa55ee6e285a3373684d3454529fd043a54217b0095a80ab"
-    }
-  ]
+  "id": "04384fe3-1f19-4551-8f4c-2a48e9cca213",
+  "address": "a2a8854b1802d8cd5de631e690817c253d6a9153",
+  "keyring": [{
+    "ciphertext": "4b1e6c4d7ceb8913a3e5b6dce644cbbbf4b83172c9fa521a2ffb10087adec78a",
+    "cipherparams": {
+      "iv": "965cefe5668f0db8cf719d7e964d67f4"
+    },
+    "cipher": "aes-128-ctr",
+    "kdf": "scrypt",
+    "kdfparams": {
+      "n": 8192,
+      "r": 8,
+      "p": 1,
+      "dklen": 32,
+      "salt": "23a10a97c98fd0283462d5cf08a6b9218ec8f509fedfaf34a84f203f9e928678"
+    },
+    "mac": "6bbc7e1a3fe9369ba270dc3a6aeeaeb51c520d29ab75b3d3c3350c60d603b2d8"
+  }]
 }

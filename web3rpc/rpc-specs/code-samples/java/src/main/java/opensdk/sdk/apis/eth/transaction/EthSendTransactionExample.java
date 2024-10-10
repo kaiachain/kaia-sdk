@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 public class EthSendTransactionExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void ethSendTransactionExample() throws IOException {
         // TransactionArgs tx = new TransactionArgs();
         // tx.setFrom("0x487f2dfef230c2120b8cc55c5087b103146536ec");

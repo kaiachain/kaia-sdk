@@ -1196,11 +1196,11 @@ components:
         maxFeePerGas:
           type: string
           format: hex
-          description: "(optional, default: 250 ston) The maximum amount to pay for the transaction's execution. Since Klaytn uses a fixed gas price, it must be set to 250 ston (Gpeb in Ethereum)."
+          description: "(optional, default: 250 ston) The maximum amount to pay for the transaction's execution. Since Kaia uses a fixed gas price, it must be set to 250 ston (Gpeb in Ethereum)."
         maxPriorityFeePerGas:
           type: string
           format: hex
-          description: "(optional, default: 250 ston) Gas tip cap for dynamic fee transaction in peb. Since Klaytn uses a fixed gas price, it must be set to 250 ston (Gpeb in Ethereum)."
+          description: "(optional, default: 250 ston) Gas tip cap for dynamic fee transaction in peb. Since Kaia uses a fixed gas price, it must be set to 250 ston (Gpeb in Ethereum)."
         input:
           type: string
           format: DATA
@@ -1233,7 +1233,7 @@ components:
         accounts:
           type: array
           items:
-            type: object
+            type: string
           description: The list of account addresses.
 
     EthBlockHeader:

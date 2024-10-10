@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -17,7 +17,7 @@ paths:
       description: |
         Returns the number of transactions sent from an address.
 
-        **NOTE:** *In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available*
+        **NOTE:** *In versions earlier than Kaia v1.7.0, only integer block number, the string "earliest" and "latest" are available*
 
         **JSONRPC:** `kaia_getTransactionCount`
       tags:

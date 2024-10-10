@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -15,7 +15,7 @@ paths:
       operationId: .sendTransaction
       summary: "[Transaction] kaia_sendTransaction"
       description: |
-        Constructs a transaction with given parameters, signs the transaction with a sender's private key and propagates the transaction to Klaytn network.
+        Constructs a transaction with given parameters, signs the transaction with a sender's private key and propagates the transaction to Kaia network.
 
         `kaia_sendTransaction` will be failed to baobab/cypress network because it is signed in the EN node, which means that the EN must have the key that you want to sign with.
         Steps to test `kaia_sendTransaction`.

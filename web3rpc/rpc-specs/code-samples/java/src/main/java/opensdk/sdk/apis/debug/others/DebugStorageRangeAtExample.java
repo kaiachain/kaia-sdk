@@ -5,7 +5,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class DebugStorageRangeAtExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void debugStorageRangeAtExample() throws IOException {
         String blockHash = "0x90c81195698bc9f282bbdec386b0afb4dcc28e43aae834894281c3ecb3c88d21";
         int txIndex = 1;

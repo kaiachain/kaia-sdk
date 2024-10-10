@@ -1,7 +1,7 @@
 from web3 import Web3
 from web3py_ext import extend
 
-host = "https://api.baobab.klaytn.net:8651"
+host = "https://public-en-kairos.node.kaia.io"
 
 transactionArgs = {
     "from": "0x3bc5885c2941c5cda454bdb4a8c88aa7f248e312",

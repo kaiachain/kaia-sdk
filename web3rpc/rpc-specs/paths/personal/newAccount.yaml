@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -17,7 +17,7 @@ paths:
       description: |
         Generates a new private key and stores it in the key store directory. The key file is encrypted with the given passphrase. Returns the address of the new account.
 
-        At the Klaytn console, newAccount will prompt for a passphrase when it is not supplied as the argument.
+        At the Kaia console, newAccount will prompt for a passphrase when it is not supplied as the argument.
 
         **JSONRPC:** `personal_newAccount`
       tags:

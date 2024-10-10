@@ -29,7 +29,9 @@ public class KaiaCredentials {
 
     private KaiaCredentials(ECKeyPair ecKeyPair, String address) {
         this.ecKeyPair = ecKeyPair;
-        this.address = !Strings.isEmpty(address) ? Numeric.toHexStringWithPrefixZeroPadded(Numeric.toBigInt(address), 40) : "";
+        this.address = !Strings.isEmpty(address)
+                ? Numeric.toHexStringWithPrefixZeroPadded(Numeric.toBigInt(address), 40)
+                : "";
     }
 
     public ECKeyPair getEcKeyPair() {
@@ -69,7 +71,7 @@ public class KaiaCredentials {
      * Static method for creating KaiaCredentials instance
      *
      * @param privateKey private key for transaction signing
-     * @param address address of account
+     * @param address    address of account
      * @return KaiaCredentials
      */
     public static KaiaCredentials create(String privateKey, String address) {
@@ -78,27 +80,24 @@ public class KaiaCredentials {
 
     public Credentials convertToCredentials() {
         Credentials Ethcredentials = Credentials.create(this.getEcKeyPair());
-        return Ethcredentials;
-
+         return Ethcredentials;
     }
-    
+
     public boolean isDeCoupled() {
         String address = Numeric.prependHexPrefix(Keys.getAddress(ecKeyPair));
         return !(address.equals(this.address));
     }
-    
 
     public static boolean isDeCoupled(String privKey, String address) {
         ECKeyPair ecKeyPair = ECKeyPair.create(Numeric.toBigInt(privKey));
         return !(address.equals(Numeric.prependHexPrefix(Keys.getAddress(ecKeyPair))));
     }
 
-
     /**
      * Static method for creating KaiaCredentials instance
      *
      * @param ecKeyPair ecKeyPair for transaction signing
-     * @param address address of account
+     * @param address   address of account
      * @return KaiaCredentials
      */
     public static KaiaCredentials create(ECKeyPair ecKeyPair, String address) {

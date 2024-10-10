@@ -1,6 +1,6 @@
 const { JsonRpcProvider } = require("@kaiachain/ethers-ext");
 (() => {
-  const provider = new JsonRpcProvider("https://public-en-baobab.klaytn.net");
+  const provider = new JsonRpcProvider("https://public-en-kairos.node.kaia.io");
   const hashrate = "0x5";
   const id =
     "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef";

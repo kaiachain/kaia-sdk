@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -17,7 +17,7 @@ paths:
       description: |
         Returns true if an input account has a non-empty codeHash at the time of a specific block number. It returns false if the account is an EOA or a smart contract account which doesn't have codeHash.
 
-        **NOTE:** *In versions earlier than Klaytn v1.7.0, only integer block number, the string "earliest" and "latest" are available*
+        **NOTE:** *In versions earlier than Kaia v1.7.0, only integer block number, the string "earliest" and "latest" are available*
 
         **JSONRPC:** `klay_isContractAccount`
       tags:

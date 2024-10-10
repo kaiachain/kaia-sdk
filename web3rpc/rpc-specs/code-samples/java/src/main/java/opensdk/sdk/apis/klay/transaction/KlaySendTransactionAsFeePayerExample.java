@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class KlaySendTransactionAsFeePayerExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
   void klaySendTransactionAsFeePayerExample() throws IOException {
     KlaytnTransactionTypes tx = new KlaytnTransactionTypes();
     Signature signature = new Signature();

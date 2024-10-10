@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.function.Function;
 
 public class AccountKeyDecoder {
-    private static HashMap<AccountKey.Type, Function<byte[], AccountKey>> typeMap = new HashMap<AccountKey.Type, Function<byte[], AccountKey>>(){
+    private static HashMap<AccountKey.Type, Function<byte[], AccountKey>> typeMap = new HashMap<AccountKey.Type, Function<byte[], AccountKey>>() {
         {
             put(AccountKey.Type.PUBLIC, AccountKeyPublic::decodeFromRlp);
             put(AccountKey.Type.MULTISIG, AccountKeyWeightedMultiSig::decodeFromRlp);
@@ -33,7 +33,7 @@ public class AccountKeyDecoder {
     };
 
     public static AccountKey fromRlp(String raw) {
-        if(Numeric.toHexString(AccountKeyNil.RLP).equals(raw))
+        if (Numeric.toHexString(AccountKeyNil.RLP).equals(raw))
             return AccountKeyNil.create();
 
         AccountKey.Type type = AccountKey.Type.findByValue(Numeric.hexStringToByteArray(raw)[0]);

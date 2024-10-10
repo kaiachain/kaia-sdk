@@ -1,6 +1,6 @@
 const { Web3 } = require("@kaiachain/web3js-ext");
 
-const provider = new Web3.providers.HttpProvider("https://public-en-baobab.klaytn.net");
+const provider = new Web3.providers.HttpProvider("https://public-en-kairos.node.kaia.io");
 const web3 = new Web3(provider);
 
 // Web3 V3. web3.eth.accounts.create(1).encrypt("password")
@@ -30,26 +30,20 @@ const password = "password";
 const password2 = "password2";
 
 async function main() {
-  const accounts = await web3.eth.accounts.wallet.decrypt([JSON.parse(encryptedKey)], password);
+  const account = await web3.eth.accounts.decrypt(encryptedKey, password);
 
   console.log("\ndecrypted address");
-  console.log(accounts[0].address);
+  console.log(account.address);
+  console.log("decrypted privateKey");
+  console.log(account.privateKey);
 
-  console.log("\ndecrypted privateKey");
-  console.log(accounts[0].privateKey);
-
-  const encryptedKey2 = await web3.eth.accounts.wallet.encrypt(password2);
-
-  // Delete account before adding the same account already existing in the wallet.
-  web3.eth.accounts.wallet.remove(encryptedKey2[0].address);
-
-  const accounts2 = await web3.eth.accounts.wallet.decrypt(encryptedKey2, password2);
+  const encryptedKey2 = await account.encrypt(password2);
+  const account2 = await web3.eth.accounts.decrypt(encryptedKey2, password2);
 
   console.log("\ndecrypted address with new password");
-  console.log(accounts2[0].address);
-
-  console.log("\ndecrypted privateKey with new password");
-  console.log(accounts2[0].privateKey);
+  console.log(account2.address);
+  console.log("decrypted privateKey with new password");
+  console.log(account2.privateKey);
 }
 
 main();

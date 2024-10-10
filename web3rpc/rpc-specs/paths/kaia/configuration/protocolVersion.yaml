@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -15,7 +15,7 @@ paths:
       operationId: .protocolVersion
       summary: "[Configuration] kaia_protocolVersion"
       description: |
-        Returns the Klaytn protocol version of the node. The current version (as of v1.9.0) of Cypress/Baobab is istanbul/65.
+        Returns the Kaia protocol version of the node. The current version (as of v1.9.0) of Cypress/Baobab is istanbul/65.
 
         **JSONRPC:** `kaia_protocolVersion`
       tags:
@@ -35,7 +35,7 @@ paths:
 
       responses:
         200:
-          description: Returns the Klaytn protocol version of the node.
+          description: Returns the Kaia protocol version of the node.
           content:
             application/json:
               schema:
@@ -46,7 +46,7 @@ paths:
                       result:
                         type: string
                         format: hex
-                        description: "The Klaytn protocol version of the node."
+                        description: "The Kaia protocol version of the node."
                         example: "0xAE9F7BCC00"
 
       x-codeSamples:

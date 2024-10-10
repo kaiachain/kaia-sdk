@@ -6,7 +6,7 @@ from web3.middleware import construct_sign_and_send_raw_middleware
 
 user = Account.from_key('0x4a72b3d09c3d5e28e8652e0111f9c4ce252e8299aad95bb219a38eb0a3f4da49')
 acc_list = [user]
-w3 = Web3(Web3.HTTPProvider('https://public-en-baobab.klaytn.net'))
+w3 = Web3(Web3.HTTPProvider('https://public-en-kairos.node.kaia.io'))
 w3.middleware_onion.add(construct_sign_and_send_raw_middleware(acc_list))
 
 def contract_interaction():

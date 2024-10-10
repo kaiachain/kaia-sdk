@@ -5,7 +5,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class KaiaGetAccountKeyExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));    void kaiaGetAccountKeyExample() throws IOException {
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));    void kaiaGetAccountKeyExample() throws IOException {
         String address = "0x3111a0577f322e8fb54f78d9982a26ae7ca0f722";
         String blockNumberOrHashOrTag = "latest";
         KaiaGetAccountKeyResponse response = w3.kaiaGetAccountKey(address, blockNumberOrHashOrTag).send();

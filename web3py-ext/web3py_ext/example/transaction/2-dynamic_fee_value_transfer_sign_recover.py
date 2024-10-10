@@ -10,7 +10,7 @@ from web3py_ext.transaction.transaction import (
 from web3py_ext.utils.klaytn_utils import to_pretty
 from cytoolz import merge
 
-w3 = Web3(Web3.HTTPProvider('https://public-en-baobab.klaytn.net'))
+w3 = Web3(Web3.HTTPProvider('https://public-en-kairos.node.kaia.io'))
 
 def web3_dynamic_fee_value_transfer_sign_recover():
     user = Account.from_key('0x0e4ca6d38096ad99324de0dde108587e5d7c600165ae4cd6c2462c597458c2b8')

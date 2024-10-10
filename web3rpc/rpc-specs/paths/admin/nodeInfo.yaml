@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -15,7 +15,7 @@ paths:
       operationId: nodeInfo
       summary: "admin_nodeInfo"
       description: |
-        The nodeInfo administrative property can be queried for all the information known about the running Klaytn node at the networking granularity. These include general information about the node itself as a participant of the devp2p P2P overlay protocol, as well as specialized information added by each of the running application protocols, e.g., klay.
+        The nodeInfo administrative property can be queried for all the information known about the running Kaia node at the networking granularity. These include general information about the node itself as a participant of the devp2p P2P overlay protocol, as well as specialized information added by each of the running application protocols, e.g., klay.
         
         **JSONRPC:** `admin_nodeInfo`
 
@@ -75,7 +75,7 @@ components:
           type: object
           description: The node information.
           example: 
-            {"id":"377ef808aff73a397d133b3bf160df586054c98c0e6a65c8fce9560e6a0632bc975419f461803d27f28ee270287113cc2359225814debc1bfb2f811061e14c5d", "name":"Klaytn/vvX.X.X/XXXX-XXXX/goX.X.X",    "kni":"kni://377ef808aff73a397d133b3bf160df586054c98c0e6a65c8fce9560e6a0632bc975419f461803d27f28ee270287113cc2359225814debc1bfb2f811061e14c5d@[::]:32323?discport=0",
+            {"id":"377ef808aff73a397d133b3bf160df586054c98c0e6a65c8fce9560e6a0632bc975419f461803d27f28ee270287113cc2359225814debc1bfb2f811061e14c5d", "name":"Kaia/vvX.X.X/XXXX-XXXX/goX.X.X",    "kni":"kni://377ef808aff73a397d133b3bf160df586054c98c0e6a65c8fce9560e6a0632bc975419f461803d27f28ee270287113cc2359225814debc1bfb2f811061e14c5d@[::]:32323?discport=0",
               "ip":"::",
               "ports":{"discovery":0,"listener":32323},
               "listenAddr":"[::]:32323",

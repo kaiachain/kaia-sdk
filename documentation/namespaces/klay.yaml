@@ -13,11 +13,10 @@ x-tagGroups:
     tags:
       - klay
 servers:
-  - url: https://api.baobab.klaytn.net:8651
-  - url: https://public-en-cypress.klaytn.net
+  - url: https://public-en-kairos.node.kaia.io
+  - url: https://public-en.node.kaia.io
   - url: http://localhost:8551
 paths:
-
   # klay/account
   /klay/account/accountCreated:
     $ref: ../../web3rpc/rpc-specs/paths/klay/account/accountCreated.yaml#/paths/~1klay~1account~1accountCreated
@@ -123,7 +122,7 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/klay/transaction/resend.yaml#/paths/~1klay~1transaction~1resend
   /klay/getRawTransactionByBlockNumberAndIndex:
     $ref: ../../web3rpc/rpc-specs/paths/klay/transaction/getRawTransactionByBlockNumberAndIndex.yaml#/paths/~1klay~1transaction~1getRawTransactionByBlockNumberAndIndex
- 
+
   # klay/configuration
   /klay/configuration/chainID:
     $ref: ../../web3rpc/rpc-specs/paths/klay/configuration/chainID.yaml#/paths/~1klay~1configuration~1chainID
@@ -141,6 +140,8 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/klay/configuration/getChainConfig.yaml#/paths/~1klay~1configuration~1getChainConfig
   /klay/configuration/forkStatus:
     $ref: ../../web3rpc/rpc-specs/paths/klay/configuration/forkStatus.yaml#/paths/~1klay~1configuration~1forkStatus
+  /klay/configuration/getParams:
+    $ref: ../../web3rpc/rpc-specs/paths/klay/configuration/getParams.yaml#/paths/~1klay~1configuration~1getParams
 
   # klay/filter
   /klay/filter/getFilterChanges:
@@ -171,8 +172,6 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/klay/gas/upperBoundGasPrice.yaml#/paths/~1klay~1gas~1upperBoundGasPrice
   /klay/gas/maxPriorityFeePerGas:
     $ref: ../../web3rpc/rpc-specs/paths/klay/gas/maxPriorityFeePerGas.yaml#/paths/~1klay~1gas~1maxPriorityFeePerGas
-  /klay/gas/gasPriceAt:
-    $ref: ../../web3rpc/rpc-specs/paths/klay/gas/gasPriceAt.yaml#/paths/~1klay~1gas~1gasPriceAt
   /klay/gas/gasPrice:
     $ref: ../../web3rpc/rpc-specs/paths/klay/gas/gasPrice.yaml#/paths/~1klay~1gas~1gasPrice
   # klay/miscellaneous
@@ -188,7 +187,7 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/klay/miscellaneous/getProof.yaml#/paths/~1klay~1miscellaneous~1getProof
   /klay/miscellaneous/nodeAddress:
     $ref: ../../web3rpc/rpc-specs/paths/klay/miscellaneous/nodeAddress.yaml#/paths/~1klay~1miscellaneous~1nodeAddress
-  
+
   /klay/miscellaneous/getBlsInfos:
     $ref: ../../web3rpc/rpc-specs/paths/klay/miscellaneous/getBlsInfos.yaml#/paths/~1klay~1miscellaneous~1getBlsInfos
   /klay/miscellaneous/getActiveAddressFromRegistry:

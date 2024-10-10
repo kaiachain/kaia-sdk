@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: Klay Open API
+  title: KAIA Open API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -17,7 +17,7 @@ paths:
         - eth
       operationId: sendTransaction
       description: |
-        Constructs a transaction with given parameters, signs the transaction with a sender's private key and propagates the transaction to Klaytn network.
+        Constructs a transaction with given parameters, signs the transaction with a sender's private key and propagates the transaction to Kaia network.
 
         `eth_sendTransaction` will be failed to baobab/cypress network because it is signed in the EN node, which means that the EN must have the key that you want to sign with.
         Steps to test `eth_sendTransaction`.
@@ -119,11 +119,11 @@ components:
         maxFeePerGas:
           type: string
           format: hex
-          description: "(optional, default: 250 ston) The maximum amount to pay for the transaction's execution. Since Klaytn uses a fixed gas price, it must be set to 250 ston (Gpeb in Ethereum)."
+          description: "(optional, default: 250 ston) The maximum amount to pay for the transaction's execution. Since Kaia uses a fixed gas price, it must be set to 250 ston (Gpeb in Ethereum)."
         maxPriorityFeePerGas:
           type: string
           format: hex
-          description: "(optional, default: 250 ston) Gas tip cap for dynamic fee transaction in peb. Since Klaytn uses a fixed gas price, it must be set to 250 ston (Gpeb in Ethereum)."
+          description: "(optional, default: 250 ston) Gas tip cap for dynamic fee transaction in peb. Since Kaia uses a fixed gas price, it must be set to 250 ston (Gpeb in Ethereum)."
         input:
           type: string
           format: DATA

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class KaiaAccountCreatedExample {
 
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void kaiaAccountCreatedExample() throws IOException {
         KaiaAccountCreatedResponse ar = w3.kaiaAccountCreated(
             "0xa4f42d4d2a3a13874406435500950c9bf2d783db",

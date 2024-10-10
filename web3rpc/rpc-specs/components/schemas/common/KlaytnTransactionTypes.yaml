@@ -33,7 +33,7 @@ components:
       required:
         - from
         - data
-      description: TxTypeLegacyTransaction represents a type of transaction existed previously in Klaytn. This transaction type exists to support compatibility. For more information, see TxTypeLegacyTransaction.
+      description: TxTypeLegacyTransaction represents a type of transaction existed previously in Kaia. This transaction type exists to support compatibility. For more information, see TxTypeLegacyTransaction.
       properties:
         from:
           type: string
@@ -209,7 +209,7 @@ components:
         - to
         - value
         - input
-      description: TxTypeValueTransferMemo is used when a user wants to send KLAY with a specific message. For more information, see TxTypeValueTransferMemo.
+      description: TxTypeValueTransferMemo is used when a user wants to send KAIA with a specific message. For more information, see TxTypeValueTransferMemo.
       properties:
         typeInt:
           type: number

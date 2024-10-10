@@ -9,8 +9,8 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 tags:
-#  - name: eth
-#    description: namespace
+  #  - name: eth
+  #    description: namespace
   - name: kaia
     description: namespace
   - name: klay
@@ -33,8 +33,8 @@ tags:
     description: namespace
 servers:
   - url: http://localhost:8551
-  - url: https://api.baobab.klaytn.net:8651
-  - url: https://public-en-cypress.klaytn.net
+  - url: https://public-en-kairos.node.kaia.io
+  - url: https://public-en.node.kaia.io
 paths:
   # kaia/account
   /kaia/account/accountCreated:
@@ -163,6 +163,8 @@ paths:
     $ref: ../kaia/configuration/rewardBase.yaml#/paths/~1kaia~1configuration~1rewardbase
   /kaia/configuration/forkStatus:
     $ref: ../kaia/configuration/forkStatus.yaml#/paths/~1kaia~1configuration~1forkStatus
+  /kaia/configuration/getParams:
+    $ref: ../kaia/configuration/getParams.yaml#/paths/~1kaia~1configuration~1getParams
 
   # kaia/filter
   /kaia/filter/getFilterChanges:
@@ -207,7 +209,8 @@ paths:
     $ref: ../kaia/miscellaneous/recoverFromMessage.yaml#/paths/~1kaia~1miscellaneous~1recoverFromMessage
   /kaia/miscellaneous/getProof:
     $ref: ../kaia/miscellaneous/getProof.yaml#/paths/~1kaia~1miscellaneous~1getProof
-
+  /kaia/miscellaneous/getTotalSupply:
+    $ref: ../kaia/miscellaneous/getTotalSupply.yaml#/paths/~1kaia~1miscellaneous~1getTotalSupply
 
   # klay/account
   /klay/account/accountCreated:
@@ -320,7 +323,7 @@ paths:
     $ref: ../klay/configuration/chainID.yaml#/paths/~1klay~1configuration~1chainID
   /klay/configuration/clientVersion:
     $ref: ../klay/configuration/clientVersion.yaml#/paths/~1klay~1configuration~1clientVersion
-  
+
   /klay/configuration/getChainConfig:
     $ref: ../klay/configuration/getChainConfig.yaml#/paths/~1klay~1configuration~1getChainConfig
   /klay/configuration/isParallelDBWrite:
@@ -333,6 +336,8 @@ paths:
     $ref: ../klay/configuration/rewardBase.yaml#/paths/~1klay~1configuration~1rewardbase
   /klay/configuration/forkStatus:
     $ref: ../klay/configuration/forkStatus.yaml#/paths/~1klay~1configuration~1forkStatus
+  /klay/configuration/getParams:
+    $ref: ../klay/configuration/getParams.yaml#/paths/~1klay~1configuration~1getParams
 
   # klay/filter
   /klay/filter/getFilterChanges:
@@ -367,7 +372,7 @@ paths:
     $ref: ../klay/gas/gasPrice.yaml#/paths/~1klay~1gas~1gasPrice
   # /klay/configuration/gasPriceAt:
   #   $ref: ../klay/configuration/gasPriceAt.yaml#/paths/~1klay~1configuration~1gasPriceAt
-  
+
   # klay/miscellaneous
   /klay/miscellaneous/getStakingInfo:
     $ref: ../klay/miscellaneous/getStakingInfo.yaml#/paths/~1klay~1miscellaneous~1getStakingInfo
@@ -659,7 +664,7 @@ paths:
     $ref: ../admin/stopWS.yaml#/paths/~1admin~1stopWS
   /admin/nodeConfig:
     $ref: ../admin/nodeConfig.yaml#/paths/~1admin~1nodeConfig
-    
+
   # mainbridge:
   /mainbridge/convertChildChainBlockHashToParentChainTxHash:
     $ref: ../mainbridge/convertChildChainBlockHashToParentChainTxHash.yaml#/paths/~1mainbridge~1convertChildChainBlockHashToParentChainTxHash
@@ -677,7 +682,7 @@ paths:
   /subbridge/anchoring:
     $ref: ../subbridge/anchoring.yaml#/paths/~1subbridge~1anchoring
   /subbridge/convertRequestTxHashToHandleTxHash:
-    $ref: ../subbridge/convertRequestTxHashToHandleTxHash.yaml#/paths/~1subbridge~1convertRequestTxHashToHandleTxHash  
+    $ref: ../subbridge/convertRequestTxHashToHandleTxHash.yaml#/paths/~1subbridge~1convertRequestTxHashToHandleTxHash
   /subbridge/deployBridge:
     $ref: ../subbridge/deployBridge.yaml#/paths/~1subbridge~1deployBridge
   /subbridge/deregisterBridge:

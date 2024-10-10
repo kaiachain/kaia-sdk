@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>@kaiachain/ethers-ext/v6 html+js demo</title>
+  </head>
+  <body>
+    <body>
+      <p><button id="btnConnectMM" onclick="connectMM()">Connect MetaMask</button></p>
+      <p><button id="btnConnectKK" onclick="connectKK()">Connect Kaikas</button></p>
+      <hr/>
+      <p>
+        <button id="btnNetBaobab" onclick="switchBaobab()">Switch to Baobab</button>
+      </p>
+      <hr/>
+      <p>For MetaMask and Kaikas</p>
+      <p><button id="btnSignMsg" onclick="signMsg()">Sign message</button></p>
+      <p>
+        <button id="btnLegacyVT" onclick="sendLegacyVT()">Send Legacy or Dynamic Fee tx (send ETH/KLAY)</button>
+        <button id="btnLegacySC" onclick="sendLegacySC()">Send Legacy or Dynamic Fee tx (call contract)</button>
+      </p>
+      <hr/>
+      <p>For Kaikas</p>
+      <p>
+        <button id="btnKlaytnVT" onclick="sendKlaytnVT()">Send ValueTransfer tx</button>
+        <button id="btnKlaytnSC" onclick="sendKlaytnSC()">Send SmartContractExecution tx</button>
+      </p>
+      <p>
+        <button id="btnFeeDelegatedVT" onclick="sendFeeDelegatedVT()">Sign and Send FeeDelegatedValueTransfer tx</button>
+        <button id="btnFeeDelegatedSC" onclick="sendFeeDelegatedSC()">Sign and Send FeeDelegatedSmartContractExecution tx</button>
+      </p>
+      <hr/>
+      <p>
+        <div>accounts: <text id="textAccounts"></text></div>
+        <div>chainId: <text id="textChainId"></text></div>
+      </p>
+      <p>
+        <div>message signature: <text id="textSignature"></text></div>
+        <div>recovered signer address: <text id="textRecoveredAddress"></text></div>
+      </p>
+      <p>
+        <div>signed tx: <text id="textSignedTx"></text></div>
+        <div>txhash: <text id="textTxhash"></text></div>
+      </p>
+    </body>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.1/ethers.umd.min.js" integrity="sha512-UvwB92yhzWWQstXZT31l1Fc7wv3sRG7uWBSFZ6TeJ0LIfBe8oM9p2oufp1Y5nuBAso+FYHR03WocHr5+wqWJ7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@kaiachain/ethers-ext/v6@latest/dist/ethers-ext.bundle.js"></script> -->
+    <script src="ethers-ext.v6.bundle.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>

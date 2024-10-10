@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -17,7 +17,7 @@ paths:
       description: |
         Returns historical gas information for a range of blocks.
 
-        **NOTE:** This API is effective after Klaytn v1.8.0
+        **NOTE:** This API is effective after Kaia v1.8.0
 
         **JSONRPC:** `klay_feeHistory`
       tags:

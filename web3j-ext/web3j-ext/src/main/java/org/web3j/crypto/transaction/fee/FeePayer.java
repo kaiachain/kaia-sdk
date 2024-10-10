@@ -1,4 +1,5 @@
 package org.web3j.crypto.transaction.fee;
+
 import org.web3j.crypto.KaiaCredentials;
 import org.web3j.crypto.KaiaRawTransaction;
 import org.web3j.crypto.KaiaSignatureData;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 public class FeePayer {
 
     final static String EMPTY_FEE_PAYER_ADDRESS = "0x";
@@ -55,7 +57,7 @@ public class FeePayer {
         rlpTypeList.add(new RlpList(feePayerSignatureList));
 
         byte[] encodedTransaction = RlpEncoder.encode(new RlpList(rlpTypeList));
-        byte[] type = {txType.getKaiaType().get()};
+        byte[] type = { txType.getKaiaType().get() };
         byte[] rawTx = BytesUtils.concat(type, encodedTransaction);
         return new KaiaRawTransaction(null, rawTx, feePayerSignatureDataSet);
     }
@@ -92,8 +94,8 @@ public class FeePayer {
         rlpTypeList.addAll(signatureData.toRlpList().getValues());
         byte[] encodedTransaction = RlpEncoder.encode(new RlpList(rlpTypeList));
 
-            Sign.SignatureData signedSignatureData = Sign.signMessage(encodedTransaction, credentials.getEcKeyPair());
-            feePayerSignatureDataSet.add(KaiaSignatureData.createEip155KaiaSignatureData(signedSignatureData, chainId));
+        Sign.SignatureData signedSignatureData = Sign.signMessage(encodedTransaction, credentials.getEcKeyPair());
+        feePayerSignatureDataSet.add(KaiaSignatureData.createEip155KaiaSignatureData(signedSignatureData, chainId));
 
         return feePayerSignatureDataSet;
     }

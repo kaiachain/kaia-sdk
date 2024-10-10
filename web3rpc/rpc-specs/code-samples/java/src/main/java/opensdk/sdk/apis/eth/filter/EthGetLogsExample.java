@@ -7,7 +7,7 @@ import org.web3j.protocol.core.methods.response.EthLog;
 import java.io.IOException;
 
 public class EthGetLogsExample {
-      private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));    
+      private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));    
       void ethGetLogsExample() throws IOException {
         EthFilter filterOption = new EthFilter(
             DefaultBlockParameter.valueOf("latest"),

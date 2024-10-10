@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -17,7 +17,7 @@ paths:
       description: |
         Returns information about a header by number. This API works only on RPC call, not on JavaScript console.
 
-        **NOTE:** *This API is supported from Klaytn v1.7.0.*
+        **NOTE:** *This API is supported from Kaia v1.7.0.*
 
         **JSONRPC:** `kaia_getHeaderByNumber`
       tags:

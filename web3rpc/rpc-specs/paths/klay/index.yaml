@@ -10,11 +10,11 @@ info:
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 tags:
   - name: klay
-    description: API for klay namespace
+    description: API for kaia namespace
 servers:
   - url: http://localhost:7151
-  - url: https://api.baobab.klaytn.net:8651
-  - url: https://public-en-cypress.klaytn.net
+  - url: https://public-en-kairos.node.kaia.io
+  - url: https://public-en.node.kaia.io
 paths:
   # klay/account
   /klay/account/accountCreated:
@@ -121,7 +121,7 @@ paths:
     $ref: ./transaction/resend.yaml#/paths/~1klay~1transaction~1resend
   /klay/getRawTransactionByBlockNumberAndIndex:
     $ref: ./transaction/getRawTransactionByBlockNumberAndIndex.yaml#/paths/~1klay~1transaction~1getRawTransactionByBlockNumberAndIndex
- 
+
   # klay/configuration
   /klay/configuration/chainID:
     $ref: ./configuration/chainID.yaml#/paths/~1klay~1configuration~1chainID
@@ -139,6 +139,8 @@ paths:
     $ref: ./configuration/getChainConfig.yaml#/paths/~1klay~1configuration~1getChainConfig
   /klay/configuration/forkStatus:
     $ref: ./configuration/forkStatus.yaml#/paths/~1klay~1configuration~1forkStatus
+  /klay/configuration/getParams:
+    $ref: ./configuration/getParams.yaml#/paths/~1klay~1configuration~1getParams
 
   # klay/filter
   /klay/filter/getFilterChanges:
@@ -169,8 +171,6 @@ paths:
     $ref: ./gas/upperBoundGasPrice.yaml#/paths/~1klay~1gas~1upperBoundGasPrice
   /klay/gas/maxPriorityFeePerGas:
     $ref: ./gas/maxPriorityFeePerGas.yaml#/paths/~1klay~1gas~1maxPriorityFeePerGas
-  /klay/gas/gasPriceAt:
-    $ref: ./gas/gasPriceAt.yaml#/paths/~1klay~1gas~1gasPriceAt
   /klay/gas/gasPrice:
     $ref: ./gas/gasPrice.yaml#/paths/~1klay~1gas~1gasPrice
   # klay/miscellaneous
@@ -186,7 +186,7 @@ paths:
     $ref: ./miscellaneous/getProof.yaml#/paths/~1klay~1miscellaneous~1getProof
   /klay/miscellaneous/nodeAddress:
     $ref: ./miscellaneous/nodeAddress.yaml#/paths/~1klay~1miscellaneous~1nodeAddress
- 
+
   /klay/miscellaneous/getBlsInfos:
     $ref: ./miscellaneous/getBlsInfos.yaml#/paths/~1klay~1miscellaneous~1getBlsInfos
   /klay/miscellaneous/getActiveAddressFromRegistry:

@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -17,7 +17,7 @@ paths:
       description: |
         The addPeer is an administrative method that requests adding a new remote node to the list of tracked static nodes. The node will try to maintain connectivity to these nodes at all times, reconnecting every once in a while if the remote connection goes down.
 
-        The method accepts a single argument kni, which means "Klaytn Network Identifier". It is similar to the enode concept in the geth. It is URL of the remote peer to start tracking and returns a BOOL indicating whether the peer was accepted for tracking or some error occurred.
+        The method accepts a single argument kni, which means "Kaia Network Identifier". It is similar to the enode concept in the geth. It is URL of the remote peer to start tracking and returns a BOOL indicating whether the peer was accepted for tracking or some error occurred.
 
         **JSONRPC:** `admin_addPeer`
 

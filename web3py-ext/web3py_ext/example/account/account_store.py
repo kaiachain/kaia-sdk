@@ -5,7 +5,7 @@ from eth_account import Account
 from web3py_ext.utils.klaytn_utils import to_pretty
 from web3 import Web3
 
-w3 = Web3(Web3.HTTPProvider('https://public-en-baobab.klaytn.net'))
+w3 = Web3(Web3.HTTPProvider('https://public-en-kairos.node.kaia.io'))
 
 acc_list = [
     Account.from_key('0x0e4ca6d38096ad99324de0dde108587e5d7c600165ae4cd6c2462c597458c2b8'),

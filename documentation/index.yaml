@@ -23,8 +23,8 @@ x-tagGroups:
       - mainbridge
       - subbridge
 servers:
-  - url: https://api.baobab.klaytn.net:8651
-  - url: https://public-en-cypress.klaytn.net
+  - url: https://public-en-kairos.node.kaia.io
+  - url: https://public-en.node.kaia.io
   - url: http://localhost:8551
 paths:
   # kaia/account
@@ -140,8 +140,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/clientVersion.yaml#/paths/~1kaia~1configuration~1clientVersion
   /kaia/configuration/gasPrice:
     $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/gasPrice.yaml#/paths/~1kaia~1configuration~1gasPrice
-  /kaia/configuration/gasPriceAt:
-    $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/gasPriceAt.yaml#/paths/~1kaia~1configuration~1gasPriceAt
+  # /kaia/configuration/gasPriceAt: # removed
+  #   $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/gasPriceAt.yaml#/paths/~1kaia~1configuration~1gasPriceAt
   /kaia/configuration/getChainConfig:
     $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/getChainConfig.yaml#/paths/~1kaia~1configuration~1getChainConfig
   /kaia/configuration/isParallelDBWrite:
@@ -152,6 +152,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/protocolVersion.yaml#/paths/~1kaia~1configuration~1protocolVersion
   /kaia/configuration/rewardbase:
     $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/rewardBase.yaml#/paths/~1kaia~1configuration~1rewardbase
+  /kaia/configuration/getParams:
+    $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/getParams.yaml#/paths/~1kaia~1configuration~1getParams
 
   # kaia/filter
   /kaia/filter/getFilterChanges:
@@ -196,6 +198,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/kaia/miscellaneous/sha3.yaml#/paths/~1kaia~1miscellaneous~1sha3
   /kaia/miscellaneous/getProof:
     $ref: ../web3rpc/rpc-specs/paths/kaia/miscellaneous/getProof.yaml#/paths/~1kaia~1miscellaneous~1getProof
+  /kaia/miscellaneous/getTotalSupply:
+    $ref: ../web3rpc/rpc-specs/paths/kaia/miscellaneous/getTotalSupply.yaml#/paths/~1kaia~1miscellaneous~1getTotalSupply
 
   # klay/account
   /klay/account/accountCreated:
@@ -318,6 +322,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/klay/configuration/protocolVersion.yaml#/paths/~1klay~1configuration~1protocolVersion
   /klay/configuration/rewardbase:
     $ref: ../web3rpc/rpc-specs/paths/klay/configuration/rewardBase.yaml#/paths/~1klay~1configuration~1rewardbase
+  /klay/configuration/getParams:
+    $ref: ../web3rpc/rpc-specs/paths/klay/configuration/getParams.yaml#/paths/~1klay~1configuration~1getParams
 
   # klay/filter
   /klay/filter/getFilterChanges:
@@ -350,8 +356,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/klay/gas/upperBoundGasPrice.yaml#/paths/~1klay~1gas~1upperBoundGasPrice
   /klay/gas/gasPrice:
     $ref: ../web3rpc/rpc-specs/paths/klay/gas/gasPrice.yaml#/paths/~1klay~1gas~1gasPrice
-  /klay/gas/gasPriceAt:
-    $ref: ../web3rpc/rpc-specs/paths/klay/gas/gasPriceAt.yaml#/paths/~1klay~1gas~1gasPriceAt
+  # /klay/gas/gasPriceAt: // removed
+  #   $ref: ../web3rpc/rpc-specs/paths/klay/gas/gasPriceAt.yaml#/paths/~1klay~1gas~1gasPriceAt
   # klay/miscellaneous
   /klay/miscellaneous/getStakingInfo:
     $ref: ../web3rpc/rpc-specs/paths/klay/miscellaneous/getStakingInfo.yaml#/paths/~1klay~1miscellaneous~1getStakingInfo
@@ -418,7 +424,6 @@ paths:
   /eth/block/getBlockReceipt:
     $ref: ../web3rpc/rpc-specs/paths/eth/block/getBlockReceipts.yaml#/paths/~1eth~1block~1getBlockReceipts
 
-
   # eth/transaction
   /eth/transaction/call:
     $ref: ../web3rpc/rpc-specs/paths/eth/transaction/call.yaml#/paths/~1eth~1transaction~1call
@@ -460,7 +465,7 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/eth/config/coinbase.yaml#/paths/~1eth~1config~1coinbase
   /eth/config/etherbase:
     $ref: ../web3rpc/rpc-specs/paths/eth/config/etherbase.yaml#/paths/~1eth~1config~1etherbase
- 
+
   /eth/protocolVersion:
     $ref: ../web3rpc/rpc-specs/paths/eth/config/protocolVersion.yaml#/paths/~1eth~1config~1protocolVersion
 
@@ -820,7 +825,7 @@ paths:
   /subbridge/deregisterToken:
     $ref: ../web3rpc/rpc-specs/paths/subbridge/deregisterToken.yaml#/paths/~1subbridge~1deregisterToken
   /subbridge/convertRequestTxHashToHandleTxHash:
-    $ref: ../web3rpc/rpc-specs/paths/subbridge/convertRequestTxHashToHandleTxHash.yaml#/paths/~1subbridge~1convertRequestTxHashToHandleTxHash  
+    $ref: ../web3rpc/rpc-specs/paths/subbridge/convertRequestTxHashToHandleTxHash.yaml#/paths/~1subbridge~1convertRequestTxHashToHandleTxHash
   /subbridge/listBridge:
     $ref: ../web3rpc/rpc-specs/paths/subbridge/listBridge.yaml#/paths/~1subbridge~1listBridge
   /subbridge/getBridgeInFormation:

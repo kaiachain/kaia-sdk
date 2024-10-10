@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -15,8 +15,12 @@ paths:
       operationId: .gasPrice
       summary: "[Configuration] kaia_gasPrice"
       description: |
-        Returns a suggestion for a gas price in peb.
-        
+        Returns a recommended gasPrice for a new transaction.
+
+        - Before Magma, returns the fixed UnitPrice
+        - After Magma, returns the twice of next baseFee (2*baseFee)
+        - After Kaia, returns slightly buffered baseFee plus recommended tip (BaseFee * (1.10 or 1.15) + eth_maxPriorityFeePerGas)
+                
         **JSONRPC:** `kaia_gasPrice`
       tags:
         - kaia
@@ -35,7 +39,7 @@ paths:
 
       responses:
         200:
-          description: Returns a suggestion for a gas price in peb.
+          description: Recommended gas price in kei.
           content:
             application/json:
               schema:
@@ -46,7 +50,7 @@ paths:
                       result:
                         type: string
                         format: hex
-                        description: "Integer of the current gas price in peb"
+                        description: Recommended gas price in kei.
                         example: "0xAE9F7BCC00"
 
       x-codeSamples:

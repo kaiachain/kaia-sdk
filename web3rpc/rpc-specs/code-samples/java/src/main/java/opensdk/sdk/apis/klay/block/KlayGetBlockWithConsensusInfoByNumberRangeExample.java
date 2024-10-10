@@ -4,7 +4,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class KlayGetBlockWithConsensusInfoByNumberRangeExample {
-    private Web3j w3 = new Web3j(new HttpService("https://api.baobab.klaytn.net:8651"));
+    private Web3j w3 = new Web3j(new HttpService("https://public-en-kairos.node.kaia.io"));
     void klayGetBlockWithConsensusInfoByNumberRangeExample() throws IOException {
         Integer blockNumber = 1;
         Integer numberRange = 1;

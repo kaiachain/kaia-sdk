@@ -1,6 +1,6 @@
 openapi: "3.0.2"
 info:
-  title: KLAY OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   license:
     name: Apache 2.0
@@ -17,7 +17,7 @@ paths:
       tags:
         - kaia
       description: |
-        Generates and returns an estimate of how much computation cost will be spent to execute the transaction. Klaytn limits the computation cost of a transaction to 100000000 currently not to take too much time by a single transaction. The transaction will not be added to the blockchain like kaia_estimateGas
+        Generates and returns an estimate of how much computation cost will be spent to execute the transaction. Kaia limits the computation cost of a transaction to 100000000 currently not to take too much time by a single transaction. The transaction will not be added to the blockchain like kaia_estimateGas
 
         **JSONRPC:** `kaia_estimateComputationCost`
 

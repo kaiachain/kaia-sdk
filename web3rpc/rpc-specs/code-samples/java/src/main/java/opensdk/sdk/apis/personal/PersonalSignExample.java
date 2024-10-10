@@ -5,7 +5,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class PersonalSignExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void personalSignExample() throws IOException {
         String message = "0xdead";
         String address = "0xb44b66f0d6ea803175f921018cba7e914fed25b9";

@@ -5,7 +5,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class DebugTraceBadBlockExample {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
 
     void debugTraceCallExample() throws IOException {
         Object tracerCallObject = {"to":"0x46eda75e7ca73cb1c2f83c3927211655420dbc44","data":"0x3fb5c1cb00000000000000000000000000000000000000000000000000000000000003e7"}

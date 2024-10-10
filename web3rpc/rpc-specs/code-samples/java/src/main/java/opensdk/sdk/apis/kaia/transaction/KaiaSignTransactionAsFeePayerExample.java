@@ -6,7 +6,7 @@ import org.web3j.protocol.kaia.Web3j;
 import java.io.IOException;
 
 public class KaiaSignTransactionAsFeePayerExample   {
-    private Web3j w3 = Web3j.build(new HttpService("https://public-en-baobab.klaytn.net"));
+    private Web3j w3 = Web3j.build(new HttpService("https://public-en-kairos.node.kaia.io"));
     void kaiaSignTransactionAsFeePayerExample() throws IOException {
         KaiaTransactionTypes type = new KaiaTransactionTypes();
         String address = "0x487f2dfef230c2120b8cc55c5087b103146536ec";

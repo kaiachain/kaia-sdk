@@ -15,8 +15,18 @@ paths:
       operationId: ..getChainConfig
       summary: "[Configuration] kaia_getChainConfig"
       description: |
-        Returns the configuration of the chain.
+        Returns the chain configuration at the given block number.
 
+        See kaia_getParams for the list of parameters.
+
+        NOTE: The block number can be larger than the latest block number, in which case the API returns the tentative value based on the current chain state. The future kaia parameters are subject to change via additional governance votes or GovParam contract state changes.
+
+        NOTE: If the requested block has Kore hardfork enabled, the value of `governance.reward.useGiniCoeff` will be `false` because all council members have an equal chance of being elected as a block proposer and thus Gini coefficient is not relevant.
+
+        NOTE: If the requested block has Randao hardfork enabled, the value of `governance.reward.proposerUpdateInterval` will be `1` because proposers are no longer selected at batch.
+
+        NOTE: If the requested block has Kaia hardfork enabled, the value of `governance.reward.stakingUpdateInterval` will be `1` because staking information is every block, effectively deprecating the interval. 
+       
         **JSONRPC:** `kaia_getChainConfig`
       tags:
         - kaia

@@ -15,10 +15,122 @@ paths:
       operationId: $getParams
       summary: "klay_getParams"
       description: |
-        Returns the governance parameters effective at the given block.
+       Returns the governance parameters effective at the given block.
 
         NOTE: The block number can be larger than the latest block number, in which case the API returns the tentative value based on the current chain state. The future kaia parameters are subject to change via additional governance votes or GovParam contract state changes.
 
+        <table>
+          <thead>
+              <tr>
+                  <th>Key</th>
+                  <th>Value</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td><code>governance.governancemode</code></td>
+                  <td>STRING. One of the three governance modes, "none", "single", "ballot". this parameter is immutable.</td>
+              </tr>
+              <tr>
+                  <td><code>governance.governingnode</code></td>
+                  <td>ADDRESS. Designated governing node's address. Only works with "single" governance mode. e.g., <code>0xe733cb4d279da696f30d470f8c04decb54fcb0d2</code></td>
+              </tr>
+              <tr>
+                  <td><code>governance.unitprice</code></td>
+                  <td>NUMBER. Pre-Magma fixed gas price in kei. e.g., <code>25000000000</code> (25 gkei/gas)</td>
+              </tr>
+              <tr>
+                  <td><code>governance.addvalidator</code></td>
+                  <td>ADDRESS. Address or comma-separated list of addresses of a new validator candidate. e.g., <code>0xe733cb4d279da696f30d470f8c04decb54fcb0d2,0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266</code></td>
+              </tr>
+              <tr>
+                  <td><code>governance.removevalidator</code></td>
+                  <td>ADDRESS. Address or comma-separated list of addresses of a current validator which need to be removed. e.g., <code>0xe733cb4d279da696f30d470f8c04decb54fcb0d2</code></td>
+              </tr>
+              <tr>
+                  <td><code>governance.deriveshaimpl</code></td>
+                  <td>NUMBER. One of the three methods for generating the transaction hash and receipt hash in a block header. 0 (Original), 1 (Simple), 2 (Concat).</td>
+              </tr>
+              <tr>
+                  <td><code>governance.govparamcontract</code></td>
+                  <td>ADDRESS. (since Kore) Address of the GovParam contract. e.g., <code>0xe733cb4d279da696f30d470f8c04decb54fcb0d2</code></td>
+              </tr>
+              <tr>
+                  <td><code>istanbul.epoch</code></td>
+                  <td>NUMBER. The voting period in header-based governance. This parameter is immutable. e.g., <code>86400</code></td>
+              </tr>
+              <tr>
+                  <td><code>istanbul.committeesize</code></td>
+                  <td>NUMBER. The maximum number of validators in a committee. (also known as <code>istanbul.sub</code> in ChainConfig)</td>
+              </tr>
+              <tr>
+                  <td><code>istanbul.policy</code></td>
+                  <td>NUMBER. One of three proposer selection policies, 0 (RoundRobin), 1 (Sticky), 2 (WeightedRandom). This parameter is immutable.</td>
+              </tr>
+              <tr>
+                  <td><code>reward.mintingamount</code></td>
+                  <td>STRING. Minted rewards per block in kei. Note that it must be in string type because the number can be too big for JavaScript to handle. e.g., <code>9600000000000000000</code> (9.6 KAIA/block)</td>
+              </tr>
+              <tr>
+                  <td><code>reward.ratio</code></td>
+                  <td>STRING. Reward distribution ratio among GC/KIF/KEF. Three integers separated by "/" that adds up to 100. e.g., <code>50/40/10</code></td>
+              </tr>
+              <tr>
+                  <td><code>reward.kip82ratio</code></td>
+                  <td>STRING. (Since Kore) Reward distribution between block proposer and stakers. Two integers separated by "/" that adds up to 100. e.g., <code>20/80</code>.</td>
+              </tr>
+              <tr>
+                  <td><code>reward.useginicoeff</code></td>
+                  <td>BOOL. (Before Kore) If true, proposer selection algorithm adjusts the staking amounts using Gini coefficient. This parameter is immutable. This parameter is no longer used since Kore, so <code>false</code> is displayed in the APIs. e.g., <code>true</code></td>
+              </tr>
+              <tr>
+                  <td><code>reward.deferredtxfee</code></td>
+                  <td>BOOL. If false, transaction fees sent to the proposer after executing each transaction. If true, transaction fees are summed up with other rewards and given to the proposer after executing all transactions. This field is immutable.</td>
+              </tr>
+              <tr>
+                  <td><code>reward.minimumstake</code></td>
+                  <td>STRING. Minimum staking amount in KAIA to be a validator (i.e. CN). This parameter is immutable. Note that it must be in string type because the number can be too big for JavaScript to handle. e.g., <code>5000000</code> (5 million KAIA)</td>
+              </tr>
+              <tr>
+                  <td><code>reward.proposerupdateinterval</code></td>
+                  <td>NUMBER. (Before Randao) Size of the proposer selection batch. This parameter is immutable. This parameter is no longer used since Kore, so <code>1</code> is displayed in the APIs. e.g., <code>3600</code></td>
+              </tr>
+              <tr>
+                  <td><code>reward.stakingupdateinterval</code></td>
+                  <td>NUMBER. (Before Kaia) The block interval in which staking information is updated. This parameter is immutable. This parameter is no longer used since Kaia, so <code>1</code> is displayed in the APIs. e.g., <code>86400</code></td>
+              </tr>
+              <tr>
+                  <td><code>kip71.lowerboundbasefee</code></td>
+                  <td>NUMBER. The lowest possible base fee in kei. e.g., <code>25000000000</code></td>
+              </tr>
+              <tr>
+                  <td><code>kip71.upperboundbasefee</code></td>
+                  <td>NUMBER. The highest possible base fee in kei. e.g., <code>750000000000</code></td>
+              </tr>
+              <tr>
+                  <td><code>kip71.gastarget</code></td>
+                  <td>NUMBER. The target, or neutral, block gasUsed. The base fee increases when parent block contains more than gas target, and decreases when parent block contains less than gas target. e.g., <code>30000000</code></td>
+              </tr>
+              <tr>
+                  <td><code>kip71.basefeedenominator</code></td>
+                  <td>NUMBER. Controls how fast the base fee changes. e.g., <code>20</code></td>
+              </tr>
+              <tr>
+                  <td><code>kip71.maxblockgasusedforbasefee</code></td>
+                  <td>NUMBER. The maximum block gas recognized in base fee calculation. e.g., <code>60000000</code></td>
+              </tr>
+            </tbody>
+        </table>
+
+
+        NOTE: The block number can be larger than the latest block number, in which case the API returns the tentative value based on the current chain state. The future kaia parameters are subject to change via additional governance votes or GovParam contract state changes.
+
+        NOTE: If the requested block has Kore hardfork enabled, the value of `reward.useginicoeff` will be `false` because all council members have an equal chance of being elected as a block proposer and thus Gini coefficient is not relevant.
+
+        NOTE: If the requested block has Randao hardfork enabled, the value of `reward.proposerupdateinterval` will be `1` because proposers are no longer selected at batch.
+
+        NOTE: If the requested block has Kaia hardfork enabled, the value of `reward.stakingupdateinterval` will be `1` because staking information is every block, effectively deprecating the interval. 
+        
         **JSONRPC:** `klay_getParams`
 
       tags:

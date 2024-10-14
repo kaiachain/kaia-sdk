@@ -17,7 +17,7 @@ paths:
       description: |
         The method calculates an [EIP-191](https://eips.ethereum.org/EIPS/eip-191) signature: ```sign(keccak256("\x19Ethereum Signed Message:\n" + len(message) + message)))```
 
-        **NOTE**: In versions earlier than Kaia v1.0.1, the method calculates an [KIP-97](https://kips.kaia.io/KIPs/kip-97) signature: sign(keccak256("\x19Kaia Signed Message:\n" + len(message) + message)))
+        **NOTE**: In versions earlier than Kaia v1.0.1, the method calculates an [KIP-97](https://kips.kaia.io/KIPs/kip-97) signature: sign(keccak256("\x19Klaytn Signed Message:\n" + len(message) + message)))
 
         The personal_ecRecover and kaia_recoverFromMessage methods can verify the signature.
 

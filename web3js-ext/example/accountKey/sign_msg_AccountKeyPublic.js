@@ -1,5 +1,5 @@
 // AccountKeyPublic
-// https://docs.klaytn.foundation/docs/learn/accounts/
+// https://docs.kaia.io/docs/learn/accounts/
 
 const { Web3 } = require("@kaiachain/web3js-ext");
 

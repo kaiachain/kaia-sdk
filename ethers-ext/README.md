@@ -1,11 +1,11 @@
-# Ethers.js Extension for Klaytn
+# Ethers.js Extension for Kaia
 
-Ethers.js Extension for Klaytn offers:
+Ethers.js Extension for Kaia offers:
 
-- Drop-in replacement to `ethers.Wallet` that handles both Ethereum and Klaytn transaction types
+- Drop-in replacement to `ethers.Wallet` that handles both Ethereum and Kaia transaction types
   involving AccountKey and TxTypes.
 - Drop-in replacement to `ethers.providers.JsonRpcProvider` that provides accesses to both Ethereum RPCs and
-  Klaytn-specific RPCs.
+  Kaia-specific RPCs.
 - Drop-in replacement to `ethers.Web3Provider` to work with both MetaMask (`window.ethereum`) and Kaikas (`window.klaytn`)
 
 ## Note for ethers v6
@@ -31,7 +31,7 @@ Ethers.js Extension for Klaytn offers:
 
   ```js
   const ethers = require("ethers"); // ethers v5
-  const { Wallet } = require("@klaytn/ethers-ext/v5");
+  const { Wallet } = require("@kaiachain/ethers-ext/v5");
 
   const provider = new ethers.providers.JsonRpcProvider(
     "https://public-en-kairos.node.kaia.io"
@@ -43,7 +43,7 @@ Ethers.js Extension for Klaytn offers:
 
   ```js
   const ethers = require("ethers"); // ethers v6
-  const { Wallet } = require("@klaytn/ethers-ext/v6");
+  const { Wallet } = require("@kaiachain/ethers-ext/v6");
 
   const provider = new ethers.JsonRpcProvider(
     "https://public-en-kairos.node.kaia.io"
@@ -73,21 +73,21 @@ Ethers.js Extension for Klaytn offers:
 - ESM or TypeScript
 
   ```ts
-  import { Wallet, JsonRpcProvider } from "@klaytn/ethers-ext";
+  import { Wallet, JsonRpcProvider } from "@kaiachain/ethers-ext";
 
   // esm
   // v5
-  import { v5 } from "@klaytn/ethers-ext";
+  import { v5 } from "@kaiachain/ethers-ext";
   const { Wallet, JsonRpcProvider } = v5;
   // v6 
-  import { v6 } from "@klaytn/ethers-ext";
+  import { v6 } from "@kaiachain/ethers-ext";
   const { Wallet, JsonRpcProvider } = v6;
 
   // esm subpath import. If using typescript, add "moduleResolution": "nodenext" to tsconfig.json
   // v5
-  import { Wallet, JsonRpcProvider } from "@klaytn/ethers-ext/v5";
+  import { Wallet, JsonRpcProvider } from "@kaiachain/ethers-ext/v5";
   // v6
-  import { Wallet, JsonRpcProvider } from "@klaytn/ethers-ext/v6";
+  import { Wallet, JsonRpcProvider } from "@kaiachain/ethers-ext/v6";
 
   const provider = new JsonRpcProvider("https://public-en-kairos.node.kaia.io");
   const wallet = new Wallet("<private key>", provider);
@@ -97,12 +97,12 @@ Ethers.js Extension for Klaytn offers:
 
   ```js
   // v5
-  const { Wallet, JsonRpcProvider } = require("@klaytn/ethers-ext");
-  const { Wallet, JsonRpcProvider } = require("@klaytn/ethers-ext").v5;
-  const { Wallet, JsonRpcProvider } = require("@klaytn/ethers-ext/v5");
+  const { Wallet, JsonRpcProvider } = require("@kaiachain/ethers-ext");
+  const { Wallet, JsonRpcProvider } = require("@kaiachain/ethers-ext").v5;
+  const { Wallet, JsonRpcProvider } = require("@kaiachain/ethers-ext/v5");
   // v6
-  const { Wallet, JsonRpcProvider } = require("@klaytn/ethers-ext").v6;
-  const { Wallet, JsonRpcProvider } = require("@klaytn/ethers-ext/v6");
+  const { Wallet, JsonRpcProvider } = require("@kaiachain/ethers-ext").v6;
+  const { Wallet, JsonRpcProvider } = require("@kaiachain/ethers-ext/v6");
 
   const provider = new JsonRpcProvider("https://public-en-kairos.node.kaia.io");
   const wallet = new Wallet("<private key>", provider);

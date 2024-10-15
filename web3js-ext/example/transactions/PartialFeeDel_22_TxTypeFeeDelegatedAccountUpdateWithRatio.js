@@ -1,5 +1,5 @@
 // TxTypeFeeDelegatedAccountUpdateWithRatio
-// https://docs.klaytn.foundation/docs/learn/transactions/
+// https://docs.kaia.io/docs/learn/transactions/
 
 const { Web3, TxType, AccountKeyType, getPublicKeyFromPrivate } = require("@kaiachain/web3js-ext");
 

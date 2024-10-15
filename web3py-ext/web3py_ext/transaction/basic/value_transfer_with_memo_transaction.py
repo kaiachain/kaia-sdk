@@ -98,7 +98,7 @@ signatures = CountableList(
 class ValueTransferWithMemoTransaction(_TypedTransactionImplementation):
     """
     Represents a klaytn value transafer transaction type.
-    https://docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypevaluetransfermemo
+    https://docs.kaia.io/learn/transactions/basic#txtypevaluetransfermemo-
     """
 
     transaction_type = 16  # '0x10'
@@ -251,7 +251,7 @@ class ValueTransferWithMemoTransaction(_TypedTransactionImplementation):
 
     def hash(self) -> bytes:
         """
-        https://docs.klaytn.foundation/content/klaytn/design/transactions/basic#rlp-encoding-for-sendertxhash-2
+        https://docs.kaia.io/learn/transactions/basic#rlp-encoding-for-sendertxhash-2-
         """
         # Remove signature and chainId fields.
         transaction_without_signature_fields = dissoc(self.dictionary, "signatures", "chainId")

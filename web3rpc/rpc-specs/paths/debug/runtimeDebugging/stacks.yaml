@@ -75,7 +75,7 @@ components:
         result:
             type: string
             description: The structured metrics collected by the node.The stack information of all goroutines.
-            example: "goroutine 76176 [running]:\ngithub.com/klaytn/klaytn/api/debug.(*HandlerT).Stacks(0xc0002ce050, 0x0, 0x0)\n\t/private/tmp/klaytn-20181001-13887-zbyv2z/build/_workspace/src/github.com/klaytn/klaytn/api/debug/api.go:173 +0x74\nreflect.Value.call(0xc01867c660, 0xc000231bd8, 0x13, 0x4b26ca7, 0x4, 0xc008d8b7c0, 0x1, 0x1, 0x30, 0xc0323211d0 ..."
+            example: "goroutine 76176 [running]:\ngithub.com/kaiachain/kaia/api/debug.(*HandlerT).Stacks(0xc0002ce050, 0x0, 0x0)\n\t/private/tmp/kaia-20241001-13887-zbyv2z/build/_workspace/src/github.com/kaiachain/kaia/api/debug/api.go:173 +0x74\nreflect.Value.call(0xc01867c660, 0xc000231bd8, 0x13, 0x4b26ca7, 0x4, 0xc008d8b7c0, 0x1, 0x1, 0x30, 0xc0323211d0 ..."
            
 
 

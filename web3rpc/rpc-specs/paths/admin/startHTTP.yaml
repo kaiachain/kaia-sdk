@@ -45,7 +45,7 @@ paths:
         - name: apis
           schema:
             type: string
-          description: (optional) API modules to offer over this interface (default "klay,net,rpc").
+          description: (optional) API modules to offer over this interface (default "kaia,net,rpc").
           in: query
 
       requestBody:
@@ -114,9 +114,9 @@ components:
               APIs:
                 type: string
                 title: Apis
-                description: (optional) API modules to offer over this interface (default "klay,net,rpc").
+                description: (optional) API modules to offer over this interface (default "kaia,net,rpc").
           example:
-            ["127.0.0.1", 8551, "", "klay"]
+            ["127.0.0.1", 8551, "", "kaia"]
 
     StartHTTPResp:
       type: object

@@ -18,7 +18,7 @@ describe('debug_traceBlockFromFile API', () => {
             done();
         };
 
-        const fileName = "/home/sotatek/block.rlp";
+        const fileName = "/home/kaia/block.rlp";
 
         sdk.debug.traceBlockFromFile(fileName, {}, callbackOne);
     });

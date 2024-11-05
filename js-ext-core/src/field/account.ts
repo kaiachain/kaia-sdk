@@ -39,17 +39,17 @@ export const FieldTypeWeightedPublicKeys = new class implements FieldType {
         return [
           HexStr.fromNumber(tuple[0]),
           getCompressedPublicKey(tuple[1])
-        ];
+        ] as WeightedPublicKey;
       } else if (_.has(tupleOrObject, "weight") && _.has(tupleOrObject, "key")) {
         const object = tupleOrObject;
         return [
           HexStr.fromNumber(object.weight),
           getCompressedPublicKey(object.key)
-        ];
+        ] as WeightedPublicKey;
       } else {
         throw new Error("Malformed WeightedPublicKeys");
       }
-    });
+    }) ;
   }
 
   emptyValue(): WeightedPublicKey[] { return []; }

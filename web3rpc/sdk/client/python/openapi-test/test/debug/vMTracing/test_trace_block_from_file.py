@@ -5,7 +5,7 @@ class TestTraceBlockFromFile(KlaytnBaseTesting):
 
     def setUp(self) -> None:
         super().setUp()
-        self.fileName = "/home/sotatek/block.rlp"
+        self.fileName = "/home/kaia/block.rlp"
 
     def test_post(self):
         self.response = self.w3.debug.trace_block_from_file(

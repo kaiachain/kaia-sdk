@@ -124,7 +124,7 @@ components:
                   items:
                     type: number
                     format: float
-                  description: An array of block gas used ratios. Measures the network congestion level. These are calculated as the ratio of block gas used and [KIP-71 MAX_BLOCK_GAS_USED_FOR_BASE_FEE](https://kips.klaytn.foundation/KIPs/kip-71). If the ratio is above 1, then 1 is returned.
+                  description: An array of block gas used ratios. Measures the network congestion level. These are calculated as the ratio of block gas used and [KIP-71 MAX_BLOCK_GAS_USED_FOR_BASE_FEE](https://kips.kaia.io/KIPs/kip-71). If the ratio is above 1, then 1 is returned.
                 reward:
                   $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/Reward"
               example:

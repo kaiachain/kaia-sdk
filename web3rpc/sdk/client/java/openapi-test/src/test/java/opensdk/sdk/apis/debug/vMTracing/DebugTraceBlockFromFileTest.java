@@ -19,7 +19,7 @@ public class DebugTraceBlockFromFileTest {
     @Test
     @DisplayName("RPC debug_traceBlockFromFile")
     void whenRequestValid_ThenCall200ResponseReturns() throws IOException {
-        String fileName = "/home/sotatek/block.rlp";
+        String fileName = "/home/kaia/block.rlp";
 
         DebugTraceBlockFromFileResponse response = w3.debugTraceBlockFromFile(fileName, null).send();
 

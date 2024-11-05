@@ -1,10 +1,10 @@
 openapi: "3.0.2"
 info:
-  title: KLAYTN OPEN API
+  title: KAIA OPEN API
   version: "1.10.0"
   contact:
     name: API support
-    url: https://forum.klaytn.foundation/
+    url: https://devforum.kaia.io/
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html

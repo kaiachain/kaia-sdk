@@ -3,7 +3,7 @@ const { Web3 } = require("@kaiachain/web3js-ext");
 const provider = new Web3.providers.HttpProvider("https://public-en-kairos.node.kaia.io");
 const web3 = new Web3(provider);
 
-// Klaytn V4 with multiple role-based keys. https://toolkit.klaytn.foundation/misc/generateKeystore
+// Klaytn V4 with multiple role-based keys. https://toolkit.kaia.io/misc/generateKeystore
 const encryptedKey = `{
     "version": 4,
     "id":"2d7ad5c1-880f-4920-9b8e-51f852c4802c",

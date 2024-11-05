@@ -1,5 +1,5 @@
 // AccountKeyLegacy
-// https://docs.klaytn.foundation/docs/learn/accounts/
+// https://docs.kaia.io/docs/learn/accounts/
 
 const { Web3, toPeb } = require("@kaiachain/web3js-ext");
 

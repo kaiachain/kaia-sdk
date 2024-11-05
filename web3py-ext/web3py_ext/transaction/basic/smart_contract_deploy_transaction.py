@@ -108,7 +108,7 @@ signatures = CountableList(
 class SmartContractDeployTransaction(_TypedTransactionImplementation):
     """
     Represents a klaytn value transafer transaction type.
-    https://docs.klaytn.foundation/content/klaytn/design/transactions/basic#txtypevaluetransfer
+    https://docs.kaia.io/learn/transactions/basic#txtypevaluetransfer-
     """
 
     transaction_type = 40  # '0x28'
@@ -266,7 +266,7 @@ class SmartContractDeployTransaction(_TypedTransactionImplementation):
 
     def hash(self) -> bytes:
         """
-        https://docs.klaytn.foundation/content/klaytn/design/transactions/basic#rlp-encoding-for-sendertxhash-3
+        https://docs.kaia.io/learn/transactions/basic#rlp-encoding-for-sendertxhash-3-
         """
         # Remove signature fields.
         transaction_without_signature_fields = dissoc(self.dictionary, "signatures", "chainId")

@@ -28,3 +28,11 @@ with open('keystore') as f:
     pk = Account.decrypt(f.read(), 'password')
     acc = Account.from_key(pk)
     print(acc.address, acc.key.hex())
+    
+    # create a new keystore with other password
+    new_keystore=Account.encrypt(acc.key.hex(),'password1')
+
+    new_pk = Account.decrypt(new_keystore, 'password1')
+    acc = Account.from_key(pk)
+    print("New keystore")
+    print(acc.address, acc.key.hex())

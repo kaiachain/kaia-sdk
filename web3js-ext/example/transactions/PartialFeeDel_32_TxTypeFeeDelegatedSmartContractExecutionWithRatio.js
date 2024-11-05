@@ -1,5 +1,5 @@
 // TxTypeFeeDelegatedSmartContractExecutionWithRatio
-// https://docs.klaytn.foundation/docs/learn/transactions/
+// https://docs.kaia.io/docs/learn/transactions/
 
 const { Web3, TxType } = require("@kaiachain/web3js-ext");
 

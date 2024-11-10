@@ -77,7 +77,9 @@ describe("Role-based Key Tests", function () {
         };
 
         try {
-            await roleFeePayerAccount.signTransaction(valueTx);
+            const signedTx = await roleFeePayerAccount.signTransaction(valueTx);
+            const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+            console.log("Unexpected Success - Transaction Hash:", receipt.transactionHash);
             assert.fail("RoleFeePayer key should not sign a regular transaction.");
         } catch (error: any) {
             console.log("Expected Error (RoleFeePayer):", error.message);
@@ -102,9 +104,8 @@ describe("Role-based Key Tests", function () {
             gasLimit: 100000
         };
 
-        const signedTx = await roleTransactionAccount.signTransaction(feeDelegatedTx);
-        const feePayerSignedTx = await roleFeePayerAccount.signTransaction(signedTx);
-        const receipt = await web3.eth.sendSignedTransaction(feePayerSignedTx.rawTransaction);
+        const signedTx = await roleFeePayerAccount.signTransaction(feeDelegatedTx);
+        const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
         console.log("Fee Delegated Transaction Hash:", receipt.transactionHash);
         assert.isNotNull(receipt.transactionHash, "RoleFeePayer transaction should succeed");
     });
@@ -116,7 +117,6 @@ describe("Role-based Key Tests", function () {
 
         assert.isAbove(senderBalance, 0.01, "Sender account should have sufficient balance");
 
-        // Create a FeeDelegatedValueTransfer transaction
         const feeDelegatedTx = {
             type: TxType.FeeDelegatedValueTransfer,
             from: senderAddr,
@@ -125,12 +125,10 @@ describe("Role-based Key Tests", function () {
             gasLimit: 100000
         };
 
-        console.log("\n--- Trying to sign Fee Delegated transaction with RoleTransaction key ---");
-
-        // Attempt to sign Fee Delegated transaction with RoleTransaction key
         try {
             const signedTx = await roleTransactionAccount.signTransaction(feeDelegatedTx);
-            console.log("Unexpected Success - Fee Delegated Transaction Hash:", signedTx.rawTransaction);
+            const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+            console.log("Unexpected Success - Transaction Hash:", receipt.transactionHash);
             assert.fail("RoleTransaction key should not sign Fee Delegated transactions");
         } catch (error: any) {
             console.log("Expected Error (RoleTransaction as FeePayer):", error.message);

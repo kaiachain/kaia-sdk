@@ -26,7 +26,6 @@ components:
         - $ref: "#/components/schemas/TxTypeFeeDelegatedCancel"
         - $ref: "#/components/schemas/TxTypeFeeDelegatedCancelWithRatio"
 
-
     TxTypeLegacyTransaction:
       title: TxTypeLegacyTransaction
       type: object
@@ -254,8 +253,7 @@ components:
         - value
         - input
         - feePayer
-      description:
-        Fee delegating version of TxTypeValueTransferMemo. For more information, see TxTypeFeeDelegatedValueTransferMemo.
+      description: Fee delegating version of TxTypeValueTransferMemo. For more information, see TxTypeFeeDelegatedValueTransferMemo.
       properties:
         typeInt:
           type: number
@@ -477,7 +475,6 @@ components:
       required:
         - typeInt
         - from
-        - to
         - value
         - input
         - humanReadable
@@ -528,7 +525,6 @@ components:
       required:
         - typeInt
         - from
-        - to
         - value
         - input
         - humanReadable
@@ -586,7 +582,6 @@ components:
       required:
         - typeInt
         - from
-        - to
         - value
         - input
         - humanReadable

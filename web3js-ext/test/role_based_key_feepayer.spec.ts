@@ -24,17 +24,15 @@ describe("Role-based Key Tests", function () {
 
     // Before all tests, set up Role-based Key
     before(async function () {
-        console.log("\n--- Generating Temporary Accounts ---");
         roleTransactionAccount = generateTemporaryAccount();
         roleAccountUpdate = generateTemporaryAccount();
         roleFeePayerAccount = generateTemporaryAccount();
 
-        const pub1 = getPublicKeyFromPrivate(roleTransactionAccount.privateKey);
-        const pub2 = getPublicKeyFromPrivate(roleAccountUpdate.privateKey);
-        const pub3 = getPublicKeyFromPrivate(roleFeePayerAccount.privateKey);
+        // Feedback 5. PubKey name change
+        const roleTransactionAccountPubkey = getPublicKeyFromPrivate(roleTransactionAccount.privateKey);
+        const roleAccountUpdatePubKey = getPublicKeyFromPrivate(roleAccountUpdate.privateKey);
+        const roleFeePayerPubkey = getPublicKeyFromPrivate(roleFeePayerAccount.privateKey);
 
-        console.log("Generated Public keys:", { pub1, pub2, pub3 });
-        
         const updateTx = {
             type: TxType.AccountUpdate,
             from: roleAccountUpdate.address,
@@ -42,15 +40,14 @@ describe("Role-based Key Tests", function () {
             key: {
                 type: AccountKeyType.RoleBased,
                 keys: [
-                    { type: AccountKeyType.Public, key: pub1 },
-                    { type: AccountKeyType.Public, key: pub2 },
-                    { type: AccountKeyType.Public, key: pub3 }
+                    { type: AccountKeyType.Public, key: roleTransactionAccountPubkey },
+                    { type: AccountKeyType.Public, key: roleAccountUpdatePubKey },
+                    { type: AccountKeyType.Public, key: roleFeePayerPubkey }
                 ]
             }
         };
 
         const signedUpdateTx = await roleAccountUpdate.signTransaction(updateTx);
-        console.log("Account Updated:", signedUpdateTx);
         assert.isNotNull(signedUpdateTx.transactionHash, "Account update transaction should succeed");
     });
 
@@ -65,7 +62,6 @@ describe("Role-based Key Tests", function () {
         };
 
         const signedTx = await roleTransactionAccount.signTransaction(valueTx);
-        console.log("RoleTransaction signedTx:", signedTx.transactionHash);
         assert.isNotNull(signedTx.transactionHash, "RoleTransaction transaction should succeed");
     });
 
@@ -81,40 +77,37 @@ describe("Role-based Key Tests", function () {
 
         try {
             const signedTx = await roleFeePayerAccount.signTransaction(valueTx);
-            console.log("Unexpected Success - Signed Transaction:", signedTx);
             assert.fail("RoleFeePayer key should not sign a ValueTransfer transaction.");
         } catch (error: any) {
-            console.log("Expected Error (RoleFeePayer):", error.message);
             assert.isTrue(true, "Error occurred as expected due to role mismatch");
         }
     });
 
     // Test Case 3: Fee Delegated transaction signed by RoleFeePayer key (should succeed)
     it("3. Fee Delegated transaction signed by RoleTransaction and RoleFeePayer keys", async function () {
+        // Feedback 4. Create a new user account (different user than FeePayer)
+        const userAccount = generateTemporaryAccount();
+
         const feeDelegatedTx = {
             type: TxType.FeeDelegatedValueTransfer,
-            from: generateTemporaryAccount().address,
+            from: userAccount.address,
             to: generateTemporaryAccount().address,
             value: toPeb("0.01"),
             gasLimit: 100000
         };
 
-        // Feedback2. Remove the dependencies with network connection. just check the signed result.
-        // Feedback3. signed by a user (from address,roleTransactionAccount) first
-        const signedTxBySender = await roleTransactionAccount.signTransaction(feeDelegatedTx);
-        assert.isNotNull(signedTxBySender.rawTransaction, "Transaction should be signed by RoleTransaction");
+        // Feedback 4. User signs transaction first
+        const signedTxByUser = await userAccount.signTransaction(feeDelegatedTx);
+        assert.isNotNull(signedTxByUser.rawTransaction, "Transaction should be signed by User");
 
-        console.log("Sender signed transaction:", signedTxBySender.rawTransaction);
-
-        // Feedback3. FeePayer(FeePayerAccount) sign the tx after the user's sign.
+        // Feedback 4. FeePayer adds an additional signature
         try {
             const signedTxByFeePayer = await roleFeePayerAccount.signTransaction({
-                senderRawTransaction: signedTxBySender.rawTransaction
+                senderRawTransaction: signedTxByUser.rawTransaction
             });
             assert.isNotNull(signedTxByFeePayer.rawTransaction, "FeePayer should sign the transaction");
-            console.log("Signed Fee Delegated Transaction:", signedTxByFeePayer.rawTransaction);
         } catch (error: any) {
-            console.log("Expected Error (FeePayer signing):", error.message);
+            console.log("error is :", error.message);
             assert.fail("FeePayer failed to sign the already signed transaction.");
         }
     });
@@ -131,10 +124,8 @@ describe("Role-based Key Tests", function () {
 
         try {
             const signedTx = await roleTransactionAccount.signTransaction(feeDelegatedTx);
-            console.log("Unexpected Success - Transaction Hash:", signedTx.transactionHash);
             assert.fail("RoleTransaction key should not sign Fee Delegated transactions");
         } catch (error: any) {
-            console.log("Expected Error (RoleTransaction as FeePayer):", error.message);
             assert.isTrue(true, "Error occurred as expected");
         }
     });

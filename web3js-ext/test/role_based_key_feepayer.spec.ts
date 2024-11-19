@@ -107,25 +107,33 @@ describe("Role-based Key Tests", function () {
             });
             assert.isNotNull(signedTxByFeePayer.rawTransaction, "FeePayer should sign the transaction");
         } catch (error: any) {
-            console.log("error is :", error.message);
+            console.log("error is : ", error.message);
             assert.fail("FeePayer failed to sign the already signed transaction.");
         }
     });
 
     // Test Case 4: Attempting to sign Fee Delegated transaction with RoleTransaction key (should fail)
     it("4. Attempting to sign Fee Delegated transaction with RoleTransaction key (should fail)", async function () {
+        const userAccount = generateTemporaryAccount();
+
         const feeDelegatedTx = {
             type: TxType.FeeDelegatedValueTransfer,
-            from: generateTemporaryAccount().address,
+            from: userAccount.address,
             to: generateTemporaryAccount().address,
             value: toPeb("0.01"),
             gasLimit: 100000
         };
 
+        const signedTxByUser = await userAccount.signTransaction(feeDelegatedTx);
+        assert.isNotNull(signedTxByUser.rawTransaction, "Transaction should be signed by User");
+        
         try {
-            const signedTx = await roleTransactionAccount.signTransaction(feeDelegatedTx);
+            const signedTxByRoleTransaction = await roleTransactionAccount.signTransaction({
+                senderRawTransaction: signedTxByUser.rawTransaction
+            });
             assert.fail("RoleTransaction key should not sign Fee Delegated transactions");
         } catch (error: any) {
+            console.log("error is : ", error.message);
             assert.isTrue(true, "Error occurred as expected");
         }
     });

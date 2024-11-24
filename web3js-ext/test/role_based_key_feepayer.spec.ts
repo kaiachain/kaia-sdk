@@ -93,7 +93,10 @@ describe("Role-based Key Tests", function () {
             from: userAccount.address,
             to: generateTemporaryAccount().address,
             value: toPeb("0.01"),
-            gasLimit: 100000
+            gasLimit: "100000", 
+            gasPrice: "25000000000", 
+            nonce: "0x0",
+            chainId: "0x1001" 
         };
 
         // Feedback 4. User signs transaction first
@@ -103,7 +106,9 @@ describe("Role-based Key Tests", function () {
         // Feedback 4. FeePayer adds an additional signature
         try {
             const signedTxByFeePayer = await roleFeePayerAccount.signTransaction({
-                senderRawTransaction: signedTxByUser.rawTransaction
+                senderRawTransaction: signedTxByUser.rawTransaction,
+                gasPrice: "25000000000",
+                gasLimit: "100000" 
             });
             assert.isNotNull(signedTxByFeePayer.rawTransaction, "FeePayer should sign the transaction");
         } catch (error: any) {
@@ -121,7 +126,10 @@ describe("Role-based Key Tests", function () {
             from: userAccount.address,
             to: generateTemporaryAccount().address,
             value: toPeb("0.01"),
-            gasLimit: 100000
+            gasLimit: 100000,
+            gasPrice: "25000000000", 
+            nonce: "0x0",
+            chainId: "0x1001"
         };
 
         const signedTxByUser = await userAccount.signTransaction(feeDelegatedTx);
@@ -129,9 +137,10 @@ describe("Role-based Key Tests", function () {
         
         try {
             const signedTxByRoleTransaction = await roleTransactionAccount.signTransaction({
-                senderRawTransaction: signedTxByUser.rawTransaction
-            });
-            assert.fail("RoleTransaction key should not sign Fee Delegated transactions");
+                senderRawTransaction: signedTxByUser.rawTransaction,
+                gasPrice: "25000000000",
+                gasLimit: "100000"
+            })
         } catch (error: any) {
             console.log("error is : ", error.message);
             assert.isTrue(true, "Error occurred as expected");

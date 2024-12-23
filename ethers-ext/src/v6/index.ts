@@ -21,3 +21,8 @@ export const providers = {
   JsonRpcProvider,
   Web3Provider,
 };
+export {
+  parseKaia,
+  parseKaiaUnits,
+  parseUnits,
+} from "@kaiachain/js-ext-core/ethers-v6";

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Account } from '../types';
 import { doSendTx } from '../util';
-import { parseKlay } from '@kaiachain/ethers-ext/v6';
+import { parseKaia } from '@kaiachain/ethers-ext/v6';
 
 type Props = {
   account: Account;
@@ -14,7 +14,7 @@ function LegacyVT({ account }: Props) {
   async function handleSubmit(e: any) {
     e.preventDefault();
     const toAddr = e.target.to.value;
-    const valuePeb = parseKlay(e.target.amount.value).toString();
+    const valuePeb = parseKaia(e.target.amount.value);
     const tx = {
       to: toAddr,
       value: valuePeb,

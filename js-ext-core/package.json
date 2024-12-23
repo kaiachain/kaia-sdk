@@ -12,6 +12,10 @@
     "./util": {
       "types": "./dist/util/index.d.ts",
       "default": "./dist/util/index.js"
+    },
+    "./ethers-v6": {
+      "types": "./dist/ethers-v6/index.d.ts",
+      "default": "./dist/ethers-v6/index.js"
     }
   },
   "files": [

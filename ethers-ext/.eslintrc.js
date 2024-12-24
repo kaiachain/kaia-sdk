@@ -33,17 +33,25 @@ module.exports = {
     "@typescript-eslint/ban-ts-comment": "off",
 
     // imports
-    "import/order": ["warn", {
-      "alphabetize": { "order": "asc", "caseInsensitive": true },
-      "pathGroups": [
-        { "pattern": "@kaiachain/**", "group": "parent", "position": "after" },
-      ],
-      "newlines-between": "always",
-      "pathGroupsExcludedImportTypes": ["@kaiachain/**"],
-    }],
+    "import/order": [
+      "warn",
+      {
+        alphabetize: { order: "asc", caseInsensitive: true },
+        pathGroups: [
+          { pattern: "@kaiachain/**", group: "parent", position: "after" },
+        ],
+        "newlines-between": "always",
+        pathGroupsExcludedImportTypes: ["@kaiachain/**"],
+      },
+    ],
     "import/no-unresolved": [
       "error", // eslint-plugin-import cannot resolve subpaths https://github.com/firebase/firebase-admin-node/discussions/1359
-      { ignore: ["^@kaiachain/js-ext-core/util$"] }
+      {
+        ignore: [
+          "^@kaiachain/js-ext-core/util$",
+          "^@kaiachain/js-ext-core/ethers-v6$",
+        ],
+      },
     ],
 
     // formatting

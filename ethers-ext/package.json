@@ -92,7 +92,7 @@
     "@ethersproject/wallet": "^5.7.0",
     "@ethersproject/web": "^5.7.1",
     "ethers6": "npm:ethers@^6.12.1",
-    "@kaiachain/js-ext-core": "^1.0.0",
+    "@kaiachain/js-ext-core": "^1.1.1",
     "@kaiachain/web3rpc": "^1.0.0",
     "lodash": "^4.17.21"
   }

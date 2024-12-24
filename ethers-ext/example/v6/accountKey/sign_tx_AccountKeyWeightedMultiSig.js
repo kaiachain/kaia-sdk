@@ -7,7 +7,7 @@ const {
   Wallet,
   TxType,
   AccountKeyType,
-  parseKlay,
+  parseKaia,
 } = require("@kaiachain/ethers-ext/v6");
 
 const senderAddr = "0x82c6a8d94993d49cfd0c1d30f0f8caa65782cc7e";
@@ -34,7 +34,7 @@ async function main() {
     type: TxType.ValueTransfer,
     from: senderAddr,
     to: recieverAddr,
-    value: parseKlay("0.01").toString(),
+    value: parseKaia("0.01"),
     gasLimit: 100000,
   };
 

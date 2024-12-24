@@ -26,5 +26,4 @@ export {
   parseKaia,
   parseKaiaUnits,
   parseUnits,
-// eslint-disable-next-line import/no-unresolved
 } from "@kaiachain/js-ext-core/ethers-v6";

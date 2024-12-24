@@ -3,7 +3,7 @@
 
 const ethers = require("ethers6");
 
-const { Wallet, TxType, parseKlay } = require("@kaiachain/ethers-ext/v6");
+const { Wallet, TxType, parseKaia } = require("@kaiachain/ethers-ext/v6");
 
 const recieverAddr = "0xc40b6909eb7085590e1c26cb3becc25368e249e9";
 const senderAddr = "0xa2a8854b1802d8cd5de631e690817c253d6a9153";
@@ -20,7 +20,7 @@ async function main() {
     type: TxType.ValueTransferMemo,
     from: senderAddr,
     to: recieverAddr,
-    value: parseKlay("0.01").toString(),
+    value: parseKaia("0.01"),
     data: "0x1234567890",
   };
 

@@ -21,3 +21,10 @@ export const providers = {
   JsonRpcProvider,
   Web3Provider,
 };
+// this will override parseKaia, parseKaiaUnits, parseUnits from line 2
+export {
+  parseKaia,
+  parseKaiaUnits,
+  parseUnits,
+// eslint-disable-next-line import/no-unresolved
+} from "@kaiachain/js-ext-core/ethers-v6";

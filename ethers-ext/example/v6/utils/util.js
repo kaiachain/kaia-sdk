@@ -4,9 +4,9 @@ const {
   getCompressedPublicKey,
   getSignatureTuple,
   formatKlayUnits,
-  parseKlayUnits,
+  parseKaiaUnits,
   formatKlay,
-  parseKlay,
+  parseKaia,
 } = require("@kaiachain/ethers-ext/v6");
 
 async function main() {
@@ -53,9 +53,9 @@ async function main() {
   console.log("transfer amount in klay =", formatKlay("1230000000000000000"));
   console.log(
     "example gas price in peb =",
-    parseKlayUnits("50", "ston").toString()
+    parseKaiaUnits("50", "ston")
   );
-  console.log("transfer amount in peb =", parseKlay("9.87").toString());
+  console.log("transfer amount in peb =", parseKaia("9.87"));
 }
 
 main();

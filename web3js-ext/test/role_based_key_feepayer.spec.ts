@@ -83,36 +83,73 @@ describe("Role-based Key Tests", function () {
         }
     });
 
-    // Test Case 3: Fee Delegated transaction signed by RoleFeePayer key (should succeed)
     it("3. Fee Delegated transaction signed by RoleTransaction and RoleFeePayer keys", async function () {
-        // Feedback 4. Create a new user account (different user than FeePayer)
         const userAccount = generateTemporaryAccount();
-
+    
         const feeDelegatedTx = {
             type: TxType.FeeDelegatedValueTransfer,
             from: userAccount.address,
             to: generateTemporaryAccount().address,
             value: toPeb("0.01"),
-            gasLimit: "100000", 
-            gasPrice: "25000000000", 
+            gasLimit: "100000",
+            gasPrice: "25000000000",
             nonce: "0x0",
-            chainId: "0x1001" 
+            chainId: "0x1001"
         };
-
-        // Feedback 4. User signs transaction first
+    
+        // 1) A User signs a transaction
         const signedTxByUser = await userAccount.signTransaction(feeDelegatedTx);
         assert.isNotNull(signedTxByUser.rawTransaction, "Transaction should be signed by User");
-
-        // Feedback 4. FeePayer adds an additional signature
+    
+        console.log("Signed Transaction by User (rawTransaction):", signedTxByUser.rawTransaction);
+    
         try {
-            const signedTxByFeePayer = await roleFeePayerAccount.signTransaction({
+            // 2) FeePayer signs a transaction
+            const feePayerSignInput = {
+                type: feeDelegatedTx.type,
+                from: feeDelegatedTx.from,
+                to: feeDelegatedTx.to,
+                value: feeDelegatedTx.value,
+                gasPrice: feeDelegatedTx.gasPrice,
+                gasLimit: feeDelegatedTx.gasLimit,
+                nonce: feeDelegatedTx.nonce,
+                chainId: feeDelegatedTx.chainId,
+                feePayer: roleFeePayerAccount.address,
                 senderRawTransaction: signedTxByUser.rawTransaction,
-                gasPrice: "25000000000",
-                gasLimit: "100000" 
-            });
+            };
+            console.log("FeePayer SignTransaction Input:", feePayerSignInput);
+    
+            const signedTxByFeePayer = await roleFeePayerAccount.signTransaction(feePayerSignInput);
             assert.isNotNull(signedTxByFeePayer.rawTransaction, "FeePayer should sign the transaction");
+    
+            console.log("Signed Transaction by FeePayer (rawTransaction):", signedTxByFeePayer.rawTransaction);
+    
+            // 3) RLP format check
+            if (!signedTxByFeePayer.rawTransaction.startsWith("0x")) {
+                console.error("Invalid rawTransaction format");
+            } else {
+                // 4) RLP Decoding
+                const { KlaytnTxFactory } = require("@kaiachain/web3js-ext");
+                const decoded = KlaytnTxFactory.fromRLP(signedTxByFeePayer.rawTransaction);
+                console.log("Decoded Transaction:", decoded);
+    
+                // feepayer field check
+                if (decoded.fields.feePayer) {
+                    console.log("Decoded feePayer Field:", decoded.fields.feePayer);
+                    // Check if feepayer and roleFeePayerAccount.address are the same
+                    assert.equal( 
+                        decoded.fields.feePayer.toLowerCase(),
+                        roleFeePayerAccount.address.toLowerCase(),
+                        "FeePayer address should match roleFeePayerAccount"
+                    );
+                } else {
+                    // Unsigned if the feePayer field itself is not present
+                    console.error("No feePayer field found in decoded transaction.");
+                    assert.fail("FeePayer address not found in the final transaction.");
+                }
+            }
         } catch (error: any) {
-            console.log("error is : ", error.message);
+            console.log("Error during FeePayer signing or decoding:", error.message);
             assert.fail("FeePayer failed to sign the already signed transaction.");
         }
     });
@@ -127,14 +164,14 @@ describe("Role-based Key Tests", function () {
             to: generateTemporaryAccount().address,
             value: toPeb("0.01"),
             gasLimit: 100000,
-            gasPrice: "25000000000", 
+            gasPrice: "25000000000",
             nonce: "0x0",
             chainId: "0x1001"
         };
 
         const signedTxByUser = await userAccount.signTransaction(feeDelegatedTx);
         assert.isNotNull(signedTxByUser.rawTransaction, "Transaction should be signed by User");
-        
+
         try {
             const signedTxByRoleTransaction = await roleTransactionAccount.signTransaction({
                 senderRawTransaction: signedTxByUser.rawTransaction,

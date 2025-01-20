@@ -1,11 +1,10 @@
-import { getAddress } from "@ethersproject/address";
 import { hexValue } from "@ethersproject/bytes";
 import { keccak256 } from "@ethersproject/keccak256";
 import { AccessList, parse as parseEthTransaction } from "@ethersproject/transactions";
-import _ from "lodash";
 
 import { FieldSet, FieldSetFactory, Fields } from "../field";
 import { HexStr, getTypePrefix, getSignatureTuple, SignatureLike, isKlaytnTxType, isFeePayerSigTxType, RLP, TxType } from "../util";
+import { forOwn } from "lodash-es";
 
 export abstract class KlaytnTx extends FieldSet {
   // A Klaytn Tx has 4 kinds of RLP encoding:
@@ -207,7 +206,7 @@ export function parseTransaction(rlp: string): ParsedTransaction {
       maxFeePerGas:         tx.maxFeePerGas ? hexValue(tx.maxFeePerGas) : undefined,
     };
     // Clean up 'explicit undefined' fields
-    _.forOwn(parsedTx, (value, key) => {
+    forOwn(parsedTx, (value, key) => {
       if (value === undefined) {
         delete (parsedTx as any)[key];
       }
@@ -237,7 +236,7 @@ export function parseTransaction(rlp: string): ParsedTransaction {
         feeRatio:           tx.feeRatio ? HexStr.toNumber(tx.feeRatio) : undefined,
       };
       // Clean up 'explicit undefined' fields
-      _.forOwn(parsedTx, (value, key) => {
+      forOwn(parsedTx, (value, key) => {
         if (value === undefined) {
           delete (parsedTx as any)[key];
         }

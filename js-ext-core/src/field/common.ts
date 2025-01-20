@@ -1,8 +1,8 @@
 import { getAddress } from "@ethersproject/address";
 import { BigNumber } from "@ethersproject/bignumber";
-import _ from "lodash";
 
 import { HexStr, SignatureLike, SignatureTuple, getSignatureTuple } from "../util";
+import { map } from "lodash-es";
 
 export class FieldError extends Error {
   constructor(ty: FieldType, name: string, value: any) {
@@ -109,7 +109,7 @@ export const FieldTypeBool = new class implements FieldType {
 // Canonical type: An array of [v,r,s] tuple
 export const FieldTypeSignatureTuples = new class implements FieldType {
   canonicalize(value: SignatureLike[]): SignatureTuple[] {
-    return _.map(value, getSignatureTuple);
+    return map(value, getSignatureTuple);
   }
 
   emptyValue(): SignatureTuple[] { return []; }

@@ -1,36 +1,39 @@
-import { hexValue } from "@ethersproject/bytes";
+import { FieldSetFactory, Fields } from "../field";
 
-import { FieldSet, FieldSetFactory, Fields } from "../field";
-import { AccountKeyType, HexStr, RLP, getTypePrefix, isKlaytnAccountKeyType } from "../util";
+import { AccountKeyType, HexStr, getTypePrefix, isKlaytnAccountKeyType } from "../util";
+import { AccountKey, AccountKeyFail, AccountKeyLegacy, AccountKeyNil, AccountKeyPublic, AccountKeyRoleBased, AccountKeyWeightedMultiSig } from "./accountkey";
 
-// A typed AccountKey for Kaia is a FieldSet.
-// https://docs.kaia.io/learn/accounts/
-export abstract class AccountKey extends FieldSet {
-  // RLP encoding for constructing AccountUpdate transactions.
-  abstract toRLP(): string;
-  // Set its own fields from an RLP encoded string.
-  abstract setFieldsFromRLP(rlp: string): void;
-}
 
-class _AccountKeyFactory extends FieldSetFactory<AccountKey> {
+
+export class AccountKeyFactory extends FieldSetFactory<AccountKey> {
   constructor() {
     const requiredFields = ["type"];
+
     super(requiredFields);
+
+    this.add(AccountKeyNil);
+    this.add(AccountKeyLegacy);
+    this.add(AccountKeyPublic);
+    this.add(AccountKeyFail);
+    this.add(AccountKeyWeightedMultiSig);
+    this.add(AccountKeyRoleBased);
   }
 
-  public fromObject(fields: Fields): AccountKey {
+  public static fromObject(fields: Fields): AccountKey {
     // In AccountKeyWeightedMultiSig, alias weightedPublicKeys -> keys for compatibility.
     // 'weightedPublicKeys' is used in caver and klaytn node.
     // 'keys' is used in this SDK.
     if (fields.type == AccountKeyType.WeightedMultiSig && fields.weightedPublicKeys) {
       fields.keys = fields.weightedPublicKeys;
     }
-    return super.fromObject(fields);
+    const factory = new AccountKeyFactory();
+    return factory.fromObject(fields);
   }
 
-  public fromRLP(rlp: string): AccountKey {
+  public static fromRLP(rlp: string): AccountKey {
+    const factory = new AccountKeyFactory();
     if (rlp == "0x80") { // special case without type prefix
-      return this.fromObject({ type: AccountKeyType.Nil });
+      return factory.fromObject({ type: AccountKeyType.Nil });
     }
 
     const type = getTypePrefix(rlp);
@@ -38,13 +41,12 @@ class _AccountKeyFactory extends FieldSetFactory<AccountKey> {
       throw new Error("Not a Klaytn account key");
     }
 
-    const ctor = this.lookup(type);
+    const ctor = factory.lookup(type);
     const instance = new ctor();
     instance.setFieldsFromRLP(rlp);
     return instance;
   }
 }
-export const AccountKeyFactory = new _AccountKeyFactory();
 
 export interface ParsedAccountKeyNil { type: AccountKeyType.Nil; }
 export interface ParsedAccountKeyLegacy { type: AccountKeyType.Legacy; }

@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "module": "commonjs",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "./dist",
+    "target": "ES2020",                  // Modern syntax for ESM
+    "module": "ESNext",                  // ESM output
+    "moduleResolution": "Node",
+    "declaration": true,                 // Generate `.d.ts` files for type declarations
+    "outDir": "./dist/esm",              // Output directory for ESM
+    "strict": true,                      // Enable strict type-checking
+    "esModuleInterop": true,             // Interoperability between CommonJS and ESM
+    "skipLibCheck": true,
     "rootDirs": ["./src"],
-    "strict": true,
-    "esModuleInterop": true
   },
   "exclude": ["dist", "example", "node_modules"],
   "include": ["./src"]

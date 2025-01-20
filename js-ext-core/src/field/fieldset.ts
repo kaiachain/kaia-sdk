@@ -1,5 +1,4 @@
-import _ from "lodash";
-
+import { forOwn, has, map } from "lodash-es";
 import { HexStr } from "../util";
 
 import { FieldTypes, Fields } from "./common";
@@ -44,7 +43,7 @@ export abstract class FieldSet {
   // Reset all fields from an object
   public setFields(obj: Fields): void {
     this.fields = {};
-    _.forOwn(this.fieldTypes, (fieldType, name) => {
+    forOwn(this.fieldTypes, (fieldType, name) => {
       if (obj[name] === undefined) {
         this.fields[name] = null;
         return;
@@ -87,7 +86,7 @@ export abstract class FieldSet {
 
   // Get many fields as an array
   public getFields(names: string[]): any[] {
-    return _.map(names, (name) => this.getField(name));
+    return map(names, (name) => this.getField(name));
   }
 
   public toObject(): Fields {
@@ -139,9 +138,9 @@ export class FieldSetFactory<T extends FieldSet> {
 
   public has(type?: any): boolean {
     if (HexStr.isHex(type)) {
-      return _.has(this.registry, HexStr.toNumber(type));
+      return has(this.registry, HexStr.toNumber(type));
     } else {
-      return _.has(this.registry, type);
+      return has(this.registry, type);
     }
   }
 

@@ -1,8 +1,6 @@
-import _ from "lodash";
-
-import { AccountKey, AccountKeyFactory } from "../accountkey";
-import { HexStr, RLP, getCompressedPublicKey, isEmbeddableAccountKeyType } from "../util";
-
+import { AccountKeyFactory } from "../accountkey";
+import { HexStr, getCompressedPublicKey, isEmbeddableAccountKeyType } from "../util";
+import { has, isArray, isString, map } from 'lodash-es'
 import { FieldType } from "./common";
 
 
@@ -29,18 +27,18 @@ export type WeightedPublicKey = [string, string];
 // ]
 export const FieldTypeWeightedPublicKeys = new class implements FieldType {
   canonicalize(value: any): WeightedPublicKey[] {
-    if (!_.isArray(value)) {
+    if (!isArray(value)) {
       throw new Error("Malformed WeightedPublicKeys");
     }
 
-    return _.map(value, (tupleOrObject: any) => {
-      if (_.isArray(tupleOrObject) && tupleOrObject.length == 2) {
+    return map(value, (tupleOrObject: any) => {
+      if (isArray(tupleOrObject) && tupleOrObject.length == 2) {
         const tuple = tupleOrObject;
         return [
           HexStr.fromNumber(tuple[0]),
           getCompressedPublicKey(tuple[1])
         ] as WeightedPublicKey;
-      } else if (_.has(tupleOrObject, "weight") && _.has(tupleOrObject, "key")) {
+      } else if (has(tupleOrObject, "weight") && has(tupleOrObject, "key")) {
         const object = tupleOrObject;
         return [
           HexStr.fromNumber(object.weight),
@@ -49,7 +47,7 @@ export const FieldTypeWeightedPublicKeys = new class implements FieldType {
       } else {
         throw new Error("Malformed WeightedPublicKeys");
       }
-    }) ;
+    });
   }
 
   emptyValue(): WeightedPublicKey[] { return []; }
@@ -66,12 +64,12 @@ export const FieldTypeWeightedPublicKeys = new class implements FieldType {
 // ]
 export const FieldTypeAccountKeyList = new class implements FieldType {
   canonicalize(value: any): string[] {
-    if (!_.isArray(value)) {
+    if (!isArray(value)) {
       throw new Error("Malformed RoleBasedKeys");
     }
 
-    return _.map(value, (elem: any) => {
-      if (_.isString(elem) && HexStr.isHex(elem)) { // pass RLP format
+    return map(value, (elem: any) => {
+      if (isString(elem) && HexStr.isHex(elem)) { // pass RLP format
         return elem;
       } else { // encode JS object format
         const accountKey = AccountKeyFactory.fromObject(elem);
@@ -92,7 +90,7 @@ export const FieldTypeAccountKeyList = new class implements FieldType {
 // "0x02a103e4a01407460c1c03ac0c82fd84f303a699b210c0b054f4aff72ff7dcdf01512d",
 export const FieldTypeAccountKey = new class implements FieldType {
   canonicalize(value: any): string {
-    if (_.isString(value) && HexStr.isHex(value)) { // pass RLP format
+    if (isString(value) && HexStr.isHex(value)) { // pass RLP format
       return value;
     } else { // encode JS object format
       return AccountKeyFactory.fromObject(value).toRLP();

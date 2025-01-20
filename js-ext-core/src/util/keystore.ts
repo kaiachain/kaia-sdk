@@ -1,7 +1,8 @@
 // js-ext-core does not provide keystore decryption function
 // to make the library slim. Decrypting the splitted keystore JSON
 // shall be done outside this library.
-import _ from "lodash";
+
+import { flattenDepth, isArray, isNumber, map } from "lodash-es";
 
 // Cipher is an opaque structure to be passed down to decryption library.
 type EncryptedKey = any;
@@ -41,18 +42,18 @@ interface KeystoreKIP3 {
 export function splitKeystoreKIP3(json: string, deleteAddress: boolean = true): string[] {
   const data: KeystoreKIP3 = JSON.parse(json);
   const keyring = data.keyring;
-  if (!_.isArray(keyring)) {
+  if (!isArray(keyring)) {
     throw new Error("Invalid KIP-3 JSON wallet");
   }
 
   let cryptos: any[] = [];
-  if (!_.isArray(keyring[0])) {
-    cryptos = _.flattenDepth(keyring, 1);
+  if (!isArray(keyring[0])) {
+    cryptos = flattenDepth(keyring, 1);
   } else {
-    cryptos = _.flattenDepth(keyring, 2);
+    cryptos = flattenDepth(keyring, 2);
   }
 
-  return _.map(cryptos, (crypto) => {
+  return map(cryptos, (crypto) => {
     const v3: KeystoreV3 = {
       version: 3,
       crypto: crypto,
@@ -77,5 +78,5 @@ export function isKIP3Json(json: string): boolean {
   } catch {
     return false;
   }
-  return _.isNumber(data.version) && (data.version == 4) && _.isArray(data.keyring);
+  return isNumber(data.version) && (data.version == 4) && isArray(data.keyring);
 }

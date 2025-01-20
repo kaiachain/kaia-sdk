@@ -2,7 +2,7 @@
 
 import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
 import { parseUnits as parseEthUnits, formatUnits as formatEthUnits } from "@ethersproject/units";
-import _ from "lodash";
+import { isString } from "lodash-es";
 
 // All in lowercase. The ambiguity between mKLAY and MKLAY is resolved in getKlayDecimals.
 const names: { [key: string]: number } = {
@@ -29,7 +29,7 @@ const names: { [key: string]: number } = {
 // Returns the decimal corresponding the unitName.
 // If not found, returns undefined.
 function getKlayDecimals(unitName?: string | BigNumberish): number | undefined {
-  if (_.isString(unitName)) {
+  if (isString(unitName)) {
     const lower = unitName.toLowerCase();
 
     // mKLAY and MKLAY are different
@@ -55,7 +55,7 @@ export function formatKlayUnits(value: BigNumberish, unitName?: string | BigNumb
   } else {
     // Fallback to Eth units and raw numbers.
     // Though parseEthUnits rejects uppercase, we allow it here for consistency with getKlayDecimals.
-    if (_.isString(unitName)) {
+    if (isString(unitName)) {
       unitName = unitName.toLowerCase();
     }
     return formatEthUnits(value, unitName);
@@ -71,7 +71,7 @@ export function parseKlayUnits(value: string, unitName?: string | BigNumberish):
   } else {
     // Fallback to Eth units and raw numbers.
     // Though parseEthUnits rejects uppercase, we allow it here for consistency with getKlayDecimals.
-    if (_.isString(unitName)) {
+    if (isString(unitName)) {
       unitName = unitName.toLowerCase();
     }
     return parseEthUnits(value, unitName);

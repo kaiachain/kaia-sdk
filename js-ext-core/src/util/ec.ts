@@ -1,8 +1,8 @@
 import { SignatureLike as EthersSignatureLike, Signature, splitSignature } from "@ethersproject/bytes";
 import { ec } from "elliptic";
-import _ from "lodash";
 
 import { HexStr } from "./data";
+import { isArray, isString } from "lodash-es";
 
 const secp256k1 = new ec("secp256k1");
 
@@ -20,7 +20,7 @@ export function getCompressedPublicKey(pub: any): string {
     pub = HexStr.from(pub);
   }
 
-  if (_.isString(pub)) { // Hex string
+  if (isString(pub)) { // Hex string
     const hex = HexStr.from(HexStr.withHexPrefix(pub));
     if (HexStr.isHex(hex, 33) || HexStr.isHex(hex, 65)) {
       const serialized = HexStr.stripHexPrefix(hex);
@@ -29,7 +29,7 @@ export function getCompressedPublicKey(pub: any): string {
     }
   }
 
-  if (_.isString(pub.x) && _.isString(pub.y)) {
+  if (isString(pub.x) && isString(pub.y)) {
     pub.x = HexStr.stripHexPrefix(pub.x);
     pub.y = HexStr.stripHexPrefix(pub.y);
     const pubkey = secp256k1.keyFromPublic(pub);
@@ -69,7 +69,7 @@ export type SignatureLike =
 export function getSignatureTuple(sig: SignatureLike): SignatureTuple {
   // Pass through splitSignature() for sanity check
   let obj: Signature;
-  if (_.isArray(sig)) {
+  if (isArray(sig)) {
     if (sig.length != 3) {
       throw new Error("Signature tuple must have 3 elements [v,r,s]");
     }
@@ -92,12 +92,12 @@ export function getSignatureTuple(sig: SignatureLike): SignatureTuple {
 // It works because Klaytn TxType signatures are always EIP-155.
 // Returns undefined if chainId cannot be extracted. Use other methods like RPC to get chainId.
 export function getChainIdFromSignatureTuples(signatures?: any[]): number | undefined {
-  if (!_.isArray(signatures) || signatures.length == 0) {
+  if (!isArray(signatures) || signatures.length == 0) {
     return undefined;
   }
 
   const signature = signatures[0];
-  if (!_.isArray(signature) || signature.length != 3) {
+  if (!isArray(signature) || signature.length != 3) {
     return undefined;
   }
 

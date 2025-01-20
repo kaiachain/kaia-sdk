@@ -1,6 +1,4 @@
-import { BigNumber } from "@ethersproject/bignumber";
 import { assert } from "chai";
-import _ from "lodash";
 import { describe, it } from "mocha";
 
 import {
@@ -29,6 +27,7 @@ import {
   parseTransaction,
   ParsedTransaction,
 } from "../src";
+import { clone, each } from "lodash-es";
 
 interface TestCase {
   clazz: typeof KlaytnTx,
@@ -627,11 +626,11 @@ describe("KlaytnTxFactory", () => {
   describe("without any signatures", () => {
     for (const tc of testcases) {
       it(tc.clazz.typeName, () => {
-        const object = _.clone(tc.object);
+        const object = clone(tc.object);
         delete object.txSignatures;
         delete object.feePayerSignatures;
 
-        const canonical = _.clone(tc.canonical);
+        const canonical = clone(tc.canonical);
         canonical.txSignatures = null;
         if (canonical.feePayerSignatures) {
           canonical.feePayerSignatures = null;
@@ -653,10 +652,10 @@ describe("KlaytnTxFactory", () => {
         continue;
       }
       it(tc.clazz.typeName, () => {
-        const object = _.clone(tc.object);
+        const object = clone(tc.object);
         delete object.feePayerSignatures;
 
-        const canonical = _.clone(tc.canonical);
+        const canonical = clone(tc.canonical);
         canonical.feePayerSignatures = null;
 
         // Object -> RLP
@@ -681,8 +680,8 @@ describe("KlaytnTxFactory", () => {
   describe("with all signatures", () => {
     for (const tc of testcases) {
       it(tc.clazz.typeName, () => {
-        const object = _.clone(tc.object);
-        const canonical = _.clone(tc.canonical);
+        const object = clone(tc.object);
+        const canonical = clone(tc.canonical);
 
         // Object -> RLP
         const tx = KlaytnTxFactory.fromObject(object);
@@ -719,7 +718,7 @@ describe("KlaytnTxFactory", () => {
       TxType.FeeDelegatedSmartContractDeployWithRatio,
       TxType.FeeDelegatedSmartContractExecutionWithRatio,
     ];
-    _.each(typesWithInput, (type) => {
+    each(typesWithInput, (type) => {
       assert.equal(KlaytnTxFactory.fromObject({ type, input: "0x6162" }).getField("data"), "0x6162");
       assert.equal(KlaytnTxFactory.fromObject({ type, data: "0x6162" }).getField("data"), "0x6162");
     });
@@ -731,7 +730,7 @@ describe("KlaytnTxFactory", () => {
       TxType.FeeDelegatedSmartContractDeploy,
       TxType.FeeDelegatedSmartContractDeployWithRatio,
     ];
-    _.each(deployTypes, (type) => {
+    each(deployTypes, (type) => {
       assert.equal(KlaytnTxFactory.fromObject({ type, to: null }).getField("to"), "0x");
       assert.equal(KlaytnTxFactory.fromObject({ type, to: "0x" }).getField("to"), "0x");
       assert.equal(KlaytnTxFactory.fromObject({ type, to: "0x0000000000000000000000000000000000000000" }).getField("to"), "0x");

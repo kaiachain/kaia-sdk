@@ -1,21 +1,25 @@
 {
   "name": "@kaiachain/js-ext-core",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "default": "./dist/cjs/index.js"
     },
     "./util": {
-      "types": "./dist/util/index.d.ts",
-      "default": "./dist/util/index.js"
+      "types": "./dist/esm/util/index.d.ts",
+      "import": "./dist/esm/util/index.js",
+      "default": "./dist/cjs/util/index.js"
     },
     "./ethers-v6": {
-      "types": "./dist/ethers-v6/index.d.ts",
-      "default": "./dist/ethers-v6/index.js"
+      "types": "./dist/esm/ethers-v6/index.d.ts",
+      "import": "./dist/esm/ethers-v6/index.js",
+      "default": "./dist/cjs/ethers-v6/index.js"
     }
   },
   "files": [
@@ -23,19 +27,19 @@
     "./src"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc --project tsconfig.cjs.json",
     "watch": "tsc -w",
     "lint": "npm run lint:check",
     "lint:check": "eslint example src test --cache --quiet",
     "lint:fix": "eslint example src test --cache --fix",
-    "test": "mocha --timeout 10000 -r ts-node/register \"test/**/*.ts\"",
+    "test": "mocha --timeout 10000 \"test/**/*.ts\"",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@types/chai": "^4.3.4",
     "@types/chai-as-promised": "^7.1.5",
     "@types/elliptic": "^6.4.16",
-    "@types/lodash": "^4.14.199",
+    "@types/lodash-es": "^4.17.12",
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.8.10",
     "@typescript-eslint/eslint-plugin": "^6.1.0",
@@ -45,6 +49,7 @@
     "eslint-plugin-import": "^2.27.5",
     "mocha": "^10.2.0",
     "ts-node": "^10.9.1",
+    "tsx": "^4.19.2",
     "typescript": "^5.0.4",
     "web3-utils": "^4.1.0"
   },
@@ -56,6 +61,6 @@
     "@ethersproject/transactions": "^5.7.0",
     "@ethersproject/units": "^5.7.0",
     "elliptic": "^6.5.4",
-    "lodash": "^4.17.21"
+    "lodash-es": "^4.17.21"
   }
 }

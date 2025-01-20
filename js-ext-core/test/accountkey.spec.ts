@@ -1,5 +1,4 @@
 import { assert } from "chai";
-import _ from "lodash";
 import { describe, it } from "mocha";
 
 import {
@@ -14,6 +13,7 @@ import {
   parseAccountKey,
   AccountKeyType,
 } from "../src";
+import { clone } from "lodash-es";
 
 interface TestCase {
   title?: string,
@@ -115,7 +115,7 @@ const testcases: TestCase[] = [
 describe("AccountKeyFactory", () => {
   for (const tc of testcases) {
     it(tc.clazz.name, () => {
-      const object = _.clone(tc.object);
+      const object = clone(tc.object);
 
       const key = AccountKeyFactory.fromObject(object);
       // In some typescript version, the following error “Cannot assign an abstract constructor type to a non-abstract constructor type.” occurs in the line below.

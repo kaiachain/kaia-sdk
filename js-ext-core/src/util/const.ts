@@ -1,5 +1,4 @@
-import _ from "lodash";
-
+import { camelCase, get, has, isNumber, isString, snakeCase, upperFirst } from "lodash-es";
 import { HexStr } from "./data";
 
 // Klaytn Type Enumeration
@@ -42,11 +41,11 @@ export function parseTxType(type?: TxTypeLike): number {
     type = Number(type);
   }
 
-  if (_.isNumber(type)) {
+  if (isNumber(type)) {
     return type;
   }
 
-  if (_.isString(type) && type.length > 0) {
+  if (isString(type) && type.length > 0) {
     // Try the hex string, e.g. "0x08"
     if (HexStr.isHex(type)) {
       return HexStr.toNumber(type);
@@ -57,9 +56,9 @@ export function parseTxType(type?: TxTypeLike): number {
     if (name.startsWith("TxType")) {
       name = name.substring(6);
     }
-    name = _.upperFirst(_.camelCase(name));
-    if (_.has(TxType, name)) {
-      return _.get(TxType, name);
+    name = upperFirst(camelCase(name));
+    if (has(TxType, name)) {
+      return get(TxType, name);
     }
   }
 
@@ -75,7 +74,7 @@ export function getKaikasTxType(type?: TxTypeLike): number | string | undefined 
     return num;
   } else {
     const name = TxType[num];
-    return _.snakeCase(name).toUpperCase();
+    return snakeCase(name).toUpperCase();
   }
 }
 

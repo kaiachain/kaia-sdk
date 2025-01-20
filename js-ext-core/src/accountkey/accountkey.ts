@@ -1,10 +1,15 @@
-import _ from "lodash";
 
-import { FieldTypeAccountKeyList, FieldTypeCompressedPubKey, FieldTypeUint32, FieldTypeUint8, FieldTypeWeightedPublicKeys } from "../field";
+import { FieldSet, FieldTypeAccountKeyList, FieldTypeCompressedPubKey, FieldTypeUint32, FieldTypeUint8, FieldTypeWeightedPublicKeys } from "../field";
 import { AccountKeyType, HexStr, RLP } from "../util";
 
-import { AccountKey } from "./factory";
-
+// A typed AccountKey for Kaia is a FieldSet.
+// https://docs.kaia.io/learn/accounts/
+export abstract class AccountKey extends FieldSet {
+  // RLP encoding for constructing AccountUpdate transactions.
+  abstract toRLP(): string;
+  // Set its own fields from an RLP encoded string.
+  abstract setFieldsFromRLP(rlp: string): void;
+}
 // https://docs.kaia.io/learn/accounts/#accountkeynil-
 export class AccountKeyNil extends AccountKey {
   static type = AccountKeyType.Nil;

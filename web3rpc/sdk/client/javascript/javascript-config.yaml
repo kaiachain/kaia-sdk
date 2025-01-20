@@ -2,14 +2,17 @@ generatorName: web3rpc-javascript
 outputDir: ./openapi
 inputSpec: ../../../rpc-specs/namespaces/all-except-eth.yaml
 projectName: "@kaiachain/web3rpc"
-projectVersion: "1.0.1"
+projectVersion: "1.2.0"
 templateDir: ./template
 sortParamsByRequiredFlag: false
 globalProperties:
   apiDocs: false
   modelDocs: false
   modelTests: false
-  apiTests: true
+  apiTests: false
+  # only generate apis, skip models.
+  supportingFiles: ''
+  apis: ''
 inlineSchemaNameMappings:
   accountCreated_default_response: AccountCreatedResponse
   getRewards_default_response: GetRewardsResponse

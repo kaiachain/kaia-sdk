@@ -32,7 +32,7 @@
     "lint": "npm run lint:check",
     "lint:check": "eslint example src test --cache --quiet",
     "lint:fix": "eslint example src test --cache --fix",
-    "test": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha --timeout 10000 -r ts-node/register  \"test/**/*.ts\"",
+    "test": "mocha --timeout 10000 \"test/**/*.ts\"",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
@@ -49,6 +49,7 @@
     "eslint-plugin-import": "^2.27.5",
     "mocha": "^10.2.0",
     "ts-node": "^10.9.1",
+    "tsx": "^4.19.2",
     "typescript": "^5.0.4",
     "web3-utils": "^4.1.0"
   },

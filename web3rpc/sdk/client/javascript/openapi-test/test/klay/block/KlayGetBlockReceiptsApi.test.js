@@ -16,7 +16,7 @@ describe('Klay getBlockRecepts API', () => {
             }
             done();
         };
-        const blockHash = '0xba647d41423faeebe8a7c64737d284fc2eba6f0388a3e1ebf6243db509ec1577'
+        const blockHash = '0xed73ee743baee254c36b3a813006f36edd8f7183f6743baa5dfe1245f1092f0c'
         sdk.klay.getBlockReceipts(blockHash, {}, callbackOne);
     });
 });

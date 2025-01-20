@@ -1,35 +1,33 @@
 {{>licenseInfo}}
 
 {{! NOTE-Klaytn: The "optional" parameter must present in the JSON-RPC body anyway. Hence they are actually "required".
-    Instead of marking them required in the YAML spec, we handle them in the generated code. It is JavaScript specific problem.
+    Instead of marking them required in the YAML spec, we handle them in the generated code. It is a JavaScript-specific problem.
 
-    Because how openapi-generator works, we have to take out the optional parameters from the "opts".
+    Because of how openapi-generator works, we have to take out the optional parameters from the "opts".
     See https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator/src/main/java/org/openapitools/codegen/languages/JavascriptClientCodegen.java
     and https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator/src/main/resources/Javascript/libraries/javascript/api.mustache
 
-    Unlike the original openapi-generator, the "opts" can be an Object or an Array for convenience of @kaiachain/js-ext-core:promisifyMethod.
+    Unlike the original openapi-generator, the "opts" can be an Object or an Array for the convenience of @kaiachain/js-ext-core:promisifyMethod.
     See https://github.com/klaytn/web3klaytn/blob/main/js-ext-core/src/util/openapi.ts }}
 
 {{=< >=}}
 import ApiClient from "../ApiClient";
-<#imports>import <&import> from '../<#modelPackage><&modelPackage>/</modelPackage><import>';
-</imports>
 
 <#emitJSDoc>/**
-* <baseName> service.
-* @module <#invokerPackage><&invokerPackage>/</invokerPackage><#apiPackage><&apiPackage>/</apiPackage><classname>
-* @version <&projectVersion>
-*/</emitJSDoc>
+ * <baseName> service.
+ * @module <#invokerPackage><&invokerPackage>/</invokerPackage><#apiPackage><&apiPackage>/</apiPackage><classname>
+ * @version <&projectVersion>
+ */</emitJSDoc>
 export default class <&classname> {
 
     <#emitJSDoc>/**
-    * Constructs a new <&classname>. <#description>
-    * <description></description>
-    * @alias module:<#invokerPackage><&invokerPackage>/</invokerPackage><#apiPackage><&apiPackage>/</apiPackage><classname>
-    * @class
-    * @param {module:<#invokerPackage><&invokerPackage>/</invokerPackage>ApiClient} [apiClient] Optional API client implementation to use,
-    * default to {@link module:<#invokerPackage><&invokerPackage>/</invokerPackage>ApiClient#instance} if unspecified.
-    */</emitJSDoc>
+     * Constructs a new <&classname>. <#description>
+     * <description></description>
+     * @alias module:<#invokerPackage><&invokerPackage>/</invokerPackage><#apiPackage><&apiPackage>/</apiPackage><classname>
+     * @class
+     * @param {module:<#invokerPackage><&invokerPackage>/</invokerPackage>ApiClient} [apiClient] Optional API client implementation to use,
+     * default to {@link module:<#invokerPackage><&invokerPackage>/</invokerPackage>ApiClient#instance} if unspecified.
+     */</emitJSDoc>
     constructor(apiClient) {
         this.apiClient = apiClient || ApiClient.instance;
     }
@@ -39,7 +37,6 @@ export default class <&classname> {
      * Callback function to receive the result of the <&operationId> operation.
      * @callback module:<#invokerPackage><&invokerPackage>/</invokerPackage><#apiPackage><&apiPackage>/</apiPackage><&classname>~<&operationId>Callback
      * @param {String} error Error message, if any.
-     * @param <#vendorExtensions.x-jsdoc-type>{<&vendorExtensions.x-jsdoc-type>} data The data returned by the service call.</vendorExtensions.x-jsdoc-type><^vendorExtensions.x-jsdoc-type>data This operation does not return a value.</vendorExtensions.x-jsdoc-type>
      * @param {String} response The complete HTTP response.
      */</usePromises>
 
@@ -49,50 +46,58 @@ export default class <&classname> {
      * @param {<&vendorExtensions.x-jsdoc-type>} <&paramName> <&description></required></allParams><#hasOptionalParams>
      * @param {Object} opts Optional parameters<#allParams><^required>
      * @param {<&vendorExtensions.x-jsdoc-type>} opts.<&paramName> <&description><#defaultValue> (default to <&.>)</defaultValue></required></allParams></hasOptionalParams><^usePromises>
-     * @param {module:<#invokerPackage><&invokerPackage>/</invokerPackage><#apiPackage><&apiPackage>/</apiPackage><&classname>~<&operationId>Callback} callback The callback function, accepting three arguments: error, data, response<#returnType>
-     * data is of type: {@link <&vendorExtensions.x-jsdoc-type>}</returnType></usePromises><#usePromises>
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}<#returnType>, with an object containing data of type {@link <&vendorExtensions.x-jsdoc-type>} and HTTP response</returnType><^returnType>, with an object containing HTTP response</returnType></usePromises>
+     * @param {module:<#invokerPackage><&invokerPackage>/</invokerPackage><#apiPackage><&apiPackage>/</apiPackage><&classname>~<&operationId>Callback} callback The callback function, accepting three arguments: error, data, response
+     * </usePromises>
      */
-</emitJSDoc>    <operationId><#usePromises>WithHttpInfo</usePromises>(<vendorExtensions.x-codegen-arg-list>) {
-      <#vendorExtensions.x-codegen-has-optional-params>
-      opts = opts || {};
-      </vendorExtensions.x-codegen-has-optional-params>
+</emitJSDoc>    
+    <operationId><#usePromises>WithHttpInfo</usePromises>(<vendorExtensions.x-codegen-arg-list>) {
+        <#vendorExtensions.x-codegen-has-optional-params>
+        opts = opts || {};
+        </vendorExtensions.x-codegen-has-optional-params>
 <#allParams>
 <#required>
-      // verify the required parameter '<paramName>' is set
-      if (<paramName> === undefined || <paramName> === null) {
-        throw new Error("Missing the required parameter '<paramName>' when calling <operationId>");
-      }
+        // verify the required parameter '<paramName>' is set
+        if (<paramName> === undefined || <paramName> === null) {
+            throw new Error("Missing the required parameter '<paramName>' when calling <operationId>");
+        }
 </required>
 </allParams>
 
-      let postBody = <#bodyParam>new <dataType>(undefined, undefined, undefined)</bodyParam>;
-      let optsIndex = 0;
-      postBody.params = [];
-      <#queryParams>
-        <#required>
-          postBody.params.push(<paramName>);</required>
+        let optsIndex = 0;
+        const postBody = {};
+        
+        <#tags>
+        postBody['method'] = "<&name>_<operationId>";
+        </tags>
+        postBody['id'] = 1;
+        postBody['jsonrpc'] = '2.0';
+        postBody['params'] = [];
+        
+    <#queryParams>
+    <#required>
+        postBody.params.push(<paramName>);</required>
         <^required>
-          var defaultValue = null;
-          <#vendorExtensions.x-default-latest>defaultValue = "latest";</vendorExtensions.x-default-latest>
-          <#vendorExtensions.x-default-emptyobj>defaultValue = {};</vendorExtensions.x-default-emptyobj>
+        var defaultValue = null;
+        <#vendorExtensions.x-default-latest>defaultValue = "latest";</vendorExtensions.x-default-latest>
+        <#vendorExtensions.x-default-emptyobj>defaultValue = {};</vendorExtensions.x-default-emptyobj>
 
-          var optParam = opts['<paramName>'] || opts[optsIndex++] || defaultValue;
-          if (optParam === undefined || optParam === null) {
+        var optParam = opts['<paramName>'] || opts[optsIndex++] || defaultValue;
+        if (optParam === undefined || optParam === null) {
             throw new Error("Missing the required parameter '<paramName>' when calling <operationId>");
-          }
-          postBody.params.push(optParam);
-        </required>
-      </queryParams>
+        }
+        postBody.params.push(optParam);
+    </required>
+    </queryParams>
 
-      let authNames = [<#authMethods>'<name>'<^-last>, </-last></authMethods>];
-      let contentTypes = [<#consumes>'<& mediaType>'<^-last>, </-last></consumes>];
-      let accepts = [<#produces>'<& mediaType>'<^-last>, </-last></produces>];
-      let returnType = <#vendorExtensions.x-return-type><&vendorExtensions.x-return-type></vendorExtensions.x-return-type><^vendorExtensions.x-return-type>null</vendorExtensions.x-return-type>;
-      return this.apiClient.callApi(
-        '<&path>', '<httpMethod>', null, null, null, null,
-        postBody, authNames, contentTypes, accepts, returnType, null<^usePromises>, callback</usePromises>
-      );
+        let authNames = [<#authMethods>'<name>'<^-last>, </-last></authMethods>];
+        let contentTypes = [<#consumes>'<& mediaType>'<^-last>, </-last></consumes>];
+        let accepts = [<#produces>'<& mediaType>'<^-last>, </-last></produces>];
+        let returnType = "object";
+        
+        return this.apiClient.callApi(
+            '<&path>', '<httpMethod>', null, null, null, null,
+            postBody, authNames, contentTypes, accepts, returnType, null<^usePromises>, callback</usePromises>
+        );
     }
 <#usePromises>
 <#emitJSDoc>
@@ -103,16 +108,15 @@ export default class <&classname> {
      * @param {<&vendorExtensions.x-jsdoc-type>} <&paramName> <&description></required></allParams><#hasOptionalParams>
      * @param {Object} opts Optional parameters<#allParams><^required>
      * @param {<&vendorExtensions.x-jsdoc-type>} opts.<&paramName> <&description><#defaultValue> (default to <&.>)</defaultValue></required></allParams></hasOptionalParams><^usePromises>
-     * @param {module:<#invokerPackage><&invokerPackage>/</invokerPackage><#apiPackage><&apiPackage>/</apiPackage><&classname>~<&operationId>Callback} callback The callback function, accepting three arguments: error, data, response<#returnType>
-     * data is of type: {@link <&vendorExtensions.x-jsdoc-type>}</returnType></usePromises><#usePromises>
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}<#returnType>, with data of type {@link <&vendorExtensions.x-jsdoc-type>}</returnType></usePromises>
+     * @param {module:<#invokerPackage><&invokerPackage>/</invokerPackage><#apiPackage><&apiPackage>/</apiPackage><&classname>~<&operationId>Callback} callback The callback function, accepting three arguments: error, data, response
+     * </usePromises>
      */
 </emitJSDoc>
     <operationId>(<vendorExtensions.x-codegen-arg-list>) {
-      return this.<operationId>WithHttpInfo(<vendorExtensions.x-codegen-arg-list>)
-        .then(function(response_and_data) {
-          return response_and_data.data;
-        });
+        return this.<operationId>WithHttpInfo(<vendorExtensions.x-codegen-arg-list>)
+            .then(function(response_and_data) {
+                return response_and_data.data;
+            });
     }
 </usePromises>
 </operation></operations>

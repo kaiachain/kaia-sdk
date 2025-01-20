@@ -9,7 +9,10 @@ globalProperties:
   apiDocs: false
   modelDocs: false
   modelTests: false
-  apiTests: true
+  apiTests: false
+  # only generate apis, skip models.
+  supportingFiles: ''
+  apis: ''
 inlineSchemaNameMappings:
   accountCreated_default_response: AccountCreatedResponse
   getRewards_default_response: GetRewardsResponse

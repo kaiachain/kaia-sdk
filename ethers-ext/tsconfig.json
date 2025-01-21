@@ -1,16 +1,23 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "target": "ES2020",
+    "module": "ES2020",
+    "moduleResolution": "bundler",
     "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "./dist",
-    "rootDirs": ["./src", "./test"],
+    "outDir": "./dist/esm",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "rootDirs": [
+      "./src"
+    ],
   },
-  "exclude": ["dist", "example", "node_modules"],
-  "include": ["./src"]
+  "exclude": [
+    "dist",
+    "example",
+    "node_modules"
+  ],
+  "include": [
+    "./src"
+  ]
 }

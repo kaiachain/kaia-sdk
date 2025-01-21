@@ -1,6 +1,6 @@
 {
   "name": "@kaiachain/ethers-ext",
-  "version": "1.1.1",
+  "version": "1.1.0",
   "license": "MIT",
   "description": "ethers.js extension for kaia blockchain",
   "keywords": [
@@ -19,20 +19,24 @@
     "type": "git",
     "url": "https://github.com/kaiachain/kaia-sdk"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "types": "dist/esm/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "default": "./dist/cjs/index.js"
     },
     "./v5": {
-      "types": "./dist/v5/index.d.ts",
-      "default": "./dist/v5/index.js"
+      "types": "./dist/esm/v5/index.d.ts",
+      "import": "./dist/esm/v5/index.js",
+      "default": "./dist/cjs/v5/index.js"
     },
     "./v6": {
-      "types": "./dist/v6/index.d.ts",
-      "default": "./dist/v6/index.js"
+      "types": "./dist/esm/v6/index.d.ts",
+      "import": "./dist/esm/v6/index.js",
+      "default": "./dist/cjs/v6/index.js"
     }
   },
   "files": [
@@ -41,13 +45,13 @@
   ],
   "scripts": {
     "build": "npm run build:esm && npm run build:bundle",
-    "build:esm": "tsc",
+    "build:esm": "tsc && tsc -p tsconfig.cjs.json",
     "build:bundle": "webpack --mode production",
     "watch": "tsc -w",
     "lint": "npm run lint:check",
     "lint:check": "eslint example src test --cache --quiet",
     "lint:fix": "eslint example src test --cache --fix",
-    "test": "mocha --timeout 50000 -r ts-node/register \"test/**/*.ts\"",
+    "test": "mocha --timeout 50000 \"test/**/*.ts\"",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
@@ -66,6 +70,7 @@
     "mocha": "^10.2.0",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.1",
+    "tsx": "^4.19.2",
     "typedoc": "^0.25.4",
     "typescript": "^5.0.4",
     "webpack": "^5.89.0",
@@ -91,9 +96,9 @@
     "@ethersproject/transactions": "^5.7.0",
     "@ethersproject/wallet": "^5.7.0",
     "@ethersproject/web": "^5.7.1",
+    "@kaiachain/web3rpc": "^1.2.0",
+    "@kaiachain/js-ext-core": "^1.2.0",
     "ethers6": "npm:ethers@^6.12.1",
-    "@kaiachain/js-ext-core": "^1.1.1",
-    "@kaiachain/web3rpc": "^1.0.0",
     "lodash": "^4.17.21"
   }
 }

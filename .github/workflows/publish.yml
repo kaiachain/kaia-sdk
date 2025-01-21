@@ -60,7 +60,8 @@ jobs:
             web3py-ext:
               - "web3py-ext/setup.py"
             web3rpc:
-              - "web3rpc/rpc-specs/**"
+              - "web3rpc/sdk/client/java/java-config.yaml"
+              - "web3rpc/sdk/client/javascript/javascript-config.yaml"
             js-ext-core: 
               - "js-ext-core/package.json"
 

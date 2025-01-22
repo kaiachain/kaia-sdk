@@ -2,6 +2,9 @@
 
 Sub-components of Klaytn JavaScript SDKs.
 
+> **_NOTE:_**
+> @kaiachain/js-ext-core@^1.2.0 recommends node 22 or later if you have issues with ES Module resolution.
+
 For dApp developers and blockchain users, use the SDKs like [@kaiachain/ethers-ext](https://www.npmjs.com/package/@kaiachain/ethers-ext) and [@kaiachain/web3js-ext](https://www.npmjs.com/package/@kaiachain/web3js-ext).
 
 - `FieldSetFactory` to easily build custom RLP-encodable types

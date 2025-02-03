@@ -9,8 +9,8 @@ import {
   FieldTypeUint8
 } from "../field";
 import { TxType } from "../util";
+import { KlaytnTx } from "./abstract";
 
-import { KlaytnTx } from "./factory";
 
 // https://docs.kaia.io/learn/transactions/basic#txtypevaluetransfer-
 export class TxTypeValueTransfer extends KlaytnTx {

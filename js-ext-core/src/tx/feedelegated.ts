@@ -8,9 +8,9 @@ import {
   FieldTypeUint64,
   FieldTypeUint8
 } from "../field";
-import { RLP, TxType } from "../util";
+import {  TxType } from "../util";
+import { KlaytnTx } from "./abstract";
 
-import { KlaytnTx } from "./factory";
 
 // https://docs.kaia.io/learn/transactions/fee-delegation#txtypefeedelegatedvaluetransfer-
 export class TxTypeFeeDelegatedValueTransfer extends KlaytnTx {

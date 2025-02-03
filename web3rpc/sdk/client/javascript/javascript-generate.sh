@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-CURRENT_FILE_DIR=$(cd "$( dirname "$0" )" && pwd)
-PROJECT_DIR=$(cd "$CURRENT_FILE_DIR" && cd ../../.. && pwd )
+CURRENT_FILE_DIR=$(cd "$(dirname "$0")" && pwd)
+PROJECT_DIR=$(cd "$CURRENT_FILE_DIR" && cd ../../.. && pwd)
 
 cd "${CURRENT_FILE_DIR}"
 rm -rf "${CURRENT_FILE_DIR}/openapi"
@@ -22,7 +22,20 @@ cp .openapi-generator-ignore "${CURRENT_FILE_DIR}/openapi"
 sh "${PROJECT_DIR}"/bin/web3rpc-openapi-generator-cli generate -c "${CURRENT_FILE_DIR}/javascript-config.yaml"
 
 cd "${CURRENT_FILE_DIR}/openapi"
+# override openapi-generator build output
+rm .babelrc
+cp -rf ../openapi-override/* .
+# set version of openapi as defined in javascript-config.yaml
+YAML_FILE="../javascript-config.yaml"
+PROJECT_VERSION=$(grep 'projectVersion:' "$YAML_FILE" | sed -E 's/^projectVersion: "?([^"]+)"?/\1/')
+if [ -n "$PROJECT_VERSION" ]; then
+    npm version $PROJECT_VERSION
+else
+    echo "projectVersion not found in the file."
+    exit -1
+fi
 yarn install
+yarn build
 yarn link
 
 cd "${CURRENT_FILE_DIR}/opensdk"

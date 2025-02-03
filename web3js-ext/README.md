@@ -6,6 +6,9 @@ Web3.js Extension for kaia offers:
 
 ## Install
 
+> **_NOTE:_**
+> @kaiachain/web3js-ext@^1.2.0 recommends node 22 or later if you have issues with ES Module resolution.
+
 ### Node.js
 
 - Install

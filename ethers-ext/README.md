@@ -15,6 +15,9 @@ Ethers.js Extension for Kaia offers:
 > **_NOTE:_**
 > If the import path has no version sub-path (`@kaiachain/ethers-ext`), ethers v5 will be used by default.
 
+> **_NOTE:_**
+> @kaiachain/ethers-ext@^1.2.0 recommends node 22 or later if you have issues with ES Module resolution.
+
 - **Don't**: Mixing ethers v6 and ethers-ext for ethers v5
 
   ```js

@@ -8,9 +8,9 @@ import {
   FieldTypeUint64,
   FieldTypeUint8
 } from "../field";
-import { RLP, TxType } from "../util";
+import { TxType } from "../util";
+import { KlaytnTx } from "./abstract";
 
-import { KlaytnTx } from "./factory";
 
 
 // https://docs.kaia.io/learn/transactions/partial-fee-delegation#txtypefeedelegatedvaluetransferwithratio-
@@ -18,17 +18,17 @@ export class TxTypeFeeDelegatedValueTransferWithRatio extends KlaytnTx {
   static type = TxType.FeeDelegatedValueTransferWithRatio;
   static typeName = "TxTypeFeeDelegatedValueTransferWithRatio";
   static fieldTypes = {
-    "type":         FieldTypeUint8,
-    "nonce":        FieldTypeUint64,
-    "gasPrice":     FieldTypeUint256,
-    "gasLimit":     FieldTypeUint64,
-    "to":           FieldTypeAddress,
-    "value":        FieldTypeUint256,
-    "from":         FieldTypeAddress,
-    "feeRatio":     FieldTypeUint8,
-    "chainId":      FieldTypeUint64,
+    "type": FieldTypeUint8,
+    "nonce": FieldTypeUint64,
+    "gasPrice": FieldTypeUint256,
+    "gasLimit": FieldTypeUint64,
+    "to": FieldTypeAddress,
+    "value": FieldTypeUint256,
+    "from": FieldTypeAddress,
+    "feeRatio": FieldTypeUint8,
+    "chainId": FieldTypeUint64,
     "txSignatures": FieldTypeSignatureTuples,
-    "feePayer":     FieldTypeAddress,
+    "feePayer": FieldTypeAddress,
     "feePayerSignatures": FieldTypeSignatureTuples,
   };
 
@@ -72,18 +72,18 @@ export class TxTypeFeeDelegatedValueTransferMemoWithRatio extends KlaytnTx {
   static type = TxType.FeeDelegatedValueTransferMemoWithRatio;
   static typeName = "TxTypeFeeDelegatedValueTransferMemoWithRatio";
   static fieldTypes = {
-    "type":         FieldTypeUint8,
-    "nonce":        FieldTypeUint64,
-    "gasPrice":     FieldTypeUint256,
-    "gasLimit":     FieldTypeUint64,
-    "to":           FieldTypeAddress,
-    "value":        FieldTypeUint256,
-    "from":         FieldTypeAddress,
-    "data":         FieldTypeBytes,
-    "feeRatio":     FieldTypeUint8,
-    "chainId":      FieldTypeUint64,
+    "type": FieldTypeUint8,
+    "nonce": FieldTypeUint64,
+    "gasPrice": FieldTypeUint256,
+    "gasLimit": FieldTypeUint64,
+    "to": FieldTypeAddress,
+    "value": FieldTypeUint256,
+    "from": FieldTypeAddress,
+    "data": FieldTypeBytes,
+    "feeRatio": FieldTypeUint8,
+    "chainId": FieldTypeUint64,
     "txSignatures": FieldTypeSignatureTuples,
-    "feePayer":     FieldTypeAddress,
+    "feePayer": FieldTypeAddress,
     "feePayerSignatures": FieldTypeSignatureTuples,
   };
 
@@ -127,20 +127,20 @@ export class TxTypeFeeDelegatedSmartContractDeployWithRatio extends KlaytnTx {
   static type = TxType.FeeDelegatedSmartContractDeployWithRatio;
   static typeName = "TxTypeFeeDelegatedSmartContractDeployWithRatio";
   static fieldTypes = {
-    "type":         FieldTypeUint8,
-    "nonce":        FieldTypeUint64,
-    "gasPrice":     FieldTypeUint256,
-    "gasLimit":     FieldTypeUint64,
-    "to":           FieldTypeAddress,
-    "value":        FieldTypeUint256,
-    "from":         FieldTypeAddress,
-    "data":        FieldTypeBytes,
+    "type": FieldTypeUint8,
+    "nonce": FieldTypeUint64,
+    "gasPrice": FieldTypeUint256,
+    "gasLimit": FieldTypeUint64,
+    "to": FieldTypeAddress,
+    "value": FieldTypeUint256,
+    "from": FieldTypeAddress,
+    "data": FieldTypeBytes,
     "humanReadable": FieldTypeBool,
-    "feeRatio":     FieldTypeUint8,
-    "codeFormat":   FieldTypeUint8,
-    "chainId":      FieldTypeUint64,
+    "feeRatio": FieldTypeUint8,
+    "codeFormat": FieldTypeUint8,
+    "chainId": FieldTypeUint64,
     "txSignatures": FieldTypeSignatureTuples,
-    "feePayer":     FieldTypeAddress,
+    "feePayer": FieldTypeAddress,
     "feePayerSignatures": FieldTypeSignatureTuples,
   };
 
@@ -184,18 +184,18 @@ export class TxTypeFeeDelegatedSmartContractExecutionWithRatio extends KlaytnTx 
   static type = TxType.FeeDelegatedSmartContractExecutionWithRatio;
   static typeName = "TxTypeFeeDelegatedSmartContractExecutionWithRatio";
   static fieldTypes = {
-    "type":         FieldTypeUint8,
-    "nonce":        FieldTypeUint64,
-    "gasPrice":     FieldTypeUint256,
-    "gasLimit":     FieldTypeUint64,
-    "to":           FieldTypeAddress,
-    "value":        FieldTypeUint256,
-    "from":         FieldTypeAddress,
-    "data":        FieldTypeBytes,
-    "feeRatio":     FieldTypeUint8,
-    "chainId":      FieldTypeUint64,
+    "type": FieldTypeUint8,
+    "nonce": FieldTypeUint64,
+    "gasPrice": FieldTypeUint256,
+    "gasLimit": FieldTypeUint64,
+    "to": FieldTypeAddress,
+    "value": FieldTypeUint256,
+    "from": FieldTypeAddress,
+    "data": FieldTypeBytes,
+    "feeRatio": FieldTypeUint8,
+    "chainId": FieldTypeUint64,
     "txSignatures": FieldTypeSignatureTuples,
-    "feePayer":     FieldTypeAddress,
+    "feePayer": FieldTypeAddress,
     "feePayerSignatures": FieldTypeSignatureTuples,
   };
 
@@ -240,16 +240,16 @@ export class TxTypeFeeDelegatedAccountUpdateWithRatio extends KlaytnTx {
   static type = TxType.FeeDelegatedAccountUpdateWithRatio;
   static typeName = "TxTypeFeeDelegatedAccountUpdateWithRatio";
   static fieldTypes = {
-    "type":         FieldTypeUint8,
-    "nonce":        FieldTypeUint64,
-    "gasPrice":     FieldTypeUint256,
-    "gasLimit":     FieldTypeUint64,
-    "from":         FieldTypeAddress,
-    "key":          FieldTypeAccountKey,
-    "feeRatio":     FieldTypeUint8,
-    "chainId":      FieldTypeUint64,
+    "type": FieldTypeUint8,
+    "nonce": FieldTypeUint64,
+    "gasPrice": FieldTypeUint256,
+    "gasLimit": FieldTypeUint64,
+    "from": FieldTypeAddress,
+    "key": FieldTypeAccountKey,
+    "feeRatio": FieldTypeUint8,
+    "chainId": FieldTypeUint64,
     "txSignatures": FieldTypeSignatureTuples,
-    "feePayer":     FieldTypeAddress,
+    "feePayer": FieldTypeAddress,
     "feePayerSignatures": FieldTypeSignatureTuples,
   };
 
@@ -293,15 +293,15 @@ export class TxTypeFeeDelegatedCancelWithRatio extends KlaytnTx {
   static type = TxType.FeeDelegatedCancelWithRatio;
   static typeName = "TxTypeFeeDelegatedCancelWithRatio";
   static fieldTypes = {
-    "type":         FieldTypeUint8,
-    "nonce":        FieldTypeUint64,
-    "gasPrice":     FieldTypeUint256,
-    "gasLimit":     FieldTypeUint64,
-    "from":         FieldTypeAddress,
-    "feeRatio":     FieldTypeUint8,
-    "chainId":      FieldTypeUint64,
+    "type": FieldTypeUint8,
+    "nonce": FieldTypeUint64,
+    "gasPrice": FieldTypeUint256,
+    "gasLimit": FieldTypeUint64,
+    "from": FieldTypeAddress,
+    "feeRatio": FieldTypeUint8,
+    "chainId": FieldTypeUint64,
     "txSignatures": FieldTypeSignatureTuples,
-    "feePayer":     FieldTypeAddress,
+    "feePayer": FieldTypeAddress,
     "feePayerSignatures": FieldTypeSignatureTuples,
   };
 

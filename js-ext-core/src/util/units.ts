@@ -54,7 +54,7 @@ function getKlayDecimals(
 // Convert [value]peb to [unit].
 export function formatKlayUnits(value: BigNumberish, unitName?: UnitNameType): string {
   const decimals = getKlayDecimals(unitName);
-  if (decimals) {
+  if (Number.isInteger(decimals)) {
     // Klay units
     return formatEthUnits(value, decimals);
   } else {
@@ -65,7 +65,7 @@ export function formatKlayUnits(value: BigNumberish, unitName?: UnitNameType): s
 // Convert [value][unit] to peb.
 export function parseKlayUnits(value: string, unitName?: UnitNameType): BigNumber {
   const decimals = getKlayDecimals(unitName);
-  if (decimals) {
+  if (Number.isInteger(decimals)) {
     // Klay units
     return parseEthUnits(value, decimals);
   } else {

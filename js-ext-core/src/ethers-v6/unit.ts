@@ -4,6 +4,7 @@ import {
   parseKaia as parseKaiaBase,
   parseKaiaUnits as parseKaiaUnitsBase,
   parseUnits as parseUnitsBase,
+  UnitNameType,
 } from "../util";
 /**
  * Convert kaia to kei
@@ -23,7 +24,7 @@ export function parseKaia(kaia: string): bigint {
  */
 export function parseKaiaUnits(
   value: string,
-  unitName?: string | BigNumberish
+  unitName?: UnitNameType
 ): bigint {
   return parseKaiaUnitsBase(value, unitName).toBigInt();
 }
@@ -36,7 +37,7 @@ export function parseKaiaUnits(
  */
 export function parseUnits(
   value: string,
-  unitName?: string | BigNumberish
+  unitName?: UnitNameType
 ): bigint {
   return parseUnitsBase(value, unitName).toBigInt();
 }

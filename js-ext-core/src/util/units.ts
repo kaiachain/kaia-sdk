@@ -26,9 +26,14 @@ const names: { [key: string]: number } = {
   kaia: 18
 };
 
+type KaiaUnit = "kei" | "gkei" | "kaia";
+export type UnitNameType = KaiaUnit | `${number}` | Exclude<BigNumberish, string>;
+
 // Returns the decimal corresponding the unitName.
 // If not found, returns undefined.
-function getKlayDecimals(unitName?: string | BigNumberish): number | undefined {
+function getKlayDecimals(
+  unitName?: UnitNameType
+): number | undefined {
   if (isString(unitName)) {
     const lower = unitName.toLowerCase();
 
@@ -47,33 +52,23 @@ function getKlayDecimals(unitName?: string | BigNumberish): number | undefined {
 }
 
 // Convert [value]peb to [unit].
-export function formatKlayUnits(value: BigNumberish, unitName?: string | BigNumberish): string {
+export function formatKlayUnits(value: BigNumberish, unitName?: UnitNameType): string {
   const decimals = getKlayDecimals(unitName);
   if (decimals) {
     // Klay units
     return formatEthUnits(value, decimals);
   } else {
-    // Fallback to Eth units and raw numbers.
-    // Though parseEthUnits rejects uppercase, we allow it here for consistency with getKlayDecimals.
-    if (isString(unitName)) {
-      unitName = unitName.toLowerCase();
-    }
     return formatEthUnits(value, unitName);
   }
 }
 
 // Convert [value][unit] to peb.
-export function parseKlayUnits(value: string, unitName?: string | BigNumberish): BigNumber {
+export function parseKlayUnits(value: string, unitName?: UnitNameType): BigNumber {
   const decimals = getKlayDecimals(unitName);
   if (decimals) {
     // Klay units
     return parseEthUnits(value, decimals);
   } else {
-    // Fallback to Eth units and raw numbers.
-    // Though parseEthUnits rejects uppercase, we allow it here for consistency with getKlayDecimals.
-    if (isString(unitName)) {
-      unitName = unitName.toLowerCase();
-    }
     return parseEthUnits(value, unitName);
   }
 }
@@ -90,13 +85,13 @@ export function parseKlay(klay: string): BigNumber {
 
 // Equivalent to web3.utils.fromWei.
 // Convert [value]peb to [unit].
-export function fromPeb(value: BigNumberish, unitName?: string | BigNumberish): string {
+export function fromPeb(value: BigNumberish, unitName?: UnitNameType): string {
   return formatKlayUnits(value, unitName);
 }
 
 // Equivalent to web3.utils.toWei.
 // Convert [value][unit] to peb.
-export function toPeb(value: string, unitName?: string | BigNumberish): string {
+export function toPeb(value: string, unitName?: UnitNameType): string {
   return parseKlayUnits(value, unitName).toString();
 }
 
@@ -112,12 +107,13 @@ export const parseKaia = parseKlay;
 
 // Equivalent to web3.utils.fromWei.
 // Convert [value]kei to [unit].
-export function fromKei(value: BigNumberish, unitName?: string | BigNumberish): string {
+
+export function fromKei(value: BigNumberish, unitName?: UnitNameType): string {
   return formatKlayUnits(value, unitName);
 }
 
 // Equivalent to web3.utils.toWei.
 // Convert [value][unit] to kei.
-export function toKei(value: string, unitName?: string | BigNumberish): string {
+export function toKei(value: string, unitName?: UnitNameType): string {
   return parseKlayUnits(value, unitName).toString();
 }

@@ -1,7 +1,7 @@
-import { AccountKeyFactory } from "../accountkey";
-import { HexStr, getCompressedPublicKey, isEmbeddableAccountKeyType } from "../util";
-import { has, isArray, isString, map } from 'lodash-es'
+import { getCompressedPublicKey, HexStr, isEmbeddableAccountKeyType } from "../util";
+import {  cloneDeep, has, isArray, isString, map } from 'lodash-es'
 import { FieldType } from "./common";
+import { convertKeysToRLP, decodeObjectFromRLP, GetHexlifyRLP } from "../util/rlp";
 
 
 // Accepted types: A compressed (33-bytes) or uncompressed (65-bytes) public key
@@ -9,7 +9,8 @@ import { FieldType } from "./common";
 // Canonical type: A compressed (33-byte) public key in hex string
 export const FieldTypeCompressedPubKey = new class implements FieldType {
   canonicalize(value: any): string {
-    return getCompressedPublicKey(value);
+    // only passed the value, input validation are applied in AccountKey.setFieldsFromRLP()
+    return value;
   }
 
   emptyValue(): string { return "0x000000000000000000000000000000000000000000000000000000000000000000"; }
@@ -26,27 +27,21 @@ export type WeightedPublicKey = [string, string];
 //   ["0x02", "0x0212d45f1cc56fbd6cd8fc877ab63b5092ac77db907a8a42c41dad3e98d7c64dfb"],
 // ]
 export const FieldTypeWeightedPublicKeys = new class implements FieldType {
-  canonicalize(value: any): WeightedPublicKey[] {
+  canonicalize(value: any): { weight: string, key: string }[] {
     if (!isArray(value)) {
       throw new Error("Malformed WeightedPublicKeys");
     }
 
+    // format to object if input is string
     return map(value, (tupleOrObject: any) => {
       if (isArray(tupleOrObject) && tupleOrObject.length == 2) {
         const tuple = tupleOrObject;
-        return [
-          HexStr.fromNumber(tuple[0]),
-          getCompressedPublicKey(tuple[1])
-        ] as WeightedPublicKey;
-      } else if (has(tupleOrObject, "weight") && has(tupleOrObject, "key")) {
-        const object = tupleOrObject;
-        return [
-          HexStr.fromNumber(object.weight),
-          getCompressedPublicKey(object.key)
-        ] as WeightedPublicKey;
-      } else {
-        throw new Error("Malformed WeightedPublicKeys");
+        return {
+          weight: tuple[0],
+          key: getCompressedPublicKey(tuple[1])
+        }
       }
+      return { weight: tupleOrObject.weight, key: getCompressedPublicKey(tupleOrObject.key) }
     });
   }
 
@@ -68,16 +63,16 @@ export const FieldTypeAccountKeyList = new class implements FieldType {
       throw new Error("Malformed RoleBasedKeys");
     }
 
+    // format to object if input is string
     return map(value, (elem: any) => {
-      if (isString(elem) && HexStr.isHex(elem)) { // pass RLP format
-        return elem;
-      } else { // encode JS object format
-        const accountKey = AccountKeyFactory.fromObject(elem);
-        if (!isEmbeddableAccountKeyType(accountKey.type)) {
-          throw new Error(`AccountKeyType ${accountKey.type} cannot be inside an AccountKeyRoleBased`);
-        }
-        return accountKey.toRLP();
+      let key = cloneDeep(elem)
+      if (isString(key) && HexStr.isHex(key)) { // convert rlp to object
+        key = decodeObjectFromRLP(key)
       }
+      if (typeof key === 'object' && has(key, 'type') && isEmbeddableAccountKeyType(Number(key.type))) {
+        return key
+      }
+      throw new Error(`AccountKeyType ${key?.type} cannot be inside an AccountKeyRoleBased`);
     });
   }
 
@@ -92,8 +87,10 @@ export const FieldTypeAccountKey = new class implements FieldType {
   canonicalize(value: any): string {
     if (isString(value) && HexStr.isHex(value)) { // pass RLP format
       return value;
-    } else { // encode JS object format
-      return AccountKeyFactory.fromObject(value).toRLP();
+    } else {
+      // encode JS object format
+      const rawRLP = convertKeysToRLP(value)
+      return GetHexlifyRLP(value.type, rawRLP);
     }
   }
 

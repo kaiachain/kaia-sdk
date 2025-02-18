@@ -64,17 +64,21 @@ export const decodeObjectFromRLP = (rlp: string): { type: AccountKeyType, key?: 
     const type = HexStr.toNumber(rlp.substring(0, 4));
     switch (type) {
         case AccountKeyType.RoleBased:
-            const roleBasedInnerKeys = RLP.decode('0x' + rlp.substring(4))
-            return {
-                type: AccountKeyType.RoleBased,
-                keys: map(roleBasedInnerKeys, (key) => decodeObjectFromRLP(key))
+            {
+                const roleBasedInnerKeys = RLP.decode('0x' + rlp.substring(4))
+                return {
+                    type: AccountKeyType.RoleBased,
+                    keys: map(roleBasedInnerKeys, (key) => decodeObjectFromRLP(key))
+                }
             }
         case AccountKeyType.WeightedMultiSig:
-            const [threshold, keys] = RLP.decode('0x' + rlp.substring(4))
-            return {
-                type: AccountKeyType.WeightedMultiSig,
-                threshold: Number(threshold),
-                keys: map(keys, ([weight, innerKey]) => ({ weight: Number(weight), key: innerKey }))
+            {
+                const [threshold, keys] = RLP.decode('0x' + rlp.substring(4))
+                return {
+                    type: AccountKeyType.WeightedMultiSig,
+                    threshold: Number(threshold),
+                    keys: map(keys, ([weight, innerKey]) => ({ weight: Number(weight), key: innerKey }))
+                }
             }
         case AccountKeyType.Public:
             return {

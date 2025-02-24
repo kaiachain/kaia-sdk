@@ -291,7 +291,11 @@ describe("util", () => {
   describe("kei to unit (formatKaiaUnits, formatKaia, fromKei)", () => {
     it("kaia units", () => {
       // unit names are case-insensitive.
-      const kei = BigNumber.from("1000000000000000000"); // 1e18 kei
+      const balance = BigInt(1_000_000_000_000_000_000).toString(); // 1e18 kei
+      const kei = BigNumber.from(balance); // 1e18 kei
+
+      assert.equal(formatKaiaUnits(kei, "kei"), balance); // = 1e18 kei
+      assert.equal(fromKei(kei, "kei"), balance);
 
       assert.equal(formatKaiaUnits(kei, "Gkei"), "1000000000.0"); // = 1e9 Gkei
       assert.equal(fromKei(kei, "Gkei"), "1000000000.0");
@@ -307,6 +311,7 @@ describe("util", () => {
     it("for eth units, equivalent to ethers.utils.formatUnits", () => {
       {
         const wei = BigNumber.from("1000000000000000000"); // 1e18 wei in BigNumber
+        assert.equal(formatKaiaUnits(wei, "kei"), formatEthUnits(wei, "wei"));
         assert.equal(formatKaiaUnits(wei, "gwei"), formatEthUnits(wei, "gwei"));
         assert.equal(formatKaiaUnits(wei, "ether"), formatEthUnits(wei, "ether"));
         assert.equal(formatKaia(wei), formatEther(wei));

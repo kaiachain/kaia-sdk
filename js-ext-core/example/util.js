@@ -1,4 +1,4 @@
-const core = require("../dist");
+const core = require("../dist/cjs");
 
 function main() {
   const TxTypeValueTransfer = core.TxType.ValueTransfer;

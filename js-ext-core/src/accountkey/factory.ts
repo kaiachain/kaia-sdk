@@ -19,21 +19,22 @@ export class AccountKeyFactory extends FieldSetFactory<AccountKey> {
     this.add(AccountKeyRoleBased);
   }
 
-  public static fromObject(fields: Fields): AccountKey {
+  private _fromObject(fields: Fields): AccountKey {
     // In AccountKeyWeightedMultiSig, alias weightedPublicKeys -> keys for compatibility.
     // 'weightedPublicKeys' is used in caver and klaytn node.
     // 'keys' is used in this SDK.
     if (fields.type == AccountKeyType.WeightedMultiSig && fields.weightedPublicKeys) {
       fields.keys = fields.weightedPublicKeys;
     }
-    const factory = new AccountKeyFactory();
-    return factory.fromObject(fields);
+    return super.fromObject(fields);
+  }
+  public static fromObject(fields: Fields): AccountKey {
+    return new AccountKeyFactory()._fromObject(fields)
   }
 
-  public static fromRLP(rlp: string): AccountKey {
-    const factory = new AccountKeyFactory();
+  private _fromRLP(rlp: string): AccountKey {
     if (rlp == "0x80") { // special case without type prefix
-      return factory.fromObject({ type: AccountKeyType.Nil });
+      return this.fromObject({ type: AccountKeyType.Nil });
     }
 
     const type = getTypePrefix(rlp);
@@ -41,10 +42,13 @@ export class AccountKeyFactory extends FieldSetFactory<AccountKey> {
       throw new Error("Not a Klaytn account key");
     }
 
-    const ctor = factory.lookup(type);
+    const ctor = this.lookup(type);
     const instance = new ctor();
     instance.setFieldsFromRLP(rlp);
     return instance;
+  }
+  public static fromRLP(rlp: string): AccountKey {
+    return new AccountKeyFactory()._fromRLP(rlp)
   }
 }
 
@@ -85,13 +89,15 @@ export function parseAccountKey(rlp: string): ParsedAccountKey {
     return {
       type: key.type,
       threshold: HexStr.toNumber(canonical.threshold),
-      keys: canonical.keys.map((k: any) => ({ weight: HexStr.toNumber(k[0]), key: k[1] })),
+      // keys field of AccountKeyWeightedMultiSig already parse the RLP to object format
+      keys: key.getField('keys'),
     };
   }
   if (key.type == AccountKeyType.RoleBased) {
     return {
       type: key.type,
-      keys: canonical.keys.map((k: any) => parseAccountKey(k)),
+      // keys field of AccountKeyRoleBased already parse the RLP to object format
+      keys: key.getField('keys'),
     };
   }
 

@@ -1,6 +1,7 @@
 
 import { FieldSet, FieldTypeAccountKeyList, FieldTypeCompressedPubKey, FieldTypeUint32, FieldTypeUint8, FieldTypeWeightedPublicKeys } from "../field";
 import { AccountKeyType, HexStr, RLP } from "../util";
+import { convertKeysToRLP, decodeObjectFromRLP, GetHexlifyRLP } from "../util/rlp";
 
 // A typed AccountKey for Kaia is a FieldSet.
 // https://docs.kaia.io/learn/accounts/
@@ -19,7 +20,7 @@ export class AccountKeyNil extends AccountKey {
   };
 
   toRLP(): string {
-    return "0x80";
+    return convertKeysToRLP({ type: AccountKeyType.Nil });
   }
 
   setFieldsFromRLP(rlp: string): void {
@@ -39,7 +40,7 @@ export class AccountKeyLegacy extends AccountKey {
   };
 
   toRLP(): string {
-    return "0x01c0";
+    return convertKeysToRLP({ type: AccountKeyType.Legacy });
   }
 
   setFieldsFromRLP(rlp: string): void {
@@ -56,23 +57,20 @@ export class AccountKeyPublic extends AccountKey {
   static typeName = "AccountKeyPublic";
   static fieldTypes = {
     "type": FieldTypeUint8,
-    "key":  FieldTypeCompressedPubKey,
+    "key": FieldTypeCompressedPubKey,
   };
 
   // 0x02 + encode(CompressedPubKey)
   toRLP(): string {
-    const inner = this.getField("key");
-    return HexStr.concat("0x02", RLP.encode(inner));
+    const rawRLP = convertKeysToRLP({ key: this.getField("key"), type: AccountKeyType.Public })
+    return GetHexlifyRLP(AccountKeyType.Public, rawRLP);
   }
 
   setFieldsFromRLP(rlp: string): void {
-    const type = HexStr.toNumber(rlp.substring(0, 4));
+    const { type, key } = decodeObjectFromRLP(rlp)
     if (type !== this.type) {
       this.throwTypeError(`Invalid type '${type}`);
     }
-
-    const withoutType = "0x" + String(rlp).substring(4); // Strip type byte
-    const key = RLP.decode(withoutType);
     this.setFields({ type, key });
   }
 }
@@ -86,7 +84,7 @@ export class AccountKeyFail extends AccountKey {
   };
 
   toRLP(): string {
-    return "0x03c0";
+    return convertKeysToRLP({ type: AccountKeyType.Fail });
   }
 
   setFieldsFromRLP(rlp: string): void {
@@ -109,22 +107,17 @@ export class AccountKeyWeightedMultiSig extends AccountKey {
 
   // 0x04 + encode([threshold, [[weight1, compressedPubKey1], [weight2, compressedPubKey2]]])
   toRLP(): string {
-    const inner = this.getFields(["threshold", "keys"]);
-    return HexStr.concat("0x04", RLP.encode(inner));
+    const [threshold, keys] = this.getFields(["threshold", "keys"]);
+    const rawRLP = convertKeysToRLP({ threshold, keys, type: AccountKeyType.WeightedMultiSig })
+    return GetHexlifyRLP(AccountKeyType.WeightedMultiSig, rawRLP);
   }
 
   setFieldsFromRLP(rlp: string): void {
-    const type = HexStr.toNumber(rlp.substring(0, 4));
+    const { type, keys, threshold } = decodeObjectFromRLP(rlp)
     if (type !== this.type) {
       this.throwTypeError(`Invalid type '${type}`);
     }
-
-    const withoutType = "0x" + String(rlp).substring(4); // Strip type byte
-    const decoded = RLP.decode(withoutType);
-    if (decoded.length != 2) {
-      this.throwTypeError(`Invalid RLP string '${rlp}'`);
-    }
-    this.setFields({ type, threshold: decoded[0], keys: decoded[1] });
+    this.setFields({ type, threshold, keys });
   }
 }
 
@@ -142,17 +135,16 @@ export class AccountKeyRoleBased extends AccountKey {
   // = 0x05 + encode(keys)
   toRLP(): string {
     const inner = this.getField("keys");
-    return HexStr.concat("0x05", RLP.encode(inner));
+    const rawRLP = convertKeysToRLP({ type: AccountKeyType.RoleBased, keys: inner })
+    return GetHexlifyRLP(AccountKeyType.RoleBased, rawRLP);
   }
 
   setFieldsFromRLP(rlp: string): void {
-    const type = HexStr.toNumber(rlp.substring(0, 4));
+    const { type, keys } = decodeObjectFromRLP(rlp)
     if (type !== this.type) {
       this.throwTypeError(`Invalid type '${type}`);
     }
+    this.setFields({ type, keys });
 
-    const withoutType = "0x" + String(rlp).substring(4); // Strip type byte
-    const decoded = RLP.decode(withoutType);
-    this.setFields({ type, keys: decoded });
   }
 }

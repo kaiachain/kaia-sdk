@@ -1,6 +1,6 @@
 import { hexValue } from "@ethersproject/bytes";
 import { keccak256 } from "@ethersproject/keccak256";
-import { AccessList, parse as parseEthTransaction } from "@ethersproject/transactions";
+import { AccessList, Transaction as EthTransaction } from "ethers";
 
 import { FieldSetFactory, Fields } from "../field";
 import { HexStr, getTypePrefix, isKlaytnTxType, TxType } from "../util";
@@ -108,9 +108,22 @@ export interface ParsedTransaction {
 export function parseTransaction(rlp: string): ParsedTransaction {
   const type = getTypePrefix(rlp);
   if (!isKlaytnTxType(type)) {
-    const tx = parseEthTransaction(rlp);
+    const tx = EthTransaction.from(rlp);
+
+    // eip1559
     const parsedTx: ParsedTransaction = {
-      ...tx,
+      // ...tx,
+      from: tx.from ?? undefined,
+      to: tx.to ?? undefined,
+      nonce: tx.nonce,
+      data: tx.data,
+      r: tx.signature?.r,
+      s: tx.signature?.s,
+      v: tx.signature?.v ?? undefined,
+      hash: tx.hash ?? undefined,
+      accessList: tx.accessList ?? undefined,
+      chainId: Number(tx.chainId),
+      type: tx?.type,
       // Convert BigNumber to hex string
       gasLimit: hexValue(tx.gasLimit),
       gasPrice: tx.gasPrice ? hexValue(tx.gasPrice) : undefined,
@@ -118,6 +131,10 @@ export function parseTransaction(rlp: string): ParsedTransaction {
       maxPriorityFeePerGas: tx.maxPriorityFeePerGas ? hexValue(tx.maxPriorityFeePerGas) : undefined,
       maxFeePerGas: tx.maxFeePerGas ? hexValue(tx.maxFeePerGas) : undefined,
     };
+    if (typeof parsedTx.v === 'number') {
+      // convert v to KAIA compatible
+      parsedTx.v = parsedTx.v === 27 ? 0 : 1;
+    }
     // Clean up 'explicit undefined' fields
     forOwn(parsedTx, (value, key) => {
       if (value === undefined) {

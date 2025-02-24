@@ -751,10 +751,10 @@ describe("KlaytnTxFactory", () => {
         data: "0x",
         value: "0x0",
         chainId: 1001,
-        v: 2037,
+        v: 0,
         r: "0xc5b24df459fb25cc688cd440d0ba768d930c56a2fe4913d7269e6cd1d404b7c7",
         s: "0x6d4c94c64f534deb678e9e543f12a7f429df6d9ca24900c6df321dbe2d19c08f",
-        type: null,
+        type: 0,
       };
       assert.deepEqual(parseTransaction(rlp), obj);
     });

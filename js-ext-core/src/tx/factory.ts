@@ -133,11 +133,7 @@ export function parseTransaction(rlp: string): ParsedTransaction {
     };
     if (typeof parsedTx.v === 'number') {
       // convert v to KAIA compatible
-      // if (parsedTx.type === 0 && parsedTx.chainId) {
-      //   parsedTx.v = (parsedTx.v === 27 ? 0 : 1) + parsedTx.chainId * 2 + 35;
-      // } else {
       parsedTx.v = parsedTx.v === 27 ? 0 : 1;
-      // }
     }
     // Clean up 'explicit undefined' fields
     forOwn(parsedTx, (value, key) => {

@@ -131,7 +131,7 @@ export function parseTransaction(rlp: string): ParsedTransaction {
       maxPriorityFeePerGas: tx.maxPriorityFeePerGas ? hexValue(tx.maxPriorityFeePerGas) : undefined,
       maxFeePerGas: tx.maxFeePerGas ? hexValue(tx.maxFeePerGas) : undefined,
     };
-    if (!!parsedTx.v) {
+    if (typeof parsedTx.v === 'number') {
       // convert v to KAIA compatible
       // if (parsedTx.type === 0 && parsedTx.chainId) {
       //   parsedTx.v = (parsedTx.v === 27 ? 0 : 1) + parsedTx.chainId * 2 + 35;

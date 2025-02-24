@@ -1,6 +1,6 @@
 import { BigNumber } from "@ethersproject/bignumber";
 import { hexValue, hexlify } from "@ethersproject/bytes";
-import { accessListify } from "@ethersproject/transactions";
+import { accessListify } from "ethers";
 import { each, has } from "lodash-es";
 
 const numericFields = ["chainId", "gasLimit", "gasPrice", "type", "maxFeePerGas", "maxPriorityFeePerGas", "nonce", "value"];

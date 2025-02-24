@@ -61,6 +61,7 @@
     "@ethersproject/transactions": "^5.7.0",
     "@ethersproject/units": "^5.7.0",
     "elliptic": "^6.5.4",
+    "ethers": "^6.13.5",
     "lodash-es": "^4.17.21"
   }
 }

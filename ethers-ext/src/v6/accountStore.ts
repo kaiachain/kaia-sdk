@@ -4,7 +4,7 @@ import {
   computeAddress,
   JsonRpcProvider,
   SigningKey,
-} from "ethers6";
+} from "ethers";
 
 import { HexStr } from "@kaiachain/js-ext-core";
 

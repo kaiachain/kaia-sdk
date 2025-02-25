@@ -1,6 +1,6 @@
 {
   "name": "@kaiachain/js-ext-core",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "license": "MIT",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -58,9 +58,8 @@
     "@ethersproject/bignumber": "^5.7.0",
     "@ethersproject/bytes": "^5.7.0",
     "@ethersproject/rlp": "^5.7.0",
-    "@ethersproject/transactions": "^5.7.0",
     "@ethersproject/units": "^5.7.0",
-    "elliptic": "^6.5.4",
+    "elliptic": "^6.6.0",
     "ethers": "^6.13.5",
     "lodash-es": "^4.17.21"
   }

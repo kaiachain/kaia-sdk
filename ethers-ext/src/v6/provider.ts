@@ -4,7 +4,7 @@ import {
   JsonRpcProvider as EthersJsonRpcProvider,
   BrowserProvider as EthersWeb3Provider,
   assert,
-} from "ethers6";
+} from "ethers";
 
 import { asyncOpenApi, AsyncNamespaceApi } from "@kaiachain/js-ext-core";
 import {

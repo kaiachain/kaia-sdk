@@ -1,4 +1,4 @@
-import { TransactionRequest as EthersTransactionRequest } from "ethers6";
+import { TransactionRequest as EthersTransactionRequest } from "ethers";
 export type EthersExternalProvider = {
   isMetaMask?: boolean;
   isStatus?: boolean;

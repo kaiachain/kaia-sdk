@@ -46,7 +46,7 @@ jobs:
           cd web3rpc/rpc-specs && npm install && bash -x generate-namespace.sh && cd 
 
       - name: Verify Changed files
-        uses: tj-actions/changed-files@v39
+        uses: tj-actions/changed-files@v46
         id: verify-changed-files
         with:
           base_sha: ${{ steps.last_successful_commit_pr.outputs.base }}

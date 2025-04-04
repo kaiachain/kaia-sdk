@@ -30,7 +30,7 @@ import {
   getKaikasTxType,
 } from "@kaiachain/js-ext-core";
 
-import { decryptKeystoreList, decryptKeystoreListSync } from "./keystore";
+import { decryptKeystoreList, decryptKeystoreListSync } from "./keystore.js";
 import {
   eip155sign,
   getTransactionRequest,
@@ -42,8 +42,8 @@ import {
   populateChainId,
   populateFeePayerAndSignatures,
   pollTransactionInPool,
-} from "./txutil";
-import { ExternalProvider } from "./types";
+} from "./txutil.js";
+import { ExternalProvider } from "./types.js";
 
 export class Wallet extends EthersWallet {
   // Override Wallet factories accepting keystores to support both v3 and v4 (KIP-3) formats

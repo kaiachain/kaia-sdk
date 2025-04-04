@@ -15,9 +15,9 @@ import {
   TransactionWithFromAndToLocalWalletIndex,
 } from "web3-types";
 
-import { getProtocolVersion } from "./rpc";
-import { sendTransaction, sendSignedTransaction } from "./send";
-import { signTransaction } from "./sign";
+import { getProtocolVersion } from "./rpc.js";
+import { sendTransaction, sendSignedTransaction } from "./send.js";
+import { signTransaction } from "./sign.js";
 
 // Analogous to: web3-eth/src/web3_eth.ts:Web3Eth.getProtocolVersion()
 // Replaces: web3.eth.getProtocolVersion()
@@ -34,12 +34,12 @@ export function context_getProtocolVersion(context: Web3Context) {
 // For Klaytn TxTypes, call klay_sendTransaction instead.
 // Optionally converts tx.type field to Kaikas-friendly.
 export function context_sendTransaction(context: Web3Context) {
-  return function<ReturnFormat extends DataFormat = typeof DEFAULT_RETURN_FORMAT> (
+  return function <ReturnFormat extends DataFormat = typeof DEFAULT_RETURN_FORMAT>(
     transaction:
-			| Transaction
-			| TransactionWithFromLocalWalletIndex
-			| TransactionWithToLocalWalletIndex
-			| TransactionWithFromAndToLocalWalletIndex,
+      | Transaction
+      | TransactionWithFromLocalWalletIndex
+      | TransactionWithToLocalWalletIndex
+      | TransactionWithFromAndToLocalWalletIndex,
     returnFormat: ReturnFormat = DEFAULT_RETURN_FORMAT as ReturnFormat,
     options?: SendTransactionOptions,
   ) {
@@ -52,7 +52,7 @@ export function context_sendTransaction(context: Web3Context) {
 // Because: eth_sendRawTransaction cannot accept Klaytn TxTypes.
 // For Klaytn TxTypes, call klay_sendRawTransaction instead.
 export function context_sendSignedTransaction(context: Web3Context) {
-  return function<ReturnFormat extends DataFormat = typeof DEFAULT_RETURN_FORMAT> (
+  return function <ReturnFormat extends DataFormat = typeof DEFAULT_RETURN_FORMAT>(
     transaction: Bytes,
     returnFormat: ReturnFormat = DEFAULT_RETURN_FORMAT as ReturnFormat,
     options?: SendTransactionOptions) {
@@ -66,7 +66,7 @@ export function context_sendSignedTransaction(context: Web3Context) {
 // For Klaytn TxTypes, call klay_signTransaction instead.
 // Optionally converts tx.type field to Kaikas-friendly.
 export function context_signTransaction(context: Web3Context) {
-  return function<ReturnFormat extends DataFormat = typeof DEFAULT_RETURN_FORMAT> (
+  return function <ReturnFormat extends DataFormat = typeof DEFAULT_RETURN_FORMAT>(
     transaction: Transaction,
     returnFormat: ReturnFormat = DEFAULT_RETURN_FORMAT as ReturnFormat,
   ) {

@@ -46,13 +46,13 @@ import {
 import { format, bytesToHex, hexToNumber } from "web3-utils";
 import { isNullish } from "web3-validator";
 
-import { _parseTxType, bufferedGasLimit } from "../accounts/sign";
-import { KlaytnTransaction } from "../types";
+import { _parseTxType, bufferedGasLimit } from "../accounts/sign.js";
+import { KlaytnTransaction } from "../types.js";
 
-import { SendTxHelper } from "./utils/send_tx_helper";
-import { getTransactionFromOrToAttr } from "./utils/transaction_builder";
-import { trySendTransaction } from "./utils/try_send_transaction";
-import { waitForTransactionReceipt } from "./utils/wait_for_transaction_receipt";
+import { SendTxHelper } from "./utils/send_tx_helper.js";
+import { getTransactionFromOrToAttr } from "./utils/transaction_builder.js";
+import { trySendTransaction } from "./utils/try_send_transaction.js";
+import { waitForTransactionReceipt } from "./utils/wait_for_transaction_receipt.js";
 
 // sendTransaction sends a transaction object.
 //

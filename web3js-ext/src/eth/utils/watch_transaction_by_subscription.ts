@@ -20,21 +20,21 @@ import { transactionReceiptSchema, NewHeadsSubscription } from "web3-eth";
 import { Bytes, Numbers, BlockHeaderOutput, TransactionReceipt, DataFormat } from "web3-types";
 import { format } from "web3-utils";
 
-import { WaitProps, watchTransactionByPolling } from "./watch_transaction_by_pooling";
+import { WaitProps, watchTransactionByPolling } from "./watch_transaction_by_pooling.js";
 
 /**
  * This function watches a Transaction by subscribing to new heads.
  * It is used by `watchTransactionForConfirmations`, in case the provider supports subscription.
  */
 export const watchTransactionBySubscription = <
-	ReturnFormat extends DataFormat,
-	ResolveType = TransactionReceipt,
+  ReturnFormat extends DataFormat,
+  ResolveType = TransactionReceipt,
 >({
-    web3Context,
-    transactionReceipt,
-    transactionPromiEvent,
-    returnFormat,
-  }: WaitProps<ReturnFormat, ResolveType>) => {
+  web3Context,
+  transactionReceipt,
+  transactionPromiEvent,
+  returnFormat,
+}: WaitProps<ReturnFormat, ResolveType>) => {
   // The following variable will stay true except if the data arrived,
   //	or if watching started after an error had occurred.
   let needToWatchLater = true;
@@ -47,30 +47,30 @@ export const watchTransactionBySubscription = <
           needToWatchLater = false;
           if (
             !newBlockHeader?.number ||
-						// For some cases, the on-data event is fired couple times for the same block!
-						// This needs investigation but seems to be because of multiple `subscription.on('data'...)` even this should not cause that.
-						lastCaughtBlockHash === newBlockHeader?.parentHash
+            // For some cases, the on-data event is fired couple times for the same block!
+            // This needs investigation but seems to be because of multiple `subscription.on('data'...)` even this should not cause that.
+            lastCaughtBlockHash === newBlockHeader?.parentHash
           ) {
             return;
           }
           lastCaughtBlockHash = newBlockHeader?.parentHash as string;
 
           const confirmations =
-						BigInt(newBlockHeader.number) -
-						BigInt(transactionReceipt.blockNumber) +
-						BigInt(1);
+            BigInt(newBlockHeader.number) -
+            BigInt(transactionReceipt.blockNumber) +
+            BigInt(1);
 
           transactionPromiEvent.emit("confirmation", {
             confirmations: format(
               { format: "uint" },
-							confirmations as Numbers,
-							returnFormat,
+              confirmations as Numbers,
+              returnFormat,
             ),
             receipt: format(transactionReceiptSchema, transactionReceipt, returnFormat),
             latestBlockHash: format(
               { format: "bytes32" },
-							newBlockHeader.parentHash as Bytes,
-							returnFormat,
+              newBlockHeader.parentHash as Bytes,
+              returnFormat,
             ),
           });
           if (confirmations >= web3Context.transactionConfirmationBlocks) {

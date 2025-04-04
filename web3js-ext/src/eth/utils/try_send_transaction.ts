@@ -22,7 +22,7 @@ import { EthExecutionAPI, Bytes } from "web3-types";
 import { AsyncFunction, rejectIfTimeout } from "web3-utils";
 
 // eslint-disable-next-line import/no-cycle
-import { rejectIfBlockTimeout } from "./reject_if_block_timeout";
+import { rejectIfBlockTimeout } from "./reject_if_block_timeout.js";
 
 /**
  * An internal function to send a transaction or throws if sending did not finish during the timeout during the blocks-timeout.

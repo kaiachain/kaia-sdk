@@ -6,7 +6,7 @@ import { computeAddress } from "@ethersproject/transactions";
 
 import { HexStr } from "@kaiachain/js-ext-core";
 
-import { Wallet } from "./signer";
+import { Wallet } from "./signer.js";
 
 function isSameAddress(a: string, b: string) {
   return getAddress(a) == getAddress(b);

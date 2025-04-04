@@ -33,7 +33,7 @@ import {
   getKaikasTxType,
 } from "@kaiachain/js-ext-core";
 
-import { decryptKeystoreList, decryptKeystoreListSync } from "./keystore";
+import { decryptKeystoreList, decryptKeystoreListSync } from "./keystore.js";
 import {
   eip155sign,
   getTransactionRequest,
@@ -46,8 +46,8 @@ import {
   populateChainId,
   populateFeePayerAndSignatures,
   pollTransactionInPool,
-} from "./txutil";
-import { PrivateKeyLike, ExternalProvider } from "./types";
+} from "./txutil.js";
+import { PrivateKeyLike, ExternalProvider } from "./types.js";
 
 
 const logger = new Logger("@kaiachain/ethers-ext");
@@ -515,7 +515,7 @@ class UncheckedJsonRpcSigner extends JsonRpcSigner {
 }
 
 function catchUserRejectedSigning(error: any, action: string, from: string, messageData: any) {
-  if (typeof(error.message) === "string" && error.message.match(/user denied/i)) {
+  if (typeof (error.message) === "string" && error.message.match(/user denied/i)) {
     logger.throwError("user rejected signing", Logger.errors.ACTION_REJECTED, {
       action,
       from,

@@ -4,10 +4,10 @@ import { Web3Account, create, decrypt, privateKeyToAccount } from "web3-eth-acco
 import { EthExecutionAPI, KeyStore } from "web3-types";
 import { toChecksumAddress } from "web3-utils";
 
-import { isKIP3Json, splitKeystoreKIP3 } from "..";
-import { KlaytnTransaction, KlaytnWeb3Account } from "../types";
+import { isKIP3Json, splitKeystoreKIP3 } from "../index.js";
+import { KlaytnTransaction, KlaytnWeb3Account } from "../types.js";
 
-import { context_signTransaction, context_signTransactionAsFeePayer } from "./sign";
+import { context_signTransaction, context_signTransactionAsFeePayer } from "./sign.js";
 
 // Analogous to web3/src/accounts.ts:createWithContext
 export function context_create(context: Web3Context<EthExecutionAPI>) {

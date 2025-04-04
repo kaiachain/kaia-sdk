@@ -1,26 +1,26 @@
 import Eth from "web3-eth";
 import {
-  decodeLog,
-  decodeParameter,
-  decodeParameters,
-  encodeFunctionCall,
-  encodeFunctionSignature,
-  encodeParameter,
-  encodeParameters,
+	decodeLog,
+	decodeParameter,
+	decodeParameters,
+	encodeFunctionCall,
+	encodeFunctionSignature,
+	encodeParameter,
+	encodeParameters,
 } from "web3-eth-abi";
 import {
-  encrypt,
-  hashMessage,
-  recover,
-  recoverTransaction,
-  sign,
-  signTransaction,
-  TxData,
-  Transaction as LegacyTransaction,
-  AccessListEIP2930Transaction,
-  FeeMarketEIP1559Transaction,
-  Wallet,
-  Web3Account,
+	encrypt,
+	hashMessage,
+	recover,
+	recoverTransaction,
+	sign,
+	signTransaction,
+	TxData,
+	Transaction as LegacyTransaction,
+	AccessListEIP2930Transaction,
+	FeeMarketEIP1559Transaction,
+	Wallet,
+	Web3Account,
 } from "web3-eth-accounts";
 import { Contract } from "web3-eth-contract";
 import { ENS } from "web3-eth-ens";
@@ -29,7 +29,7 @@ import { Personal } from "web3-eth-personal";
 import { Net } from "web3-net";
 import { KeyStore, Bytes, Transaction } from "web3-types";
 
-import { KlaytnTypedTransaction } from "./accounts/klaytn_tx";
+import { KlaytnTypedTransaction } from "./accounts/klaytn_tx.js";
 
 // Type analogous to web3-eth-accounts/src/types.ts:Web3Account
 // Designed for the "account object" returned by
@@ -95,37 +95,37 @@ export interface KlaytnWeb3EthInterface extends Eth {
 // This is the type of KlaytnWeb3EthInterface.accounts
 // i.e. (typeof web3.eth.accounts)
 export interface KlaytnAccountsInterface {
-		// Klaytn: contents may have changed, but types unchanged
-		recoverTransaction: typeof recoverTransaction;
-		hashMessage: typeof hashMessage;
-		sign: typeof sign;
-		recover: typeof recover;
-		encrypt: typeof encrypt;
+	// Klaytn: contents may have changed, but types unchanged
+	recoverTransaction: typeof recoverTransaction;
+	hashMessage: typeof hashMessage;
+	sign: typeof sign;
+	recover: typeof recover;
+	encrypt: typeof encrypt;
 
-		// Klaytn: modified methods
-		wallet: Wallet<KlaytnWeb3Account>;
-		create: () => KlaytnWeb3Account;
-		privateKeyToAccount: (privateKey: Uint8Array | string) => KlaytnWeb3Account;
-		decrypt: (
-			keystore: string,
-			password: string,
-			options?: Record<string, unknown>,
-		) => Promise<KlaytnWeb3Account>;
-		signTransaction: (
-			transaction: KlaytnTransaction | string,
-			privateKey: Bytes,
-		) => ReturnType<typeof signTransaction>;
+	// Klaytn: modified methods
+	wallet: Wallet<KlaytnWeb3Account>;
+	create: () => KlaytnWeb3Account;
+	privateKeyToAccount: (privateKey: Uint8Array | string) => KlaytnWeb3Account;
+	decrypt: (
+		keystore: string,
+		password: string,
+		options?: Record<string, unknown>,
+	) => Promise<KlaytnWeb3Account>;
+	signTransaction: (
+		transaction: KlaytnTransaction | string,
+		privateKey: Bytes,
+	) => ReturnType<typeof signTransaction>;
 
-		// Klaytn: additional methods
-		signTransactionAsFeePayer: (
-			transaction: KlaytnTransaction | string,
-			privateKey: Bytes,
-		) => ReturnType<typeof signTransaction>;
-		decryptList: (
-			keystore: string,
-			password: string,
-			options?: Record<string, unknown>,
-		) => Promise<KlaytnWeb3Account[]>;
+	// Klaytn: additional methods
+	signTransactionAsFeePayer: (
+		transaction: KlaytnTransaction | string,
+		privateKey: Bytes,
+	) => ReturnType<typeof signTransaction>;
+	decryptList: (
+		keystore: string,
+		password: string,
+		options?: Record<string, unknown>,
+	) => Promise<KlaytnWeb3Account[]>;
 }
 
 // The plain Transaction object supplied by the users.
@@ -134,29 +134,29 @@ export interface KlaytnTransaction extends Transaction {
 	key?: any;
 	feePayer?: string;
 	txSignatures?: any;
-  feePayerSignatures?: any;
+	feePayerSignatures?: any;
 	feeRatio?: number;
 }
 
 // The plain Transaction object used internally.
 // Used as argument to KlaytnTx.fromTxData()
 export interface KlaytnTxData extends TxData {
-  from?: string;
-  chainId?: bigint;
-  key?: any;
-  feePayer?: string;
-  feePayer_v?: bigint;
-  feePayer_r?: bigint;
-  feePayer_s?: bigint;
-  txSignatures?: any;
-  feePayerSignatures?: any;
-  feeRatio?: number;
+	from?: string;
+	chainId?: bigint;
+	key?: any;
+	feePayer?: string;
+	feePayer_v?: bigint;
+	feePayer_r?: bigint;
+	feePayer_s?: bigint;
+	txSignatures?: any;
+	feePayerSignatures?: any;
+	feeRatio?: number;
 }
 
 // The child classes of BaseTransaction.
 // Used inside signTransaction() and signTransactionAsFeePayer()
 export type TypedTransaction =
-  | LegacyTransaction // type 0
-  | AccessListEIP2930Transaction // type 1
-  | FeeMarketEIP1559Transaction // type 2
-  | KlaytnTypedTransaction; // Klaytn TxTypes
+	| LegacyTransaction // type 0
+	| AccessListEIP2930Transaction // type 1
+	| FeeMarketEIP1559Transaction // type 2
+	| KlaytnTypedTransaction; // Klaytn TxTypes

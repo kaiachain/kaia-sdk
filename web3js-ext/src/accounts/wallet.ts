@@ -3,10 +3,10 @@ import { isKIP3Json } from "@kaiachain/js-ext-core";
 import { Wallet as EthWallet } from "web3-eth-accounts";
 import { Web3BaseWalletAccount, KeyStore } from "web3-types";
 
-import { KlaytnWeb3Account } from "../types";
+import { KlaytnWeb3Account } from "../types.js";
 
 export class Wallet<
-	T extends Web3BaseWalletAccount = KlaytnWeb3Account,
+  T extends Web3BaseWalletAccount = KlaytnWeb3Account,
 > extends EthWallet<T> {
   public async decrypt(
     encryptedWallets: KeyStore[],

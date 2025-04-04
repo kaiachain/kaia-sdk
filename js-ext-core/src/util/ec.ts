@@ -1,9 +1,10 @@
 import { SignatureLike as EthersSignatureLike, Signature, splitSignature } from "@ethersproject/bytes";
-import { ec } from "elliptic";
+import ecPkg from "elliptic";
 
-import { HexStr } from "./data";
-import { isArray, isString } from "lodash-es";
-
+import { HexStr } from "./data.js";
+import { isArray, isString } from "./helpers.js";
+// ec is commonjs only, then we need default import.
+const { ec } = ecPkg
 const secp256k1 = new ec("secp256k1");
 
 // Returns a 33-byte compressed public key from a private key.

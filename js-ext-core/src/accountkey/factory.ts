@@ -1,7 +1,7 @@
-import { FieldSetFactory, Fields } from "../field";
+import { FieldSetFactory, Fields } from "../field/index.js";
 
-import { AccountKeyType, HexStr, getTypePrefix, isKlaytnAccountKeyType } from "../util";
-import { AccountKey, AccountKeyFail, AccountKeyLegacy, AccountKeyNil, AccountKeyPublic, AccountKeyRoleBased, AccountKeyWeightedMultiSig } from "./accountkey";
+import { AccountKeyType, HexStr, getTypePrefix, isKlaytnAccountKeyType } from "../util/index.js";
+import { AccountKey, AccountKeyFail, AccountKeyLegacy, AccountKeyNil, AccountKeyPublic, AccountKeyRoleBased, AccountKeyWeightedMultiSig } from "./accountkey.js";
 
 
 

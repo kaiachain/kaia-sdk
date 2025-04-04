@@ -1,5 +1,5 @@
-import { FieldSet } from "../field";
-import { getSignatureTuple, HexStr, isFeePayerSigTxType, RLP, SignatureLike } from "../util";
+import { FieldSet } from "../field/index.js";
+import { getSignatureTuple, HexStr, isFeePayerSigTxType, RLP, SignatureLike } from "../util/index.js";
 
 export abstract class KlaytnTx extends FieldSet {
   // A Klaytn Tx has 4 kinds of RLP encoding:

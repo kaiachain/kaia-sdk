@@ -13,6 +13,9 @@ module.exports = {
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
+    extensionAlias: {
+      '.js': ['.js', '.ts'],
+    },
     fallback: {
       "querystring": false, // referenced in web3rpc/ApiClient, which is unused.
     },

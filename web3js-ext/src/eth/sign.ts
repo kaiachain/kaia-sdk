@@ -35,10 +35,10 @@ import {
 import { format } from "web3-utils";
 import { isNullish } from "web3-validator";
 
-import { _parseTxType, bufferedGasLimit } from "../accounts/sign";
-import { KlaytnTransaction } from "../types";
+import { _parseTxType, bufferedGasLimit } from "../accounts/sign.js";
+import { KlaytnTransaction } from "../types.js";
 
-import { getTransactionFromOrToAttr } from "./utils/transaction_builder";
+import { getTransactionFromOrToAttr } from "./utils/transaction_builder.js";
 
 export async function signTransaction<ReturnFormat extends DataFormat>(
   web3Context: Web3Context<EthExecutionAPI>,

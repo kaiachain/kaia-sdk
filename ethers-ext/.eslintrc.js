@@ -2,15 +2,19 @@ module.exports = {
   root: true,
 
   // rule presets and plugins
-  extends: [
+  "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:import/recommended",
     "plugin:import/typescript",
+    "plugin:require-extensions/recommended"
   ],
-  parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "require-extensions"
+  ],
   env: {
     es2022: true,
     browser: false,
@@ -99,6 +103,8 @@ module.exports = {
         // give some flexibility adding and deleting variables
         "@typescript-eslint/no-unused-vars": "off",
         "prefer-const": "off",
+        "require-extensions/require-extensions": "off",
+        "require-extensions/require-index": "off"
       },
     },
     {
@@ -108,6 +114,7 @@ module.exports = {
         "no-undef": "off",
         "no-unused-vars": "off",
         "no-constant-condition": "off",
+
       },
     },
   ],
@@ -115,5 +122,6 @@ module.exports = {
     "example/**/browser-html/ethers-ext.bundle.js",
     "example/**/browser-html/ethers-ext.v6.bundle.js",
     "example/**/browser-react",
+
   ],
 };

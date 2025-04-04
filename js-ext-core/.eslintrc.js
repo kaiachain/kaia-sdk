@@ -8,10 +8,12 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:import/recommended",
     "plugin:import/typescript",
+    "plugin:require-extensions/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": [
     "@typescript-eslint",
+    "require-extensions"
   ],
   "env": {
     "es2022": true,
@@ -89,6 +91,8 @@ module.exports = {
         // give some flexibility adding and deleting variables
         "@typescript-eslint/no-unused-vars": "off",
         "prefer-const": "off",
+        "require-extensions/require-extensions": "off",
+        "require-extensions/require-index": "off"
       }
     },
   ]

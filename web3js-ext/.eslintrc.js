@@ -8,10 +8,12 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:import/recommended",
     "plugin:import/typescript",
+    "plugin:require-extensions/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": [
     "@typescript-eslint",
+    "require-extensions"
   ],
   "env": {
     "es2022": true,
@@ -23,7 +25,7 @@ module.exports = {
   // custom rules
   // see https://eslint.org/docs/latest/rules
   "rules": {
-    "import/no-unresolved":"off",
+    "import/no-unresolved": "off",
     // logic
     "prefer-const": "warn",
     "no-promise-executor-return": "warn",
@@ -90,6 +92,8 @@ module.exports = {
         // give some flexibility adding and deleting variables
         "@typescript-eslint/no-unused-vars": "off",
         "prefer-const": "off",
+        "require-extensions/require-extensions": "off",
+        "require-extensions/require-index": "off"
       }
     },
     { // browser examples use browser globals

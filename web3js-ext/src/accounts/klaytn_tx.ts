@@ -5,7 +5,7 @@ import * as ethereumCryptography from "ethereum-cryptography/secp256k1.js";
 import { Transaction as LegacyTransaction, TxOptions, ECDSASignature } from "web3-eth-accounts";
 import { bytesToHex, hexToBytes, toHex, toNumber, numberToHex, toBigInt } from "web3-utils";
 
-import { KlaytnTxData } from "../types";
+import { KlaytnTxData } from "../types.js";
 
 export const secp256k1 = ethereumCryptography.secp256k1 ?? ethereumCryptography;
 
@@ -67,23 +67,23 @@ export class KlaytnTypedTransaction extends LegacyTransaction {
 
     // Convert to type understood by CoreKlaytnTx.
     const klaytnTxObject = {
-      type:               toHex(this.type || 0),
-      nonce:              toHex(this.nonce),
-      gasPrice:           toHex(this.gasPrice),
-      gasLimit:           toHex(this.gasLimit),
-      to:                 this.to ? bytesToHex(this.to.toString()) : undefined,
-      value:              toHex(this.value),
-      from:               this.from,
-      data:               bytesToHex(this.data),
-      input:              bytesToHex(this.data),
-      chainId:            this.chainId ? toHex(this.chainId) : undefined,
-      humanReadable:      false,
-      codeFormat:         0x00,
-      key:                this.key,
-      feePayer:           this.feePayer,
-      txSignatures:       this.txSignatures,
+      type: toHex(this.type || 0),
+      nonce: toHex(this.nonce),
+      gasPrice: toHex(this.gasPrice),
+      gasLimit: toHex(this.gasLimit),
+      to: this.to ? bytesToHex(this.to.toString()) : undefined,
+      value: toHex(this.value),
+      from: this.from,
+      data: bytesToHex(this.data),
+      input: bytesToHex(this.data),
+      chainId: this.chainId ? toHex(this.chainId) : undefined,
+      humanReadable: false,
+      codeFormat: 0x00,
+      key: this.key,
+      feePayer: this.feePayer,
+      txSignatures: this.txSignatures,
       feePayerSignatures: this.feePayerSignatures,
-      feeRatio:           this.feeRatio,
+      feeRatio: this.feeRatio,
     };
 
     if (txData.type == TxType.SmartContractDeploy ||

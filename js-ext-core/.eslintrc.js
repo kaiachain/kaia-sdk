@@ -23,6 +23,7 @@ module.exports = {
   // custom rules
   // see https://eslint.org/docs/latest/rules
   "rules": {
+    "import/no-unresolved": "off",
     // logic
     "prefer-const": "warn",
     "no-promise-executor-return": "warn",

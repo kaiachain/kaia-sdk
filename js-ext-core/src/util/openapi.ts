@@ -3,9 +3,10 @@
 // ApiClient has many methods, but implementing callApi() is actually sufficient
 // for the purpose of JSON-RPC.
 
-import { isFunction } from "lodash-es";
 
 // For example, JsonRpcClient can be built from ethers.JsonRpcProvider or web3.HttpProvider.
+import {isFunction} from "./helpers.js";
+
 export type rpcSendFunction = (method: string, params: any[]) => Promise<any>;
 export class JsonRpcClient {
   send: rpcSendFunction;

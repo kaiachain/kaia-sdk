@@ -1,2 +1,2 @@
-export * from "./factory";
-export * from "./accountkey";
+export * from "./factory.js";
+export * from "./accountkey.js";

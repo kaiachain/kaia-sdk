@@ -7,9 +7,9 @@ import {
   FieldTypeUint256,
   FieldTypeUint64,
   FieldTypeUint8
-} from "../field";
-import { TxType } from "../util";
-import { KlaytnTx } from "./abstract";
+} from "../field/index.js";
+import { TxType } from "../util/index.js";
+import { KlaytnTx } from "./abstract.js";
 
 
 // https://docs.kaia.io/learn/transactions/basic#txtypevaluetransfer-

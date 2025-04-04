@@ -1,6 +1,6 @@
 {
   "name": "@kaiachain/js-ext-core",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "license": "MIT",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -27,7 +27,8 @@
     "./src"
   ],
   "scripts": {
-    "build": "tsc && tsc --project tsconfig.cjs.json",
+    "build": "tsc && tsc --project tsconfig.cjs.json && npm run post:build",
+    "post:build": "cpr ./misc/esm-package.json ./dist/esm/package.json -o",
     "watch": "tsc -w",
     "lint": "npm run lint:check",
     "lint:check": "eslint example src test --cache --quiet",
@@ -47,6 +48,7 @@
     "@typescript-eslint/eslint-plugin": "^6.1.0",
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
+    "cpr": "^3.0.1",
     "eslint": "^8.45.0",
     "eslint-plugin-import": "^2.27.5",
     "mocha": "^10.2.0",

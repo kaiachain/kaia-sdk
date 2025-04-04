@@ -1,15 +1,23 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                  // Modern syntax for ESM
-    "module": "ESNext",                  // ESM output
+    "target": "ESNext", // Modern syntax for ESM
+    "module": "ESNext", // ESM output
     "moduleResolution": "bundler",
-    "declaration": true,                 // Generate `.d.ts` files for type declarations
-    "outDir": "./dist/esm",              // Output directory for ESM
-    "strict": true,                      // Enable strict type-checking
-    "esModuleInterop": true,             // Interoperability between CommonJS and ESM
+    "declaration": true, // Generate `.d.ts` files for type declarations
+    "outDir": "./dist/esm", // Output directory for ESM
+    "strict": true, // Enable strict type-checking
+    "esModuleInterop": true, // Interoperability between CommonJS and ESM
     "skipLibCheck": true,
-    "rootDirs": ["./src"],
+    "rootDirs": [
+      "./src"
+    ],
   },
-  "exclude": ["dist", "example", "node_modules"],
-  "include": ["./src"]
+  "exclude": [
+    "dist",
+    "example",
+    "node_modules"
+  ],
+  "include": [
+    "./src"
+  ]
 }

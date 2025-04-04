@@ -21,6 +21,7 @@ module.exports = {
   // custom rules
   // see https://eslint.org/docs/latest/rules
   rules: {
+    "import/no-unresolved": "off",
     // logic
     "prefer-const": "warn",
     "no-promise-executor-return": "warn",
@@ -42,15 +43,6 @@ module.exports = {
         ],
         "newlines-between": "always",
         pathGroupsExcludedImportTypes: ["@kaiachain/**"],
-      },
-    ],
-    "import/no-unresolved": [
-      "error", // eslint-plugin-import cannot resolve subpaths https://github.com/firebase/firebase-admin-node/discussions/1359
-      {
-        ignore: [
-          "^@kaiachain/js-ext-core/util$",
-          "^@kaiachain/js-ext-core/ethers-v6$",
-        ],
       },
     ],
 

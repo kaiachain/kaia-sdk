@@ -1,12 +1,5 @@
 // Pass-through js-ext-core exports
 export * from "@kaiachain/js-ext-core";
-export {
-  AccountKey,
-  AccountKeyFactory,
-  KlaytnTx,
-  KlaytnTxFactory,
-  parseTransaction,
-} from "@kaiachain/js-ext-core";
 
 // ethers-ext classes and functions
 export * from "./accountStore.js";
@@ -21,3 +14,4 @@ export const providers = {
   JsonRpcProvider,
   Web3Provider,
 };
+

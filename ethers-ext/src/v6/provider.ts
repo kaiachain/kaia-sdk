@@ -7,18 +7,10 @@ import {
 } from "ethers";
 
 import { asyncOpenApi, AsyncNamespaceApi } from "@kaiachain/js-ext-core";
-import {
-  AdminApi,
-  DebugApi,
-  GovernanceApi,
-  KlayApi,
-  NetApi,
-  PersonalApi,
-  TxpoolApi,
-  // @ts-ignore: package @kaiachain/web3rpc has no .d.ts file.
-} from "@kaiachain/web3rpc";
+// @ts-ignore: package @kaiachain/web3rpc has no .d.ts file.
+import * as web3rpc from "@kaiachain/web3rpc";
 
-import { JsonRpcSigner } from "./signer";
+import { JsonRpcSigner } from "./signer.js";
 
 /* eslint-disable no-multi-spaces */
 export class JsonRpcProvider extends EthersJsonRpcProvider {
@@ -37,6 +29,8 @@ export class JsonRpcProvider extends EthersJsonRpcProvider {
     const send = (method: string, params: any) => {
       return this.send(method, params);
     };
+
+    const { AdminApi, DebugApi, GovernanceApi, KlayApi, NetApi, PersonalApi, TxpoolApi } = web3rpc
 
     this.admin = asyncOpenApi(send, AdminApi);
     this.debug = asyncOpenApi(send, DebugApi);
@@ -66,6 +60,7 @@ export class Web3Provider extends EthersWeb3Provider {
     const send = (method: string, params: any) => {
       return this.send(method, params);
     };
+    const { AdminApi, DebugApi, GovernanceApi, KlayApi, NetApi, PersonalApi, TxpoolApi } = web3rpc
 
     this.admin = asyncOpenApi(send, AdminApi);
     this.debug = asyncOpenApi(send, DebugApi);

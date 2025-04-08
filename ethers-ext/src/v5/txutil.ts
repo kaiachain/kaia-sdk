@@ -9,7 +9,7 @@ import _ from "lodash";
 
 import { getChainIdFromSignatureTuples, parseTransaction } from "@kaiachain/js-ext-core";
 
-import { TransactionRequest } from "./types";
+import { TransactionRequest } from "./types.js";
 
 const logger = new Logger("@kaiachain/ethers-ext");
 

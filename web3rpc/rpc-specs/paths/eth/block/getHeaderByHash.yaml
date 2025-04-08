@@ -115,7 +115,6 @@ components:
         - size
         - stateRoot
         - timestamp
-        - totalDifficulty
         - transactionsRoot
       properties:
         baseFeePerGas:
@@ -186,10 +185,6 @@ components:
           type: string
           format: hex
           description: The Unix timestamp for when the block was collated.
-        totalDifficulty:
-          type: string
-          format: hex
-          description: The total blockScore of the chain until this block.
         transactionsRoot:
           type: string
           format: 32-byte DATA
@@ -213,7 +208,6 @@ components:
         size: "0x2d7",
         stateRoot: "0xedb87f4b0f905a655c80d1768eb22b1eff2405098c4748b8364c869611e02a2b",
         timestamp: "0x5c99cbd8",
-        totalDifficulty: "0x2",
         transactions: [],
         transactionsRoot: "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
         uncles: [],

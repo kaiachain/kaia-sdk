@@ -120,7 +120,6 @@ components:
             - size
             - stateRoot
             - timestamp
-            - totalDifficulty
             - transactionsRoot
             - transactions
             - uncles
@@ -196,10 +195,6 @@ components:
               type: string
               format: hex
               description: The Unix timestamp for when the block was collated.
-            totalDifficulty:
-              type: string
-              format: hex
-              description: The total blockScore of the chain until this block
             transactionsRoot:
               type: string
               format: 32-byte DATA
@@ -237,7 +232,6 @@ components:
                 "size": "0x64c",
                 "stateRoot": "0x123a0da1c621236e64f9b486a9a9712ec6ce07d6690acab5a18b716d17cdc29f",
                 "timestamp": "0x6194f184",
-                "totalDifficulty": "0xd0054f",
                 "transactions": [
                   "0x5b3492f8199ee2a551d991b7d00bd48967ca5e5c1c15d6e1ee9fda97e3126e9a",
                   "0x8e1870262f2ba0452458280ad6ad5d54e5288623e415692c822979b7608c7297",

@@ -22,7 +22,7 @@ import { getTransactionReceipt } from "web3-eth";
 import { EthExecutionAPI, Bytes, TransactionReceipt, DataFormat } from "web3-types";
 import { pollTillDefinedAndReturnIntervalId, rejectIfTimeout } from "web3-utils";
 
-import { rejectIfBlockTimeout } from "./reject_if_block_timeout";
+import { rejectIfBlockTimeout } from "./reject_if_block_timeout.js";
 
 export async function waitForTransactionReceipt<ReturnFormat extends DataFormat>(
   web3Context: Web3Context<EthExecutionAPI>,
@@ -30,7 +30,7 @@ export async function waitForTransactionReceipt<ReturnFormat extends DataFormat>
   returnFormat: ReturnFormat,
 ): Promise<TransactionReceipt> {
   const pollingInterval =
-		web3Context.transactionReceiptPollingInterval ?? web3Context.transactionPollingInterval;
+    web3Context.transactionReceiptPollingInterval ?? web3Context.transactionPollingInterval;
 
   const [awaitableTransactionReceipt, IntervalId] = pollTillDefinedAndReturnIntervalId(async () => {
     try {

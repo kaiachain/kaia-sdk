@@ -31,7 +31,7 @@ import {
   TransactionReceipt,
 } from "web3-types";
 
-import { getRevertReason, parseTransactionError } from "./get_revert_reason";
+import { getRevertReason, parseTransactionError } from "./get_revert_reason.js";
 
 
 export async function getTransactionError<ReturnFormat extends DataFormat>(
@@ -53,13 +53,13 @@ export async function getTransactionError<ReturnFormat extends DataFormat>(
   }
 
   let error:
-		| TransactionRevertedWithoutReasonError<FormatType<TransactionReceipt, ReturnFormat>>
-		| TransactionRevertInstructionError<FormatType<TransactionReceipt, ReturnFormat>>
-		| TransactionRevertWithCustomError<FormatType<TransactionReceipt, ReturnFormat>>;
+    | TransactionRevertedWithoutReasonError<FormatType<TransactionReceipt, ReturnFormat>>
+    | TransactionRevertInstructionError<FormatType<TransactionReceipt, ReturnFormat>>
+    | TransactionRevertWithCustomError<FormatType<TransactionReceipt, ReturnFormat>>;
   if (_reason === undefined) {
     error = new TransactionRevertedWithoutReasonError<
-			FormatType<TransactionReceipt, ReturnFormat>
-		>(transactionReceiptFormatted);
+      FormatType<TransactionReceipt, ReturnFormat>
+    >(transactionReceiptFormatted);
   } else if (typeof _reason === "string") {
     error = new TransactionRevertInstructionError<FormatType<TransactionReceipt, ReturnFormat>>(
       _reason,
@@ -68,11 +68,11 @@ export async function getTransactionError<ReturnFormat extends DataFormat>(
     );
   } else if (
     (_reason as RevertReasonWithCustomError).customErrorName !== undefined &&
-		(_reason as RevertReasonWithCustomError).customErrorDecodedSignature !== undefined &&
-		(_reason as RevertReasonWithCustomError).customErrorArguments !== undefined
+    (_reason as RevertReasonWithCustomError).customErrorDecodedSignature !== undefined &&
+    (_reason as RevertReasonWithCustomError).customErrorArguments !== undefined
   ) {
     const reasonWithCustomError: RevertReasonWithCustomError =
-			_reason as RevertReasonWithCustomError;
+      _reason as RevertReasonWithCustomError;
     error = new TransactionRevertWithCustomError<FormatType<TransactionReceipt, ReturnFormat>>(
       reasonWithCustomError.reason,
       reasonWithCustomError.customErrorName,

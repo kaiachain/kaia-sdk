@@ -18,7 +18,7 @@ import {
   SignatureLike,
 } from "@kaiachain/js-ext-core";
 
-import { TransactionRequest } from "./types";
+import { TransactionRequest } from "./types.js";
 
 // Normalize transaction request in Object or RLP format
 export async function getTransactionRequest(

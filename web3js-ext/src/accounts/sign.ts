@@ -4,14 +4,14 @@ import { Web3Context } from "web3-core";
 import { TransactionSigningError } from "web3-errors";
 import { prepareTransactionForSigning } from "web3-eth";
 import { privateKeyToAddress, signTransaction, SignTransactionResult } from "web3-eth-accounts";
-import { EthExecutionAPI, Bytes, HexString, Numbers } from "web3-types";
+import { EthExecutionAPI, Bytes, HexString } from "web3-types";
 import { bytesToHex, hexToBytes, sha3Raw } from "web3-utils";
 import { isNullish } from "web3-validator";
 
-import { getTransactionFromOrToAttr } from "../eth/utils/transaction_builder";
-import { KlaytnTransaction, KlaytnTxData, TypedTransaction } from "../types";
+import { getTransactionFromOrToAttr } from "../eth/utils/transaction_builder.js";
+import { KlaytnTransaction, KlaytnTxData, TypedTransaction } from "../types.js";
 
-import { KlaytnTypedTransaction } from "./klaytn_tx";
+import { KlaytnTypedTransaction } from "./klaytn_tx.js";
 
 // Analogous to web3/src/accounts.ts:signTransactionWithContext
 export function context_signTransaction(context: Web3Context<EthExecutionAPI>) {

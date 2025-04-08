@@ -1,6 +1,6 @@
 import { AsyncNamespaceApi, rpcSendFunction, asyncOpenApi } from "@kaiachain/js-ext-core";
 // @ts-ignore: package @kaiachain/web3rpc has no .d.ts file.
-import { AdminApi, DebugApi, GovernanceApi, KlayApi, NetApi, PersonalApi, TxpoolApi } from "@kaiachain/web3rpc";
+import * as web3rpc from "@kaiachain/web3rpc";
 import { Web3 } from "web3";
 import {
   Web3Context,
@@ -15,14 +15,14 @@ import {
 } from "web3-types";
 import * as utils from "web3-utils";
 
-import { context_accounts } from "./accounts";
+import { context_accounts } from "./accounts/index.js";
 import {
   context_getProtocolVersion,
   context_sendSignedTransaction,
   context_sendTransaction,
   context_signTransaction,
-} from "./eth";
-import { KlaytnWeb3EthInterface } from "./types";
+} from "./eth/index.js";
+import { KlaytnWeb3EthInterface } from "./types.js";
 
 
 // Follow the Web3 class from the web3/src/web3.ts
@@ -54,9 +54,9 @@ export class KlaytnWeb3
 
   public constructor(
     providerOrContext?:
-			| string
-			| SupportedProviders<EthExecutionAPI>
-			| Web3ContextInitOptions<EthExecutionAPI>,
+      | string
+      | SupportedProviders<EthExecutionAPI>
+      | Web3ContextInitOptions<EthExecutionAPI>,
   ) {
     // Call super() like original Web3.constructor() does
     const contextInitOptions = getContextInitOptions(providerOrContext);
@@ -84,6 +84,8 @@ export class KlaytnWeb3
 
     // Attach additional RPC namespaces.
     const send = this.makeSendFunction();
+
+    const { AdminApi, DebugApi, GovernanceApi, KlayApi, NetApi, PersonalApi, TxpoolApi } = web3rpc
     this.admin = asyncOpenApi(send, AdminApi);
     this.debug = asyncOpenApi(send, DebugApi);
     this.governance = asyncOpenApi(send, GovernanceApi);

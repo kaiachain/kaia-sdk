@@ -30,13 +30,13 @@ import { isNullish } from "web3-validator";
 import {
   watchTransactionByPolling,
   Web3PromiEventEventTypeBase,
-} from "./watch_transaction_by_pooling";
-import { watchTransactionBySubscription } from "./watch_transaction_by_subscription";
+} from "./watch_transaction_by_pooling.js";
+import { watchTransactionBySubscription } from "./watch_transaction_by_subscription.js";
 
 export function watchTransactionForConfirmations<
-	ReturnFormat extends DataFormat,
-	Web3PromiEventEventType extends Web3PromiEventEventTypeBase<ReturnFormat>,
-	ResolveType = TransactionReceipt,
+  ReturnFormat extends DataFormat,
+  Web3PromiEventEventType extends Web3PromiEventEventTypeBase<ReturnFormat>,
+  ResolveType = TransactionReceipt,
 >(
   web3Context: Web3Context<EthExecutionAPI>,
   transactionPromiEvent: Web3PromiEvent<ResolveType, Web3PromiEventEventType>,

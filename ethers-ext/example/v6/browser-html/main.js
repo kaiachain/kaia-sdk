@@ -1,9 +1,14 @@
 var provider = null;
 var accounts = null;
+var signedApproveTx = null;
+var signedSwapTx = null;
 
 // https://baobab.klaytnscope.com/account/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
 var contractAddress = "0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df";
 var contractCalldata = "0xd09de08a"; // function increment()
+
+var testTokenAddr = "0x8ebc32c078f5ecc8406ddDC785c8F0e2490C1081"
+var gsrAddr = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"
 
 function isKaikas() {
   return provider && provider.provider.isKaikas;
@@ -46,6 +51,8 @@ async function connect(injectedProvider) {
     console.log("accounts changed", accounts);
     $("#textAccounts").html(accounts.map((a) => a.address));
   });
+
+  startPollingGasFee();
 }
 async function connectMM() {
   $("text").html(""); // Clear all text
@@ -80,6 +87,19 @@ async function switchBaobab() {
     },
     rpcUrls: ["https://public-en-kairos.node.kaia.io"],
     blockExplorerUrls: ["https://baobab.klaytnscope.com/"],
+  });
+}
+async function switchPrivateNetwork() {
+  await switchNetwork({
+    chainId: "0x3e8",
+    chainName: "Klaytn Private Network",
+    nativeCurrency: {
+      name: "KLAY",
+      symbol: "KLAY",
+      decimals: 18,
+    },
+    rpcUrls: ["http://localhost:8559"],
+    blockExplorerUrls: null,
   });
 }
 
@@ -142,6 +162,7 @@ async function doSendTx(makeTxRequest) {
     $("#textTxhash").html(`Error: ${err.message}`);
   }
 }
+
 async function sendLegacyVT() {
   doSendTx(async (address) => {
     return {
@@ -229,4 +250,171 @@ async function sendFeeDelegatedSC() {
       data: contractCalldata,
     };
   });
+}
+
+async function signApproveTx() {
+  try {
+    const signer = await provider.getSigner(accounts[0].address);
+
+    const network = await signer.provider.getNetwork();
+    const chainId = Number(network.chainId);
+
+    const feeData = await signer.provider.getFeeData();
+    const gasPriceBN = BigInt(feeData.gasPrice) || 25000000000n;
+    
+    // send approve
+    const approveABI = ["function approve(address spender, uint256 amount) external returns (bool)"];
+    const tokenContract = new ethers.Contract(testTokenAddr, approveABI, provider);
+    const maxUint256 = BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
+
+    const approveData = tokenContract.interface.encodeFunctionData("approve", [
+      gsrAddr,
+      maxUint256
+    ]);
+
+    const approveTx = {
+      to: testTokenAddr,
+      gasLimit: 100000,
+      gasPrice: gasPriceBN,
+      data: approveData,
+      chainId: chainId,
+    };
+
+    signedApproveTx = await signer.signTransaction(approveTx);
+  } catch (err) {
+    console.error(err);
+    $("#textApproveTxhash").html(`Error: ${err.message}`);
+  }
+}
+
+async function signSwapTx() {
+  try {
+    const testTokenToSwap = document.getElementById('testTokenSwapAmount')
+    const testTokenToSwapBN = BigInt(testTokenToSwap.value)
+
+    const signer = await provider.getSigner(accounts[0].address);
+
+    const network = await signer.provider.getNetwork();
+    const chainId = Number(network.chainId);
+
+    const feeData = await signer.provider.getFeeData();
+    const gasPriceBN = BigInt(feeData.gasPrice) || 25000000000n;
+
+    const swapForGasABI = ["function swapForGas(address token, uint256 amountIn, uint256 minAmountOut, uint256 amountRepay, uint256 deadline)"];
+    const gsr = new ethers.Contract(gsrAddr, swapForGasABI, provider);
+    const currentBlock = await provider.getBlock("latest");
+    const deadlineTimestamp = BigInt(currentBlock.timestamp) + 20n;
+
+    const swapData = gsr.interface.encodeFunctionData("swapForGas", [
+      testTokenAddr,
+      testTokenToSwapBN,
+      getMinAmountOut(gasPriceBN),
+      amountRepay(gasPriceBN),
+      deadlineTimestamp
+    ]);
+
+    const swapTx = {
+      to: gsrAddr,
+      gasLimit: 100000,
+      gasPrice: gasPriceBN,
+      data: swapData,
+      chainId: chainId,
+    };
+
+    signedSwapTx = await signer.signTransaction(swapTx);
+  } catch (err) {
+    console.error(err);
+    $("#textSwapTxhash").html(`Error: ${err.message}`);
+  }
+}
+
+async function sendGaslessTx() {
+  try {
+    const balanceOfABI = ["function balanceOf(address owner) view returns (uint256)"];
+    const testToken = new ethers.Contract(testTokenAddr, balanceOfABI, provider);
+
+    const kaiaBeforeSwap = await provider.getBalance(accounts[0].address);
+    const tokenBeforeSwap = await testToken.balanceOf(accounts[0].address);
+    $("#kaiaBeforeSwap").html(`${kaiaBeforeSwap}`);
+    $("#tokenBeforeSwap").html(`${tokenBeforeSwap}`);
+
+    const explorerUrl = "https://baobab.klaytnscope.com/tx/";
+    if (signedApproveTx) {
+      console.log("Sending both approve and swap transactions via RPC...");
+      await provider.send("kaia_sendRawTransactions", [[signedApproveTx, signedSwapTx]]);
+      $("#textApproveTxhash").html(
+        `<a href="${explorerUrl}${signedApproveTx.txhash}" target="_blank">${signedApproveTx.txhash}</a>`
+      );
+      $("#textSwapTxhash").html(
+        `<a href="${explorerUrl}${signedSwapTx.txhash}" target="_blank">${signedSwapTx.txhash}</a>`
+      );
+    } else {
+      await provider.send("kaia_sendRawTransactions", [[signedSwapTx]]);
+      $("#textSwapTxhash").html(
+        `<a href="${explorerUrl}${signedSwapTx.txhash}" target="_blank">${signedSwapTx.txhash}</a>`
+      );
+    }
+
+    const kaiaAfterSwap = await provider.getBalance(accounts[0].address);
+    const tokenAfterSwap = await testToken.balanceOf(accounts[0].address);
+    $("#kaiaAfterSwap").html(`${kaiaAfterSwap}`);
+    $("#tokenAfterSwap").html(`${tokenAfterSwap}`);
+  } catch (error) {
+    console.error("Error in sendGaslessTx:", error);
+  }
+}
+
+function startPollingGasFee() {
+  setInterval(async () => {
+    const feeData = await provider.getFeeData();
+    const gasPriceBN = feeData.gasPrice || 25000000000n;
+    
+    const totalFee = amountRepay(gasPriceBN);
+    const kaiaEstimateFee = totalFee;
+    const testTokenEstimateFee = totalFee;
+    
+    $("#kaiaEstimateFee").html(`${ethers_ext.formatKaia(kaiaEstimateFee)} KAIA`);
+    $("#testTokenEstimateFee").html(`${ethers_ext.formatKaia(testTokenEstimateFee)} TEST`);
+  }, 1000);
+}
+
+async function calcTargetValue() {
+  const testTokenToSwap = document.getElementById('testTokenSwapAmount')
+  const feeData = await provider.getFeeData();
+  const gasPriceBN = feeData.gasPrice || 25000000000n;
+
+  const totalFee = amountRepay(gasPriceBN)
+  const formattedTotalFee = ethers_ext.formatKaia(totalFee)
+  const kaiaSwapAmount = testTokenToSwap.value - formattedTotalFee
+  $("#kaiaSwapAmount").html(`${kaiaSwapAmount}`);
+}
+
+function amountRepay(gasPriceBN) {
+  const lendTxGas = BigInt(21000);
+  const approveTxGas = BigInt(100000);
+  const swapTxGas = BigInt(500000);
+
+  const R1 = gasPriceBN * lendTxGas;
+  const R2 = gasPriceBN * approveTxGas;
+  const R3 = gasPriceBN * swapTxGas;
+
+  const totalFee = R1 + R2 + R3;
+  return totalFee
+}
+
+function getMinAmountOut(gasPriceBN) {
+  const appTxFee = BigInt(100000)
+  const commissionRateBasisPoints = 500;
+
+  // Calculate minimum amount out: appTxFee/(1 - commissionRate) + amountRepay
+  const appTxFeeBN = BigInt(appTxFee);
+  const amountRepayBN = amountRepay(gasPriceBN);
+
+  const commissionRateBN = BigInt(commissionRateBasisPoints);
+  const denominator = BigInt(10000);
+
+  const adjustedFee = appTxFeeBN * denominator / (denominator - commissionRateBN);
+  const minAmountOut = adjustedFee + amountRepayBN;
+
+  return minAmountOut.toString();
 }

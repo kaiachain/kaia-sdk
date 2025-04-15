@@ -7,28 +7,25 @@
   </head>
   <body>
     <body>
+    
       <p><button id="btnConnectMM" onclick="connectMM()">Connect MetaMask</button></p>
       <p><button id="btnConnectKK" onclick="connectKK()">Connect Kaikas</button></p>
       <hr/>
       <p>
-        <button id="btnNetBaobab" onclick="switchBaobab()">Switch to Baobab</button>
+        <button id="btnNetPrivate" onclick="switchPrivateNetwork()">Switch to Private Network</button>
       </p>
       <hr/>
-      <p>For MetaMask and Kaikas</p>
-      <p><button id="btnSignMsg" onclick="signMsg()">Sign message</button></p>
+      <p>Dapp of Gasless Swap</p>
+      <p>TestToken: <input type="number" id="testTokenSwapAmount" size="15" onchange="calcTargetValue()"></p>
+      <p>KAIA: <text id="kaiaSwapAmount"></text></p>
       <p>
-        <button id="btnLegacyVT" onclick="sendLegacyVT()">Send Legacy or Dynamic Fee tx (send ETH/KLAY)</button>
-        <button id="btnLegacySC" onclick="sendLegacySC()">Send Legacy or Dynamic Fee tx (call contract)</button>
-      </p>
-      <hr/>
-      <p>For Kaikas</p>
-      <p>
-        <button id="btnKlaytnVT" onclick="sendKlaytnVT()">Send ValueTransfer tx</button>
-        <button id="btnKlaytnSC" onclick="sendKlaytnSC()">Send SmartContractExecution tx</button>
+        <div>Estimated Fee in KAIA: <text id="kaiaEstimateFee"></text></div>
+        <div>Estimated Fee in TestToken: <text id="testTokenEstimateFee"></text></div>
       </p>
       <p>
-        <button id="btnFeeDelegatedVT" onclick="sendFeeDelegatedVT()">Sign and Send FeeDelegatedValueTransfer tx</button>
-        <button id="btnFeeDelegatedSC" onclick="sendFeeDelegatedSC()">Sign and Send FeeDelegatedSmartContractExecution tx</button>
+        <button id="btnSendGasless" onclick="signApproveTx()">Sign ApproveTx</button>
+        <button id="btnSendGasless" onclick="signSwapTx()">Sign SwapTx</button>
+        <button id="btnSendGasless" onclick="sendGaslessTxs()">Request Swap (pay in TestToken)</button>
       </p>
       <hr/>
       <p>
@@ -36,18 +33,22 @@
         <div>chainId: <text id="textChainId"></text></div>
       </p>
       <p>
-        <div>message signature: <text id="textSignature"></text></div>
-        <div>recovered signer address: <text id="textRecoveredAddress"></text></div>
+        <div>approve txhash: <text id="textApproveTxhash"></text></div>
+        <div>swap txhash: <text id="textSwapTxhash"></text></div>
       </p>
       <p>
-        <div>signed tx: <text id="textSignedTx"></text></div>
-        <div>txhash: <text id="textTxhash"></text></div>
+        <div>KAIA before Swap: <text id="kaiaBeforeSwap"></text></div>
+        <div>KAIA after Swap: <text id="kaiaAfterSwap"></text></div>
+      </p>
+      <p>
+        <div>TOKEN before Swap: <text id="tokenBeforeSwap"></text></div>
+        <div>TOKEN after Swap: <text id="tokenAfterSwap"></text></div>
       </p>
 
       <hr/>
       <hr/>
       <div class="button-group">
-        <button onclick="window.location.href='gasless.html'">Go to Gasless Swap</button>
+        <button onclick="window.location.href='index.html'">Go to home</button>
       </div> 
     </body>
 

@@ -105,7 +105,7 @@ export interface KlaytnAccountsInterface {
 	// Klaytn: modified methods
 	wallet: Wallet<KlaytnWeb3Account>;
 	create: () => KlaytnWeb3Account;
-	privateKeyToAccount: (privateKey: Uint8Array | string) => KlaytnWeb3Account;
+	privateKeyToAccount: (privateKey: Uint8Array | string, address?: string) => KlaytnWeb3Account;
 	decrypt: (
 		keystore: string,
 		password: string,
@@ -120,6 +120,7 @@ export interface KlaytnAccountsInterface {
 	signTransactionAsFeePayer: (
 		transaction: KlaytnTransaction | string,
 		privateKey: Bytes,
+		address?: string,
 	) => ReturnType<typeof signTransaction>;
 	decryptList: (
 		keystore: string,

@@ -5,42 +5,13 @@ const provider = new Web3.providers.HttpProvider("https://public-en-kairos.node.
 const web3 = new Web3(provider);
 
 describe("Role-based Key Tests", function () {
-    this.timeout(200000);
-
-    it("5. [REAL SEND] RoleBased + FeeDelegatedValueTransfer, check feePayer via getTransaction", async function () {
-        // Step 1: Prepare legacyA (for value transfer) and legacyB (for fee payment), test accouont created by Kaia Online Toolkit
+    it("Decoupled fee payer when signTransactionAsFeePayer", async function () {
+        // Step 1: Prepare legacyA (for value transfer) and legacyB (for fee payment)
         const legacyA = web3.eth.accounts.privateKeyToAccount("0x21040aa5efd8548b18d71aaea183f38cf242237d1cff1274fba02d57a35baac7");
-        const legacyB = web3.eth.accounts.privateKeyToAccount("0x7833d6a97880af896ee1c042d7965c952b4592a318cff584bedb966ec24e2069");
+        const legacyB = web3.eth.accounts.privateKeyToAccount("0x7833d6a97880af896ee1c042d7965c952b4592a318cff584bedb966ec24e2069", legacyA.address);
 
-        console.log("[Test5] legacyA (TxKey):", legacyA.address);
-        console.log("[Test5] legacyB (FeePayerKey):", legacyB.address);
-
-        // Step 2: Update legacyA to a RoleBased account
-        // Set RoleTransaction = legacyA, RoleAccountUpdate = legacyA, RoleFeePayer = legacyB
-        // const pubA = getPublicKeyFromPrivate(legacyA.privateKey);
-        // const pubB = getPublicKeyFromPrivate(legacyB.privateKey);
-
-        // console.log("[Test5] Updating legacyA to RoleBased...");
-        // const accountUpdateTx = {
-        //     type: TxType.AccountUpdate,
-        //     from: legacyA.address,
-        //     gas: 300000,
-        //     gasPrice: "25000000000",
-        //     key: {
-        //         type: AccountKeyType.RoleBased,
-        //         keys: [
-        //             { type: AccountKeyType.Public, key: pubA }, // RoleTransaction
-        //             { type: AccountKeyType.Public, key: pubA }, // RoleAccountUpdate
-        //             { type: AccountKeyType.Public, key: pubB }  // RoleFeePayer
-        //         ]
-        //     }
-        // };
-
-        // const signedUpdateTx = await web3.eth.accounts.signTransaction(accountUpdateTx, legacyA.privateKey);
-        // const receiptUpdate = await web3.eth.sendSignedTransaction(signedUpdateTx.rawTransaction);
-        // assert.isNotNull(receiptUpdate.transactionHash, "[Test5] AccountUpdate must be mined");
-        // console.log("[Test5] AccountUpdate TxHash:", receiptUpdate.transactionHash);
-
+        assert.equal(legacyA.address, legacyB.address, 'both account must have same public address')
+        assert.notEqual(legacyA.privateKey, legacyB.privateKey, 'both account must have different private key')
         // Step 3: Create FeeDelegatedValueTransfer transaction from legacyA to a new receiver
         const feeDelegatedTx = {
             type: TxType.FeeDelegatedValueTransfer,
@@ -54,23 +25,17 @@ describe("Role-based Key Tests", function () {
 
         // Step 4: Sign the transaction with legacyA (RoleTransaction)
         const userSigned = await legacyA.signTransaction(feeDelegatedTx);
-        console.log('parse signed user tx', parseTransaction(userSigned.rawTransaction));
+        assert.isNotNull(userSigned.rawTransaction, "User-signed transaction must exist");
 
-        assert.isNotNull(userSigned.rawTransaction, "[Test5] User-signed transaction must exist");
+        // Step 5: Sign the transaction with legacyB (RoleFeePayer), output feePayer field will be legacy A
+        // Step 5.1 using account to signTransactionAsFeePayer
+        const feePayerSigned1 = await legacyB.signTransactionAsFeePayer(userSigned.rawTransaction);
+        const parsedFeePayer1 = parseTransaction(feePayerSigned1.rawTransaction).feePayer
+        assert.equal(parsedFeePayer1, legacyA.address, `fee payer address expecte to be ${legacyA.address}, got ${parsedFeePayer1}`)
 
-        // Step 5: Sign the transaction with legacyB (RoleFeePayer) with feePayer field set to legacyA's address
-        // TODO: fix `type` datatypes in parseTransaction
-        // for role-based-keys, if we want the fee payer to be legacyA, we need to decode and set the fee payer manually, otherwise the feepayer will equal legacyB
-        const feePayerSigned = await legacyB.signTransactionAsFeePayer({ ...parseTransaction(userSigned.rawTransaction), feePayer: legacyA.address });
-
-        const parsedFeePayer = parseTransaction(feePayerSigned.rawTransaction).feePayer
-        assert.equal(parsedFeePayer, legacyA.address, `fee payer address expecte to be ${legacyA.address}, got ${parsedFeePayer}`)
-
-        console.log("[Test5] Sending FeeDelegated transaction to network...");
-        const receiptFD = await web3.eth.sendSignedTransaction(feePayerSigned.rawTransaction);
-
-        assert.isNotNull(receiptFD.transactionHash, "[Test5] FeeDelegated transaction must be mined");
-        console.log("[Test5] FeeDelegated TxHash:", receiptFD.transactionHash);
-        console.log(`Scan: https://kairos.kaiascan.io/tx/${receiptFD.transactionHash}?tabId=overview&page=1`);
+        // Step 5.2 using web3.eth.accounts to signTransactionAsFeePayer
+        const feePayerSigned2 = await web3.eth.accounts.signTransactionAsFeePayer(userSigned.rawTransaction, legacyB.privateKey, legacyA.address);
+        const parsedFeePayer2 = parseTransaction(feePayerSigned2.rawTransaction).feePayer
+        assert.equal(parsedFeePayer2, legacyA.address, `fee payer address expecte to be ${legacyA.address}, got ${parsedFeePayer2}`)
     });
 });

@@ -30,7 +30,7 @@ export function context_signTransaction(context: Web3Context<EthExecutionAPI>) {
 // Analogous to web3/src/accounts.ts:signTransactionWithContext
 // but instead calls signTransactionAsFeePayer.
 export function context_signTransactionAsFeePayer(context: Web3Context<EthExecutionAPI>) {
-  return async (transaction: KlaytnTransaction | string, privateKey: Bytes) => {
+  return async (transaction: KlaytnTransaction | string, privateKey: Bytes, feePayerAddress?: string) => {
     const tx = resolveTransaction(transaction);
     const priv = bytesToHex(privateKey);
 
@@ -38,7 +38,7 @@ export function context_signTransactionAsFeePayer(context: Web3Context<EthExecut
       throw new Error(`signTransactionAsFeePayer not supported for tx type ${tx.type}`);
     }
 
-    populateFeePayerAndSignatures(tx, privateKeyToAddress(privateKey));
+    populateFeePayerAndSignatures(tx, feePayerAddress || privateKeyToAddress(privateKey));
     const preparedTx = await prepareTransaction(tx, context, privateKey);
 
     // Not using the original web3-eth-accounts:signTransaction()

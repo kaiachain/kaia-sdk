@@ -28,14 +28,8 @@ describe("Role-based Key Tests", function () {
         assert.isNotNull(userSigned.rawTransaction, "User-signed transaction must exist");
 
         // Step 5: Sign the transaction with legacyB (RoleFeePayer), output feePayer field will be legacy A
-        // Step 5.1 using account to signTransactionAsFeePayer
-        const feePayerSigned1 = await legacyB.signTransactionAsFeePayer(userSigned.rawTransaction);
-        const parsedFeePayer1 = parseTransaction(feePayerSigned1.rawTransaction).feePayer
-        assert.equal(parsedFeePayer1, legacyA.address, `fee payer address expecte to be ${legacyA.address}, got ${parsedFeePayer1}`)
-
-        // Step 5.2 using web3.eth.accounts to signTransactionAsFeePayer
-        const feePayerSigned2 = await web3.eth.accounts.signTransactionAsFeePayer(userSigned.rawTransaction, legacyB.privateKey, legacyA.address);
-        const parsedFeePayer2 = parseTransaction(feePayerSigned2.rawTransaction).feePayer
-        assert.equal(parsedFeePayer2, legacyA.address, `fee payer address expecte to be ${legacyA.address}, got ${parsedFeePayer2}`)
+        const feePayerSigned = await legacyB.signTransactionAsFeePayer(userSigned.rawTransaction);
+        const parsedFeePayer = parseTransaction(feePayerSigned.rawTransaction).feePayer
+        assert.equal(parsedFeePayer, legacyA.address, `fee payer address expecte to be ${legacyA.address}, got ${parsedFeePayer}`)
     });
 });

@@ -120,7 +120,6 @@ export interface KlaytnAccountsInterface {
 	signTransactionAsFeePayer: (
 		transaction: KlaytnTransaction | string,
 		privateKey: Bytes,
-		address?: string,
 	) => ReturnType<typeof signTransaction>;
 	decryptList: (
 		keystore: string,

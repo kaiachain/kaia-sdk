@@ -3,7 +3,7 @@ import _ from "lodash";
 import { describe, it } from "mocha";
 import { Receipt, Web3 } from "web3";
 
-import { KlaytnWeb3 } from "../src";
+import { KaiaWeb3 } from "../src";
 
 import { MockProvider } from "./mock_provider";
 
@@ -76,12 +76,12 @@ const block = {
 describe("web3.eth", () => {
   let P: MockProvider;
   let EW3: Web3;
-  let KW3: KlaytnWeb3;
+  let KW3: KaiaWeb3;
 
   before(() => {
     P = new MockProvider(url);
     EW3 = new Web3(P);
-    KW3 = new KlaytnWeb3(P);
+    KW3 = new KaiaWeb3(P);
 
     // Stuff dummy values to the mock provider
     P.mock_override("eth_chainId", () => "0x3e9");

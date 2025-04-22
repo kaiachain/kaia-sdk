@@ -22,7 +22,7 @@ import {
   context_sendTransaction,
   context_signTransaction,
 } from "./eth/index.js";
-import { KlaytnWeb3EthInterface } from "./types.js";
+import { KaiaWeb3EthInterface } from "../src/index.js";
 
 
 // Follow the Web3 class from the web3/src/web3.ts
@@ -36,7 +36,7 @@ export class KlaytnWeb3
 
   // Properties analogous to Web3 class
   public utils: typeof utils;
-  public eth: KlaytnWeb3EthInterface;
+  public eth: KaiaWeb3EthInterface;
 
   // Additional RPC namespaces
   public admin: AsyncNamespaceApi;
@@ -67,7 +67,7 @@ export class KlaytnWeb3
 
     // Expose required properties from inner Web3 object
     this.utils = this._web3.utils;
-    this.eth = this._web3.eth as KlaytnWeb3EthInterface;
+    this.eth = this._web3.eth as KaiaWeb3EthInterface;
 
     // Override web3.eth.accounts methods
     const accounts = context_accounts(this);

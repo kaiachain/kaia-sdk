@@ -3,8 +3,7 @@ import { describe, it } from "mocha";
 import { CipherOptions, KeyStore, Web3 } from "web3";
 import { sign, recover, Web3Account } from "web3-eth-accounts";
 
-import { KlaytnWeb3 } from "../src";
-import { KlaytnWeb3Account } from "../src/types";
+import { KaiaWeb3, KaiaWeb3Account } from "../src";
 
 import { MockProvider } from "./mock_provider";
 
@@ -57,12 +56,12 @@ const keystores = [
 describe("web3.eth.accounts", () => {
   let P: MockProvider;
   let EW3: Web3;
-  let KW3: KlaytnWeb3;
+  let KW3: KaiaWeb3;
 
   before(() => {
     P = new MockProvider(url);
     EW3 = new Web3(P);
-    KW3 = new KlaytnWeb3(P);
+    KW3 = new KaiaWeb3(P);
 
     // Stuff dummy values to the mock provider
     P.mock_override("eth_getTransactionCount", () => "0x1234");
@@ -146,7 +145,7 @@ describe("web3.eth.accounts", () => {
       assert.equal(W3.eth.accounts.wallet.at(2)?.address, addr2);
       checkAccountObject(W3.eth.accounts.wallet.at(0)!);
     }
-    async function checkKlaytnWallet(W3: KlaytnWeb3) {
+    async function checkKlaytnWallet(W3: KaiaWeb3) {
       await checkWallet(W3);
       checkKlaytnAccountObject(W3.eth.accounts.wallet.at(0)!);
     }
@@ -225,8 +224,8 @@ async function checkAccountObject(account: Web3Account, expectedAddr?: string, e
   checkKeyStore(await account.encrypt("password", lightKdf));
 }
 
-// Check the result of web3.eth.accounts.create(), decrypt(), and privateKeyToAccount() from KlaytnWeb3.
-async function checkKlaytnAccountObject(account: KlaytnWeb3Account, expectedAddr?: string, expectedPriv?: string) {
+// Check the result of web3.eth.accounts.create(), decrypt(), and privateKeyToAccount() from KaiaWeb3.
+async function checkKlaytnAccountObject(account: KaiaWeb3Account, expectedAddr?: string, expectedPriv?: string) {
   // All properties are defined.
   await checkAccountObject(account, expectedAddr, expectedPriv);
   assert.isFunction(account.signTransactionAsFeePayer);

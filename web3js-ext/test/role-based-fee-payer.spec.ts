@@ -30,6 +30,6 @@ describe("Role-based Key Tests", function () {
         // Step 5: Sign the transaction with legacyB (RoleFeePayer), output feePayer field will be legacy A
         const feePayerSigned = await legacyB.signTransactionAsFeePayer(userSigned.rawTransaction);
         const parsedFeePayer = parseTransaction(feePayerSigned.rawTransaction).feePayer
-        assert.equal(parsedFeePayer, legacyA.address, `fee payer address expecte to be ${legacyA.address}, got ${parsedFeePayer}`)
+        assert.equal(parsedFeePayer, legacyA.address, `fee payer address expected to be ${legacyA.address}, got ${parsedFeePayer}`)
     });
 });

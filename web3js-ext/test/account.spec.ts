@@ -147,7 +147,7 @@ describe("web3.eth.accounts", () => {
     }
     async function checkKlaytnWallet(W3: KaiaWeb3) {
       await checkWallet(W3);
-      checkKlaytnAccountObject(W3.eth.accounts.wallet.at(0)!);
+      checkKaiaAccountObject(W3.eth.accounts.wallet.at(0)!);
     }
 
     await checkWallet(EW3);
@@ -156,7 +156,7 @@ describe("web3.eth.accounts", () => {
 
   it("create()", async () => {
     await checkAccountObject(EW3.eth.accounts.create());
-    await checkKlaytnAccountObject(KW3.eth.accounts.create());
+    await checkKaiaAccountObject(KW3.eth.accounts.create());
   });
 
   it("privateKeyToAccount()", async () => {
@@ -164,7 +164,7 @@ describe("web3.eth.accounts", () => {
     const addr = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 
     await checkAccountObject(EW3.eth.accounts.privateKeyToAccount(priv), addr, priv);
-    await checkKlaytnAccountObject(KW3.eth.accounts.privateKeyToAccount(priv), addr, priv);
+    await checkKaiaAccountObject(KW3.eth.accounts.privateKeyToAccount(priv), addr, priv);
   });
 
   it("decrypt()", async () => {
@@ -181,7 +181,7 @@ describe("web3.eth.accounts", () => {
     for (const tc of keystores) {
       const accounts = await KW3.eth.accounts.decryptList(tc.json, tc.password);
       for (let idx = 0; idx < accounts.length; idx++) {
-        await checkKlaytnAccountObject(accounts[idx], tc.address, tc.keys[idx]);
+        await checkKaiaAccountObject(accounts[idx], tc.address, tc.keys[idx]);
       }
     }
   });
@@ -225,7 +225,7 @@ async function checkAccountObject(account: Web3Account, expectedAddr?: string, e
 }
 
 // Check the result of web3.eth.accounts.create(), decrypt(), and privateKeyToAccount() from KaiaWeb3.
-async function checkKlaytnAccountObject(account: KaiaWeb3Account, expectedAddr?: string, expectedPriv?: string) {
+async function checkKaiaAccountObject(account: KaiaWeb3Account, expectedAddr?: string, expectedPriv?: string) {
   // All properties are defined.
   await checkAccountObject(account, expectedAddr, expectedPriv);
   assert.isFunction(account.signTransactionAsFeePayer);

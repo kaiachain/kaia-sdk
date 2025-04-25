@@ -3,7 +3,7 @@ import { assert } from "ethers";
 import { ethers, TransactionLike } from "ethers";
 import { getTransactionRequest } from "./txutil.js";
 
-const GASLESS_SWAP_ROUTER_ABI = [
+export const GASLESS_SWAP_ROUTER_ABI = [
   {
       "inputs": [
           { "internalType": "address", "name": "token", "type": "address" },
@@ -80,11 +80,11 @@ const LocalGaslessSwapRouterAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F87570
 
 /**
  * Get the gasless swap router for the specified chain
- * @param signer The ethers signer
+ * @param provider The ethers provider
  * @param chainId The chain ID
  * @returns The gasless swap router contract
  */
-export function getGaslessSwapRouter(signer: ethers.Signer, chainId: number): any {
+export function getGaslessSwapRouter(provider: ethers.Provider, chainId: number): any {
   const MAINNET_CHAIN_ID = 8217; // Kaia mainnet
   const KAIROS_CHAIN_ID = 1001; // Kaia testnet (Kairos)
   const LOCAL = 1000;
@@ -104,7 +104,7 @@ export function getGaslessSwapRouter(signer: ethers.Signer, chainId: number): an
   const contract = new ethers.Contract(
     routerAddress,
     GASLESS_SWAP_ROUTER_ABI,
-    signer
+    provider
   );
 
   const contractWithAddress = Object.assign(contract, { address: routerAddress });
@@ -172,54 +172,49 @@ export async function getAmountIn(
 }
 
 /**
- * Generate a raw approve transaction
- * @param signer The signer
- * @param token The token address or contract
- * @param amount The amount to approve (default: MaxUint256)
- * @returns The raw approve transaction
+ * Generate a approve transaction
+ * @param provider The ethers provider
+ * @param fromAddress The sender address
+ * @param tokenAddr The token address
+ * @param routerAddress The router address
+ * @param amount The amount to approve
+ * @returns The approve transaction
  */
-export async function getApproveRawTx(
-  signer: ethers.Signer,
+export async function getApproveTx(
+  provider: ethers.Provider,
+  fromAddress: string,
   tokenAddr: string,
+  routerAddress: string,
   amount: string
-): Promise<string> {
+): Promise<ethers.TransactionRequest> {
   try {
-    if (!signer.provider) {
-      throw new Error("Signer provider is null");
-    }
-
-    const network = await signer.provider.getNetwork();
+    const network = await provider.getNetwork();
     const chainId = Number(network.chainId);
-
-    const gsr = getGaslessSwapRouter(signer, chainId);
 
     const tokenAbi = [
       "function approve(address spender, uint256 amount) external returns (bool)"
     ];
 
-    const tokenContract = new ethers.Contract(
-      tokenAddr,
-      tokenAbi,
-      signer
-    );
-
+    const tokenInterface = new ethers.Interface(tokenAbi);
+    
     const amountBN = BigInt(amount);
     if (amountBN <= BigInt(0)) {
       throw new Error("Amount must be greater than 0");
     }
 
-    const approveData = tokenContract.interface.encodeFunctionData("approve", [
-      gsr.address,
+    const approveData = tokenInterface.encodeFunctionData("approve", [
+      routerAddress,
       amountBN.toString()
     ]);
 
-    const nonce = await signer.provider.getTransactionCount(await signer.getAddress());
-    const feeData = await signer.provider.getFeeData();
+    const nonce = await provider.getTransactionCount(fromAddress);
+    const feeData = await provider.getFeeData();
     const gasPriceBN = feeData.gasPrice?.toString() || "25000000000";
 
-    const tx = {
+    return {
       type: 0,
       to: tokenAddr,
+      from: fromAddress,
       nonce: nonce,
       gasLimit: 100000,
       gasPrice: gasPriceBN,
@@ -227,57 +222,50 @@ export async function getApproveRawTx(
       value: 0n,
       chainId: chainId,
     };
-
-    return await signer.signTransaction(tx);
   } catch (error) {
-    console.error("Error in getApproveRawTx:", error);
+    console.error("Error in getApproveTx:", error);
     throw error;
   }
 }
 
 /**
- * Generate a raw swap transaction
- * @param signer The signer
+ * Generate an swap transaction
+ * @param provider The ethers provider
+ * @param fromAddress The sender address
  * @param tokenAddr The token address to swap
  * @param amountIn The amount to swap
  * @param minAmountOut The minimum amount out
  * @param amountRepay The amount to repay
  * @param isSingle Whether this is a single transaction (default: true)
  * @param deadline The deadline in seconds (default: 1800)
- * @returns The raw swap transaction
+ * @returns The swap transaction
  */
-export async function getSwapRawTx(
-  signer: ethers.Signer,
+export async function getSwapTx(
+  provider: ethers.Provider,
+  fromAddress: string,
   tokenAddr: string,
   amountIn: string,
   minAmountOut: string,
   amountRepay: string,
   isSingle: boolean = true,
   deadline: number = 1800
-): Promise<string> {
+): Promise<ethers.TransactionRequest> {
   try {
-    if (!signer.provider) {
-      throw new Error("Signer provider is null");
-    }
-
-    const network = await signer.provider.getNetwork();
+    const network = await provider.getNetwork();
     const chainId = Number(network.chainId);
 
-    const gsr = getGaslessSwapRouter(signer, chainId);
+    const routerInfo = getGaslessSwapRouter(provider, chainId);
+    const routerAddress = routerInfo.address;
 
-    const currentBlock = await signer.provider.getBlock("latest");
+    const currentBlock = await provider.getBlock("latest");
     if (!currentBlock) {
       throw new Error("Failed to get latest block");
     }
     const deadlineTimestamp = currentBlock.timestamp + deadline;
 
-    const routerContract = new ethers.Contract(
-      gsr.address,
-      GASLESS_SWAP_ROUTER_ABI,
-      signer
-    );
+    const routerInterface = new ethers.Interface(GASLESS_SWAP_ROUTER_ABI);
 
-    const swapData = routerContract.interface.encodeFunctionData("swapForGas", [
+    const swapData = routerInterface.encodeFunctionData("swapForGas", [
       tokenAddr,
       amountIn,
       minAmountOut,
@@ -285,16 +273,18 @@ export async function getSwapRawTx(
       deadlineTimestamp
     ]);
 
-    const address = await signer.getAddress();
-    const baseNonce = await signer.provider.getTransactionCount(address);
+    const baseNonce = await provider.getTransactionCount(fromAddress);
     const nonceIncrement = isSingle ? 0 : 1;
     const nonce = baseNonce + nonceIncrement;
-    const feeData = await signer.provider.getFeeData();
+    
+    const feeData = await provider.getFeeData();
     const gasPriceBN = feeData.gasPrice?.toString() || "25000000000";
 
-    const tx = {
+    // Construct the transaction object
+    const tx: ethers.TransactionRequest = {
       type: 0,
-      to: gsr.address,
+      to: routerAddress,
+      from: fromAddress,
       nonce: nonce,
       gasLimit: 500000,
       gasPrice: gasPriceBN,
@@ -303,9 +293,9 @@ export async function getSwapRawTx(
       chainId: chainId,
     };
 
-    return await signer.signTransaction(tx);
+    return tx;
   } catch (error) {
-    console.error("Error in getSwapRawTx:", error);
+    console.error("Error in getSwapTx:", error);
     throw error;
   }
 }
@@ -365,12 +355,12 @@ export async function sendGaslessTx(
  * @returns True if the token is supported, false otherwise
  */
 export async function isGaslessSupportedToken(
-  signer: ethers.Signer,
+  provider: ethers.Provider,
   token: string,
   chainId: number,
 ): Promise<boolean> {
   try {
-    const gsr = getGaslessSwapRouter(signer, chainId);
+    const gsr = getGaslessSwapRouter(provider, chainId);
 
     return await gsr.isTokenSupported(token);
   } catch (error) {
@@ -381,13 +371,13 @@ export async function isGaslessSupportedToken(
 
 /**
  * Check if a transaction is a gasless approve transaction
- * @param signer The ethers signer
+ * @param provider The ethers provider
  * @param tx The transaction
  * @param chainId The chain ID
  * @returns True if the transaction is a gasless approve transaction, false otherwise
  */
 export async function isGaslessApprove(
-  signer: ethers.Signer,
+  provider: ethers.Provider,
   tx: string | any,
   chainId: number,
 ): Promise<boolean> {
@@ -399,7 +389,7 @@ export async function isGaslessApprove(
     }
 
     // A1: GaslessApproveTx.to is a whitelisted ERC-20 token.
-    const isTokenSupported = await isGaslessSupportedToken(signer, txRequest.to.toString(), chainId);
+    const isTokenSupported = await isGaslessSupportedToken(provider, txRequest.to.toString(), chainId);
     if (!isTokenSupported) {
       return false;
     }
@@ -417,7 +407,7 @@ export async function isGaslessApprove(
     const amountData = "0x" + data.slice(74);
 
     // A3: spender is a whitelisted GaslessSwapRouter.
-    const router = getGaslessSwapRouter(signer, chainId);
+    const router = getGaslessSwapRouter(provider, chainId);
     if (spenderData.toLowerCase() !== router.address.toLowerCase()) {
       return false;
     }
@@ -429,8 +419,8 @@ export async function isGaslessApprove(
     }
 
     // A5: nonce is getNonce(tx.from).
-    if (signer.provider && txRequest.nonce !== undefined && txRequest.nonce !== null && txRequest.from) {
-      const expectedNonce = await signer.provider.getTransactionCount(txRequest.from);
+    if (txRequest.nonce !== undefined && txRequest.nonce !== null && txRequest.from) {
+      const expectedNonce = await provider.getTransactionCount(txRequest.from);
       if (BigInt(txRequest.nonce.toString()) !== BigInt(expectedNonce)) {
         return false;
       }
@@ -454,13 +444,13 @@ export function isValidSwapTxFormat(txRequest: TransactionLike<string>): boolean
 }
 
 export async function isValidRouterAddress(
-  signer: ethers.Signer,
+  provider: ethers.Provider,
   txRequest: TransactionLike<string>,
   chainId: number
 ): Promise<boolean> {
   if (!txRequest.to) return false;
   
-  const router = getGaslessSwapRouter(signer, chainId);
+  const router = getGaslessSwapRouter(provider, chainId);
   return txRequest.to.toLowerCase() === router.address.toLowerCase();
 }
 
@@ -520,7 +510,7 @@ export function validateApproveAmount(
 }
 
 export async function validateNonceWithApprove(
-  signer: ethers.Signer,
+  provider: ethers.Provider,
   approveTxRequest: TransactionLike<string>,
   swapTxRequest: TransactionLike<string>
 ): Promise<boolean> {
@@ -535,9 +525,9 @@ export async function validateNonceWithApprove(
   }
   
   // Approve transaction nonce = Current nonce
-  if (signer.provider && swapTxRequest.from) {
+  if (swapTxRequest.from) {
     try {
-      const currentNonce = await signer.provider.getTransactionCount(swapTxRequest.from);
+      const currentNonce = await provider.getTransactionCount(swapTxRequest.from);
       if (BigInt(approveTxRequest.nonce.toString()) !== BigInt(currentNonce)) {
         return false;
       }
@@ -564,16 +554,16 @@ export function validateAmountRepayWithApprove(
 }
 
 export async function validateNonceWithoutApprove(
-  signer: ethers.Signer,
+  provider: ethers.Provider,
   swapTxRequest: TransactionLike<string>
 ): Promise<boolean> {
   if (swapTxRequest.nonce === undefined || swapTxRequest.nonce === null) {
     return false;
   }
   
-  if (signer.provider && swapTxRequest.from) {
+  if (swapTxRequest.from) {
     try {
-      const currentNonce = await signer.provider.getTransactionCount(swapTxRequest.from);
+      const currentNonce = await provider.getTransactionCount(swapTxRequest.from);
       if (BigInt(swapTxRequest.nonce.toString()) !== BigInt(currentNonce)) {
         return false;
       }
@@ -601,7 +591,7 @@ export function validateAmountRepayWithoutApprove(
 }
 
 export async function validateWithApprove(
-  signer: ethers.Signer,
+  provider: ethers.Provider,
   approveTx: string | any,
   swapTxRequest: TransactionLike<string>,
   tokenData: string,
@@ -609,7 +599,7 @@ export async function validateWithApprove(
   amountRepayData: string,
   chainId: number
 ): Promise<boolean> {
-  const isApprove = await isGaslessApprove(signer, approveTx, chainId);
+  const isApprove = await isGaslessApprove(provider, approveTx, chainId);
   if (!isApprove) {
     return false;
   }
@@ -627,7 +617,7 @@ export async function validateWithApprove(
   }
   
   // SP3: Nonce is the correct value
-  if (!await validateNonceWithApprove(signer, approveTxRequest, swapTxRequest)) {
+  if (!await validateNonceWithApprove(provider, approveTxRequest, swapTxRequest)) {
     return false;
   }
   
@@ -640,12 +630,12 @@ export async function validateWithApprove(
 }
 
 export async function validateWithoutApprove(
-  signer: ethers.Signer,
+  provider: ethers.Provider,
   swapTxRequest: TransactionLike<string>,
   amountRepayData: string
 ): Promise<boolean> {
   // SP3: Nonce is the correct value
-  if (!await validateNonceWithoutApprove(signer, swapTxRequest)) {
+  if (!await validateNonceWithoutApprove(provider, swapTxRequest)) {
     return false;
   }
   
@@ -662,11 +652,11 @@ export async function validateWithoutApprove(
  * @param approveTxOrNull The approve transaction or null if not needed
  * @param swapTx The swap transaction
  * @param chainId The chain ID
- * @param signer The ethers signer
+ * @param provider The ethers provider
  * @returns True if the transactions form a valid gasless swap, false otherwise
  */
 export async function isGaslessSwap(
-  signer: ethers.Signer,
+  provider: ethers.Provider,
   approveTxOrNull: string | any | null,
   swapTx: string | any,
   chainId: number
@@ -680,7 +670,7 @@ export async function isGaslessSwap(
     }
     
     // S1: Router address validation
-    if (!await isValidRouterAddress(signer, swapTxRequest, chainId)) {
+    if (!await isValidRouterAddress(provider, swapTxRequest, chainId)) {
       return false;
     }
     
@@ -693,7 +683,7 @@ export async function isGaslessSwap(
     const { tokenData, amountInData, amountRepayData } = decodedParams;
     
     // S3: Token support validation
-    const isTokenSupported = await isGaslessSupportedToken(signer, tokenData, chainId);
+    const isTokenSupported = await isGaslessSupportedToken(provider, tokenData, chainId);
     if (!isTokenSupported) {
       return false;
     }
@@ -701,7 +691,7 @@ export async function isGaslessSwap(
     // Validation with or without approve transaction
     if (approveTxOrNull) {
       if (!await validateWithApprove(
-        signer, 
+        provider, 
         approveTxOrNull, 
         swapTxRequest, 
         tokenData, 
@@ -713,7 +703,7 @@ export async function isGaslessSwap(
       }
     } else {
       if (!await validateWithoutApprove(
-        signer, 
+        provider, 
         swapTxRequest, 
         amountRepayData
       )) {

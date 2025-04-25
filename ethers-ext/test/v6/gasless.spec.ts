@@ -10,8 +10,8 @@ import {
   getCommissionRate,
   getMinAmountOut,
   getAmountIn,
-  getApproveRawTx,
-  getSwapRawTx,
+  getApproveTx,
+  getSwapTx,
   sendGaslessTx,
   isGaslessSupportedToken,
   isGaslessApprove,
@@ -49,7 +49,7 @@ describe("Gasless v6", () => {
     for (let P of [EP, KP]) {
       P.mock_override("eth_chainId", () => "0x3e9"); // 1001 in hex
       P.mock_override("eth_blockNumber", () => "0x12d687");
-      P.mock_override("eth_gasPrice", () => "0xba43b7400"); // 50 gkei
+      P.mock_override("eth_gasPrice", () => "0xba43b7400"); // 50 gwei
       P.mock_override("eth_getTransactionCount", () => "0x1234");
       P.mock_override("eth_estimateGas", () => "0x5208"); // 21000
       P.mock_override("eth_sendRawTransaction", (params: any[]) => {
@@ -79,7 +79,7 @@ describe("Gasless v6", () => {
     }
     
     for (let P of [KP]) {
-      P.mock_override("klay_gasPrice", () => "0xba43b7400"); // 50 gkei
+      P.mock_override("klay_gasPrice", () => "0xba43b7400"); // 50 gwei
       P.mock_override("klay_estimateGas", () => "0x5208"); // 21000
       P.mock_override("klay_sendRawTransaction", (params: any[]) => {
         sentRawTx = params[0];
@@ -111,22 +111,22 @@ describe("Gasless v6", () => {
 
   describe("getGaslessSwapRouter", () => {
     it("should return router for mainnet chain ID", () => {
-      const router = getGaslessSwapRouter(EW, mainnetChainId);
+      const router = getGaslessSwapRouter(EP, mainnetChainId);
       expect(router.address).to.equal("0x5FC8d32690cc91D4c39d9d3abcBD16989F875707");
     });
 
     it("should return router for kairos chain ID", () => {
-      const router = getGaslessSwapRouter(EW, kairosChainId);
+      const router = getGaslessSwapRouter(EP, kairosChainId);
       expect(router.address).to.equal("0x5FC8d32690cc91D4c39d9d3abcBD16989F875707");
     });
 
     it("should return router for local chain ID", () => {
-      const router = getGaslessSwapRouter(EW, localChainId);
+      const router = getGaslessSwapRouter(EP, localChainId);
       expect(router.address).to.equal("0x5FC8d32690cc91D4c39d9d3abcBD16989F875707");
     });
 
     it("should throw error for unsupported chain ID", () => {
-      expect(() => getGaslessSwapRouter(EW, unsupportedChainId)).to.throw("Unsupported chain ID: 1234");
+      expect(() => getGaslessSwapRouter(EP, unsupportedChainId)).to.throw("Unsupported chain ID: 1234");
     });
   });
 
@@ -166,39 +166,47 @@ describe("Gasless v6", () => {
     });
   });
 
-  describe("getApproveRawTx", () => {
-    it("should generate a valid approve raw transaction", async () => {
+  describe("getApproveTx", () => {
+    it("should generate a valid approve transaction", async () => {
       const amount = "1000000000000000000";
       
-      const rawTx = await getApproveRawTx(EW, tokenAddress, amount);
-      expect(rawTx).to.be.a("string");
-      expect(rawTx.startsWith("0x")).to.be.true;
+      const tx = await getApproveTx(EP, walletAddress, tokenAddress, "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707", amount);
+      expect(tx).to.be.an("object");
+      expect(tx.to).to.equal(tokenAddress);
+      expect(tx.from).to.equal(walletAddress);
+      expect(tx.data).to.exist;
+      if (tx.data) {
+        expect(tx.data.toString().startsWith("0x095ea7b3")).to.be.true; // approve selector
+      }
     });
 
     it("should throw error if amount is zero or negative", async () => {
-      await expect(getApproveRawTx(EW, tokenAddress, "0")).to.be.rejectedWith("Amount must be greater than 0");
+      await expect(getApproveTx(EP, walletAddress, tokenAddress, "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707", "0")).to.be.rejectedWith("Amount must be greater than 0");
     });
   });
 
-  describe("getSwapRawTx", () => {
-    it("should generate a valid swap raw transaction", async () => {
+  describe("getSwapTx", () => {
+    it("should generate a valid swap transaction", async () => {
       const amountIn = "1000000000000000000";
       const minAmountOut = "26636111111111111";
       const amountRepay = "15525000000000000";
       
-      const rawTx = await getSwapRawTx(EW, tokenAddress, amountIn, minAmountOut, amountRepay);
-      expect(rawTx).to.be.a("string");
-      expect(rawTx.startsWith("0x")).to.be.true;
-    });
+      const tx = await getSwapTx(EP, walletAddress, tokenAddress, amountIn, minAmountOut, amountRepay);
+      expect(tx).to.be.an("object");
+      expect(tx.to).to.be.a("string");
+      expect(tx.from).to.equal(walletAddress);
+      expect(tx.data).to.be.a("string");
+    })
 
     it("should handle isSingle parameter correctly", async () => {
       const amountIn = "1000000000000000000";
       const minAmountOut = "26636111111111111";
       const amountRepay = "15525000000000000";
       
-      const rawTx = await getSwapRawTx(EW, tokenAddress, amountIn, minAmountOut, amountRepay, false);
-      expect(rawTx).to.be.a("string");
-      expect(rawTx.startsWith("0x")).to.be.true;
+      const tx = await getSwapTx(EP, walletAddress, tokenAddress, amountIn, minAmountOut, amountRepay, false);
+      expect(tx).to.be.an("object");
+      expect(tx.to).to.be.a("string");
+      expect(tx.nonce).to.equal(0x1235);
     });
   });
 
@@ -240,7 +248,7 @@ describe("Gasless v6", () => {
       });
       
       try {
-        const result = await isGaslessSupportedToken(EW, tokenAddress, kairosChainId);
+        const result = await isGaslessSupportedToken(EP, tokenAddress, kairosChainId);
         expect(result).to.be.true;
       } finally {
         EP.mock_override("eth_call", originalMock);
@@ -251,7 +259,7 @@ describe("Gasless v6", () => {
       const originalMock = EP.overrides["eth_call"];
       EP.mock_override("eth_call", () => { throw new Error("Test error"); });
       
-      const result = await isGaslessSupportedToken(EW, tokenAddress, kairosChainId);
+      const result = await isGaslessSupportedToken(EP, tokenAddress, kairosChainId);
       expect(result).to.be.false;
       
       EP.mock_override("eth_call", originalMock);
@@ -276,7 +284,7 @@ describe("Gasless v6", () => {
       EP.mock_override("eth_getTransactionCount", () => "0x1234");
       
       try {
-        const result = await isGaslessApprove(EW, mockTx, kairosChainId);
+        const result = await isGaslessApprove(EP, mockTx, kairosChainId);
         expect(result).to.be.true;
       } finally {
         EP.mock_override("eth_call", originalMock);
@@ -292,7 +300,7 @@ describe("Gasless v6", () => {
         from: walletAddress
       };
       
-      const result = await isGaslessApprove(EW, mockTx, kairosChainId);
+      const result = await isGaslessApprove(EP, mockTx, kairosChainId);
       expect(result).to.be.false;
     });
   });
@@ -341,7 +349,7 @@ describe("Gasless v6", () => {
       });
       
       try {
-        const result = await isGaslessSwap(EW, null, mockSwapTx, kairosChainId);
+        const result = await isGaslessSwap(EP, null, mockSwapTx, kairosChainId);
         expect(result).to.be.false;
       } finally {
         (ethers as any).id = originalEthersId;

@@ -37,7 +37,7 @@ async function sendGaslessTx(appTxFee, slippage) {
   const chainId = Number(network.chainId);
   console.log(`Connected to chain ID: ${chainId}`);
 
-  const gsr = gasless.getGaslessSwapRouter(wallet, chainId);
+  const gsr = gasless.getGaslessSwapRouter(provider, chainId);
   console.log(`Using gasless swap router at: ${gsr.address}`);
 
   console.log("Checking if token is supported...");
@@ -60,8 +60,17 @@ async function sendGaslessTx(appTxFee, slippage) {
 
   if (!(allowance >= swapAmount)) {
     console.log("Approval needed. Generating approve transaction...");
-    approveTx = await gasless.getApproveRawTx(wallet, tokenAddress, allowanceAmount);
-    console.log(`approveTx: ${approveTx}`);
+    approveTx = await gasless.getApproveTx(
+      provider,
+      senderAddr,
+      tokenAddress,
+      gsr.address,
+      allowanceAmount
+    );
+    
+    const signedApproveTx = await wallet.signTransaction(approveTx);
+    console.log(`Signed approveTx: ${signedApproveTx}`);
+    
     amountRepay = gasless.getAmountRepay(true, gasPriceGkei);
     console.log(`Amount to repay (with approval): ${ethers.formatUnits(amountRepay, 18)}`);
   } else {
@@ -73,7 +82,7 @@ async function sendGaslessTx(appTxFee, slippage) {
   const commissionRate = await gasless.getCommissionRate(gsr);
   console.log(`Commission rate: ${commissionRate * 100}%`);
 
-  const uniRouter = new ethers.Contract(UNISWAP_ROUTER_ADDRESS, ROUTER_ABI, wallet);
+  const uniRouter = new ethers.Contract(UNISWAP_ROUTER_ADDRESS, ROUTER_ABI, provider);
 
   let swapExpectedOutput;
   let minAmountOut;
@@ -90,7 +99,7 @@ async function sendGaslessTx(appTxFee, slippage) {
   } catch (error) {
     console.log("Could not calculate using UniswapV2Router02, falling back to basic calculation");
     console.log(`err: ${error}`);
-    return
+    return;
   }
 
   console.log("Calculating optimal amount in with slippage...");
@@ -101,41 +110,46 @@ async function sendGaslessTx(appTxFee, slippage) {
 
   const isSingle = !approveTx;
 
-  const swapTx = await gasless.getSwapRawTx(
-    wallet,
+  const swapTx = await gasless.getSwapTx(
+    provider,
+    senderAddr,
     tokenAddress,
     amountIn,
     minAmountOut,
     amountRepay,
-    isSingle,
+    isSingle
   );
-  console.log(`swapTx: ${swapTx}`);
+  
+  // Sign the swap transaction
+  const signedSwapTx = await wallet.signTransaction(swapTx);
+  console.log(`Signed swapTx: ${signedSwapTx}`);
 
-  try {
-    console.log("\nDecoding swap transaction parameters...");
-    const parsedTx = ethers.Transaction.from(swapTx);
-    console.log("Parsed transaction:", {
-      to: parsedTx.to,
-      value: parsedTx.value.toString(),
-      gasLimit: parsedTx.gasLimit.toString(),
-      gasPrice: parsedTx.gasPrice?.toString() || "N/A",
-      nonce: parsedTx.nonce,
-      data: parsedTx.data.substring(0, 66) + "..."
-    });
-  } catch (error) {
-    console.log("Could not decode transaction:", error.message);
+  // Validate the transactions
+  let signedApproveTxString = null;
+  if (approveTx) {
+    signedApproveTxString = await wallet.signTransaction(approveTx);
   }
-
-  const isValidSwap = await gasless.isGaslessSwap(wallet, approveTx, swapTx, chainId);
+  
+  const isValidSwap = await gasless.isGaslessSwap(
+    provider, 
+    signedApproveTxString, 
+    signedSwapTx, 
+    chainId
+  );
+  
   if (!isValidSwap) {
-    console.log(`Is invalid gasless swap: ${isValidSwap}`);
-    return ""
+    console.log(`Invalid gasless swap: ${isValidSwap}`);
+    return "";
   }
 
   console.log("\nSending gasless transaction(s)...");
   let txHashes;
   try {
-    txHashes = await gasless.sendGaslessTx(approveTx, swapTx, provider);
+    txHashes = await gasless.sendGaslessTx(
+      signedApproveTxString, 
+      signedSwapTx, 
+      provider
+    );
     console.log("sendGaslessTx returned:", txHashes);
   } catch (error) {
     console.error("Error in sendGaslessTx:", error);

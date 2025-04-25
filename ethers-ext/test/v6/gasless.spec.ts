@@ -126,7 +126,7 @@ describe("Gasless v6", () => {
     });
 
     it("should throw error for unsupported chain ID", () => {
-      expect(() => getGaslessSwapRouter(EP, unsupportedChainId)).to.throw("Unsupported chain ID: 1234");
+      expect(() => getGaslessSwapRouter(EP, unsupportedChainId)).to.throw("Chain ID 1234 is not supported by this SDK");
     });
   });
 
@@ -137,7 +137,7 @@ describe("Gasless v6", () => {
       };
       
       const rate = await getCommissionRate(mockContract as any);
-      expect(rate).to.equal(0.1);
+      expect(rate).to.equal(1000);
     });
   });
 
@@ -145,9 +145,9 @@ describe("Gasless v6", () => {
     it("should calculate the minimum amount out correctly", () => {
       const amountRepay = "15525000000000000";
       const appTxFee = "10000000000000000";
-      const commissionRate = 0.1;
+      const commissionRateBasisPoints = 1000;
       
-      const result = getMinAmountOut(amountRepay, appTxFee, commissionRate);
+      const result = getMinAmountOut(amountRepay, appTxFee, commissionRateBasisPoints);
       expect(result).to.equal("26636111111111111");
     });
   });
@@ -159,9 +159,9 @@ describe("Gasless v6", () => {
       };
       
       const minAmountOut = "26636111111111111";
-      const slippage = 0.5;
+      const slippageBasisPoints = 50;
       
-      const result = await getAmountIn(mockContract as any, tokenAddress, minAmountOut, slippage);
+      const result = await getAmountIn(mockContract as any, tokenAddress, minAmountOut, slippageBasisPoints);
       expect(result).to.equal("1000000000000000000");
     });
   });

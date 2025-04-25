@@ -5,7 +5,6 @@ export * from "@kaiachain/js-ext-core";
 export * from "./accountStore.js";
 export * from "./keystore.js";
 export * from "./signer.js";
-export * as gasless from "./gasless.js";
 
 // Follow ethers v6 convention like `ethers.JsonRpcProvider`
 export * from "./provider.js";

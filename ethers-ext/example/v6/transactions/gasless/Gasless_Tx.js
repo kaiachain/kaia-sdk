@@ -58,7 +58,7 @@ async function sendGaslessTx(appTxFee, slippage) {
   let approveTx = null;
   let amountRepay;
 
-  if (!(allowance >= swapAmount)) {
+  if (!(BigInt(allowance) >= BigInt(swapAmount))) {
     console.log("Approval needed. Generating approve transaction...");
     approveTx = await gasless.getApproveTx(
       provider,
@@ -79,8 +79,8 @@ async function sendGaslessTx(appTxFee, slippage) {
     console.log(`Amount to repay (without approval): ${amountRepay}`);
   }
 
-  const commissionRate = await gasless.getCommissionRate(gsr);
-  console.log(`Commission rate: ${commissionRate * 100}%`);
+  const commissionRateBasisPoints = await gasless.getCommissionRate(gsr);
+  console.log(`Commission rate: ${commissionRateBasisPoints / 100}%`);
 
   const uniRouter = new ethers.Contract(UNISWAP_ROUTER_ADDRESS, ROUTER_ABI, provider);
 
@@ -92,7 +92,7 @@ async function sendGaslessTx(appTxFee, slippage) {
     swapExpectedOutput = amountsOut[1];
     console.log(`swapExpectedOutput: ${swapExpectedOutput}`);
 
-    minAmountOut = gasless.getMinAmountOut(amountRepay, appTxFee, commissionRate);
+    minAmountOut = gasless.getMinAmountOut(amountRepay, appTxFee, commissionRateBasisPoints);
 
     console.log(`Expected output: ${ethers.formatUnits(swapExpectedOutput, 18)} KAIA`);
     console.log(`Minimum amount out: ${ethers.formatUnits(minAmountOut, 18)} KAIA`);
@@ -237,11 +237,11 @@ async function main() {
     console.log("=== Starting Gasless Transaction Flow ===");
 
     const appTxFee = ethers.parseUnits("0.01", "ether").toString();
-    const slippage = 5;
+    const slippageBasisPoints = 500; // 5% = 500 basis points
     console.log(`App transaction fee: ${ethers.formatUnits(appTxFee, 18)} KAIA`);
-    console.log(`Slippage tolerance: ${slippage}%`);
+    console.log(`Slippage tolerance: ${slippageBasisPoints}%`);
 
-    await sendGaslessTx(appTxFee, slippage);
+    await sendGaslessTx(appTxFee, slippageBasisPoints);
   } catch (error) {
     console.error("Error in gasless transaction flow:", error);
     console.error("Error details:", JSON.stringify(error, Object.getOwnPropertyNames(error)));

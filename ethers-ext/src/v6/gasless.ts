@@ -2,54 +2,27 @@ import { JsonRpcApiProvider } from "ethers";
 import { assert } from "ethers";
 import { ethers, TransactionLike } from "ethers";
 import { getTransactionRequest } from "./txutil.js";
+import GaslessSwapRouterAbi from "./abi/GaslessSwapRouter.json"
 
-export const GASLESS_SWAP_ROUTER_ABI = [
-  {
-      "inputs": [
-          { "internalType": "address", "name": "token", "type": "address" },
-          { "internalType": "uint256", "name": "amountIn", "type": "uint256" },
-          { "internalType": "uint256", "name": "minAmountOut", "type": "uint256" },
-          { "internalType": "uint256", "name": "amountRepay", "type": "uint256" },
-          { "internalType": "uint256", "name": "deadline", "type": "uint256" }
-      ],
-      "name": "swapForGas",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-  },
-  {
-      "inputs": [
-          { "internalType": "address", "name": "token", "type": "address" }
-      ],
-      "name": "isTokenSupported",
-      "outputs": [
-          { "internalType": "bool", "name": "", "type": "bool" }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-  },
-  {
-      "inputs": [],
-      "name": "commissionRate",
-      "outputs": [
-          { "internalType": "uint256", "name": "", "type": "uint256" }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-  },
-  {
-      "inputs": [
-          { "internalType": "address", "name": "token", "type": "address" },
-          { "internalType": "uint256", "name": "amountOut", "type": "uint256" }
-      ],
-      "name": "getAmountIn",
-      "outputs": [
-          { "internalType": "uint256", "name": "", "type": "uint256" }
-      ],
-      "stateMutability": "view",
-      "type": "function"
+const SUPPORTED_CHAIN_IDS: { [key: number]: string } = {
+  8217: 'mainnet',
+  1001: 'testnet',
+  1000: 'local'
+};
+
+const CHAIN_ROUTER_ADDRESSES: { [key: string]: string } = {
+  'mainnet': GaslessSwapRouterAbi.address, // Mainnet address
+  'testnet': "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707", // Testnet address
+  'local': "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"   // Local address
+};
+
+function validateChainId(chainId: number): string {
+  const networkName = SUPPORTED_CHAIN_IDS[chainId];
+  if (!networkName) {
+    throw new Error(`Chain ID ${chainId} is not supported by this SDK. This SDK only supports Kaia networks.`);
   }
-];
+  return networkName;
+}
 
 /**
  * Calculate the amount to repay based on whether approval is required and gas price
@@ -73,11 +46,6 @@ export function getAmountRepay(approveRequired: boolean, gasPrice: number = 25):
   return amountRepay.toString();
 }
 
-// Contract addresses for gasless swap routers
-const MainnetGaslessSwapRouterAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"; // Actual address from JSON
-const KairosGaslessSwapRouterAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"; // Using same address for testnet for now
-const LocalGaslessSwapRouterAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
-
 /**
  * Get the gasless swap router for the specified chain
  * @param provider The ethers provider
@@ -85,25 +53,11 @@ const LocalGaslessSwapRouterAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F87570
  * @returns The gasless swap router contract
  */
 export function getGaslessSwapRouter(provider: ethers.Provider, chainId: number): any {
-  const MAINNET_CHAIN_ID = 8217; // Kaia mainnet
-  const KAIROS_CHAIN_ID = 1001; // Kaia testnet (Kairos)
-  const LOCAL = 1000;
-
-  let routerAddress: string;
-
-  if (chainId === MAINNET_CHAIN_ID) {
-    routerAddress = MainnetGaslessSwapRouterAddress;
-  } else if (chainId === KAIROS_CHAIN_ID) {
-    routerAddress = KairosGaslessSwapRouterAddress;
-  } else if (chainId === LOCAL) {
-    routerAddress = LocalGaslessSwapRouterAddress;
-  } else {
-    throw new Error(`Unsupported chain ID: ${chainId}`);
-  }
+  const routerAddress = CHAIN_ROUTER_ADDRESSES[validateChainId(chainId)];
 
   const contract = new ethers.Contract(
     routerAddress,
-    GASLESS_SWAP_ROUTER_ABI,
+    GaslessSwapRouterAbi.abi,
     provider
   );
 
@@ -119,26 +73,34 @@ export function getGaslessSwapRouter(provider: ethers.Provider, chainId: number)
  */
 export async function getCommissionRate(gsr: ethers.Contract): Promise<number> {
   const rate = await gsr.commissionRate();
-  return Number(rate) / 10000;
+  return Number(rate);
 }
 
 /**
  * Calculate the minimum amount out based on amount to repay, app transaction fee, and commission rate
  * @param amountRepay The amount to repay
  * @param appTxFee The application transaction fee
- * @param commissionRate The commission rate
+ * @param commissionRateBasisPoints The commission rate in basis points (e.g., 1000 = 10%)
  * @returns The minimum amount out
  */
 export function getMinAmountOut(
   amountRepay: string,
   appTxFee: string,
-  commissionRate: number
+  commissionRateBasisPoints: number
 ): string {
+  if (!Number.isInteger(commissionRateBasisPoints)) {
+    throw new Error("Commission rate must be an integer value in basis points");
+  }
+  
+  if (commissionRateBasisPoints < 0 || commissionRateBasisPoints >= 10000) {
+    throw new Error("Commission rate must be between 0 and 9999 basis points");
+  }
+
   // Calculate minimum amount out: appTxFee/(1 - commissionRate) + amountRepay
   const appTxFeeBN = BigInt(appTxFee);
   const amountRepayBN = BigInt(amountRepay);
 
-  const commissionRateBN = BigInt(Math.floor(commissionRate * 10000));
+  const commissionRateBN = BigInt(commissionRateBasisPoints);
   const denominator = BigInt(10000);
 
   const adjustedFee = appTxFeeBN * denominator / (denominator - commissionRateBN);
@@ -152,17 +114,17 @@ export function getMinAmountOut(
  * @param gsr The gasless swap router contract
  * @param token The token address
  * @param minAmountOut The minimum amount out
- * @param slippage The slippage percentage (e.g., 0.5 for 0.5%)
+ * @param slippageBasisPoints The slippage basis point (e.g., 50 basis points = 0.5%)
  * @returns The amount in
  */
 export async function getAmountIn(
   gsr: ethers.Contract,
   token: string,
   minAmountOut: string,
-  slippage: number
+  slippageBasisPoints: number
 ): Promise<string> {
   const minAmountOutBN = BigInt(minAmountOut);
-  const slippageBN = BigInt(Math.floor(slippage * 10000));
+  const slippageBN = BigInt(slippageBasisPoints);
   const denominator = BigInt(10000);
 
   const adjustedMinAmountOut = minAmountOutBN * (denominator + slippageBN) / denominator;
@@ -190,6 +152,8 @@ export async function getApproveTx(
   try {
     const network = await provider.getNetwork();
     const chainId = Number(network.chainId);
+
+    validateChainId(chainId);
 
     const tokenAbi = [
       "function approve(address spender, uint256 amount) external returns (bool)"
@@ -254,6 +218,8 @@ export async function getSwapTx(
     const network = await provider.getNetwork();
     const chainId = Number(network.chainId);
 
+    validateChainId(chainId);
+
     const routerInfo = getGaslessSwapRouter(provider, chainId);
     const routerAddress = routerInfo.address;
 
@@ -263,7 +229,7 @@ export async function getSwapTx(
     }
     const deadlineTimestamp = currentBlock.timestamp + deadline;
 
-    const routerInterface = new ethers.Interface(GASLESS_SWAP_ROUTER_ABI);
+    const routerInterface = new ethers.Interface(GaslessSwapRouterAbi.abi);
 
     const swapData = routerInterface.encodeFunctionData("swapForGas", [
       tokenAddr,
@@ -314,6 +280,10 @@ export async function sendGaslessTx(
 ): Promise<string[]> {
   try {
     if (provider) {
+      const network = await provider.getNetwork();
+      const chainId = Number(network.chainId);  
+      validateChainId(chainId);
+
       // Assert that provider is JsonRpcApiProvider
       assert(
         provider instanceof JsonRpcApiProvider,

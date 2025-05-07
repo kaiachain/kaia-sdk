@@ -22,6 +22,12 @@
         <div>Estimated Fee in KAIA: <text id="kaiaEstimateFee"></text></div>
         <div>Estimated Fee in TestToken: <text id="testTokenEstimateFee"></text></div>
       </p>
+      <p>For metamask</p>
+      <p>
+        <button id="btnSendApproveByMetamask" onclick="signAndSendApproveTx()">Request Max Approve</button>
+        <button id="btnSendSwapByMetamask" onclick="signAndSendSwapTx()">Request Swap (pay in TestToken)</button>
+      </p>
+      <p>For kaikas</p>
       <p>
         <button id="btnSendGasless" onclick="signApproveTx()">Sign ApproveTx</button>
         <button id="btnSendGasless" onclick="signSwapTx()">Sign SwapTx</button>

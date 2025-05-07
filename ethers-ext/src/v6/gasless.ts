@@ -176,7 +176,6 @@ export async function getApproveTx(
     const gasPriceBN = feeData.gasPrice?.toString() || "25000000000";
 
     return {
-      type: 0,
       to: tokenAddr,
       from: fromAddress,
       nonce: nonce,
@@ -248,7 +247,6 @@ export async function getSwapTx(
 
     // Construct the transaction object
     const tx: ethers.TransactionRequest = {
-      type: 0,
       to: routerAddress,
       from: fromAddress,
       nonce: nonce,

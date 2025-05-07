@@ -68,8 +68,12 @@ async function sendGaslessTx(appTxFee, slippage) {
       allowanceAmount
     );
     
-    const signedApproveTx = await wallet.signTransaction(approveTx);
-    console.log(`Signed approveTx: ${signedApproveTx}`);
+    const approveResult = await wallet.sendTransaction(approveTx);
+    console.log(`Approve transaction hash: ${approveResult.hash}`);
+    
+    console.log("Waiting for approval confirmation...");
+    await approveResult.wait();
+    console.log("Approval transaction confirmed");
     
     amountRepay = gasless.getAmountRepay(true, gasPriceGkei);
     console.log(`Amount to repay (with approval): ${ethers.formatUnits(amountRepay, 18)}`);
@@ -108,8 +112,6 @@ async function sendGaslessTx(appTxFee, slippage) {
 
   console.log("Generating swap transaction...");
 
-  const isSingle = !approveTx;
-
   const swapTx = await gasless.getSwapTx(
     provider,
     senderAddr,
@@ -117,119 +119,24 @@ async function sendGaslessTx(appTxFee, slippage) {
     amountIn,
     minAmountOut,
     amountRepay,
-    isSingle
+    true
   );
   
-  // Sign the swap transaction
-  const signedSwapTx = await wallet.signTransaction(swapTx);
-  console.log(`Signed swapTx: ${signedSwapTx}`);
-
-  // Validate the transactions
-  let signedApproveTxString = null;
-  if (approveTx) {
-    signedApproveTxString = await wallet.signTransaction(approveTx);
-  }
-  
-  const isValidSwap = await gasless.isGaslessSwap(
-    provider, 
-    signedApproveTxString, 
-    signedSwapTx, 
-    chainId
-  );
-  
-  if (!isValidSwap) {
-    console.log(`Invalid gasless swap: ${isValidSwap}`);
-    return "";
-  }
-
-  console.log("\nSending gasless transaction(s)...");
-  let txHashes;
+  console.log("\nSending swap transaction...");
   try {
-    txHashes = await gasless.sendGaslessTx(
-      signedApproveTxString, 
-      signedSwapTx, 
-      provider
-    );
-    console.log("sendGaslessTx returned:", txHashes);
+    const swapResult = await wallet.sendTransaction(swapTx);
+    console.log(`Swap transaction hash: ${swapResult.hash}`);
+    
+    console.log("Waiting for transaction receipt...");
+    const receipt = await swapResult.wait();
+    console.log("Transaction confirmed:", receipt.blockNumber);
+    
+    return swapResult.hash;
   } catch (error) {
-    console.error("Error in sendGaslessTx:", error);
+    console.error("Error in sending swap transaction:", error);
     console.error("Error details:", JSON.stringify(error, Object.getOwnPropertyNames(error)));
     return "";
   }
-
-  if (approveTx) {
-    console.log(`Approve transaction hash: ${txHashes[0]}`);
-    console.log(`Swap transaction hash: ${txHashes[1]}`);
-  } else {
-    console.log(`Swap transaction hash: ${txHashes[0]}`);
-  }
-
-  console.log("Gasless transaction(s) sent successfully!");
-
-  console.log("Waiting for transaction receipt...");
-  const receipt = await waitForReceipt(txHashes[txHashes.length - 1]);
-  if (!receipt) {
-    console.log("❌ No receipt found for transaction.");
-
-    try {
-      console.log("Checking transaction status...");
-      const tx = await provider.getTransaction(txHashes[txHashes.length - 1]);
-      console.log("Transaction status:", tx ? "Pending" : "Not found");
-
-      if (tx) {
-        console.log("Transaction details:", {
-          from: tx.from,
-          to: tx.to,
-          value: tx.value.toString(),
-          gasLimit: tx.gasLimit.toString(),
-          gasPrice: tx.gasPrice?.toString() || "N/A",
-          nonce: tx.nonce,
-          blockNumber: tx.blockNumber || "Not mined yet"
-        });
-      }
-
-      try {
-        console.log("Trying kaia.getTransactionBySenderTxHash...");
-        const senderTxResult = await provider.send("kaia_getTransactionBySenderTxHash", [txHashes[txHashes.length - 1]]);
-        console.log("Sender transaction result:", senderTxResult || "Not found");
-      } catch (error) {
-        console.log("Error getting transaction by sender tx hash:", error.message);
-      }
-    } catch (error) {
-      console.log("Error checking transaction status:", error.message);
-    }
-
-    return txHashes;
-  }
-
-  console.log("Transaction confirmed:", receipt.blockNumber);
-  return txHashes;
-}
-
-async function waitForReceipt(transactionHash) {
-  let receipt;
-  let attempts = 0;
-  const maxAttempts = 30;
-
-  while (!receipt && attempts < maxAttempts) {
-    try {
-      receipt = await provider.getTransactionReceipt(transactionHash);
-      if (!receipt) {
-        console.log(`Receipt not found yet. Waiting... (attempt ${attempts + 1}/${maxAttempts})`);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      }
-    } catch (error) {
-      console.error(`Error fetching receipt (attempt ${attempts + 1}/${maxAttempts}):`, error);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
-    attempts++;
-  }
-
-  if (!receipt) {
-    console.log(`Gave up waiting for receipt after ${maxAttempts} attempts`);
-  }
-
-  return receipt;
 }
 
 async function main() {

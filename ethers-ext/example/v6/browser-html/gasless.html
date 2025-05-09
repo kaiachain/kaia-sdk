@@ -16,26 +16,18 @@
       </p>
       <hr/>
       <p>Dapp of Gasless Swap</p>
-      <p>TestToken: <input type="number" id="testTokenSwapAmount" size="15" onchange="calcTargetValue()"></p>
-      <p>KAIA: <text id="kaiaSwapAmount"></text></p>
+      <p>TestToken (From): <input type="number" id="testTokenSwapAmount" size="15" onchange="calcTargetValue()"></p>
+      <p>KAIA (To): <text id="kaiaSwapAmount"></text></p>
       <p>
-        <div>Estimated Fee in KAIA: <text id="kaiaEstimateFee"></text></div>
-        <div>Estimated Fee in TestToken: <text id="testTokenEstimateFee"></text></div>
+        <div>- Estimated Fee in KAIA: <text id="kaiaEstimateFee"></text></div>
+        <div>- Estimated Fee in TestToken: <text id="testTokenEstimateFee"></text></div>
       </p>
-      <p>For metamask</p>
       <p>
-        <button id="btnSendApproveByMetamask" onclick="signAndSendApproveTx()">Request Max Approve</button>
-        <button id="btnSendSwapByMetamask" onclick="signAndSendSwapTx()">Request Swap (pay in TestToken)</button>
-      </p>
-      <p>For kaikas</p>
-      <p>
-        <button id="btnSendGasless" onclick="signApproveTx()">Sign ApproveTx</button>
-        <button id="btnSendGasless" onclick="signSwapTx()">Sign SwapTx</button>
-        <button id="btnSendGasless" onclick="sendGaslessTxs()">Request Swap (pay in TestToken)</button>
+        <button id="btnSendGaslessByMetamask" onclick="signAndGaslessTx()">Request Swap (pay in TestToken)</button>
       </p>
       <hr/>
       <p>
-        <div>accounts: <text id="textAccounts"></text></div>
+        <div>account: <text id="textAccount"></text></div>
         <div>chainId: <text id="textChainId"></text></div>
       </p>
       <p>

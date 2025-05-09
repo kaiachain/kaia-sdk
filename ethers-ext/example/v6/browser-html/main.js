@@ -44,7 +44,12 @@ async function connect(injectedProvider) {
 
   accounts = await provider.listAccounts(); // internally eth_accounts
   console.log("accounts", accounts);
-  $("#textAccounts").html(accounts.map((a) => a.address));
+  $("#textAccount").html(accounts.map(
+    (a, i) => {
+      if (i == 0) {
+        return a.address
+      }
+  }));
 
   injectedProvider.on("accountsChanged", async (changedAccounts) => {
     accounts = changedAccounts;
@@ -374,13 +379,16 @@ async function signAndSendApproveTx() {
     const nonce = await provider.getTransactionCount(accounts[0].address);
     
     // send approve
+    const testTokenToSwap = document.getElementById('testTokenSwapAmount')
+    const testTokenToSwapBN = BigInt(ethers_ext.parseKaia(testTokenToSwap.value))
+
     const approveABI = ["function approve(address spender, uint256 amount) external returns (bool)"];
     const tokenContract = new ethers.Contract(testTokenAddr, approveABI, provider);
-    const maxUint256 = BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
+    const allowance = testTokenToSwapBN * 3n
     
     const approveData = tokenContract.interface.encodeFunctionData("approve", [
       gsrAddr,
-      maxUint256
+      allowance
     ]);
   
     const approveTx = {
@@ -395,12 +403,13 @@ async function signAndSendApproveTx() {
     console.log("approveTx", approveTx);
   
     const approveSentTx = await signer.sendTransaction(approveTx);
+    console.log("approveSentTx", approveSentTx);
     const approveTxhash = approveSentTx.hash;
     $("#textApproveTxhash").html(
       approveTxhash
     );
   } catch (error) {
-    console.error("Error in sendGaslessTx:", error);
+    console.error("Error in signAndSendApproveTx:", error);
   }
 }
 
@@ -446,10 +455,10 @@ async function signAndSendSwapTx() {
     const swapTx = {
       type: 0,
       to: gsrAddr,
-      gasLimit: 100000,
+      gasLimit: 500000,
       gasPrice: gasPriceBN,
       data: swapData,
-      nonce: nonce,
+      nonce: nonce + 1,
     };
     console.log("swapTx", swapTx);
 
@@ -461,7 +470,7 @@ async function signAndSendSwapTx() {
     );
 
     const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
-    await sleep(10000); // wait 10s
+    await sleep(20000); // wait 20s
     
     // after swap
     const kaiaAfterSwap = await provider.getBalance(accounts[0].address);
@@ -469,7 +478,103 @@ async function signAndSendSwapTx() {
     $("#kaiaAfterSwap").html(`${ethers_ext.formatKaia(kaiaAfterSwap)}`);
     $("#tokenAfterSwap").html(`${ethers_ext.formatKaia(tokenAfterSwap)}`);
   } catch (error) {
-    console.error("Error in sendGaslessTx:", error);
+    console.error("Error in signAndSendSwapTx:", error);
+  }
+}
+
+async function signAndGaslessTx() {
+  try {
+    // before swap
+    const balanceOfABI = ["function balanceOf(address owner) view returns (uint256)"];
+    const testToken = new ethers.Contract(testTokenAddr, balanceOfABI, provider);
+
+    const kaiaBeforeSwap = await provider.getBalance(accounts[0].address);
+    const tokenBeforeSwap = await testToken.balanceOf(accounts[0].address);
+
+    $("#kaiaBeforeSwap").html(`${ethers_ext.formatKaia(kaiaBeforeSwap)}`);
+    $("#tokenBeforeSwap").html(`${ethers_ext.formatKaia(tokenBeforeSwap)}`);
+
+    const testTokenToSwap = document.getElementById('testTokenSwapAmount')
+    const testTokenToSwapBN = BigInt(ethers_ext.parseKaia(testTokenToSwap.value))
+
+    // prepare transactions
+    const signer = await provider.getSigner(accounts[0].address);
+
+    const feeData = await signer.provider.getFeeData();
+    const gasPriceBN = BigInt(feeData.gasPrice) || 25000000000n;
+    const nonce = await provider.getTransactionCount(accounts[0].address);
+
+    // send approve
+    const approveABI = ["function approve(address spender, uint256 amount) external returns (bool)"];
+    const tokenContract = new ethers.Contract(testTokenAddr, approveABI, provider);
+    const allowance = testTokenToSwapBN * 3n
+
+    const approveData = tokenContract.interface.encodeFunctionData("approve", [
+      gsrAddr,
+      allowance
+    ]);
+
+    const approveTx = {
+      type: 0,
+      to: testTokenAddr,
+      gasLimit: 100000,
+      gasPrice: gasPriceBN,
+      data: approveData,
+      nonce: nonce,
+    };
+
+    console.log("approveTx", approveTx);
+
+    const approveSentTx = await signer.sendTransaction(approveTx);
+    console.log("approveSentTx", approveSentTx);
+    const approveTxhash = approveSentTx.hash;
+    $("#textApproveTxhash").html(
+      approveTxhash
+    );
+
+    // send swap
+    const swapForGasABI = ["function swapForGas(address token, uint256 amountIn, uint256 minAmountOut, uint256 amountRepay, uint256 deadline)"];
+    const gsr = new ethers.Contract(gsrAddr, swapForGasABI, provider);
+    const currentBlock = await provider.getBlock("latest");
+    const deadlineTimestamp = BigInt(currentBlock.timestamp) + 20n;
+
+    console.log("testTokenToSwapBN", testTokenToSwapBN);
+
+    const swapData = gsr.interface.encodeFunctionData("swapForGas", [
+      testTokenAddr,
+      testTokenToSwapBN,
+      getMinAmountOut(gasPriceBN),
+      amountRepay(gasPriceBN),
+      deadlineTimestamp
+    ]);
+
+    const swapTx = {
+      type: 0,
+      to: gsrAddr,
+      gasLimit: 500000,
+      gasPrice: gasPriceBN,
+      data: swapData,
+      nonce: nonce + 1,
+    };
+    console.log("swapTx", swapTx);
+
+    const swapSentTx = await signer.sendTransaction(swapTx);
+    console.log("swapSentTx", swapSentTx);
+    const swapTxhash = swapSentTx.hash;
+    $("#textSwapTxhash").html(
+      swapTxhash
+    );
+
+    const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
+    await sleep(30000); // wait 30s
+    
+    // after swap
+    const kaiaAfterSwap = await provider.getBalance(accounts[0].address);
+    const tokenAfterSwap = await testToken.balanceOf(accounts[0].address);
+    $("#kaiaAfterSwap").html(`${ethers_ext.formatKaia(kaiaAfterSwap)}`);
+    $("#tokenAfterSwap").html(`${ethers_ext.formatKaia(tokenAfterSwap)}`);
+  } catch (error) {
+    console.error("Error in signAndGaslessTx:", error);
   }
 }
 

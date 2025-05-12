@@ -8,7 +8,6 @@ var contractAddress = "0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df";
 var contractCalldata = "0xd09de08a"; // function increment()
 
 var testTokenAddr = "0x8ebc32c078f5ecc8406ddDC785c8F0e2490C1081"
-var gsrAddr = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"
 
 function isKaikas() {
   return provider && provider.provider.isKaikas;
@@ -271,9 +270,10 @@ async function signApproveTx() {
     const approveABI = ["function approve(address spender, uint256 amount) external returns (bool)"];
     const tokenContract = new ethers.Contract(testTokenAddr, approveABI, provider);
     const maxUint256 = BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
+    const gsr = ethers_ext.gasless.getGaslessSwapRouter(provider, chainId);
 
     const approveData = tokenContract.interface.encodeFunctionData("approve", [
-      gsrAddr,
+      gsr.address,
       maxUint256
     ]);
 
@@ -304,22 +304,27 @@ async function signSwapTx() {
 
     const feeData = await signer.provider.getFeeData();
     const gasPriceBN = BigInt(feeData.gasPrice) || 25000000000n;
+    const gasPriceGkei = Number(feeData.gasPrice) / 1e9;
+    const amountRepay = ethers_ext.gasless.getAmountRepay(true, gasPriceGkei)
 
-    const swapForGasABI = ["function swapForGas(address token, uint256 amountIn, uint256 minAmountOut, uint256 amountRepay, uint256 deadline)"];
-    const gsr = new ethers.Contract(gsrAddr, swapForGasABI, provider);
+    const gsr = ethers_ext.gasless.getGaslessSwapRouter(provider, chainId);
     const currentBlock = await provider.getBlock("latest");
     const deadlineTimestamp = BigInt(currentBlock.timestamp) + 20n;
+
+    const appTxFee = ethers.parseUnits("0.01", "ether").toString()
+    const commissionRateBasisPoints = await ethers_ext.gasless.getCommissionRate(gsr);
+    const minAmountOut = ethers_ext.gasless.getMinAmountOut(amountRepay, appTxFee, commissionRateBasisPoints)
 
     const swapData = gsr.interface.encodeFunctionData("swapForGas", [
       testTokenAddr,
       testTokenToSwapBN,
-      getMinAmountOut(gasPriceBN),
-      amountRepay(gasPriceBN),
+      minAmountOut,
+      amountRepay,
       deadlineTimestamp
     ]);
 
     const swapTx = {
-      to: gsrAddr,
+      to: gsr.address,
       gasLimit: 100000,
       gasPrice: gasPriceBN,
       data: swapData,
@@ -379,16 +384,14 @@ async function signAndSendApproveTx() {
     const nonce = await provider.getTransactionCount(accounts[0].address);
     
     // send approve
-    const testTokenToSwap = document.getElementById('testTokenSwapAmount')
-    const testTokenToSwapBN = BigInt(ethers_ext.parseKaia(testTokenToSwap.value))
-
     const approveABI = ["function approve(address spender, uint256 amount) external returns (bool)"];
     const tokenContract = new ethers.Contract(testTokenAddr, approveABI, provider);
-    const allowance = testTokenToSwapBN * 3n
+    const maxUint256 = BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
+    const gsr = ethers_ext.gasless.getGaslessSwapRouter(provider, chainId);
     
     const approveData = tokenContract.interface.encodeFunctionData("approve", [
-      gsrAddr,
-      allowance
+      gsr.address,
+      maxUint256
     ]);
   
     const approveTx = {
@@ -428,8 +431,13 @@ async function signAndSendSwapTx() {
     // prepare transactions
     const signer = await provider.getSigner(accounts[0].address);
 
+    const network = await signer.provider.getNetwork();
+    const chainId = Number(network.chainId);
+
     const feeData = await signer.provider.getFeeData();
     const gasPriceBN = BigInt(feeData.gasPrice) || 25000000000n;
+    const gasPriceGkei = Number(feeData.gasPrice) / 1e9;
+    const amountRepay = ethers_ext.gasless.getAmountRepay(true, gasPriceGkei);
     const nonce = await provider.getTransactionCount(accounts[0].address);
 
     // send swap
@@ -437,24 +445,27 @@ async function signAndSendSwapTx() {
     const testTokenToSwapBN = BigInt(ethers_ext.parseKaia(testTokenToSwap.value))
     console.log(testTokenToSwapBN)
 
-    const swapForGasABI = ["function swapForGas(address token, uint256 amountIn, uint256 minAmountOut, uint256 amountRepay, uint256 deadline)"];
-    const gsr = new ethers.Contract(gsrAddr, swapForGasABI, provider);
+    const gsr = ethers_ext.gasless.getGaslessSwapRouter(provider, chainId);
     const currentBlock = await provider.getBlock("latest");
     const deadlineTimestamp = BigInt(currentBlock.timestamp) + 20n;
 
     console.log("testTokenToSwapBN", testTokenToSwapBN);
 
+    const appTxFee = ethers.parseUnits("0.01", "ether").toString()
+    const commissionRateBasisPoints = await ethers_ext.gasless.getCommissionRate(gsr);
+    const minAmountOut = ethers_ext.gasless.getMinAmountOut(amountRepay, appTxFee, commissionRateBasisPoints)
+
     const swapData = gsr.interface.encodeFunctionData("swapForGas", [
       testTokenAddr,
       testTokenToSwapBN,
-      getMinAmountOut(gasPriceBN),
-      amountRepay(gasPriceBN),
+      minAmountOut,
+      amountRepay,
       deadlineTimestamp
     ]);
 
     const swapTx = {
       type: 0,
-      to: gsrAddr,
+      to: gsr.address,
       gasLimit: 500000,
       gasPrice: gasPriceBN,
       data: swapData,
@@ -482,7 +493,7 @@ async function signAndSendSwapTx() {
   }
 }
 
-async function signAndGaslessTx() {
+async function signAndSendGaslessTxs() {
   try {
     // before swap
     const balanceOfABI = ["function balanceOf(address owner) view returns (uint256)"];
@@ -500,18 +511,24 @@ async function signAndGaslessTx() {
     // prepare transactions
     const signer = await provider.getSigner(accounts[0].address);
 
+    const network = await signer.provider.getNetwork();
+    const chainId = Number(network.chainId);
+
     const feeData = await signer.provider.getFeeData();
     const gasPriceBN = BigInt(feeData.gasPrice) || 25000000000n;
+    const gasPriceGkei = Number(feeData.gasPrice) / 1e9;
+    const amountRepay = ethers_ext.gasless.getAmountRepay(true, gasPriceGkei);
     const nonce = await provider.getTransactionCount(accounts[0].address);
 
     // send approve
     const approveABI = ["function approve(address spender, uint256 amount) external returns (bool)"];
     const tokenContract = new ethers.Contract(testTokenAddr, approveABI, provider);
-    const allowance = testTokenToSwapBN * 3n
+    const maxUint256 = BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
+    const gsr = ethers_ext.gasless.getGaslessSwapRouter(provider, chainId);
 
     const approveData = tokenContract.interface.encodeFunctionData("approve", [
-      gsrAddr,
-      allowance
+      gsr.address,
+      maxUint256
     ]);
 
     const approveTx = {
@@ -526,31 +543,33 @@ async function signAndGaslessTx() {
     console.log("approveTx", approveTx);
 
     const approveSentTx = await signer.sendTransaction(approveTx);
-    console.log("approveSentTx", approveSentTx);
+    console.log("approveSentTx", approveSentTx.toJSON());
     const approveTxhash = approveSentTx.hash;
     $("#textApproveTxhash").html(
       approveTxhash
     );
 
     // send swap
-    const swapForGasABI = ["function swapForGas(address token, uint256 amountIn, uint256 minAmountOut, uint256 amountRepay, uint256 deadline)"];
-    const gsr = new ethers.Contract(gsrAddr, swapForGasABI, provider);
     const currentBlock = await provider.getBlock("latest");
     const deadlineTimestamp = BigInt(currentBlock.timestamp) + 20n;
 
     console.log("testTokenToSwapBN", testTokenToSwapBN);
 
+    const appTxFee = ethers.parseUnits("0.01", "ether").toString()
+    const commissionRateBasisPoints = await ethers_ext.gasless.getCommissionRate(gsr);
+    const minAmountOut = ethers_ext.gasless.getMinAmountOut(amountRepay, appTxFee, commissionRateBasisPoints)
+
     const swapData = gsr.interface.encodeFunctionData("swapForGas", [
       testTokenAddr,
       testTokenToSwapBN,
-      getMinAmountOut(gasPriceBN),
-      amountRepay(gasPriceBN),
+      minAmountOut,
+      amountRepay,
       deadlineTimestamp
     ]);
 
     const swapTx = {
       type: 0,
-      to: gsrAddr,
+      to: gsr.address,
       gasLimit: 500000,
       gasPrice: gasPriceBN,
       data: swapData,
@@ -559,7 +578,7 @@ async function signAndGaslessTx() {
     console.log("swapTx", swapTx);
 
     const swapSentTx = await signer.sendTransaction(swapTx);
-    console.log("swapSentTx", swapSentTx);
+    console.log("swapSentTx", swapSentTx.toJSON());
     const swapTxhash = swapSentTx.hash;
     $("#textSwapTxhash").html(
       swapTxhash
@@ -581,9 +600,9 @@ async function signAndGaslessTx() {
 function startPollingGasFee() {
   setInterval(async () => {
     const feeData = await provider.getFeeData();
-    const gasPriceBN = feeData.gasPrice || 25000000000n;
+    const gasPriceGkei = Number(feeData.gasPrice) / 1e9;
     
-    const totalFee = amountRepay(gasPriceBN);
+    const totalFee = ethers_ext.gasless.getAmountRepay(true, gasPriceGkei);
     const kaiaEstimateFee = totalFee;
     const testTokenEstimateFee = totalFee;
     
@@ -595,40 +614,10 @@ function startPollingGasFee() {
 async function calcTargetValue() {
   const testTokenToSwap = document.getElementById('testTokenSwapAmount')
   const feeData = await provider.getFeeData();
-  const gasPriceBN = feeData.gasPrice || 25000000000n;
+  const gasPriceGkei = Number(feeData.gasPrice) / 1e9;
 
-  const totalFee = amountRepay(gasPriceBN)
+  const totalFee = ethers_ext.gasless.getAmountRepay(true, gasPriceGkei)
   const formattedTotalFee = ethers_ext.formatKaia(totalFee)
   const kaiaSwapAmount = testTokenToSwap.value - formattedTotalFee
   $("#kaiaSwapAmount").html(`${kaiaSwapAmount}`);
-}
-
-function amountRepay(gasPriceBN) {
-  const lendTxGas = BigInt(21000);
-  const approveTxGas = BigInt(100000);
-  const swapTxGas = BigInt(500000);
-
-  const R1 = gasPriceBN * lendTxGas;
-  const R2 = gasPriceBN * approveTxGas;
-  const R3 = gasPriceBN * swapTxGas;
-
-  const totalFee = R1 + R2 + R3;
-  return totalFee
-}
-
-function getMinAmountOut(gasPriceBN) {
-  const appTxFee = BigInt(100000)
-  const commissionRateBasisPoints = 500;
-
-  // Calculate minimum amount out: appTxFee/(1 - commissionRate) + amountRepay
-  const appTxFeeBN = BigInt(appTxFee);
-  const amountRepayBN = amountRepay(gasPriceBN);
-
-  const commissionRateBN = BigInt(commissionRateBasisPoints);
-  const denominator = BigInt(10000);
-
-  const adjustedFee = appTxFeeBN * denominator / (denominator - commissionRateBN);
-  const minAmountOut = adjustedFee + amountRepayBN;
-
-  return minAmountOut.toString();
 }

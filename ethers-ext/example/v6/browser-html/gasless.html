@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>@kaiachain/ethers-ext/v6 html+js demo</title>
+  </head>
+  <body>
+    <body>
+    
+      <p><button id="btnConnectMM" onclick="connectMM()">Connect MetaMask</button></p>
+      <p><button id="btnConnectKK" onclick="connectKK()">Connect Kaikas</button></p>
+      <hr/>
+      <p>
+        <button id="btnNetPrivate" onclick="switchPrivateNetwork()">Switch to Private Network</button>
+      </p>
+      <hr/>
+      <p>Dapp of Gasless Swap</p>
+      <p>TestToken (From): <input type="number" id="testTokenSwapAmount" size="15" onchange="calcTargetValue()"></p>
+      <p>KAIA (To): <text id="kaiaSwapAmount"></text></p>
+      <p>
+        <div>- Estimated Fee in KAIA: <text id="kaiaEstimateFee"></text></div>
+        <div>- Estimated Fee in TestToken: <text id="testTokenEstimateFee"></text></div>
+      </p>
+      <p>
+        <button id="btnSendGaslessByMetamask" onclick="signAndSendGaslessTxs()">Request Swap (pay in TestToken)</button>
+      </p>
+      <hr/>
+      <p>
+        <div>account: <text id="textAccount"></text></div>
+        <div>chainId: <text id="textChainId"></text></div>
+      </p>
+      <p>
+        <div>approve txhash: <text id="textApproveTxhash"></text></div>
+        <div>swap txhash: <text id="textSwapTxhash"></text></div>
+      </p>
+      <p>
+        <div>KAIA before Swap: <text id="kaiaBeforeSwap"></text></div>
+        <div>KAIA after Swap: <text id="kaiaAfterSwap"></text></div>
+      </p>
+      <p>
+        <div>TOKEN before Swap: <text id="tokenBeforeSwap"></text></div>
+        <div>TOKEN after Swap: <text id="tokenAfterSwap"></text></div>
+      </p>
+
+      <hr/>
+      <hr/>
+      <div class="button-group">
+        <button onclick="window.location.href='index.html'">Go to home</button>
+      </div> 
+    </body>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.1/ethers.umd.min.js" integrity="sha512-UvwB92yhzWWQstXZT31l1Fc7wv3sRG7uWBSFZ6TeJ0LIfBe8oM9p2oufp1Y5nuBAso+FYHR03WocHr5+wqWJ7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@kaiachain/ethers-ext/v6@latest/dist/ethers-ext.bundle.js"></script> -->
+    <script src="ethers-ext.v6.bundle.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>

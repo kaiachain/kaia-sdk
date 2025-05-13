@@ -258,7 +258,7 @@ async function sendFeeDelegatedSC() {
 
 async function signAndSendGaslessTxs() {
   try {
-    // before swap
+    // ------- before swap -------
     const balanceOfABI = ["function balanceOf(address owner) view returns (uint256)"];
     const testToken = new ethers.Contract(testTokenAddr, balanceOfABI, provider);
 
@@ -271,38 +271,27 @@ async function signAndSendGaslessTxs() {
     const testTokenToSwap = document.getElementById('testTokenSwapAmount')
     const testTokenToSwapBN = BigInt(ethers_ext.parseKaia(testTokenToSwap.value))
 
-    // prepare transactions
+    // ------- prepare transactions -------
     const signer = await provider.getSigner(accounts[0].address);
 
     const network = await signer.provider.getNetwork();
     const chainId = Number(network.chainId);
 
-    const feeData = await signer.provider.getFeeData();
-    const gasPriceBN = BigInt(feeData.gasPrice) || 25000000000n;
-    const gasPriceGkei = Number(feeData.gasPrice) / 1e9;
-    const amountRepay = ethers_ext.gasless.getAmountRepay(true, gasPriceGkei);
-    const nonce = await provider.getTransactionCount(accounts[0].address);
-
-    // send approve
-    const approveABI = ["function approve(address spender, uint256 amount) external returns (bool)"];
-    const tokenContract = new ethers.Contract(testTokenAddr, approveABI, provider);
-    const maxUint256 = BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
     const gsr = ethers_ext.gasless.getGaslessSwapRouter(provider, chainId);
 
-    const approveData = tokenContract.interface.encodeFunctionData("approve", [
+    // ------- send approve -------
+    const maxUint256 = BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
+    let approveTx = await ethers_ext.gasless.getApproveTx(
+      provider,
+      accounts[0].address,
+      testTokenAddr,
       gsr.address,
       maxUint256
-    ]);
+    );
 
-    const approveTx = {
-      type: 0,
-      to: testTokenAddr,
-      gasLimit: 100000,
-      gasPrice: gasPriceBN,
-      data: approveData,
-      nonce: nonce,
+    if (approveTx) {
+      approveTx['type'] = 0;
     };
-
     console.log("approveTx", approveTx);
 
     const approveSentTx = await signer.sendTransaction(approveTx);
@@ -312,31 +301,31 @@ async function signAndSendGaslessTxs() {
       approveTxhash
     );
 
-    // send swap
+    // ------- send swap -------
     const currentBlock = await provider.getBlock("latest");
-    const deadlineTimestamp = BigInt(currentBlock.timestamp) + 20n;
+    const deadlineTimestamp = BigInt(currentBlock.timestamp) + 1800n;
 
-    console.log("testTokenToSwapBN", testTokenToSwapBN);
+    const feeData = await provider.getFeeData();
+    const gasPriceGkei = Number(feeData.gasPrice) / 1e9;
+    const amountRepay = ethers_ext.gasless.getAmountRepay(true, gasPriceGkei);
 
     const appTxFee = ethers.parseUnits("0.01", "ether").toString()
     const commissionRateBasisPoints = await ethers_ext.gasless.getCommissionRate(gsr);
     const minAmountOut = ethers_ext.gasless.getMinAmountOut(amountRepay, appTxFee, commissionRateBasisPoints)
 
-    const swapData = gsr.interface.encodeFunctionData("swapForGas", [
+    let swapTx = await ethers_ext.gasless.getSwapTx(
+      provider,
+      accounts[0].address,
       testTokenAddr,
-      testTokenToSwapBN,
-      minAmountOut,
-      amountRepay,
-      deadlineTimestamp
-    ]);
+      testTokenToSwapBN.toString(),
+      minAmountOut.toString(),
+      amountRepay.toString(),
+      false,
+      Number(deadlineTimestamp)
+    );
 
-    const swapTx = {
-      type: 0,
-      to: gsr.address,
-      gasLimit: 500000,
-      gasPrice: gasPriceBN,
-      data: swapData,
-      nonce: nonce + 1,
+    if (swapTx) {
+      swapTx['type'] = 0;
     };
     console.log("swapTx", swapTx);
 
@@ -349,8 +338,8 @@ async function signAndSendGaslessTxs() {
 
     const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
     await sleep(30000); // wait 30s
-    
-    // after swap
+
+    // ------- after swap -------
     const kaiaAfterSwap = await provider.getBalance(accounts[0].address);
     const tokenAfterSwap = await testToken.balanceOf(accounts[0].address);
     $("#kaiaAfterSwap").html(`${ethers_ext.formatKaia(kaiaAfterSwap)}`);

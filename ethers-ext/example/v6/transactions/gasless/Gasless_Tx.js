@@ -25,7 +25,6 @@ const WKAIA_ADDRESS = "0x75Ec3c04DA63bE95Ec9876Aca967D79A1c74e2cf"; // Using GSR
 const UNISWAP_ROUTER_ADDRESS = "0xcB148BDB400Fd9eDC955B2c8c6a3fb7677e9DeE8"; // UniswapV2Router02 address
 
 const swapAmount = ethers.parseEther("1.0").toString();
-const allowanceAmount = ethers.parseEther("3.0").toString();
 
 async function sendGaslessTx(appTxFee, slippage) {
   console.log(`Sending gasless transaction with appTxFee=${appTxFee} and slippage=${slippage}%`);
@@ -64,8 +63,7 @@ async function sendGaslessTx(appTxFee, slippage) {
       provider,
       senderAddr,
       tokenAddress,
-      gsr.address,
-      allowanceAmount
+      gsr.address
     );
     
     const approveResult = await wallet.sendTransaction(approveTx);

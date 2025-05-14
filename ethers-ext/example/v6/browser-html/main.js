@@ -280,18 +280,12 @@ async function signAndSendGaslessTxs() {
     const gsr = ethers_ext.gasless.getGaslessSwapRouter(provider, chainId);
 
     // ------- send approve -------
-    const maxUint256 = BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
     let approveTx = await ethers_ext.gasless.getApproveTx(
       provider,
       accounts[0].address,
       testTokenAddr,
-      gsr.address,
-      maxUint256
+      gsr.address
     );
-
-    if (approveTx) {
-      approveTx['type'] = 0;
-    };
     console.log("approveTx", approveTx);
 
     const approveSentTx = await signer.sendTransaction(approveTx);
@@ -323,10 +317,6 @@ async function signAndSendGaslessTxs() {
       false,
       Number(deadlineTimestamp)
     );
-
-    if (swapTx) {
-      swapTx['type'] = 0;
-    };
     console.log("swapTx", swapTx);
 
     const swapSentTx = await signer.sendTransaction(swapTx);

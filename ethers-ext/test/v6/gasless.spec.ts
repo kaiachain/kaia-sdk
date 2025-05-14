@@ -1,6 +1,6 @@
 import chai, { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
-import { ethers } from "ethers";
+import { ethers, MaxUint256 } from "ethers";
 import _ from "lodash";
 import { describe, it, before } from "mocha";
 
@@ -168,20 +168,15 @@ describe("Gasless v6", () => {
 
   describe("getApproveTx", () => {
     it("should generate a valid approve transaction", async () => {
-      const amount = "1000000000000000000";
-      
-      const tx = await getApproveTx(EP, walletAddress, tokenAddress, "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707", amount);
+      const tx = await getApproveTx(EP, walletAddress, tokenAddress, "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707");
       expect(tx).to.be.an("object");
       expect(tx.to).to.equal(tokenAddress);
       expect(tx.from).to.equal(walletAddress);
       expect(tx.data).to.exist;
       if (tx.data) {
         expect(tx.data.toString().startsWith("0x095ea7b3")).to.be.true; // approve selector
+        expect(tx.data.toString().endsWith(MaxUint256.toString(16).substring(2))).to.be.true; // approve amount
       }
-    });
-
-    it("should throw error if amount is zero or negative", async () => {
-      await expect(getApproveTx(EP, walletAddress, tokenAddress, "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707", "0")).to.be.rejectedWith("Amount must be greater than 0");
     });
   });
 

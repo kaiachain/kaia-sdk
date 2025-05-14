@@ -1,6 +1,6 @@
 import { JsonRpcApiProvider } from "ethers";
 import { assert } from "ethers";
-import { ethers, TransactionLike } from "ethers";
+import { ethers, TransactionLike, MaxUint256 } from "ethers";
 import { getTransactionRequest } from "./txutil.js";
 import GaslessSwapRouterAbi from "./abi/GaslessSwapRouter.json"
 
@@ -146,8 +146,7 @@ export async function getApproveTx(
   provider: ethers.Provider,
   fromAddress: string,
   tokenAddr: string,
-  routerAddress: string,
-  amount: string
+  routerAddress: string
 ): Promise<ethers.TransactionRequest> {
   try {
     const network = await provider.getNetwork();
@@ -161,14 +160,11 @@ export async function getApproveTx(
 
     const tokenInterface = new ethers.Interface(tokenAbi);
     
-    const amountBN = BigInt(amount);
-    if (amountBN <= BigInt(0)) {
-      throw new Error("Amount must be greater than 0");
-    }
-
+    // GaslessApproveTx's allowance is only set to MaxUint256.
+    // ref: https://github.com/kaiachain/kips/pull/64
     const approveData = tokenInterface.encodeFunctionData("approve", [
       routerAddress,
-      amountBN.toString()
+      MaxUint256.toString()
     ]);
 
     const nonce = await provider.getTransactionCount(fromAddress);
@@ -176,6 +172,7 @@ export async function getApproveTx(
     const gasPriceBN = feeData.gasPrice?.toString() || "25000000000";
 
     return {
+      type: 0,
       to: tokenAddr,
       from: fromAddress,
       nonce: nonce,
@@ -247,6 +244,7 @@ export async function getSwapTx(
 
     // Construct the transaction object
     const tx: ethers.TransactionRequest = {
+      type: 0,
       to: routerAddress,
       from: fromAddress,
       nonce: nonce,

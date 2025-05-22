@@ -1,0 +1,54 @@
+{
+  "name": "@kaiachain/viem-ext",
+  "version": "0.0.1",
+  "license": "ISC",
+  "description": "viem extension for kaia blockchain",
+  "keywords": [
+    "ethereum",
+    "web3",
+    "viem",
+    "kaia",
+    "kaia sdk",
+    "kaia api",
+    "kaiachain",
+    "kaiachain sdk",
+    "kaiachain api"
+  ],
+  "homepage": "https://github.com/kaiachain/kaia-sdk/tree/dev/viem-ext",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kaiachain/kaia-sdk"
+  },
+  "main": "dist/cjs/index.js",
+  "types": "dist/esm/index.d.ts",
+  "files": [
+    "./dist",
+    "./src"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "default": "./dist/cjs/index.js"
+    }
+  },
+  "scripts": {
+    "test": "vitest run --maxConcurrency 1",
+    "test:watch": "vitest",
+    "build": "tsc && tsc -p tsconfig.cjs.json"
+  },
+  "dependencies": {
+    "@kaiachain/js-ext-core": "^2.0.0",
+    "ethers": "^6.13.4",
+    "lodash": "^4.17.21",
+    "viem": "^2.21.41"
+  },
+  "devDependencies": {
+    "@kaiachain/viem-ext": "file:./dist/cjs",
+    "@types/lodash": "^4.17.13",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^3.0.7"
+  }
+}

@@ -19,9 +19,9 @@ export function context_create(context: Web3Context<EthExecutionAPI>) {
 
 // Analogous to web3/src/accounts.ts:privateKeyToAccountWithContext
 export function context_privateKeyToAccount(context: Web3Context<EthExecutionAPI>) {
-  return function (privateKey: Uint8Array | string): KaiaWeb3Account {
+  return function (privateKey: Uint8Array | string, address?: string): KaiaWeb3Account {
     const account = privateKeyToAccount(privateKey);
-    return wrapAccount(context, account);
+    return wrapAccount(context, { ...account, address: address || account.address });
   };
 }
 
@@ -92,9 +92,9 @@ function wrapAccount(context: Web3Context<EthExecutionAPI>, account: Web3Account
 
   return {
     ...account,
-    signTransaction:
-      (transaction: KlaytnTransaction | string) => _signTransaction(transaction, account.privateKey),
-    signTransactionAsFeePayer:
-      (transaction: KlaytnTransaction | string) => _signTransactionAsFeePayer(transaction, account.privateKey),
+    signTransaction: (transaction: KlaytnTransaction | string) =>
+      _signTransaction(transaction, account.privateKey),
+    signTransactionAsFeePayer: (transaction: KlaytnTransaction | string) =>
+      _signTransactionAsFeePayer(transaction, account.privateKey, account.address),
   };
 }

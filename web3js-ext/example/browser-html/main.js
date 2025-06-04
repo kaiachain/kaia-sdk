@@ -16,7 +16,7 @@ async function connect(injectedProvider) {
   }
 
   // Wrap the window.{ethereum,klaytn} object with Web3 from web3js-ext.bundle.js
-  web3 = new web3_ext.KlaytnWeb3(injectedProvider);
+  web3 = new web3_ext.KaiaWeb3(injectedProvider);
   // Uncomment to use the original Web3
   // web3 = new Web3(injectedProvider);
 
@@ -178,7 +178,7 @@ async function sendKlaytnSC() {
 // We do it here with hardcoded private key for demonstration purpose.
 async function doSendTxAsFeePayer(signedTx) {
   const provider = new Web3.providers.HttpProvider("https://public-en-kairos.node.kaia.io");
-  const web3 = new web3_ext.KlaytnWeb3(provider);
+  const web3 = new web3_ext.KaiaWeb3(provider);
   const feePayerPriv = "0xb3cf575dea0081563fe5482de2fe4425e025502b1f4ae7e02b2540ac0a5beda1";
   const feePayerAccount = web3.eth.accounts.privateKeyToAccount(feePayerPriv);
 

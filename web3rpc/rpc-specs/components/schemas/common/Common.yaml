@@ -797,8 +797,7 @@ components:
           type: string
           description: A string representing the type of the transaction.
         typeInt:
-          type: string
-          format: hex
+          type: number
           description: An integer representing the type of the transaction.
         value:
           type: string

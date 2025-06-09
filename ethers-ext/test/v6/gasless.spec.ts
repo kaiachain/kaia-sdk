@@ -27,6 +27,7 @@ chai.use(chaiAsPromised);
 // Dummy values
 const url = "https://public-en-kairos.node.kaia.io";
 const priv = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+const gsrAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
 const walletAddress = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 const tokenAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
 const mainnetChainId = 8217;
@@ -85,7 +86,7 @@ describe("Gasless v6", () => {
         sentRawTx = params[0];
         return ethers.keccak256(sentRawTx);
       });
-      P.mock_override("kaia_getActiveAddressFromRegistry", () => "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707");
+      P.mock_override("kaia_getActiveAddressFromRegistry", () => gsrAddress);
       P.mock_override("kaia_sendRawTransactions", (params: any[]) => {
         const txs = params[0];
         return txs.map((tx: string) => ethers.keccak256(tx));
@@ -113,17 +114,17 @@ describe("Gasless v6", () => {
   describe("getGaslessSwapRouter", () => {
     it("should return router for mainnet chain ID", async () => {
       const router = await getGaslessSwapRouter(KP, mainnetChainId);
-      expect(router.address).to.equal("0x5FC8d32690cc91D4c39d9d3abcBD16989F875707");
+      expect(router.address).to.equal(gsrAddress);
     });
 
     it("should return router for kairos chain ID", async () => {
       const router = await getGaslessSwapRouter(KP, kairosChainId);
-      expect(router.address).to.equal("0x5FC8d32690cc91D4c39d9d3abcBD16989F875707");
+      expect(router.address).to.equal(gsrAddress);
     });
 
     it("should return router for local chain ID", async () => {
       const router = await getGaslessSwapRouter(KP, localChainId);
-      expect(router.address).to.equal("0x5FC8d32690cc91D4c39d9d3abcBD16989F875707");
+      expect(router.address).to.equal(gsrAddress);
     });
 
     it("should throw error for unsupported chain ID", () => {
@@ -180,7 +181,7 @@ describe("Gasless v6", () => {
 
   describe("getApproveTx", () => {
     it("should generate a valid approve transaction", async () => {
-      const tx = await getApproveTx(EP, walletAddress, tokenAddress, "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707");
+      const tx = await getApproveTx(EP, walletAddress, tokenAddress, gsrAddress);
       expect(tx).to.be.an("object");
       expect(tx.to).to.equal(tokenAddress);
       expect(tx.from).to.equal(walletAddress);
@@ -344,7 +345,7 @@ describe("Gasless v6", () => {
 
     it("should return false for non-swap transactions", async () => {
       const mockSwapTx = {
-        to: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+        to: gsrAddress,
         data: "0x12345678",
         nonce: "0x1234",
         from: walletAddress

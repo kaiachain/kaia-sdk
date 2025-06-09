@@ -55,6 +55,8 @@ jobs:
               - "ethers-ext/package.json"
             web3js-ext:  
               - "web3js-ext/package.json"
+            viem-ext:  
+              - "viem-ext/package.json"
             web3j-ext:
               - "web3j-ext/web3j-ext/build.gradle"
             web3py-ext:
@@ -103,6 +105,19 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           cd web3js-ext && npx pnpm --filter "@kaiachain/*" -r publish --publish-branch main --no-git-check --access=public && cd -
+
+      - name: generate viem-ext 
+        if: steps.verify-changed-files.outputs.viem-ext_any_changed == 'true' 
+        shell: bash
+        run: |
+          cd viem-ext && npm install && npm run build && cd -
+
+      - name: publish viem-ext
+        if: steps.verify-changed-files.outputs.viem-ext_any_changed == 'true' 
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          cd viem-ext && npx pnpm --filter "@kaiachain/*" -r publish --publish-branch main --no-git-check --access=public && cd -
 
       - name: generate web3rpc-python 
         if: steps.verify-changed-files.outputs.web3py-ext_any_changed == 'true'

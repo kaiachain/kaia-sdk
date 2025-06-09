@@ -387,9 +387,9 @@ export async function isGaslessApprove(
       return false;
     }
 
-    // A4: amount is a nonzero.
+    // A4: amount is MaxUint256.
     const amount = BigInt(amountData);
-    if (amount === BigInt(0)) {
+    if (amount !== MaxUint256) {
       return false;
     }
 

@@ -281,7 +281,7 @@ describe("Gasless v6", () => {
     it("should validate a gasless approve transaction", async () => {
       const mockTx = {
         to: tokenAddress,
-        data: "0x095ea7b30000000000000000000000005fc8d32690cc91d4c39d9d3abcbd16989f8757070000000000000000000000000000000000000000000000000de0b6b3a7640000",
+        data: "0x095ea7b30000000000000000000000005fc8d32690cc91d4c39d9d3abcbd16989f875707ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
         nonce: "0x1234",
         from: walletAddress
       };

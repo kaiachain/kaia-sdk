@@ -10,11 +10,9 @@ const SUPPORTED_CHAIN_IDS: { [key: number]: string } = {
   1000: 'local'
 };
 
-const CHAIN_ROUTER_ADDRESSES: { [key: string]: string } = {
-  'mainnet': GaslessSwapRouterAbi.address, // Mainnet address
-  'testnet': "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707", // Testnet address
-  'local': "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"   // Local address
-};
+// GaslessSwapRouterAddress registry key
+// https://github.com/kaiachain/kaia/blob/v2.0.0/contracts/contracts/system_contracts/multicall/MultiCallContract.sol#L140
+const GASLESS_SWAP_ROUTER_NAME = "GaslessSwapRouter"
 
 function validateChainId(chainId: number): string {
   const networkName = SUPPORTED_CHAIN_IDS[chainId];
@@ -52,8 +50,23 @@ export function getAmountRepay(approveRequired: boolean, gasPrice: number = 25):
  * @param chainId The chain ID
  * @returns The gasless swap router contract
  */
-export function getGaslessSwapRouter(provider: ethers.Provider, chainId: number): any {
-  const routerAddress = CHAIN_ROUTER_ADDRESSES[validateChainId(chainId)];
+export async function getGaslessSwapRouter(provider: ethers.Provider, chainId: number): Promise<any> {
+  validateChainId(chainId)
+  assert(
+    provider instanceof JsonRpcApiProvider,
+    "Provider is not JsonRpcApiProvider: cannot send kaia_getActiveAddressFromRegistry",
+    "UNSUPPORTED_OPERATION",
+    {
+      operation: "getGaslessSwapRouter",
+    }
+  );
+  const routerAddress = await provider.send("kaia_getActiveAddressFromRegistry", [
+    GASLESS_SWAP_ROUTER_NAME,
+    "latest"
+  ]);
+  if (routerAddress === undefined || routerAddress === null || routerAddress === "") {
+    throw new Error("There is no valid GaslessSwapRouter for the target chain");
+  }
 
   const contract = new ethers.Contract(
     routerAddress,
@@ -216,7 +229,7 @@ export async function getSwapTx(
 
     validateChainId(chainId);
 
-    const routerInfo = getGaslessSwapRouter(provider, chainId);
+    const routerInfo = await getGaslessSwapRouter(provider, chainId);
     const routerAddress = routerInfo.address;
 
     const currentBlock = await provider.getBlock("latest");
@@ -326,7 +339,7 @@ export async function isGaslessSupportedToken(
   chainId: number,
 ): Promise<boolean> {
   try {
-    const gsr = getGaslessSwapRouter(provider, chainId);
+    const gsr = await getGaslessSwapRouter(provider, chainId);
 
     return await gsr.isTokenSupported(token);
   } catch (error) {
@@ -373,7 +386,7 @@ export async function isGaslessApprove(
     const amountData = "0x" + data.slice(74);
 
     // A3: spender is a whitelisted GaslessSwapRouter.
-    const router = getGaslessSwapRouter(provider, chainId);
+    const router = await getGaslessSwapRouter(provider, chainId);
     if (spenderData.toLowerCase() !== router.address.toLowerCase()) {
       return false;
     }
@@ -416,7 +429,7 @@ export async function isValidRouterAddress(
 ): Promise<boolean> {
   if (!txRequest.to) return false;
   
-  const router = getGaslessSwapRouter(provider, chainId);
+  const router = await getGaslessSwapRouter(provider, chainId);
   return txRequest.to.toLowerCase() === router.address.toLowerCase();
 }
 

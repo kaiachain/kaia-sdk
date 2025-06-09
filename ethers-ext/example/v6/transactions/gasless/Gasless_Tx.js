@@ -36,7 +36,7 @@ async function sendGaslessTx(appTxFee, slippage) {
   const chainId = Number(network.chainId);
   console.log(`Connected to chain ID: ${chainId}`);
 
-  const gsr = gasless.getGaslessSwapRouter(provider, chainId);
+  const gsr = await gasless.getGaslessSwapRouter(provider, chainId);
   console.log(`Using gasless swap router at: ${gsr.address}`);
 
   console.log("Checking if token is supported...");

@@ -3,6 +3,7 @@ import { assert } from "ethers";
 import { ethers, TransactionLike, MaxUint256 } from "ethers";
 import { getTransactionRequest } from "./txutil.js";
 import GaslessSwapRouterAbi from "./abi/GaslessSwapRouter.json"
+import RegistryAbi from "./abi/Registry.json"
 
 const SUPPORTED_CHAIN_IDS: { [key: number]: string } = {
   8217: 'mainnet',
@@ -13,6 +14,7 @@ const SUPPORTED_CHAIN_IDS: { [key: number]: string } = {
 // GaslessSwapRouterAddress registry key
 // https://github.com/kaiachain/kaia/blob/v2.0.0/contracts/contracts/system_contracts/multicall/MultiCallContract.sol#L140
 const GASLESS_SWAP_ROUTER_NAME = "GaslessSwapRouter"
+const REGISTRY_ADDRESS = "0x0000000000000000000000000000000000000401"
 
 function validateChainId(chainId: number): string {
   const networkName = SUPPORTED_CHAIN_IDS[chainId];
@@ -52,19 +54,13 @@ export function getAmountRepay(approveRequired: boolean, gasPrice: number = 25):
  */
 export async function getGaslessSwapRouter(provider: ethers.Provider, chainId: number): Promise<any> {
   validateChainId(chainId)
-  assert(
-    provider instanceof JsonRpcApiProvider,
-    "Provider is not JsonRpcApiProvider: cannot send kaia_getActiveAddressFromRegistry",
-    "UNSUPPORTED_OPERATION",
-    {
-      operation: "getGaslessSwapRouter",
-    }
+  const registry = new ethers.Contract(
+    REGISTRY_ADDRESS,
+    RegistryAbi,
+    provider
   );
-  const routerAddress = await provider.send("kaia_getActiveAddressFromRegistry", [
-    GASLESS_SWAP_ROUTER_NAME,
-    "latest"
-  ]);
-  if (routerAddress === undefined || routerAddress === null || routerAddress === "") {
+  const routerAddress = await registry.getActiveAddr(GASLESS_SWAP_ROUTER_NAME);
+  if (routerAddress === undefined || routerAddress === null || routerAddress === ethers.ZeroHash) {
     throw new Error("There is no valid GaslessSwapRouter for the target chain");
   }
 

@@ -60,16 +60,20 @@ describe("Gasless v6", () => {
       P.mock_override("eth_call", (params: any[]) => {
         const data = params[0].data || "";
         
-        if (data.startsWith("0xbb9c4ea7")) { // isTokenSupported
+        if (data.startsWith("0x75151b63")) { // isTokenSupported
           return "0x0000000000000000000000000000000000000000000000000000000000000001";
         }
         
-        if (data.startsWith("0xc20b8fa5")) { // commissionRate
+        if (data.startsWith("0x5ea1d6f8")) { // commissionRate
           return "0x00000000000000000000000000000000000000000000000000000000000003e8";
         }
         
-        if (data.startsWith("0x3883e119")) { // getAmountIn
+        if (data.startsWith("0x632db21c")) { // getAmountIn
           return "0x0000000000000000000000000000000000000000000000000de0b6b3a7640000";
+        }
+
+        if (data.startsWith("0xe2693e3f")) { // getActiveAddr
+          return ethers.zeroPadValue(gsrAddress, 32);
         }
         
         return "0x0000000000000000000000000000000000000000000000000000000000000000";
@@ -86,7 +90,6 @@ describe("Gasless v6", () => {
         sentRawTx = params[0];
         return ethers.keccak256(sentRawTx);
       });
-      P.mock_override("kaia_getActiveAddressFromRegistry", () => gsrAddress);
       P.mock_override("kaia_sendRawTransactions", (params: any[]) => {
         const txs = params[0];
         return txs.map((tx: string) => ethers.keccak256(tx));
@@ -113,32 +116,32 @@ describe("Gasless v6", () => {
 
   describe("getGaslessSwapRouter", () => {
     it("should return router for mainnet chain ID", async () => {
-      const router = await getGaslessSwapRouter(KP, mainnetChainId);
+      const router = await getGaslessSwapRouter(EP, mainnetChainId);
       expect(router.address).to.equal(gsrAddress);
     });
 
     it("should return router for kairos chain ID", async () => {
-      const router = await getGaslessSwapRouter(KP, kairosChainId);
+      const router = await getGaslessSwapRouter(EP, kairosChainId);
       expect(router.address).to.equal(gsrAddress);
     });
 
     it("should return router for local chain ID", async () => {
-      const router = await getGaslessSwapRouter(KP, localChainId);
+      const router = await getGaslessSwapRouter(EP, localChainId);
       expect(router.address).to.equal(gsrAddress);
     });
 
     it("should throw error for unsupported chain ID", () => {
-      expect(getGaslessSwapRouter(KP, unsupportedChainId)).to.be.rejectedWith("Chain ID 1234 is not supported by this SDK");
+      expect(getGaslessSwapRouter(EP, unsupportedChainId)).to.be.rejectedWith("Chain ID 1234 is not supported by this SDK");
     });
 
     it("should throw error when GaslessSwapRouter is not set in the registry", () => {
-      const originalMock = KP.overrides["kaia_getActiveAddressFromRegistry"];
-      KP.mock_override("kaia_getActiveAddressFromRegistry", () => "");
+      const originalMock = EP.overrides["eth_call"];
+      EP.mock_override("eth_call", () => "0x0000000000000000000000000000000000000000000000000000000000000000");
 
       try {
-        expect(getGaslessSwapRouter(KP, mainnetChainId)).to.be.rejectedWith("There is no valid GaslessSwapRouter for the target chain");
+        expect(getGaslessSwapRouter(EP, mainnetChainId)).to.be.rejectedWith("There is no valid GaslessSwapRouter for the target chain");
       } finally {
-        KP.mock_override("kaia_getActiveAddressFromRegistry", originalMock);
+        EP.mock_override("eth_call", originalMock);
       }
     });
   });
@@ -199,7 +202,7 @@ describe("Gasless v6", () => {
       const minAmountOut = "26636111111111111";
       const amountRepay = "15525000000000000";
       
-      const tx = await getSwapTx(KP, walletAddress, tokenAddress, amountIn, minAmountOut, amountRepay);
+      const tx = await getSwapTx(EP, walletAddress, tokenAddress, amountIn, minAmountOut, amountRepay);
       expect(tx).to.be.an("object");
       expect(tx.to).to.be.a("string");
       expect(tx.from).to.equal(walletAddress);
@@ -283,20 +286,14 @@ describe("Gasless v6", () => {
         from: walletAddress
       };
       
-      const originalMock = KP.overrides["eth_call"];
-      KP.mock_override("eth_call", (params: any[]) => {
-        return "0x0000000000000000000000000000000000000000000000000000000000000001";
-      });
-      
-      const originalGetTxCountMock = KP.overrides["eth_getTransactionCount"];
-      KP.mock_override("eth_getTransactionCount", () => "0x1234");
+      const originalGetTxCountMock = EP.overrides["eth_getTransactionCount"];
+      EP.mock_override("eth_getTransactionCount", () => "0x1234");
       
       try {
-        const result = await isGaslessApprove(KP, mockTx, kairosChainId);
+        const result = await isGaslessApprove(EP, mockTx, kairosChainId);
         expect(result).to.be.true;
       } finally {
-        KP.mock_override("eth_call", originalMock);
-        KP.mock_override("eth_getTransactionCount", originalGetTxCountMock);
+        EP.mock_override("eth_getTransactionCount", originalGetTxCountMock);
       }
     });
 
@@ -308,7 +305,7 @@ describe("Gasless v6", () => {
         from: walletAddress
       };
       
-      const result = await isGaslessApprove(KP, mockTx, kairosChainId);
+      const result = await isGaslessApprove(EP, mockTx, kairosChainId);
       expect(result).to.be.false;
     });
   });

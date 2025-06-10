@@ -1,6 +1,6 @@
 import { TxType } from '@kaiachain/js-ext-core'
 import { createWalletClient, http } from '../src/index'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, beforeEach } from 'vitest'
 import { kairos } from '../src'
 import { privateKeyToAccount } from 'viem/accounts'
 
@@ -20,6 +20,10 @@ const feePayerWallet = createWalletClient({
 })
 
 describe('kaia/sendTransactionAsFeePayer', () => {
+  beforeEach(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+  });
+
   it('send a tx as fee payer', async () => {
     const txRequest = await senderWallet.prepareTransactionRequest({
       account: senderWallet.account,

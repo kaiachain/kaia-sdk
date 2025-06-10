@@ -1,5 +1,5 @@
 1. Requirements
-    - node `^18.20.4`
+    - node `^20.12.2`
 2. Install
     - npm install
     - npm run build

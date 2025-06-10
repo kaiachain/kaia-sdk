@@ -9,7 +9,7 @@ export * from 'viem'
 export { privateKeyToAccount, parseAccount } from 'viem/accounts'
 export { kairos, kaia } from './chainConfig.js'
 export { createPublicClient, createWalletClient } from './client.js'
-export { kaiaAccount } from './accounts'
+export { kaiaAccount } from './accounts/index.js'
 // js-ext-core passthrough
 export * from '@kaiachain/js-ext-core'
 // override viem similar function

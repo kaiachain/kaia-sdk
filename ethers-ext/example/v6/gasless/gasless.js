@@ -65,14 +65,14 @@ async function sendGaslessTx(appTxFee, slippage) {
       tokenAddress,
       gsr.address
     );
-    
+
     const approveResult = await wallet.sendTransaction(approveTx);
     console.log(`Approve transaction hash: ${approveResult.hash}`);
-    
+
     console.log("Waiting for approval confirmation...");
     await approveResult.wait();
     console.log("Approval transaction confirmed");
-    
+
     amountRepay = gasless.getAmountRepay(true, gasPriceGkei);
     console.log(`Amount to repay (with approval): ${ethers.formatUnits(amountRepay, 18)}`);
   } else {
@@ -119,16 +119,16 @@ async function sendGaslessTx(appTxFee, slippage) {
     amountRepay,
     true
   );
-  
+
   console.log("\nSending swap transaction...");
   try {
     const swapResult = await wallet.sendTransaction(swapTx);
     console.log(`Swap transaction hash: ${swapResult.hash}`);
-    
+
     console.log("Waiting for transaction receipt...");
     const receipt = await swapResult.wait();
     console.log("Transaction confirmed:", receipt.blockNumber);
-    
+
     return swapResult.hash;
   } catch (error) {
     console.error("Error in sending swap transaction:", error);

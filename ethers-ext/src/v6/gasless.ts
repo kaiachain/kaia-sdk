@@ -290,40 +290,28 @@ export async function getSwapTx(
 export async function sendGaslessTx(
   approveTxOrNull: string | null,
   swapTx: string,
-  provider?: ethers.Provider
+  provider: ethers.Provider
 ): Promise<string[]> {
   try {
-    if (provider) {
-      const network = await provider.getNetwork();
-      const chainId = Number(network.chainId);  
-      validateChainId(chainId);
+    const network = await provider.getNetwork();
+    const chainId = Number(network.chainId);  
+    validateChainId(chainId);
 
-      // Assert that provider is JsonRpcApiProvider
-      assert(
-        provider instanceof JsonRpcApiProvider,
-        "Provider is not JsonRpcApiProvider: cannot send kaia_sendRawTransactions",
-        "UNSUPPORTED_OPERATION",
-        {
-          operation: "sendGaslessTx",
-        }
-      );
-
-      if (approveTxOrNull) {
-        console.log("Sending both approve and swap transactions via RPC...");
-        return await provider.send("kaia_sendRawTransactions", [[approveTxOrNull, swapTx]]);
-      } else {
-        return await provider.send("kaia_sendRawTransactions", [[swapTx]]);
+    // Assert that provider is JsonRpcApiProvider
+    assert(
+      provider instanceof JsonRpcApiProvider,
+      "Provider is not JsonRpcApiProvider: cannot send kaia_sendRawTransactions",
+      "UNSUPPORTED_OPERATION",
+      {
+        operation: "sendGaslessTx",
       }
+    );
+
+    if (approveTxOrNull) {
+      console.log("Sending both approve and swap transactions via RPC...");
+      return await provider.send("kaia_sendRawTransactions", [[approveTxOrNull, swapTx]]);
     } else {
-      console.log("No provider available, simulating transaction sending...");
-      if (approveTxOrNull) {
-        return [
-          `0x${approveTxOrNull.slice(2, 10).padEnd(64, '0')}`,
-          `0x${swapTx.slice(2, 10).padEnd(64, '0')}`
-        ];
-      } else {
-        return [`0x${swapTx.slice(2, 10).padEnd(64, '0')}`];
-      }
+      return await provider.send("kaia_sendRawTransactions", [[swapTx]]);
     }
   } catch (error) {
     console.error("Error in sendGaslessTx:", error);

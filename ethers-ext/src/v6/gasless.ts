@@ -50,27 +50,36 @@ export function getAmountRepay(approveRequired: boolean, gasPrice: number = 25):
  * Get the gasless swap router for the specified chain
  * @param provider The ethers provider
  * @param chainId The chain ID
+ * @param address Override the address of the gasless swap router (optional)
  * @returns The gasless swap router contract
  */
-export async function getGaslessSwapRouter(provider: ethers.Provider, chainId: number): Promise<any> {
-  validateChainId(chainId)
-  const registry = new ethers.Contract(
-    REGISTRY_ADDRESS,
-    RegistryAbi,
-    provider
-  );
-  const routerAddress = await registry.getActiveAddr(GASLESS_SWAP_ROUTER_NAME);
-  if (routerAddress === undefined || routerAddress === null || routerAddress === ethers.ZeroHash) {
-    throw new Error("There is no valid GaslessSwapRouter for the target chain");
+export async function getGaslessSwapRouter(provider: ethers.Provider, chainId: number, address?: string): Promise<any> {
+  let routerAddr: string;
+  if (!address) {
+    // Attempt to get the address from the KIP-149 registry
+    validateChainId(chainId)
+    const registry = new ethers.Contract(
+      REGISTRY_ADDRESS,
+      RegistryAbi,
+      provider
+    );
+    const addr = await registry.getActiveAddr(GASLESS_SWAP_ROUTER_NAME);
+    if (addr === undefined || addr === null || addr === ethers.ZeroHash) {
+      throw new Error(`There is no GaslessSwapRouter registered in the target chain (chainId: ${chainId})`);
+    }
+    routerAddr = addr;
+  } else {
+    // Otherwise use specified address
+    routerAddr = address;
   }
 
   const contract = new ethers.Contract(
-    routerAddress,
+    routerAddr,
     GaslessSwapRouterAbi.abi,
     provider
   );
 
-  const contractWithAddress = Object.assign(contract, { address: routerAddress });
+  const contractWithAddress = Object.assign(contract, { address: routerAddr });
 
   return contractWithAddress;
 }

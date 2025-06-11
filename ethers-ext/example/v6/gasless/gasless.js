@@ -3,14 +3,14 @@ const ethers = require("ethers6");
 const { Wallet, gasless } = require("@kaiachain/ethers-ext/v6");
 
 // Replace with ERC20 token address to be spent
-//const tokenAddr = "0xcB00BA2cAb67A3771f9ca1Fa48FDa8881B457750"; // Kairos:TEST token
-const tokenAddr = "0x8ebc32c078f5ecc8406ddDC785c8F0e2490C1081";
+const tokenAddr = "0xcB00BA2cAb67A3771f9ca1Fa48FDa8881B457750"; // Kairos:TEST token
+//const tokenAddr = "0x8ebc32c078f5ecc8406ddDC785c8F0e2490C1081";
 // Replace with your wallet address and private key
 const senderAddr = "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720";
 const senderPriv = "0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6";
 
-//const provider = new ethers.JsonRpcProvider("https://public-en-kairos.node.kaia.io");
-const provider = new ethers.JsonRpcProvider("http://localhost:8559");
+const provider = new ethers.JsonRpcProvider("https://public-en-kairos.node.kaia.io");
+//const provider = new ethers.JsonRpcProvider("http://localhost:8559");
 const wallet = new Wallet(senderPriv, provider);
 
 const ERC20_ABI = [
@@ -36,7 +36,7 @@ async function main() {
 
   const network = await provider.getNetwork();
   const chainId = Number(network.chainId);
-  const router = await gasless.getGaslessSwapRouter(provider, chainId, "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9");
+  const router = await gasless.getGaslessSwapRouter(provider, chainId);
   const routerAddr = await router.getAddress();
   const commissionRate = Number(await router.commissionRate());
   console.log(`\nGaslessSwapRouter address: ${routerAddr}`);
@@ -49,7 +49,7 @@ async function main() {
   const txs = [];
   if (approveRequired) {
     console.log("\nAdding ApproveTx because allowance is 0");
-    approveTx = await gasless.getApproveTx(
+    const approveTx = await gasless.getApproveTx(
       provider,
       senderAddr,
       tokenAddr,

@@ -44,7 +44,7 @@ jobs:
           cd web3rpc/rpc-specs && npm install && bash -x generate-namespace.sh && cd 
 
       - name: Verify Changed files
-        uses: tj-actions/changed-files@v39
+        uses: tj-actions/changed-files@v46
         id: verify-changed-files
         with:
           base_sha: ${{ steps.last_successful_commit_pr.outputs.base }}
@@ -53,6 +53,8 @@ jobs:
               - "ethers-ext/package.json"
             web3js-ext:  
               - "web3js-ext/package.json"
+            viem-ext:  
+              - "viem-ext/package.json"
             web3j-ext:
               - "web3j-ext/web3j-ext/build.gradle"
             web3py-ext:
@@ -107,6 +109,12 @@ jobs:
         shell: bash
         run: |
           cd web3js-ext && npm install && npm run build && cd -
+
+      - name: generate viem-ext sdk
+        if: steps.verify-changed-files.outputs.viem-ext_any_changed == 'true' 
+        shell: bash
+        run: |
+          cd viem-ext && npm install && npm run build && cd -
 
       - name: generate web3j-ext
         if: steps.verify-changed-files.outputs.web3j-ext_any_changed == 'true'

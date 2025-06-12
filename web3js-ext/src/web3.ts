@@ -22,7 +22,8 @@ import {
   context_sendTransaction,
   context_signTransaction,
 } from "./eth/index.js";
-import { KaiaWeb3EthInterface } from "../src/index.js";
+
+import { KaiaWeb3EthInterface } from "./index.js";
 
 
 // Follow the Web3 class from the web3/src/web3.ts
@@ -67,11 +68,15 @@ export class KlaytnWeb3
 
     // Expose required properties from inner Web3 object
     this.utils = this._web3.utils;
-    this.eth = this._web3.eth as KaiaWeb3EthInterface;
 
     // Override web3.eth.accounts methods
     const accounts = context_accounts(this);
-    this.eth.accounts = accounts;
+
+    this.eth = {
+      ...this._web3.eth,
+      accounts: accounts
+    } as KaiaWeb3EthInterface;
+
     this._accountProvider = accounts as any; // inevitable conflict in signTransaction types
     this._wallet = accounts.wallet;
 

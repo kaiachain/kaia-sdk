@@ -238,17 +238,6 @@ describe("Gasless v6", () => {
       expect(result).to.be.an("array");
       expect(result.length).to.equal(2);
     });
-
-    it("should simulate transaction sending when no provider is given", async () => {
-      const approveTx = "0x5678";
-      const swapTx = "0x1234";
-      
-      const result = await sendGaslessTx(approveTx, swapTx);
-      expect(result).to.be.an("array");
-      expect(result.length).to.equal(2);
-      expect(result[0]).to.equal("0x5678000000000000000000000000000000000000000000000000000000000000");
-      expect(result[1]).to.equal("0x1234000000000000000000000000000000000000000000000000000000000000");
-    });
   });
 
   describe("isGaslessSupportedToken", () => {

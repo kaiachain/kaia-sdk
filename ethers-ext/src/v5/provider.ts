@@ -56,9 +56,37 @@ export class Web3Provider extends EthersWeb3Provider {
   constructor(provider: any, network?: any) {
     super(provider, network);
 
-    const send = (method: string, params: any) => {
-      return this.send(method, params);
+    const send = async (method: string, params: any = []) => {
+      if (method === "wallet_switchEthereumChain") {
+        method = "wallet_switchKlaytnChain";
+      }
+      if (method === "wallet_addEthereumChain") {
+        method = "wallet_addKlaytnChain";
+      }
+
+      if (provider?.request) {
+        return provider.request({ method, params });
+      } else if (provider?.send) {
+        return provider.send(method, params);
+      } else if (provider?.sendAsync && provider?.isMobile) {
+        if (method === "eth_requestAccounts" || method == "eth_accounts" || method == "kaia_accounts") {
+          return provider?.enable();
+        } else {
+          return new Promise((resolve, reject) => {
+            provider.sendAsync({ method, params }, (err: any, result: any) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(result?.result || "");
+              }
+            });
+          });
+        }
+      } else {
+        throw new Error("Provider does not support sendAsync or send methods");
+      }
     };
+    this.send = send;
     const { AdminApi, DebugApi, GovernanceApi, KlayApi, NetApi, PersonalApi, TxpoolApi } = web3rpc
     this.admin = asyncOpenApi(send, AdminApi);
     this.debug = asyncOpenApi(send, DebugApi);
@@ -72,5 +100,15 @@ export class Web3Provider extends EthersWeb3Provider {
 
   override getSigner(addressOrIndex?: string | number | undefined): EthersJsonRpcSigner {
     return new JsonRpcSigner(this, addressOrIndex);
+  }
+
+  override send(method: string, params: Array<any>): Promise<any> {
+    return this.send(method, params);
+  }
+
+  override listAccounts(): Promise<Array<string>> {
+    return this.send("eth_accounts", []).then((accounts: Array<string>) => {
+      return accounts;
+    });
   }
 }

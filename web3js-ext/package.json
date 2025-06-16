@@ -1,6 +1,6 @@
 {
     "name": "@kaiachain/web3js-ext",
-    "version": "2.0.5",
+    "version": "2.0.6",
     "license": "MIT",
     "description": "web3.js extension for kaiachain blockchain",
     "keywords": [
@@ -64,7 +64,7 @@
         "webpack-cli": "^5.1.4"
     },
     "dependencies": {
-        "@kaiachain/js-ext-core": "^2.0.5",
+        "@kaiachain/js-ext-core": "^2.0.6",
         "@kaiachain/web3rpc": "^2.0.0",
         "ethereum-cryptography": "^2.1.2",
         "lodash": "^4.17.21",

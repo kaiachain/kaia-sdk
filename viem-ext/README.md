@@ -8,7 +8,7 @@ Viem Extension for Kaia offers:
 ## Install
 
 > **_NOTE:_**
-> @kaiachain/viem-ext@^2.0.5 recommends node 20 or later if you have issues with ES Module resolution.
+> @kaiachain/viem-ext@^2.0.5 and above recommends node 20 or later if you have issues with ES Module resolution.
 
 ### Node.js
 

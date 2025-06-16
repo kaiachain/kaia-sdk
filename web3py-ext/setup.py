@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import pathlib
 
 NAME = "web3py_ext"
-VERSION = "2.0.5"
+VERSION = "2.0.6"
 
 with open("./README.md") as readme:
     long_description = readme.read()

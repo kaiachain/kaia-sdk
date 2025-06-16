@@ -1,20 +1,30 @@
-import { JsonRpcApiProvider } from "ethers";
-import { assert } from "ethers";
-import { ethers, TransactionLike, MaxUint256 } from "ethers";
+import { JsonRpcApiProvider, assert, ethers, TransactionLike, MaxUint256 } from "ethers";
+
 import { getTransactionRequest } from "./txutil.js";
-import GaslessSwapRouterAbi from "./abi/GaslessSwapRouter.json"
-import RegistryAbi from "./abi/Registry.json"
+
+/**
+ * Loads ABI JSON files using `require()` for maximum build compatibility.
+ *
+ * @reason This approach was chosen over modern `import` syntax because the project
+ * needs to be compiled for multiple targets (ESM, CJS, Webpack). Alternative methods
+ * failed during either the CJS compilation or the Webpack bundling step.
+ * `require()` is robustly supported across all tools in the toolchain, and
+ * `esModuleInterop: true` ensures it's correctly transpiled for all environments.
+ */
+/* eslint-disable @typescript-eslint/no-var-requires */
+const GaslessSwapRouterAbi = require("./abi/GaslessSwapRouter.json");
+const RegistryAbi = require("./abi/Registry.json");
 
 const SUPPORTED_CHAIN_IDS: { [key: number]: string } = {
-  8217: 'mainnet',
-  1001: 'testnet',
-  1000: 'local'
+  8217: "mainnet",
+  1001: "testnet",
+  1000: "local"
 };
 
 // GaslessSwapRouterAddress registry key
 // https://github.com/kaiachain/kaia/blob/v2.0.0/contracts/contracts/system_contracts/multicall/MultiCallContract.sol#L140
-const GASLESS_SWAP_ROUTER_NAME = "GaslessSwapRouter"
-const REGISTRY_ADDRESS = "0x0000000000000000000000000000000000000401"
+const GASLESS_SWAP_ROUTER_NAME = "GaslessSwapRouter";
+const REGISTRY_ADDRESS = "0x0000000000000000000000000000000000000401";
 
 function validateChainId(chainId: number): string {
   const networkName = SUPPORTED_CHAIN_IDS[chainId];
@@ -57,7 +67,7 @@ export async function getGaslessSwapRouter(provider: ethers.Provider, chainId: n
   let routerAddr: string;
   if (!address) {
     // Attempt to get the address from the KIP-149 registry
-    validateChainId(chainId)
+    validateChainId(chainId);
     const registry = new ethers.Contract(
       REGISTRY_ADDRESS,
       RegistryAbi,
@@ -109,7 +119,7 @@ export function getMinAmountOut(
   if (!Number.isInteger(commissionRateBasisPoints)) {
     throw new Error("Commission rate must be an integer value in basis points");
   }
-  
+
   if (commissionRateBasisPoints < 0 || commissionRateBasisPoints >= 10000) {
     throw new Error("Commission rate must be between 0 and 9999 basis points");
   }
@@ -177,7 +187,7 @@ export async function getApproveTx(
     ];
 
     const tokenInterface = new ethers.Interface(tokenAbi);
-    
+
     // GaslessApproveTx's allowance is only set to MaxUint256.
     // ref: https://github.com/kaiachain/kips/pull/64
     const approveData = tokenInterface.encodeFunctionData("approve", [
@@ -256,7 +266,7 @@ export async function getSwapTx(
     const baseNonce = await provider.getTransactionCount(fromAddress);
     const nonceIncrement = isSingle ? 0 : 1;
     const nonce = baseNonce + nonceIncrement;
-    
+
     const feeData = await provider.getFeeData();
     const gasPriceBN = feeData.gasPrice?.toString() || "25000000000";
 
@@ -294,7 +304,7 @@ export async function sendGaslessTx(
 ): Promise<string[]> {
   try {
     const network = await provider.getNetwork();
-    const chainId = Number(network.chainId);  
+    const chainId = Number(network.chainId);
     validateChainId(chainId);
 
     // Assert that provider is JsonRpcApiProvider
@@ -420,36 +430,36 @@ export async function isValidRouterAddress(
   txRequest: TransactionLike<string>,
   chainId: number
 ): Promise<boolean> {
-  if (!txRequest.to) return false;
-  
+  if (!txRequest.to) { return false; }
+
   const router = await getGaslessSwapRouter(provider, chainId);
   return txRequest.to.toLowerCase() === router.address.toLowerCase();
 }
 
-export function validateAndDecodeSwapFunction(data: string): { 
-  isValid: boolean; 
-  decodedParams?: { 
-    tokenData: string; 
-    amountInData: string; 
-    amountRepayData: string; 
-  } 
+export function validateAndDecodeSwapFunction(data: string): {
+  isValid: boolean;
+  decodedParams?: {
+    tokenData: string;
+    amountInData: string;
+    amountRepayData: string;
+  }
 } {
   try {
     const functionSelector = data.slice(0, 10);
     const expectedSelector = getFunctionSelector("swapForGas(address,uint256,uint256,uint256,uint256)");
-    
+
     if (functionSelector !== expectedSelector) {
       return { isValid: false };
     }
-    
+
     const inputData = "0x" + data.slice(10);
     const abiCoder = ethers.AbiCoder.defaultAbiCoder();
-    const paramTypes = ['address', 'uint256', 'uint256', 'uint256', 'uint256'];
-    
+    const paramTypes = ["address", "uint256", "uint256", "uint256", "uint256"];
+
     const decodedParams = abiCoder.decode(paramTypes, inputData);
-    
-    return { 
-      isValid: true, 
+
+    return {
+      isValid: true,
       decodedParams: {
         tokenData: decodedParams[0],
         amountInData: decodedParams[1].toString(),
@@ -477,7 +487,7 @@ export function validateApproveAmount(
   const approveAmountData = "0x" + approveData.slice(74);
   const approveAmount = BigInt(approveAmountData);
   const amountIn = BigInt(amountInData);
-  
+
   return approveAmount >= amountIn;
 }
 
@@ -490,12 +500,12 @@ export async function validateNonceWithApprove(
       approveTxRequest.nonce === undefined || approveTxRequest.nonce === null) {
     return false;
   }
-  
+
   // Approve transaction nonce + 1 = Swap transaction nonce
   if (BigInt(approveTxRequest.nonce.toString()) + BigInt(1) !== BigInt(swapTxRequest.nonce.toString())) {
     return false;
   }
-  
+
   // Approve transaction nonce = Current nonce
   if (swapTxRequest.from) {
     try {
@@ -507,7 +517,7 @@ export async function validateNonceWithApprove(
       return false;
     }
   }
-  
+
   return true;
 }
 
@@ -517,11 +527,11 @@ export function validateAmountRepayWithApprove(
 ): boolean {
   const gasPrice = swapTxRequest.gasPrice?.toString() || "25000000000";
   const expectedAmountRepay = getAmountRepay(true, Number(gasPrice) / 1000000000);
-  
+
   if (BigInt(amountRepayData) !== BigInt(expectedAmountRepay)) {
     return false;
   }
-  
+
   return true;
 }
 
@@ -532,7 +542,7 @@ export async function validateNonceWithoutApprove(
   if (swapTxRequest.nonce === undefined || swapTxRequest.nonce === null) {
     return false;
   }
-  
+
   if (swapTxRequest.from) {
     try {
       const currentNonce = await provider.getTransactionCount(swapTxRequest.from);
@@ -544,7 +554,7 @@ export async function validateNonceWithoutApprove(
       return false;
     }
   }
-  
+
   return true;
 }
 
@@ -554,11 +564,11 @@ export function validateAmountRepayWithoutApprove(
 ): boolean {
   const gasPrice = swapTxRequest.gasPrice?.toString() || "25000000000";
   const expectedAmountRepay = getAmountRepay(false, Number(gasPrice) / 1000000000);
-  
+
   if (BigInt(amountRepayData) !== BigInt(expectedAmountRepay)) {
     return false;
   }
-  
+
   return true;
 }
 
@@ -575,29 +585,29 @@ export async function validateWithApprove(
   if (!isApprove) {
     return false;
   }
-  
+
   const approveTxRequest = await getTransactionRequest(approveTx);
-  
+
   // SP1: GaslessApproveTx.to=token
   if (!validateApproveToken(approveTxRequest, tokenData)) {
     return false;
   }
-  
+
   // SP2: GaslessApproveTx.data.amount>=amountIn
   if (!validateApproveAmount(approveTxRequest, amountInData)) {
     return false;
   }
-  
+
   // SP3: Nonce is the correct value
   if (!await validateNonceWithApprove(provider, approveTxRequest, swapTxRequest)) {
     return false;
   }
-  
+
   // SP4: amountRepay is the correct value
   if (!validateAmountRepayWithApprove(swapTxRequest, amountRepayData)) {
     return false;
   }
-  
+
   return true;
 }
 
@@ -610,12 +620,12 @@ export async function validateWithoutApprove(
   if (!await validateNonceWithoutApprove(provider, swapTxRequest)) {
     return false;
   }
-  
+
   // SP4: amountRepay is the correct value
   if (!validateAmountRepayWithoutApprove(swapTxRequest, amountRepayData)) {
     return false;
   }
-  
+
   return true;
 }
 
@@ -635,54 +645,54 @@ export async function isGaslessSwap(
 ): Promise<boolean> {
   try {
     const swapTxRequest = await getTransactionRequest(swapTx);
-    
+
     // Basic validation
     if (!isValidSwapTxFormat(swapTxRequest)) {
       return false;
     }
-    
+
     // S1: Router address validation
     if (!await isValidRouterAddress(provider, swapTxRequest, chainId)) {
       return false;
     }
-    
+
     // S2: Function selector validation and parameter decoding
     const { isValid, decodedParams } = validateAndDecodeSwapFunction(swapTxRequest.data?.toString() || "");
     if (!isValid || !decodedParams) {
       return false;
     }
-    
+
     const { tokenData, amountInData, amountRepayData } = decodedParams;
-    
+
     // S3: Token support validation
     const isTokenSupported = await isGaslessSupportedToken(provider, tokenData, chainId);
     if (!isTokenSupported) {
       return false;
     }
-    
+
     // Validation with or without approve transaction
     if (approveTxOrNull) {
       if (!await validateWithApprove(
-        provider, 
-        approveTxOrNull, 
-        swapTxRequest, 
-        tokenData, 
-        amountInData, 
-        amountRepayData, 
+        provider,
+        approveTxOrNull,
+        swapTxRequest,
+        tokenData,
+        amountInData,
+        amountRepayData,
         chainId
       )) {
         return false;
       }
     } else {
       if (!await validateWithoutApprove(
-        provider, 
-        swapTxRequest, 
+        provider,
+        swapTxRequest,
         amountRepayData
       )) {
         return false;
       }
     }
-    
+
     return true;
   } catch (error) {
     console.error("Error in isGaslessSwap:", error);

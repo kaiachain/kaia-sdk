@@ -9,5 +9,6 @@ The extension is focused on seamless development for web3 developers. Being able
 
 - ethers extension : **ethers-ext** (javascript) [NPM]() [Github](https://github.com/kaiachain/kaia-sdk/tree/main/ethers-ext)
 - web3js extension : **web3js-ext** (javascript) [NPM]() [Github](https://github.com/kaiachain/kaia-sdk/tree/main/web3js-ext)
+- viem extension : **viem-ext** (javascript) [NPM]() [Github](https://github.com/kaiachain/kaia-sdk/tree/main/viem-ext)
 - web3j extension : **web3j-ext** (java) [MVN]() [Github](https://github.com/kaiachain/kaia-sdk/tree/main/web3j-ext)
 - web3py extension : **web3py-ext** (python) [pypi]() [Github](https://github.com/kaiachain/kaia-sdk/tree/main/web3py-ext)

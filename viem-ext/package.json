@@ -1,7 +1,7 @@
 {
   "name": "@kaiachain/viem-ext",
-  "version": "0.0.1",
-  "license": "ISC",
+  "version": "2.0.4",
+  "license": "MIT",
   "description": "viem extension for kaia blockchain",
   "keywords": [
     "ethereum",
@@ -40,7 +40,7 @@
     "build": "tsc && tsc -p tsconfig.cjs.json"
   },
   "dependencies": {
-    "@kaiachain/js-ext-core": "^2.0.0",
+    "@kaiachain/js-ext-core": "^2.0.4",
     "ethers": "^6.13.4",
     "lodash": "^4.17.21",
     "viem": "^2.21.41"

@@ -1,19 +1,8 @@
 import { JsonRpcApiProvider, assert, ethers, TransactionLike, MaxUint256 } from "ethers";
 
+import { GaslessSwapRouterAbi } from "./abi/GaslessSwapRouter.js";
+import { RegistryAbi } from "./abi/Registry.js";
 import { getTransactionRequest } from "./txutil.js";
-
-/**
- * Loads ABI JSON files using `require()` for maximum build compatibility.
- *
- * @reason This approach was chosen over modern `import` syntax because the project
- * needs to be compiled for multiple targets (ESM, CJS, Webpack). Alternative methods
- * failed during either the CJS compilation or the Webpack bundling step.
- * `require()` is robustly supported across all tools in the toolchain, and
- * `esModuleInterop: true` ensures it's correctly transpiled for all environments.
- */
-/* eslint-disable @typescript-eslint/no-var-requires */
-const GaslessSwapRouterAbi = require("./abi/GaslessSwapRouter.json");
-const RegistryAbi = require("./abi/Registry.json");
 
 const SUPPORTED_CHAIN_IDS: { [key: number]: string } = {
   8217: "mainnet",

@@ -153,7 +153,7 @@ async function doSendTx(makeTxRequest) {
     const signer = await provider.getSigner(accounts[0].address);
     const address = await signer.getAddress();
     const txRequest = await makeTxRequest(address);
-    debugger;
+
     const sentTx = await signer.sendTransaction(txRequest);
     console.log("sentTx", sentTx);
     const txhash = sentTx.hash;

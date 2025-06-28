@@ -19,6 +19,7 @@ import { context_accounts } from "./accounts/index.js";
 import {
   context_getProtocolVersion,
   context_sendSignedTransaction,
+  context_sendSignedTransactions,
   context_sendTransaction,
   context_signTransaction,
 } from "./eth/index.js";
@@ -79,7 +80,8 @@ export class KlaytnWeb3
     // Override web3.eth.accounts methods
     const accounts = context_accounts(this);
     this.eth = Object.assign(this._web3.eth, {
-      accounts: accounts
+      accounts: accounts,
+      sendSignedTransactions: context_sendSignedTransactions(this._web3),
     });
     this._accountProvider = accounts as any; // inevitable conflict in signTransaction types
     this._wallet = accounts.wallet;
@@ -89,6 +91,7 @@ export class KlaytnWeb3
     this.eth.getProtocolVersion = context_getProtocolVersion(this._web3);
     this.eth.sendTransaction = context_sendTransaction(this._web3);
     this.eth.sendSignedTransaction = context_sendSignedTransaction(this._web3);
+    this.eth.sendSignedTransactions = context_sendSignedTransactions(this._web3);
     this.eth.signTransaction = context_signTransaction(this._web3);
 
     // Attach additional namespaces.

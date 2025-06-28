@@ -56,7 +56,7 @@ async function connect(injectedProvider) {
     $("#textAccounts").html(accounts.map((a) => a.address));
   });
 
-  // startPollingGasFee();
+  startPollingGasFee();
 }
 async function connectMM() {
   $("text").html(""); // Clear all text

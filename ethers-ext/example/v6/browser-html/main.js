@@ -43,7 +43,7 @@ async function connect(injectedProvider) {
 
   accounts = await provider.listAccounts(); // internally eth_accounts
   console.log("accounts", accounts);
-  $("#textAccount").html(accounts.map(
+  $("#textAccounts").html(accounts.map(
     (a, i) => {
       if (i == 0) {
         return a.address
@@ -56,7 +56,7 @@ async function connect(injectedProvider) {
     $("#textAccounts").html(accounts.map((a) => a.address));
   });
 
-  startPollingGasFee();
+  // startPollingGasFee();
 }
 async function connectMM() {
   $("text").html(""); // Clear all text
@@ -133,7 +133,7 @@ async function signMsg() {
     } else {
       const signer = await provider.getSigner(accounts[0].address);
       const message = "Hello dapp";
-
+      
       const signature = await signer.signMessage(message);
       console.log("signature", signature);
       $("#textSignature").html(signature);
@@ -153,7 +153,7 @@ async function doSendTx(makeTxRequest) {
     const signer = await provider.getSigner(accounts[0].address);
     const address = await signer.getAddress();
     const txRequest = await makeTxRequest(address);
-
+    debugger;
     const sentTx = await signer.sendTransaction(txRequest);
     console.log("sentTx", sentTx);
     const txhash = sentTx.hash;

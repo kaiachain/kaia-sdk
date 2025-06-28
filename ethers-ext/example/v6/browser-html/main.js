@@ -43,7 +43,7 @@ async function connect(injectedProvider) {
 
   accounts = await provider.listAccounts(); // internally eth_accounts
   console.log("accounts", accounts);
-  $("#textAccount").html(accounts.map(
+  $("#textAccounts").html(accounts.map(
     (a, i) => {
       if (i == 0) {
         return a.address
@@ -56,7 +56,10 @@ async function connect(injectedProvider) {
     $("#textAccounts").html(accounts.map((a) => a.address));
   });
 
-  startPollingGasFee();
+  // Only start polling gas fee on gasless.html page
+  if (document.getElementById("testTokenSwapAmount")) {
+    startPollingGasFee();
+  }
 }
 async function connectMM() {
   $("text").html(""); // Clear all text
@@ -133,7 +136,7 @@ async function signMsg() {
     } else {
       const signer = await provider.getSigner(accounts[0].address);
       const message = "Hello dapp";
-
+      
       const signature = await signer.signMessage(message);
       console.log("signature", signature);
       $("#textSignature").html(signature);
@@ -342,6 +345,7 @@ async function signAndSendGaslessTxs() {
 function startPollingGasFee() {
   setInterval(async () => {
     const feeData = await provider.getFeeData();
+    alert(JSON.stringify(feeData));
     const gasPriceGkei = Number(feeData.gasPrice) / 1e9;
     
     const totalFee = ethers_ext.gasless.getAmountRepay(true, gasPriceGkei);

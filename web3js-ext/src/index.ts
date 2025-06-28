@@ -11,4 +11,5 @@ export {
   KlaytnWeb3Account as KaiaWeb3Account,
   KlaytnWeb3EthInterface,
   KlaytnWeb3EthInterface as KaiaWeb3EthInterface,
+  KaiaWeb3GaslessInterface,
 } from "./types.js";

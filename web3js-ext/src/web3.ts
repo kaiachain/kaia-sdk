@@ -71,12 +71,9 @@ export class KlaytnWeb3
 
     // Override web3.eth.accounts methods
     const accounts = context_accounts(this);
-
-    this.eth = {
-      ...this._web3.eth,
+    this.eth = Object.assign(this._web3.eth, {
       accounts: accounts
-    } as KaiaWeb3EthInterface;
-
+    });
     this._accountProvider = accounts as any; // inevitable conflict in signTransaction types
     this._wallet = accounts.wallet;
 

@@ -30,6 +30,7 @@ import { Net } from "web3-net";
 import { KeyStore, Bytes, Transaction } from "web3-types";
 
 import { KlaytnTypedTransaction } from "./accounts/klaytn_tx.js";
+import { GaslessSwapRouter } from "./gasless/gasless.js";
 
 // Type analogous to web3-eth-accounts/src/types.ts:Web3Account
 // Designed for the "account object" returned by
@@ -160,3 +161,7 @@ export type TypedTransaction =
 	| AccessListEIP2930Transaction // type 1
 	| FeeMarketEIP1559Transaction // type 2
 	| KlaytnTypedTransaction; // Klaytn TxTypes
+
+export interface KaiaWeb3GaslessInterface {
+	getGaslessSwapRouter: (address?: string) => Promise<GaslessSwapRouter>;
+}

@@ -23,7 +23,11 @@ import {
   context_signTransaction,
 } from "./eth/index.js";
 
-import { KaiaWeb3EthInterface } from "./index.js";
+import {
+  KaiaWeb3EthInterface,
+  KaiaWeb3GaslessInterface,
+} from "./index.js";
+import { context_gasless } from "./gasless/index.js";
 
 
 // Follow the Web3 class from the web3/src/web3.ts
@@ -38,6 +42,9 @@ export class KlaytnWeb3
   // Properties analogous to Web3 class
   public utils: typeof utils;
   public eth: KaiaWeb3EthInterface;
+
+  // Additional namespaces
+  public gasless: KaiaWeb3GaslessInterface;
 
   // Additional RPC namespaces
   public admin: AsyncNamespaceApi;
@@ -83,6 +90,9 @@ export class KlaytnWeb3
     this.eth.sendTransaction = context_sendTransaction(this._web3);
     this.eth.sendSignedTransaction = context_sendSignedTransaction(this._web3);
     this.eth.signTransaction = context_signTransaction(this._web3);
+
+    // Attach additional namespaces.
+    this.gasless = context_gasless(this._web3);
 
     // Attach additional RPC namespaces.
     const send = this.makeSendFunction();

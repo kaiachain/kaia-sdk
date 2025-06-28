@@ -92,7 +92,7 @@ export class KlaytnWeb3
     this.eth.signTransaction = context_signTransaction(this._web3);
 
     // Attach additional namespaces.
-    this.gasless = context_gasless(this._web3);
+    this.gasless = context_gasless(this._web3, this.eth);
 
     // Attach additional RPC namespaces.
     const send = this.makeSendFunction();

@@ -69,8 +69,6 @@ export class Web3Provider extends EthersWeb3Provider {
 
     const send = async (method: string, params: any = []) => {
       if (provider?.send) {
-        // const result = await provider.send(method, params);
-        // return result?.result || "";
         return super.send(method, params);
       } else if (provider?.sendAsync && provider?.isMobile) {
         if (method === "wallet_switchEthereumChain") {
@@ -166,4 +164,12 @@ export class Web3Provider extends EthersWeb3Provider {
   async signMessage(message: string): Promise<any> {
     return await this._sendFunction("eth_sign", [message]);
   }
+
+  async getNetwork(): Promise<any> {
+    return await this._sendFunction("net_version", []);
+  }
+
+  // async getFeeData(): Promise<any> {
+  //   return await this._sendFunction("eth_feeData", []);
+  // }
 }

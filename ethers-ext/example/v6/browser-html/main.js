@@ -56,7 +56,10 @@ async function connect(injectedProvider) {
     $("#textAccounts").html(accounts.map((a) => a.address));
   });
 
-  startPollingGasFee();
+  // Only start polling gas fee on gasless.html page
+  if (document.getElementById("testTokenSwapAmount")) {
+    startPollingGasFee();
+  }
 }
 async function connectMM() {
   $("text").html(""); // Clear all text
@@ -342,6 +345,7 @@ async function signAndSendGaslessTxs() {
 function startPollingGasFee() {
   setInterval(async () => {
     const feeData = await provider.getFeeData();
+    alert(JSON.stringify(feeData));
     const gasPriceGkei = Number(feeData.gasPrice) / 1e9;
     
     const totalFee = ethers_ext.gasless.getAmountRepay(true, gasPriceGkei);

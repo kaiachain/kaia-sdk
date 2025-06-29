@@ -42,6 +42,9 @@ async function main() {
   console.log(`- The token is supported: ${isTokenSupported}`);
   console.log(`- Commission rate: ${commissionRate} bps`);
 
+  const gasPrice = Number((await provider.getFeeData()).gasPrice);
+  const nonce = await provider.getTransactionCount(senderAddr);
+
   // If sender hasn't approved, include ApproveTx first.
   const allowance = await token.allowance(senderAddr, routerAddr);
   const approveRequired = (allowance == 0n);
@@ -65,8 +68,7 @@ async function main() {
   //   and pay the commission, still leaving appTxFee.
   // - amountIn (token) is the amount of the token to be swapped to produce minAmountOut plus slippage.
   console.log("\nCalculating the amount of the token to be swapped...");
-  const gasPrice = Number((await provider.getFeeData()).gasPrice) / 1e9;
-  console.log(`- gasPrice: ${gasPrice} gkei`);
+  console.log(`- gasPrice: ${ethers.formatUnits(gasPrice, "gwei")} gkei`);
   const amountRepay = gasless.getAmountRepay(approveRequired, gasPrice);
   console.log(`- amountRepay: ${ethers.formatEther(amountRepay)} KAIA`);
   const minAmountOut = gasless.getMinAmountOut(amountRepay, appTxFee, commissionRate);

@@ -15,6 +15,11 @@ const SUPPORTED_CHAIN_IDS: { [key: number]: string } = {
 const GASLESS_SWAP_ROUTER_NAME = "GaslessSwapRouter";
 const REGISTRY_ADDRESS = "0x0000000000000000000000000000000000000401";
 
+// Using fixed constants to simplify amountRepay calculation.
+const GAS_LIMIT_LEND = 21000;
+const GAS_LIMIT_APPROVE = 100000;
+const GAS_LIMIT_SWAP = 500000;
+
 function validateChainId(chainId: number): string {
   const networkName = SUPPORTED_CHAIN_IDS[chainId];
   if (!networkName) {
@@ -26,23 +31,21 @@ function validateChainId(chainId: number): string {
 /**
  * Calculate the amount to repay based on whether approval is required and gas price
  * @param approveRequired Whether approval transaction is required
- * @param gasPrice Gas price in gkei (default: 25gkei)
+ * @param gasPrice Gas price in gkei
  * @returns The amount to repay
  */
-export function getAmountRepay(approveRequired: boolean, gasPrice: number = 25): string {
-  const gasPriceBN = BigInt(Math.floor(gasPrice * 1e9));
+export function getAmountRepay(approveRequired: boolean, gasPrice: number): bigint {
+  const gasPriceBN = BigInt(gasPrice);
 
-  const lendTxGas = BigInt(21000);
-  const approveTxGas = approveRequired ? BigInt(100000) : BigInt(0);
-  const swapTxGas = BigInt(500000);
+  const lendTxGas = BigInt(GAS_LIMIT_LEND);
+  const approveTxGas = approveRequired ? BigInt(GAS_LIMIT_APPROVE) : BigInt(0);
+  const swapTxGas = BigInt(GAS_LIMIT_SWAP);
 
   const R1 = gasPriceBN * lendTxGas;
   const R2 = gasPriceBN * approveTxGas;
   const R3 = gasPriceBN * swapTxGas;
 
-  const amountRepay = R1 + R2 + R3;
-
-  return amountRepay.toString();
+  return R1 + R2 + R3;
 }
 
 /**

@@ -99,18 +99,18 @@ describe("Gasless v6", () => {
 
   describe("getAmountRepay", () => {
     it("should calculate correct amount to repay when approval is required", () => {
-      const result = getAmountRepay(true, 25);
-      expect(result).to.equal("15525000000000000");
+      const result = getAmountRepay(true, 25000000000);
+      expect(result).to.equal(15525000000000000n);
     });
 
     it("should calculate correct amount to repay when approval is not required", () => {
-      const result = getAmountRepay(false, 25);
-      expect(result).to.equal("13025000000000000");
+      const result = getAmountRepay(false, 25000000000);
+      expect(result).to.equal(13025000000000000n);
     });
 
     it("should handle string gasPrice input", () => {
-      const result = getAmountRepay(true, 25);
-      expect(result).to.equal("15525000000000000");
+      const result = getAmountRepay(true, 25000000000);
+      expect(result).to.equal(15525000000000000n);
     });
   });
 

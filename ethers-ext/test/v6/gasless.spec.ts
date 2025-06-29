@@ -11,7 +11,6 @@ import {
   getAmountIn,
   getApproveTx,
   getSwapTx,
-  sendGaslessTx,
   isGaslessSupportedToken,
   isGaslessApprove,
   isGaslessSwap,
@@ -203,25 +202,6 @@ describe("Gasless v6", () => {
       expect(tx).to.be.an("object");
       expect(tx.to).to.be.a("string");
       expect(tx.nonce).to.equal(0x1235); // one larger than the account's next nonce (getTransactionCount=0x1234)
-    });
-  });
-
-  describe("sendGaslessTx", () => {
-    it("should send a single transaction when approveTx is null", async () => {
-      const swapTx = "0x1234";
-      
-      const result = await sendGaslessTx(null, swapTx, KP);
-      expect(result).to.be.an("array");
-      expect(result.length).to.equal(1);
-    });
-
-    it("should send both transactions when approveTx is provided", async () => {
-      const approveTx = "0x5678";
-      const swapTx = "0x1234";
-      
-      const result = await sendGaslessTx(approveTx, swapTx, KP);
-      expect(result).to.be.an("array");
-      expect(result.length).to.equal(2);
     });
   });
 

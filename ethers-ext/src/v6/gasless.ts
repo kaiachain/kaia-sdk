@@ -1,15 +1,9 @@
-import { JsonRpcApiProvider, assert, ethers, BigNumberish, Contract, TransactionLike, MaxUint256 } from "ethers";
+import { ethers, BigNumberish, Contract, TransactionLike, MaxUint256 } from "ethers";
 
 import { GaslessSwapRouterAbi } from "./abi/GaslessSwapRouter.js";
 import { RegistryAbi } from "./abi/Registry.js";
 import { getTransactionRequest } from "./txutil.js";
 import { TransactionRequest } from "./types.js";
-
-const SUPPORTED_CHAIN_IDS: { [key: number]: string } = {
-  8217: "mainnet",
-  1001: "testnet",
-  1000: "local"
-};
 
 // GaslessSwapRouterAddress registry key
 // https://github.com/kaiachain/kaia/blob/v2.0.0/contracts/contracts/system_contracts/multicall/MultiCallContract.sol#L140
@@ -20,14 +14,6 @@ const REGISTRY_ADDRESS = "0x0000000000000000000000000000000000000401";
 const GAS_LIMIT_LEND = 21000;
 const GAS_LIMIT_APPROVE = 100000;
 const GAS_LIMIT_SWAP = 500000;
-
-function validateChainId(chainId: number): string {
-  const networkName = SUPPORTED_CHAIN_IDS[chainId];
-  if (!networkName) {
-    throw new Error(`Chain ID ${chainId} is not supported by this SDK. This SDK only supports Kaia networks.`);
-  }
-  return networkName;
-}
 
 /**
  * Get the gasless swap router for the specified chain
@@ -229,28 +215,6 @@ export async function getSwapTx(
 }
 
 /**
- * Check if a token is supported for gasless transactions
- * @param signer The ethers signer
- * @param token The token address
- * @param chainId The chain ID
- * @returns True if the token is supported, false otherwise
- */
-export async function isGaslessSupportedToken(
-  provider: ethers.Provider,
-  token: string,
-  chainId: number,
-): Promise<boolean> {
-  try {
-    const gsr = await getGaslessSwapRouter(provider);
-
-    return await gsr.isTokenSupported(token);
-  } catch (error) {
-    console.error("Error in isGaslessSupportedToken:", error);
-    return false;
-  }
-}
-
-/**
  * Check if a transaction is a gasless approve transaction
  * @param provider The ethers provider
  * @param tx The transaction
@@ -302,220 +266,6 @@ export async function isGaslessApprove(
   }
 
   return { ok: true };
-}
-
-// Add this helper function near the top of the file after imports
-function getFunctionSelector(func: string): string {
-  return ethers.id(func).slice(0, 10);
-}
-
-// Helper functions for isGaslessSwap
-export function isValidSwapTxFormat(txRequest: TransactionLike<string>): boolean {
-  return !!(txRequest.data && txRequest.to);
-}
-
-export async function isValidRouterAddress(
-  provider: ethers.Provider,
-  txRequest: TransactionLike<string>,
-  chainId: number
-): Promise<boolean> {
-  if (!txRequest.to) { return false; }
-
-  const router = await getGaslessSwapRouter(provider);
-  return txRequest.to.toLowerCase() === (await router.getAddress()).toLowerCase();
-}
-
-export function validateAndDecodeSwapFunction(data: string): {
-  isValid: boolean;
-  decodedParams?: {
-    tokenData: string;
-    amountInData: string;
-    amountRepayData: string;
-  }
-} {
-  try {
-    const functionSelector = data.slice(0, 10);
-    const expectedSelector = getFunctionSelector("swapForGas(address,uint256,uint256,uint256,uint256)");
-
-    if (functionSelector !== expectedSelector) {
-      return { isValid: false };
-    }
-
-    const inputData = "0x" + data.slice(10);
-    const abiCoder = ethers.AbiCoder.defaultAbiCoder();
-    const paramTypes = ["address", "uint256", "uint256", "uint256", "uint256"];
-
-    const decodedParams = abiCoder.decode(paramTypes, inputData);
-
-    return {
-      isValid: true,
-      decodedParams: {
-        tokenData: decodedParams[0],
-        amountInData: decodedParams[1].toString(),
-        amountRepayData: decodedParams[3].toString()
-      }
-    };
-  } catch (error) {
-    console.error("Error decoding swap parameters:", error);
-    return { isValid: false };
-  }
-}
-
-export function validateApproveToken(
-  approveTxRequest: TransactionLike<string>,
-  tokenData: string
-): boolean {
-  return approveTxRequest.to?.toLowerCase() === tokenData.toLowerCase();
-}
-
-export function validateApproveAmount(
-  approveTxRequest: TransactionLike<string>,
-  amountInData: string
-): boolean {
-  const approveData = approveTxRequest.data?.toString() || "";
-  const approveAmountData = "0x" + approveData.slice(74);
-  const approveAmount = BigInt(approveAmountData);
-  const amountIn = BigInt(amountInData);
-
-  return approveAmount >= amountIn;
-}
-
-export async function validateNonceWithApprove(
-  provider: ethers.Provider,
-  approveTxRequest: TransactionLike<string>,
-  swapTxRequest: TransactionLike<string>
-): Promise<boolean> {
-  if (swapTxRequest.nonce === undefined || swapTxRequest.nonce === null ||
-      approveTxRequest.nonce === undefined || approveTxRequest.nonce === null) {
-    return false;
-  }
-
-  // Approve transaction nonce + 1 = Swap transaction nonce
-  if (BigInt(approveTxRequest.nonce.toString()) + BigInt(1) !== BigInt(swapTxRequest.nonce.toString())) {
-    return false;
-  }
-
-  // Approve transaction nonce = Current nonce
-  if (swapTxRequest.from) {
-    try {
-      const currentNonce = await provider.getTransactionCount(swapTxRequest.from);
-      if (BigInt(approveTxRequest.nonce.toString()) !== BigInt(currentNonce)) {
-        return false;
-      }
-    } catch (error) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-export function validateAmountRepayWithApprove(
-  swapTxRequest: TransactionLike<string>,
-  amountRepayData: string
-): boolean {
-  const gasPrice = swapTxRequest.gasPrice?.toString() || "25000000000";
-  const expectedAmountRepay = getAmountRepay(true, Number(gasPrice) / 1000000000);
-
-  if (BigInt(amountRepayData) !== BigInt(expectedAmountRepay)) {
-    return false;
-  }
-
-  return true;
-}
-
-export async function validateNonceWithoutApprove(
-  provider: ethers.Provider,
-  swapTxRequest: TransactionLike<string>
-): Promise<boolean> {
-  if (swapTxRequest.nonce === undefined || swapTxRequest.nonce === null) {
-    return false;
-  }
-
-  if (swapTxRequest.from) {
-    try {
-      const currentNonce = await provider.getTransactionCount(swapTxRequest.from);
-      if (BigInt(swapTxRequest.nonce.toString()) !== BigInt(currentNonce)) {
-        return false;
-      }
-    } catch (error) {
-      console.error("Error checking nonce:", error);
-      return false;
-    }
-  }
-
-  return true;
-}
-
-export function validateAmountRepayWithoutApprove(
-  swapTxRequest: TransactionLike<string>,
-  amountRepayData: string
-): boolean {
-  const gasPrice = swapTxRequest.gasPrice?.toString() || "25000000000";
-  const expectedAmountRepay = getAmountRepay(false, Number(gasPrice) / 1000000000);
-
-  if (BigInt(amountRepayData) !== BigInt(expectedAmountRepay)) {
-    return false;
-  }
-
-  return true;
-}
-
-export async function validateWithApprove(
-  provider: ethers.Provider,
-  router: Contract,
-  approveTx: string | any,
-  swapTxRequest: TransactionLike<string>,
-  tokenData: string,
-  amountInData: string,
-  amountRepayData: string,
-): Promise<boolean> {
-  const isApprove = await isGaslessApprove(provider, router, approveTx);
-  if (!isApprove) {
-    return false;
-  }
-
-  const approveTxRequest = await getTransactionRequest(approveTx);
-
-  // SP1: GaslessApproveTx.to=token
-  if (!validateApproveToken(approveTxRequest, tokenData)) {
-    return false;
-  }
-
-  // SP2: GaslessApproveTx.data.amount>=amountIn
-  if (!validateApproveAmount(approveTxRequest, amountInData)) {
-    return false;
-  }
-
-  // SP3: Nonce is the correct value
-  if (!await validateNonceWithApprove(provider, approveTxRequest, swapTxRequest)) {
-    return false;
-  }
-
-  // SP4: amountRepay is the correct value
-  if (!validateAmountRepayWithApprove(swapTxRequest, amountRepayData)) {
-    return false;
-  }
-
-  return true;
-}
-
-export async function validateWithoutApprove(
-  provider: ethers.Provider,
-  swapTxRequest: TransactionLike<string>,
-  amountRepayData: string
-): Promise<boolean> {
-  // SP3: Nonce is the correct value
-  if (!await validateNonceWithoutApprove(provider, swapTxRequest)) {
-    return false;
-  }
-
-  // SP4: amountRepay is the correct value
-  if (!validateAmountRepayWithoutApprove(swapTxRequest, amountRepayData)) {
-    return false;
-  }
-
-  return true;
 }
 
 /**

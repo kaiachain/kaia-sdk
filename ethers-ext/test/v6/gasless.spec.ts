@@ -208,7 +208,7 @@ describe("Gasless v6", () => {
       const minAmountOut = "26636111111111111";
       const amountRepay = "15525000000000000";
 
-      const tx = await getSwapTx(EP, walletAddress, tokenAddress, routerAddress, amountIn, minAmountOut, amountRepay, 25000000000);
+      const tx = await getSwapTx(EP, walletAddress, tokenAddress, gsrAddress, amountIn, minAmountOut, amountRepay, 25000000000);
       expect(tx).to.be.an("object");
       expect(tx.to).to.be.a("string");
       expect(tx.from).to.equal(walletAddress);
@@ -220,7 +220,7 @@ describe("Gasless v6", () => {
       const minAmountOut = "26636111111111111";
       const amountRepay = "15525000000000000";
 
-      const tx = await getSwapTx(EP, walletAddress, tokenAddress, routerAddress, amountIn, minAmountOut, amountRepay, 25000000000, true);
+      const tx = await getSwapTx(EP, walletAddress, tokenAddress, gsrAddress, amountIn, minAmountOut, amountRepay, 25000000000, true);
       expect(tx).to.be.an("object");
       expect(tx.to).to.be.a("string");
       expect(tx.nonce).to.equal(0x1235); // one larger than the account's next nonce (getTransactionCount=0x1234)
@@ -262,16 +262,9 @@ describe("Gasless v6", () => {
         data: "0x095ea7b30000000000000000000000005fc8d32690cc91d4c39d9d3abcbd16989f875707ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
       };
 
-      const originalGetTxCountMock = EP.overrides["eth_getTransactionCount"];
-      EP.mock_override("eth_getTransactionCount", () => "0x1234");
-
-      try {
-        const router = await getGaslessSwapRouter(EP);
-        const result = await isGaslessApprove(EP, router, mockTx);
-        expect(result).to.deep.equal({ ok: true });
-      } finally {
-        EP.mock_override("eth_getTransactionCount", originalGetTxCountMock);
-      }
+      const router = await getGaslessSwapRouter(EP);
+      const result = await isGaslessApprove(EP, router, mockTx);
+      expect(result).to.deep.equal({ ok: true });
     });
 
     it("should return false for non-approve transactions", async () => {
@@ -289,54 +282,53 @@ describe("Gasless v6", () => {
   });
 
   describe("isGaslessSwap", () => {
-    describe("isValidSwapTxFormat", () => {
-      it("should return true for valid transaction format", () => {
-        const txRequest = { data: "0xdata", to: "0xaddress" };
-        expect(isValidSwapTxFormat(txRequest as any)).to.be.true;
-      });
+    it("should validate a gasless swap transaction without approve", async () => {
+      const mockSwapTx = {
+        from: walletAddress,
+        to: gsrAddress,
+        nonce: 0x1234,
+        gasPrice: 25000000000,
+        data: "0x8042690100000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c8000000000000000000000000000000000000000000000000000000000007a1200000000000000000000000000000000000000000000000000000000000000064000000000000000000000000000000000000000000000000002e462b22331000000000000000000000000000000000000000000000000000000000000000012c",
+      };
 
-      it("should return false when data is missing", () => {
-        const txRequest = { to: "0xaddress" };
-        expect(isValidSwapTxFormat(txRequest as any)).to.be.false;
-      });
-
-      it("should return false when to is missing", () => {
-        const txRequest = { data: "0xdata" };
-        expect(isValidSwapTxFormat(txRequest as any)).to.be.false;
-      });
+      const router = await getGaslessSwapRouter(EP);
+      const result = await isGaslessSwap(EP, router, null, mockSwapTx);
+      expect(result).to.deep.equal({ ok: true });
     });
 
-    describe("validateAndDecodeSwapFunction", () => {
-      it("should return invalid for wrong function selector", function() {
-        // Create invalid swap function data with a wrong selector
-        const functionSelector = "0x12345678"; // wrong selector
-        const data = functionSelector + "0000"; // Just need some data
-        
-        // We don't need to mock ethers.id here since we're testing the negative case
-        const result = validateAndDecodeSwapFunction(data);
-        expect(result.isValid).to.be.false;
-      });
+    it("should validate a gasless swap transaction with approve", async () => {
+      const mockApproveTx = {
+        from: walletAddress,
+        to: tokenAddress,
+        nonce: 0x1234,
+        gasPrice: 25000000000,
+        data: "0x095ea7b30000000000000000000000005fc8d32690cc91d4c39d9d3abcbd16989f875707ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      };
+      const mockSwapTx = {
+        from: walletAddress,
+        to: gsrAddress,
+        nonce: 0x1235,
+        gasPrice: 25000000000,
+        data: "0x8042690100000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c8000000000000000000000000000000000000000000000000000000000007a1200000000000000000000000000000000000000000000000000000000000000064000000000000000000000000000000000000000000000000003727e7be235000000000000000000000000000000000000000000000000000000000000000012c",
+      };
+
+      const router = await getGaslessSwapRouter(EP);
+      const result = await isGaslessSwap(EP, router, mockApproveTx, mockSwapTx);
+      expect(result).to.deep.equal({ ok: true });
     });
 
     it("should return false for non-swap transactions", async () => {
       const mockSwapTx = {
+        from: walletAddress,
         to: gsrAddress,
-        data: "0x12345678",
-        nonce: "0x1234",
-        from: walletAddress
+        nonce: 0x1234,
+        gasPrice: 25000000000,
+        data: "0x1234567800000000",
       };
-      
-      const originalEthersId = ethers.id;
-      (ethers as any).id = () => ({
-        slice: () => "0x2d4ba3a7"
-      });
-      
-      try {
-        const result = await isGaslessSwap(EP, null, mockSwapTx, kairosChainId);
-        expect(result).to.be.false;
-      } finally {
-        (ethers as any).id = originalEthersId;
-      }
+
+      const router = await getGaslessSwapRouter(EP);
+      const result = await isGaslessSwap(EP, router, null, mockSwapTx);
+      expect(result).to.deep.equal({ ok: false, error: "S2: Invalid data" });
     });
   });
 });

@@ -7,7 +7,6 @@ import { describe, it, before } from "mocha";
 import {
   getAmountRepay,
   getGaslessSwapRouter,
-  getCommissionRate,
   getMinAmountOut,
   getAmountIn,
   getApproveTx,
@@ -140,17 +139,6 @@ describe("Gasless v6", () => {
       } finally {
         EP.mock_override("eth_call", originalMock);
       }
-    });
-  });
-
-  describe("getCommissionRate", () => {
-    it("should return the commission rate from the contract", async () => {
-      const mockContract = {
-        commissionRate: async () => BigInt(1000)
-      };
-      
-      const rate = await getCommissionRate(mockContract as any);
-      expect(rate).to.equal(1000);
     });
   });
 

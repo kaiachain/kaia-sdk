@@ -1,4 +1,4 @@
-import { JsonRpcApiProvider, assert, ethers, Contract, TransactionLike, MaxUint256 } from "ethers";
+import { JsonRpcApiProvider, assert, ethers, BigNumberish, Contract, TransactionLike, MaxUint256 } from "ethers";
 
 import { GaslessSwapRouterAbi } from "./abi/GaslessSwapRouter.js";
 import { RegistryAbi } from "./abi/Registry.js";
@@ -83,57 +83,52 @@ export async function getGaslessSwapRouter(provider: ethers.Provider, address?: 
  * Calculate the minimum amount out based on amount to repay, app transaction fee, and commission rate
  * @param amountRepay The amount to repay
  * @param appTxFee The application transaction fee
- * @param commissionRateBasisPoints The commission rate in basis points (e.g., 1000 = 10%)
+ * @param commissionRateBps The commission rate in basis points (e.g., 1000 = 10%)
  * @returns The minimum amount out
  */
 export function getMinAmountOut(
-  amountRepay: string,
-  appTxFee: string,
-  commissionRateBasisPoints: number
-): string {
-  if (!Number.isInteger(commissionRateBasisPoints)) {
-    throw new Error("Commission rate must be an integer value in basis points");
-  }
-
-  if (commissionRateBasisPoints < 0 || commissionRateBasisPoints >= 10000) {
-    throw new Error("Commission rate must be between 0 and 9999 basis points");
-  }
-
-  // Calculate minimum amount out: appTxFee/(1 - commissionRate) + amountRepay
+  amountRepay: BigNumberish,
+  appTxFee: BigNumberish,
+  commissionRateBps: BigNumberish,
+): bigint {
   const appTxFeeBN = BigInt(appTxFee);
   const amountRepayBN = BigInt(amountRepay);
-
-  const commissionRateBN = BigInt(commissionRateBasisPoints);
+  const commissionRateBpsBN = BigInt(commissionRateBps);
   const denominator = BigInt(10000);
-
-  const adjustedFee = appTxFeeBN * denominator / (denominator - commissionRateBN);
-  const minAmountOut = adjustedFee + amountRepayBN;
-
-  return minAmountOut.toString();
+  if (commissionRateBpsBN < 0 || commissionRateBpsBN >= 10000) {
+    throw new Error("Commission rate must be between 0 and 9999 basis points");
+  }
+  // minAmountOut = appTxFee / (1 - commissionRate) + amountRepay
+  // i.e. (amountOut - amountRepay) * (1 - commissionRate) >= appTxFee
+  // because the swap output has to be enough to repay and pay the commission.
+  const adjustedFee = appTxFeeBN * denominator / (denominator - commissionRateBpsBN);
+  return adjustedFee + amountRepayBN;
 }
 
 /**
  * Calculate the amount in based on minimum amount out and slippage
- * @param gsr The gasless swap router contract
- * @param token The token address
+ * @param router The gasless swap router contract
+ * @param tokenAddress The token address
  * @param minAmountOut The minimum amount out
- * @param slippageBasisPoints The slippage basis point (e.g., 50 basis points = 0.5%)
+ * @param slippageBps The slippage basis point (e.g., 50 basis points = 0.5%)
  * @returns The amount in
  */
 export async function getAmountIn(
-  gsr: ethers.Contract,
-  token: string,
-  minAmountOut: string,
-  slippageBasisPoints: number
-): Promise<string> {
+  router: ethers.Contract,
+  tokenAddress: string,
+  minAmountOut: BigNumberish,
+  slippageBps: BigNumberish,
+): Promise<bigint> {
   const minAmountOutBN = BigInt(minAmountOut);
-  const slippageBN = BigInt(slippageBasisPoints);
+  const slippageBN = BigInt(slippageBps);
   const denominator = BigInt(10000);
 
-  const adjustedMinAmountOut = minAmountOutBN * (denominator + slippageBN) / denominator;
+  // minAmountIn = DEX.getAmountIn(tokenAddress, minAmountOut * (1 + slippage))
+  // Have DEX calculate the required input to produce minAmountOut plus slippage.
+  const withSlippage = minAmountOutBN * (denominator + slippageBN) / denominator;
 
-  const amountIn = await gsr.getAmountIn(token, adjustedMinAmountOut.toString());
-  return amountIn.toString();
+  const amountIn = await router.getAmountIn(tokenAddress, withSlippage);
+  return BigInt(amountIn);
 }
 
 /**

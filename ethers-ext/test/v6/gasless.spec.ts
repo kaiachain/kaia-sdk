@@ -33,6 +33,30 @@ const mainnetChainId = 8217;
 const kairosChainId = 1001;
 const localChainId = 1000;
 const unsupportedChainId = 1234;
+const block = {
+  baseFeePerGas: "0x5d21dba00",
+  difficulty: "0x1",
+  extraData: "0x",
+  gasLimit: "0xe8d4a50fff",
+  gasUsed: 0,
+  hash: "0x92694a6b75a012a15559d60e92ff30d855e2722292b7d1b05f94e5c34ff02a42",
+  logsBloom: "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+  miner: "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+  mixHash: "0x0000000000000000000000000000000000000000000000000000000000000000",
+  nonce: "0x0000000000000000",
+  number: 19,
+  parentHash: "0x76938e2a9b83600621d51465a66a725130de1963e9e5d546adf755939bf74799",
+  receiptsRoot: "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+  sha3Uncles: "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+  size: 630,
+  stateRoot: "0x61f886eb9904d0c776c4871f9b955d5d849938340ad2cec78b35e4ab0fa9bb1a",
+  timestamp: 1701338345,
+  timestampFoS: 0,
+  totalDifficulty: "0x14",
+  transactions: [],
+  transactionsRoot: "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+  uncles: []
+};
 
 describe("Gasless v6", () => {
   let EP: MockEthersProvider;
@@ -58,15 +82,15 @@ describe("Gasless v6", () => {
       });
       P.mock_override("eth_call", (params: any[]) => {
         const data = params[0].data || "";
-        
+
         if (data.startsWith("0x75151b63")) { // isTokenSupported
           return "0x0000000000000000000000000000000000000000000000000000000000000001";
         }
-        
+
         if (data.startsWith("0x5ea1d6f8")) { // commissionRate
           return "0x00000000000000000000000000000000000000000000000000000000000003e8";
         }
-        
+
         if (data.startsWith("0x632db21c")) { // getAmountIn
           return "0x0000000000000000000000000000000000000000000000000de0b6b3a7640000";
         }
@@ -74,14 +98,12 @@ describe("Gasless v6", () => {
         if (data.startsWith("0xe2693e3f")) { // getActiveAddr
           return ethers.zeroPadValue(gsrAddress, 32);
         }
-        
+
         return "0x0000000000000000000000000000000000000000000000000000000000000000";
       });
-      P.mock_override("eth_getBlock", () => ({
-        timestamp: Math.floor(Date.now() / 1000)
-      }));
+      P.mock_override("eth_getBlockByNumber", () => block);
     }
-    
+
     for (let P of [KP]) {
       P.mock_override("klay_gasPrice", () => "0xba43b7400"); // 50 gwei
       P.mock_override("klay_estimateGas", () => "0x5208"); // 21000
@@ -234,18 +256,19 @@ describe("Gasless v6", () => {
   describe("isGaslessApprove", () => {
     it("should validate a gasless approve transaction", async () => {
       const mockTx = {
+        from: walletAddress,
         to: tokenAddress,
+        nonce: 0x1234,
         data: "0x095ea7b30000000000000000000000005fc8d32690cc91d4c39d9d3abcbd16989f875707ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-        nonce: "0x1234",
-        from: walletAddress
       };
-      
+
       const originalGetTxCountMock = EP.overrides["eth_getTransactionCount"];
       EP.mock_override("eth_getTransactionCount", () => "0x1234");
-      
+
       try {
-        const result = await isGaslessApprove(EP, mockTx, kairosChainId);
-        expect(result).to.be.true;
+        const router = await getGaslessSwapRouter(EP);
+        const result = await isGaslessApprove(EP, router, mockTx);
+        expect(result).to.deep.equal({ ok: true });
       } finally {
         EP.mock_override("eth_getTransactionCount", originalGetTxCountMock);
       }
@@ -253,14 +276,15 @@ describe("Gasless v6", () => {
 
     it("should return false for non-approve transactions", async () => {
       const mockTx = {
+        from: walletAddress,
         to: tokenAddress,
+        nonce: 0x1234,
         data: "0x12345678",
-        nonce: "0x1234",
-        from: walletAddress
       };
-      
-      const result = await isGaslessApprove(EP, mockTx, kairosChainId);
-      expect(result).to.be.false;
+
+      const router = await getGaslessSwapRouter(EP);
+      const result = await isGaslessApprove(EP, router, mockTx);
+      expect(result).to.deep.equal({ ok: false, error: "A2: Invalid data" });
     });
   });
 

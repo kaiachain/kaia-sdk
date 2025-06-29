@@ -234,7 +234,7 @@ describe("Wallet v6", () => {
         await testOK_AsFeePayer(W, senderTxHashRLP_pad, from);
       }
     });
-    it.only("multiple transactions", async () => {
+    it("multiple transactions", async () => {
       for (let W of [KW]) {
         await testOK_Multiple(W, [
           { type: 0, to, value },

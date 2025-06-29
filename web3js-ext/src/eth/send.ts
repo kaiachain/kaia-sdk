@@ -325,6 +325,95 @@ export function sendSignedTransaction<
   return promiEvent;
 }
 
+// sendSignedTransactions sends multiple raw transactions in one RPC call.
+//
+// It eventually calls the following RPC method:
+// - kaia_sendRawTransactions
+export function sendSignedTransactions<
+  ReturnFormat extends DataFormat,
+  ResolveType = FormatType<TransactionReceipt, ReturnFormat>,
+>(
+  web3Context: Web3Context<EthExecutionAPI>,
+  signedTransactions: Bytes[],
+  returnFormat: ReturnFormat,
+  options: SendSignedTransactionOptions<ResolveType> = { checkRevertBeforeSending: false }, // default to false to allow GA transactions.
+): Web3PromiEvent<ResolveType[], SendSignedTransactionEvents<ReturnFormat>> {
+  const promiEvent = new Web3PromiEvent<ResolveType[], SendSignedTransactionEvents<ReturnFormat>>(
+    (resolve, reject) => {
+      setImmediate(() => {
+        (async () => {
+          const sendTxHelper = new SendTxHelper<ReturnFormat, ResolveType>({
+            web3Context,
+            promiEvent: promiEvent as any, // TODO: fix type mismatch
+            options,
+            returnFormat,
+          });
+
+          const signedTransactionsFormattedHex = signedTransactions.map(normalizeSignedTransaction);
+          const txCallObjects = signedTransactionsFormattedHex.map((txHex) => getRpcTxObject(parseTransaction(txHex)));
+
+          try {
+            // Send multiple transactions to receive multiple tx hashes.
+            // The code below is similar to sendSignedTransaction(), but with multiple transactions
+            // processed one by one.
+            const transactionHashes = await web3Context.requestManager.send({
+              method: "kaia_sendRawTransactions",
+              params: [signedTransactionsFormattedHex],
+            }) as string[];
+            for (const txHex of signedTransactionsFormattedHex) {
+              sendTxHelper.emitSent(txHex);
+            }
+
+            // Emit tx hashes.
+            for (const txHash of transactionHashes) {
+              const transactionHashFormatted = format(
+                { format: "bytes32" },
+                txHash as Bytes,
+                returnFormat,
+              );
+              sendTxHelper.emitTransactionHash(
+                transactionHashFormatted as string & Uint8Array,
+              );
+            }
+
+            // Wait for the receipts, one by one.
+            const receiptsResolved = [];
+            for (let i = 0; i < transactionHashes.length; i++) {
+              const txHash = transactionHashes[i];
+              const transactionReceipt = await waitForTransactionReceipt(
+                web3Context,
+                txHash,
+                returnFormat,
+              );
+              const transactionReceiptFormatted = sendTxHelper.getReceiptWithEvents(
+                format(transactionReceiptSchema, transactionReceipt, returnFormat),
+              );
+              sendTxHelper.emitReceipt(transactionReceiptFormatted);
+
+              receiptsResolved.push(
+                await sendTxHelper.handleResolve({
+                  receipt: transactionReceiptFormatted,
+                  tx: txCallObjects[i],
+                }),
+              );
+            }
+            resolve(receiptsResolved);
+          } catch (error) {
+            reject(
+              await sendTxHelper.handleError({
+                error,
+                tx: txCallObjects[0],
+              }),
+            );
+          }
+        })() as unknown;
+      });
+    },
+  );
+
+  return promiEvent;
+}
+
 // Convert Bytes(string | Uint8Array) to hex string
 function normalizeSignedTransaction(signedTransaction: Bytes): string {
   if (signedTransaction instanceof Uint8Array) {

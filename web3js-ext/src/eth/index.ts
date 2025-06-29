@@ -16,7 +16,7 @@ import {
 } from "web3-types";
 
 import { getProtocolVersion } from "./rpc.js";
-import { sendTransaction, sendSignedTransaction } from "./send.js";
+import { sendTransaction, sendSignedTransaction, sendSignedTransactions } from "./send.js";
 import { signTransaction } from "./sign.js";
 
 // Analogous to: web3-eth/src/web3_eth.ts:Web3Eth.getProtocolVersion()
@@ -57,6 +57,16 @@ export function context_sendSignedTransaction(context: Web3Context) {
     returnFormat: ReturnFormat = DEFAULT_RETURN_FORMAT as ReturnFormat,
     options?: SendTransactionOptions) {
     return sendSignedTransaction(context, transaction, returnFormat, options);
+  };
+}
+
+// Newly introduced to wrap kaia_sendRawTransactions.
+export function context_sendSignedTransactions(context: Web3Context) {
+  return function <ReturnFormat extends DataFormat = typeof DEFAULT_RETURN_FORMAT>(
+    transactions: Bytes[],
+    returnFormat: ReturnFormat = DEFAULT_RETURN_FORMAT as ReturnFormat,
+    options?: SendTransactionOptions) {
+    return sendSignedTransactions(context, transactions, returnFormat, options);
   };
 }
 

@@ -20,9 +20,9 @@ const ERC20_ABI = [
   "function balanceOf(address owner) view returns (uint256)"
 ];
 
-// senderAddr wants to swap the ERC20 token for at least 1.0 KAIA so she can execute the AppTx.
+// senderAddr wants to swap the ERC20 token for at least 0.01 KAIA so she can execute the AppTx.
 async function main() {
-  const appTxFee = ethers.parseEther("1.0").toString(); // 1.0 KAIA
+  const appTxFee = ethers.parseEther("0.01").toString();
 
   // Query the environment
   const token = new ethers.Contract(tokenAddr, ERC20_ABI, provider);
@@ -34,13 +34,12 @@ async function main() {
   console.log(`- ${ethers.formatEther(await provider.getBalance(senderAddr))} KAIA`);
   console.log(`- ${ethers.formatUnits(await token.balanceOf(senderAddr), tokenDecimals)} ${tokenSymbol}`);
 
-  const network = await provider.getNetwork();
-  const chainId = Number(network.chainId);
-  const router = await gasless.getGaslessSwapRouter(provider, chainId);
+  const router = await gasless.getGaslessSwapRouter(provider);
   const routerAddr = await router.getAddress();
+  const isTokenSupported = await router.isTokenSupported(tokenAddr);
   const commissionRate = Number(await router.commissionRate());
   console.log(`\nGaslessSwapRouter address: ${routerAddr}`);
-  console.log(`- The token is supported: ${await router.isTokenSupported(tokenAddr)}`);
+  console.log(`- The token is supported: ${isTokenSupported}`);
   console.log(`- Commission rate: ${commissionRate} bps`);
 
   // If sender hasn't approved, include ApproveTx first.

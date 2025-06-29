@@ -97,23 +97,6 @@ describe("Gasless v6", () => {
     }
   });
 
-  describe("getAmountRepay", () => {
-    it("should calculate correct amount to repay when approval is required", () => {
-      const result = getAmountRepay(true, 25000000000);
-      expect(result).to.equal(15525000000000000n);
-    });
-
-    it("should calculate correct amount to repay when approval is not required", () => {
-      const result = getAmountRepay(false, 25000000000);
-      expect(result).to.equal(13025000000000000n);
-    });
-
-    it("should handle string gasPrice input", () => {
-      const result = getAmountRepay(true, 25000000000);
-      expect(result).to.equal(15525000000000000n);
-    });
-  });
-
   describe("getGaslessSwapRouter", () => {
     it("should return router from Registry", async () => {
       const originalMock = EP.overrides["eth_call"];
@@ -142,12 +125,29 @@ describe("Gasless v6", () => {
     });
   });
 
+  describe("getAmountRepay", () => {
+    it("should calculate correct amount to repay when approval is required", () => {
+      const result = getAmountRepay(true, 25000000000);
+      expect(result).to.equal(15525000000000000n);
+    });
+
+    it("should calculate correct amount to repay when approval is not required", () => {
+      const result = getAmountRepay(false, 25000000000);
+      expect(result).to.equal(13025000000000000n);
+    });
+
+    it("should handle string gasPrice input", () => {
+      const result = getAmountRepay(true, 25000000000);
+      expect(result).to.equal(15525000000000000n);
+    });
+  });
+
   describe("getMinAmountOut", () => {
     it("should calculate the minimum amount out correctly", () => {
       const amountRepay = "15525000000000000";
       const appTxFee = "10000000000000000";
       const commissionRateBps = 1000;
-      
+
       const result = getMinAmountOut(amountRepay, appTxFee, commissionRateBps);
       expect(result).to.equal(26636111111111111n);
     });
@@ -158,10 +158,10 @@ describe("Gasless v6", () => {
       const mockContract = {
         getAmountIn: async () => BigInt("1000000000000000000")
       };
-      
+
       const minAmountOut = "26636111111111111";
       const slippageBasisPoints = 50;
-      
+
       const result = await getAmountIn(mockContract as any, tokenAddress, minAmountOut, slippageBasisPoints);
       expect(result).to.equal(1000000000000000000n);
     });
@@ -169,7 +169,7 @@ describe("Gasless v6", () => {
 
   describe("getApproveTx", () => {
     it("should generate a valid approve transaction", async () => {
-      const tx = await getApproveTx(EP, walletAddress, tokenAddress, gsrAddress);
+      const tx = await getApproveTx(EP, walletAddress, tokenAddress, gsrAddress, 25000000000);
       expect(tx).to.be.an("object");
       expect(tx.to).to.equal(tokenAddress);
       expect(tx.from).to.equal(walletAddress);
@@ -186,8 +186,8 @@ describe("Gasless v6", () => {
       const amountIn = "1000000000000000000";
       const minAmountOut = "26636111111111111";
       const amountRepay = "15525000000000000";
-      
-      const tx = await getSwapTx(EP, walletAddress, tokenAddress, amountIn, minAmountOut, amountRepay);
+
+      const tx = await getSwapTx(EP, walletAddress, tokenAddress, routerAddress, amountIn, minAmountOut, amountRepay, 25000000000);
       expect(tx).to.be.an("object");
       expect(tx.to).to.be.a("string");
       expect(tx.from).to.equal(walletAddress);
@@ -198,11 +198,11 @@ describe("Gasless v6", () => {
       const amountIn = "1000000000000000000";
       const minAmountOut = "26636111111111111";
       const amountRepay = "15525000000000000";
-      
-      const tx = await getSwapTx(EP, walletAddress, tokenAddress, amountIn, minAmountOut, amountRepay, false);
+
+      const tx = await getSwapTx(EP, walletAddress, tokenAddress, routerAddress, amountIn, minAmountOut, amountRepay, 25000000000, true);
       expect(tx).to.be.an("object");
       expect(tx.to).to.be.a("string");
-      expect(tx.nonce).to.equal(0x1235);
+      expect(tx.nonce).to.equal(0x1235); // one larger than the account's next nonce (getTransactionCount=0x1234)
     });
   });
 

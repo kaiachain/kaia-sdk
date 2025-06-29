@@ -15,8 +15,11 @@ async function main() {
   const account = await web3.klay.getAccount("0x1173d5dc7b5e1e07d857d74e962b6ed7d4234a92", "latest");
   console.log("klay.getAccount", JSON.stringify(account, null, 2));
 
-  let gasPrice = await web3.eth.getGasPrice();
-  console.log("gasPrice", gasPrice.toString());
+  const balance = await web3.eth.getBalance("0x1173d5dc7b5e1e07d857d74e962b6ed7d4234a92");
+  console.log("balance", balance.toString());
+
+  const feeData = await web3.eth.calculateFeeData();
+  console.log("feeData", feeData);
 }
 
 main();

@@ -296,6 +296,43 @@ export class Wallet extends EthersWallet {
     ]);
     return pollTransactionInPool(txhash, this.provider);
   }
+
+  async sendTransactions(
+    transactions: TransactionRequest[]
+  ): Promise<TransactionResponse[]> {
+    const signedTxs = [];
+    for (const transaction of transactions) {
+      const tx = await getTransactionRequest(transaction);
+      if (!isKlaytnTxType(parseTxType(tx.type))) {
+        const populatedTx = await super.populateTransaction(tx);
+        const signedTx = await super.signTransaction(populatedTx);
+        signedTxs.push(signedTx);
+      } else {
+        const populatedTx = await this._populateTransaction(tx, false);
+        const signedTx = await this.signTransaction(populatedTx);
+        signedTxs.push(signedTx);
+      }
+    }
+    return this._sendKlaytnRawTransactions(signedTxs);
+  }
+
+  async _sendKlaytnRawTransactions(
+    signedTxs: string[]
+  ): Promise<TransactionResponse[]> {
+    assert(
+      this.provider instanceof EthersJsonRpcApiProvider,
+      "Provider is not JsonRpcProvider: cannot send klay_sendRawTransactions",
+      "UNSUPPORTED_OPERATION",
+      {
+        operation: "_sendKlaytnRawTransactions",
+      }
+    );
+
+    const txhashes = await this.provider.send("klay_sendRawTransactions", [
+      signedTxs
+    ]) as string[];
+    return Promise.all(txhashes.map((txhash) => pollTransactionInPool(txhash, this.provider!))); // can assume this.provider != null because we asserted above.
+  }
 }
 
 // EthersJsonRpcSigner cannot be subclassed because of the constructorGuard.

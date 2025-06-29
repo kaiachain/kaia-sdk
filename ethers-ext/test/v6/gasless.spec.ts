@@ -7,19 +7,13 @@ import { describe, it, before } from "mocha";
 import {
   getAmountRepay,
   getGaslessSwapRouter,
-  getCommissionRate,
   getMinAmountOut,
   getAmountIn,
   getApproveTx,
   getSwapTx,
-  sendGaslessTx,
-  isGaslessSupportedToken,
   isGaslessApprove,
   isGaslessSwap,
-  isValidSwapTxFormat,
-  validateAndDecodeSwapFunction,
 } from "../../src/v6/gasless";
-import { Wallet as KlaytnWallet } from "../../src/v6/signer";
 import { MockEthersProvider, MockKlaytnProvider } from "./mock_provider";
 
 chai.use(chaiAsPromised);
@@ -28,12 +22,37 @@ chai.use(chaiAsPromised);
 const url = "https://public-en-kairos.node.kaia.io";
 const priv = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 const gsrAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
+const routerAddress = "0x4b41783732810b731569e4d944f59372f411bea2";
 const walletAddress = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 const tokenAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
 const mainnetChainId = 8217;
 const kairosChainId = 1001;
 const localChainId = 1000;
 const unsupportedChainId = 1234;
+const block = {
+  baseFeePerGas: "0x5d21dba00",
+  difficulty: "0x1",
+  extraData: "0x",
+  gasLimit: "0xe8d4a50fff",
+  gasUsed: 0,
+  hash: "0x92694a6b75a012a15559d60e92ff30d855e2722292b7d1b05f94e5c34ff02a42",
+  logsBloom: "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+  miner: "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+  mixHash: "0x0000000000000000000000000000000000000000000000000000000000000000",
+  nonce: "0x0000000000000000",
+  number: 19,
+  parentHash: "0x76938e2a9b83600621d51465a66a725130de1963e9e5d546adf755939bf74799",
+  receiptsRoot: "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+  sha3Uncles: "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+  size: 630,
+  stateRoot: "0x61f886eb9904d0c776c4871f9b955d5d849938340ad2cec78b35e4ab0fa9bb1a",
+  timestamp: 1701338345,
+  timestampFoS: 0,
+  totalDifficulty: "0x14",
+  transactions: [],
+  transactionsRoot: "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+  uncles: []
+};
 
 describe("Gasless v6", () => {
   let EP: MockEthersProvider;
@@ -59,15 +78,15 @@ describe("Gasless v6", () => {
       });
       P.mock_override("eth_call", (params: any[]) => {
         const data = params[0].data || "";
-        
+
         if (data.startsWith("0x75151b63")) { // isTokenSupported
           return "0x0000000000000000000000000000000000000000000000000000000000000001";
         }
-        
+
         if (data.startsWith("0x5ea1d6f8")) { // commissionRate
           return "0x00000000000000000000000000000000000000000000000000000000000003e8";
         }
-        
+
         if (data.startsWith("0x632db21c")) { // getAmountIn
           return "0x0000000000000000000000000000000000000000000000000de0b6b3a7640000";
         }
@@ -75,14 +94,12 @@ describe("Gasless v6", () => {
         if (data.startsWith("0xe2693e3f")) { // getActiveAddr
           return ethers.zeroPadValue(gsrAddress, 32);
         }
-        
+
         return "0x0000000000000000000000000000000000000000000000000000000000000000";
       });
-      P.mock_override("eth_getBlock", () => ({
-        timestamp: Math.floor(Date.now() / 1000)
-      }));
+      P.mock_override("eth_getBlockByNumber", () => block);
     }
-    
+
     for (let P of [KP]) {
       P.mock_override("klay_gasPrice", () => "0xba43b7400"); // 50 gwei
       P.mock_override("klay_estimateGas", () => "0x5208"); // 21000
@@ -97,63 +114,48 @@ describe("Gasless v6", () => {
     }
   });
 
-  describe("getAmountRepay", () => {
-    it("should calculate correct amount to repay when approval is required", () => {
-      const result = getAmountRepay(true, 25);
-      expect(result).to.equal("15525000000000000");
-    });
-
-    it("should calculate correct amount to repay when approval is not required", () => {
-      const result = getAmountRepay(false, 25);
-      expect(result).to.equal("13025000000000000");
-    });
-
-    it("should handle string gasPrice input", () => {
-      const result = getAmountRepay(true, 25);
-      expect(result).to.equal("15525000000000000");
-    });
-  });
-
   describe("getGaslessSwapRouter", () => {
-    it("should return router for mainnet chain ID", async () => {
-      const router = await getGaslessSwapRouter(EP, mainnetChainId);
-      expect(router.address).to.equal(gsrAddress);
+    it("should return router from Registry", async () => {
+      const originalMock = EP.overrides["eth_call"];
+      EP.mock_override("eth_call", () => "0x0000000000000000000000004b41783732810b731569e4d944f59372f411bea2");
+      try {
+        const router = await getGaslessSwapRouter(EP);
+        expect(await router.getAddress()).to.equal("0x4b41783732810b731569E4d944F59372F411BEa2");
+      } finally {
+        EP.mock_override("eth_call", originalMock);
+      }
     });
 
-    it("should return router for kairos chain ID", async () => {
-      const router = await getGaslessSwapRouter(EP, kairosChainId);
-      expect(router.address).to.equal(gsrAddress);
-    });
-
-    it("should return router for local chain ID", async () => {
-      const router = await getGaslessSwapRouter(EP, localChainId);
-      expect(router.address).to.equal(gsrAddress);
-    });
-
-    it("should throw error for unsupported chain ID", () => {
-      expect(getGaslessSwapRouter(EP, unsupportedChainId)).to.be.rejectedWith("Chain ID 1234 is not supported by this SDK");
+    it("should return router with custom address", async () => {
+      const router = await getGaslessSwapRouter(EP, "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
+      expect(await router.getAddress()).to.equal("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
     });
 
     it("should throw error when GaslessSwapRouter is not set in the registry", () => {
       const originalMock = EP.overrides["eth_call"];
       EP.mock_override("eth_call", () => "0x0000000000000000000000000000000000000000000000000000000000000000");
-
       try {
-        expect(getGaslessSwapRouter(EP, mainnetChainId)).to.be.rejectedWith("There is no valid GaslessSwapRouter for the target chain");
+        expect(getGaslessSwapRouter(EP)).to.be.rejectedWith("GaslessSwapRouter not found in the registry");
       } finally {
         EP.mock_override("eth_call", originalMock);
       }
     });
   });
 
-  describe("getCommissionRate", () => {
-    it("should return the commission rate from the contract", async () => {
-      const mockContract = {
-        commissionRate: async () => BigInt(1000)
-      };
-      
-      const rate = await getCommissionRate(mockContract as any);
-      expect(rate).to.equal(1000);
+  describe("getAmountRepay", () => {
+    it("should calculate correct amount to repay when approval is required", () => {
+      const result = getAmountRepay(true, 25000000000);
+      expect(result).to.equal(15525000000000000n);
+    });
+
+    it("should calculate correct amount to repay when approval is not required", () => {
+      const result = getAmountRepay(false, 25000000000);
+      expect(result).to.equal(13025000000000000n);
+    });
+
+    it("should handle string gasPrice input", () => {
+      const result = getAmountRepay(true, 25000000000);
+      expect(result).to.equal(15525000000000000n);
     });
   });
 
@@ -161,10 +163,10 @@ describe("Gasless v6", () => {
     it("should calculate the minimum amount out correctly", () => {
       const amountRepay = "15525000000000000";
       const appTxFee = "10000000000000000";
-      const commissionRateBasisPoints = 1000;
-      
-      const result = getMinAmountOut(amountRepay, appTxFee, commissionRateBasisPoints);
-      expect(result).to.equal("26636111111111111");
+      const commissionRateBps = 1000;
+
+      const result = getMinAmountOut(amountRepay, appTxFee, commissionRateBps);
+      expect(result).to.equal(26636111111111111n);
     });
   });
 
@@ -173,18 +175,18 @@ describe("Gasless v6", () => {
       const mockContract = {
         getAmountIn: async () => BigInt("1000000000000000000")
       };
-      
+
       const minAmountOut = "26636111111111111";
       const slippageBasisPoints = 50;
-      
+
       const result = await getAmountIn(mockContract as any, tokenAddress, minAmountOut, slippageBasisPoints);
-      expect(result).to.equal("1000000000000000000");
+      expect(result).to.equal(1000000000000000000n);
     });
   });
 
   describe("getApproveTx", () => {
     it("should generate a valid approve transaction", async () => {
-      const tx = await getApproveTx(EP, walletAddress, tokenAddress, gsrAddress);
+      const tx = await getApproveTx(EP, walletAddress, tokenAddress, gsrAddress, 25000000000);
       expect(tx).to.be.an("object");
       expect(tx.to).to.equal(tokenAddress);
       expect(tx.from).to.equal(walletAddress);
@@ -201,8 +203,8 @@ describe("Gasless v6", () => {
       const amountIn = "1000000000000000000";
       const minAmountOut = "26636111111111111";
       const amountRepay = "15525000000000000";
-      
-      const tx = await getSwapTx(EP, walletAddress, tokenAddress, amountIn, minAmountOut, amountRepay);
+
+      const tx = await getSwapTx(EP, walletAddress, tokenAddress, gsrAddress, amountIn, minAmountOut, amountRepay, 25000000000);
       expect(tx).to.be.an("object");
       expect(tx.to).to.be.a("string");
       expect(tx.from).to.equal(walletAddress);
@@ -213,141 +215,90 @@ describe("Gasless v6", () => {
       const amountIn = "1000000000000000000";
       const minAmountOut = "26636111111111111";
       const amountRepay = "15525000000000000";
-      
-      const tx = await getSwapTx(EP, walletAddress, tokenAddress, amountIn, minAmountOut, amountRepay, false);
+
+      const tx = await getSwapTx(EP, walletAddress, tokenAddress, gsrAddress, amountIn, minAmountOut, amountRepay, 25000000000, true);
       expect(tx).to.be.an("object");
       expect(tx.to).to.be.a("string");
-      expect(tx.nonce).to.equal(0x1235);
-    });
-  });
-
-  describe("sendGaslessTx", () => {
-    it("should send a single transaction when approveTx is null", async () => {
-      const swapTx = "0x1234";
-      
-      const result = await sendGaslessTx(null, swapTx, KP);
-      expect(result).to.be.an("array");
-      expect(result.length).to.equal(1);
-    });
-
-    it("should send both transactions when approveTx is provided", async () => {
-      const approveTx = "0x5678";
-      const swapTx = "0x1234";
-      
-      const result = await sendGaslessTx(approveTx, swapTx, KP);
-      expect(result).to.be.an("array");
-      expect(result.length).to.equal(2);
-    });
-  });
-
-  describe("isGaslessSupportedToken", () => {
-    it("should return true for supported tokens", async () => {
-      const originalMock = EP.overrides["eth_call"];
-      EP.mock_override("eth_call", (params: any[]) => {
-        return "0x0000000000000000000000000000000000000000000000000000000000000001";
-      });
-      
-      try {
-        const result = await isGaslessSupportedToken(EP, tokenAddress, kairosChainId);
-        expect(result).to.be.true;
-      } finally {
-        EP.mock_override("eth_call", originalMock);
-      }
-    });
-
-    it("should handle errors gracefully", async () => {
-      const originalMock = EP.overrides["eth_call"];
-      EP.mock_override("eth_call", () => { throw new Error("Test error"); });
-      
-      const result = await isGaslessSupportedToken(EP, tokenAddress, kairosChainId);
-      expect(result).to.be.false;
-      
-      EP.mock_override("eth_call", originalMock);
+      expect(tx.nonce).to.equal(0x1235); // one larger than the account's next nonce (getTransactionCount=0x1234)
     });
   });
 
   describe("isGaslessApprove", () => {
     it("should validate a gasless approve transaction", async () => {
       const mockTx = {
+        from: walletAddress,
         to: tokenAddress,
+        nonce: 0x1234,
         data: "0x095ea7b30000000000000000000000005fc8d32690cc91d4c39d9d3abcbd16989f875707ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-        nonce: "0x1234",
-        from: walletAddress
       };
-      
-      const originalGetTxCountMock = EP.overrides["eth_getTransactionCount"];
-      EP.mock_override("eth_getTransactionCount", () => "0x1234");
-      
-      try {
-        const result = await isGaslessApprove(EP, mockTx, kairosChainId);
-        expect(result).to.be.true;
-      } finally {
-        EP.mock_override("eth_getTransactionCount", originalGetTxCountMock);
-      }
+
+      const router = await getGaslessSwapRouter(EP);
+      const result = await isGaslessApprove(EP, router, mockTx);
+      expect(result).to.deep.equal({ ok: true });
     });
 
     it("should return false for non-approve transactions", async () => {
       const mockTx = {
+        from: walletAddress,
         to: tokenAddress,
+        nonce: 0x1234,
         data: "0x12345678",
-        nonce: "0x1234",
-        from: walletAddress
       };
-      
-      const result = await isGaslessApprove(EP, mockTx, kairosChainId);
-      expect(result).to.be.false;
+
+      const router = await getGaslessSwapRouter(EP);
+      const result = await isGaslessApprove(EP, router, mockTx);
+      expect(result).to.deep.equal({ ok: false, error: "A2: Invalid data" });
     });
   });
 
   describe("isGaslessSwap", () => {
-    describe("isValidSwapTxFormat", () => {
-      it("should return true for valid transaction format", () => {
-        const txRequest = { data: "0xdata", to: "0xaddress" };
-        expect(isValidSwapTxFormat(txRequest as any)).to.be.true;
-      });
+    it("should validate a gasless swap transaction without approve", async () => {
+      const mockSwapTx = {
+        from: walletAddress,
+        to: gsrAddress,
+        nonce: 0x1234,
+        gasPrice: 25000000000,
+        data: "0x8042690100000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c8000000000000000000000000000000000000000000000000000000000007a1200000000000000000000000000000000000000000000000000000000000000064000000000000000000000000000000000000000000000000002e462b22331000000000000000000000000000000000000000000000000000000000000000012c",
+      };
 
-      it("should return false when data is missing", () => {
-        const txRequest = { to: "0xaddress" };
-        expect(isValidSwapTxFormat(txRequest as any)).to.be.false;
-      });
-
-      it("should return false when to is missing", () => {
-        const txRequest = { data: "0xdata" };
-        expect(isValidSwapTxFormat(txRequest as any)).to.be.false;
-      });
+      const router = await getGaslessSwapRouter(EP);
+      const result = await isGaslessSwap(EP, router, null, mockSwapTx);
+      expect(result).to.deep.equal({ ok: true });
     });
 
-    describe("validateAndDecodeSwapFunction", () => {
-      it("should return invalid for wrong function selector", function() {
-        // Create invalid swap function data with a wrong selector
-        const functionSelector = "0x12345678"; // wrong selector
-        const data = functionSelector + "0000"; // Just need some data
-        
-        // We don't need to mock ethers.id here since we're testing the negative case
-        const result = validateAndDecodeSwapFunction(data);
-        expect(result.isValid).to.be.false;
-      });
+    it("should validate a gasless swap transaction with approve", async () => {
+      const mockApproveTx = {
+        from: walletAddress,
+        to: tokenAddress,
+        nonce: 0x1234,
+        gasPrice: 25000000000,
+        data: "0x095ea7b30000000000000000000000005fc8d32690cc91d4c39d9d3abcbd16989f875707ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      };
+      const mockSwapTx = {
+        from: walletAddress,
+        to: gsrAddress,
+        nonce: 0x1235,
+        gasPrice: 25000000000,
+        data: "0x8042690100000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c8000000000000000000000000000000000000000000000000000000000007a1200000000000000000000000000000000000000000000000000000000000000064000000000000000000000000000000000000000000000000003727e7be235000000000000000000000000000000000000000000000000000000000000000012c",
+      };
+
+      const router = await getGaslessSwapRouter(EP);
+      const result = await isGaslessSwap(EP, router, mockApproveTx, mockSwapTx);
+      expect(result).to.deep.equal({ ok: true });
     });
 
     it("should return false for non-swap transactions", async () => {
       const mockSwapTx = {
+        from: walletAddress,
         to: gsrAddress,
-        data: "0x12345678",
-        nonce: "0x1234",
-        from: walletAddress
+        nonce: 0x1234,
+        gasPrice: 25000000000,
+        data: "0x1234567800000000",
       };
-      
-      const originalEthersId = ethers.id;
-      (ethers as any).id = () => ({
-        slice: () => "0x2d4ba3a7"
-      });
-      
-      try {
-        const result = await isGaslessSwap(EP, null, mockSwapTx, kairosChainId);
-        expect(result).to.be.false;
-      } finally {
-        (ethers as any).id = originalEthersId;
-      }
+
+      const router = await getGaslessSwapRouter(EP);
+      const result = await isGaslessSwap(EP, router, null, mockSwapTx);
+      expect(result).to.deep.equal({ ok: false, error: "S2: Invalid data" });
     });
   });
 });

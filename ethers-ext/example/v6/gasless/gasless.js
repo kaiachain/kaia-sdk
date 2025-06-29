@@ -20,9 +20,9 @@ const ERC20_ABI = [
   "function balanceOf(address owner) view returns (uint256)"
 ];
 
-// senderAddr wants to swap the ERC20 token for at least 1.0 KAIA so she can execute the AppTx.
+// senderAddr wants to swap the ERC20 token for at least 0.01 KAIA so she can execute the AppTx.
 async function main() {
-  const appTxFee = ethers.parseEther("1.0").toString(); // 1.0 KAIA
+  const appTxFee = ethers.parseEther("0.01").toString();
 
   // Query the environment
   const token = new ethers.Contract(tokenAddr, ERC20_ABI, provider);
@@ -34,14 +34,15 @@ async function main() {
   console.log(`- ${ethers.formatEther(await provider.getBalance(senderAddr))} KAIA`);
   console.log(`- ${ethers.formatUnits(await token.balanceOf(senderAddr), tokenDecimals)} ${tokenSymbol}`);
 
-  const network = await provider.getNetwork();
-  const chainId = Number(network.chainId);
-  const router = await gasless.getGaslessSwapRouter(provider, chainId);
+  const router = await gasless.getGaslessSwapRouter(provider);
   const routerAddr = await router.getAddress();
+  const isTokenSupported = await router.isTokenSupported(tokenAddr);
   const commissionRate = Number(await router.commissionRate());
   console.log(`\nGaslessSwapRouter address: ${routerAddr}`);
-  console.log(`- The token is supported: ${await router.isTokenSupported(tokenAddr)}`);
+  console.log(`- The token is supported: ${isTokenSupported}`);
   console.log(`- Commission rate: ${commissionRate} bps`);
+
+  const gasPrice = Number((await provider.getFeeData()).gasPrice);
 
   // If sender hasn't approved, include ApproveTx first.
   const allowance = await token.allowance(senderAddr, routerAddr);
@@ -53,7 +54,8 @@ async function main() {
       provider,
       senderAddr,
       tokenAddr,
-      routerAddr
+      routerAddr,
+      gasPrice,
     );
     txs.push(approveTx);
   } else {
@@ -66,8 +68,7 @@ async function main() {
   //   and pay the commission, still leaving appTxFee.
   // - amountIn (token) is the amount of the token to be swapped to produce minAmountOut plus slippage.
   console.log("\nCalculating the amount of the token to be swapped...");
-  const gasPrice = Number((await provider.getFeeData()).gasPrice) / 1e9;
-  console.log(`- gasPrice: ${gasPrice} gkei`);
+  console.log(`- gasPrice: ${ethers.formatUnits(gasPrice, "gwei")} gkei`);
   const amountRepay = gasless.getAmountRepay(approveRequired, gasPrice);
   console.log(`- amountRepay: ${ethers.formatEther(amountRepay)} KAIA`);
   const minAmountOut = gasless.getMinAmountOut(amountRepay, appTxFee, commissionRate);
@@ -80,19 +81,19 @@ async function main() {
     provider,
     senderAddr,
     tokenAddr,
+    routerAddr,
     amountIn,
     minAmountOut,
     amountRepay,
-    !approveRequired
+    gasPrice,
+    approveRequired,
   );
   txs.push(swapTx);
 
   console.log("\nSending transactions...");
-  const sentTxs = [];
-  for (const tx of txs) {
-    const sendTx = await wallet.sendTransaction(tx);
-    sentTxs.push(sendTx);
-    console.log(`- Tx sent: ${sendTx.hash}`);
+  const sentTxs = await wallet.sendTransactions(txs);
+  for (const tx of sentTxs) {
+    console.log(`- Tx sent: (nonce: ${tx.nonce}) ${tx.hash}`);
   }
 
   console.log("\nWaiting for transactions to be mined...");

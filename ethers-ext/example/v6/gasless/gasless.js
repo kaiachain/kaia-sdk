@@ -43,7 +43,6 @@ async function main() {
   console.log(`- Commission rate: ${commissionRate} bps`);
 
   const gasPrice = Number((await provider.getFeeData()).gasPrice);
-  const nonce = await provider.getTransactionCount(senderAddr);
 
   // If sender hasn't approved, include ApproveTx first.
   const allowance = await token.allowance(senderAddr, routerAddr);
@@ -92,15 +91,9 @@ async function main() {
   txs.push(swapTx);
 
   console.log("\nSending transactions...");
-  const sentTxs = [];
-  for (const tx of txs) {
-    try {
-    const sendTx = await wallet.sendTransaction(tx);
-    sentTxs.push(sendTx);
-    console.log(`- Tx sent: (nonce: ${tx.nonce}) ${sendTx.hash}`);
-    } catch (error) {
-      console.error(`- Tx send failed: ${error}`);
-    }
+  const sentTxs = await wallet.sendTransactions(txs);
+  for (const tx of sentTxs) {
+    console.log(`- Tx sent: (nonce: ${tx.nonce}) ${tx.hash}`);
   }
 
   console.log("\nWaiting for transactions to be mined...");

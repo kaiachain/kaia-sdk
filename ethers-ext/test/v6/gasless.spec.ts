@@ -146,10 +146,10 @@ describe("Gasless v6", () => {
     it("should calculate the minimum amount out correctly", () => {
       const amountRepay = "15525000000000000";
       const appTxFee = "10000000000000000";
-      const commissionRateBasisPoints = 1000;
+      const commissionRateBps = 1000;
       
-      const result = getMinAmountOut(amountRepay, appTxFee, commissionRateBasisPoints);
-      expect(result).to.equal("26636111111111111");
+      const result = getMinAmountOut(amountRepay, appTxFee, commissionRateBps);
+      expect(result).to.equal(26636111111111111n);
     });
   });
 
@@ -163,7 +163,7 @@ describe("Gasless v6", () => {
       const slippageBasisPoints = 50;
       
       const result = await getAmountIn(mockContract as any, tokenAddress, minAmountOut, slippageBasisPoints);
-      expect(result).to.equal("1000000000000000000");
+      expect(result).to.equal(1000000000000000000n);
     });
   });
 

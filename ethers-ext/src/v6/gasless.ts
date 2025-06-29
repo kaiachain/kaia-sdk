@@ -77,16 +77,6 @@ export async function getGaslessSwapRouter(provider: ethers.Provider, address?: 
 }
 
 /**
- * Get the commission rate for the specified gasless swap router
- * @param gsr The gasless swap router contract
- * @returns The commission rate
- */
-export async function getCommissionRate(gsr: ethers.Contract): Promise<number> {
-  const rate = await gsr.commissionRate();
-  return Number(rate);
-}
-
-/**
  * Calculate the minimum amount out based on amount to repay, app transaction fee, and commission rate
  * @param amountRepay The amount to repay
  * @param appTxFee The application transaction fee

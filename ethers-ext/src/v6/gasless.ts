@@ -3,6 +3,7 @@ import { JsonRpcApiProvider, assert, ethers, BigNumberish, Contract, Transaction
 import { GaslessSwapRouterAbi } from "./abi/GaslessSwapRouter.js";
 import { RegistryAbi } from "./abi/Registry.js";
 import { getTransactionRequest } from "./txutil.js";
+import { TransactionRequest } from "./types.js";
 
 const SUPPORTED_CHAIN_IDS: { [key: number]: string } = {
   8217: "mainnet",
@@ -253,64 +254,57 @@ export async function isGaslessSupportedToken(
  * Check if a transaction is a gasless approve transaction
  * @param provider The ethers provider
  * @param tx The transaction
- * @param chainId The chain ID
  * @returns True if the transaction is a gasless approve transaction, false otherwise
  */
 export async function isGaslessApprove(
   provider: ethers.Provider,
-  tx: string | any,
-  chainId: number,
-): Promise<boolean> {
-  try {
-    const txRequest = await getTransactionRequest(tx);
-
-    if (!txRequest.data || !txRequest.to) {
-      return false;
-    }
-
-    // A1: GaslessApproveTx.to is a whitelisted ERC-20 token.
-    const isTokenSupported = await isGaslessSupportedToken(provider, txRequest.to.toString(), chainId);
-    if (!isTokenSupported) {
-      return false;
-    }
-
-    // A2: GaslessApproveTx.data is approve(spender, amount).
-    const dataPrefix = txRequest.data.toString().slice(0, 10);
-    const approveMethodId = "0x095ea7b3";
-
-    if (dataPrefix !== approveMethodId) {
-      return false;
-    }
-
-    const data = txRequest.data.toString();
-    const spenderData = "0x" + data.slice(34, 74);
-    const amountData = "0x" + data.slice(74);
-
-    // A3: spender is a whitelisted GaslessSwapRouter.
-    const router = await getGaslessSwapRouter(provider);
-    if (spenderData.toLowerCase() !== (await router.getAddress()).toLowerCase()) {
-      return false;
-    }
-
-    // A4: amount is MaxUint256.
-    const amount = BigInt(amountData);
-    if (amount !== MaxUint256) {
-      return false;
-    }
-
-    // A5: nonce is getNonce(tx.from).
-    if (txRequest.nonce !== undefined && txRequest.nonce !== null && txRequest.from) {
-      const expectedNonce = await provider.getTransactionCount(txRequest.from);
-      if (BigInt(txRequest.nonce.toString()) !== BigInt(expectedNonce)) {
-        return false;
-      }
-    }
-
-    return true;
-  } catch (error) {
-    console.error("Error in isGaslessApprove:", error);
-    return false;
+  router: Contract,
+  transactionOrRLP: TransactionRequest | string,
+): Promise<{ ok: boolean, error?: string }> {
+  const routerAddress = await router.getAddress();
+  const tx = await getTransactionRequest(transactionOrRLP);
+  if (!tx.from || !tx.to || !tx.nonce || !tx.data) {
+    return { ok: false, error: "Invalid transaction" };
   }
+
+  // A1: GaslessApproveTx.to is a whitelisted ERC-20 token.
+  const isTokenSupported = await router.isTokenSupported(tx.to);
+  if (!isTokenSupported) {
+    return { ok: false, error: "A1: Token not supported" };
+  }
+
+  // A2: GaslessApproveTx.data is approve(spender, amount).
+  let spender: string;
+  let amount: bigint;
+  try {
+    const tokenInterface = new ethers.Interface([
+      "function approve(address spender, uint256 amount) external returns (bool)"
+    ]);
+    [spender, amount] = tokenInterface.decodeFunctionData("approve", tx.data);
+    if (spender === undefined || amount === undefined) {
+      return { ok: false, error: "A2: Invalid data" };
+    }
+  } catch (error) {
+    return { ok: false, error: "A2: Invalid data" };
+  }
+
+  // A3: spender is a whitelisted GaslessSwapRouter.
+  if (spender.toLowerCase() !== routerAddress.toLowerCase()) {
+    return { ok: false, error: "A3: Invalid spender" };
+  }
+
+  // A4: amount is MaxUint256.
+  if (BigInt(amount) !== MaxUint256) {
+    return { ok: false, error: "A4: Invalid amount" };
+  }
+
+  // A5: nonce is getNonce(tx.from).
+  const expectedNonce = await provider.getTransactionCount(tx.from);
+  if (BigInt(tx.nonce) !== BigInt(expectedNonce)) {
+    return { ok: false, error: "A5: Invalid nonce" };
+  }
+
+  return { ok: true };
 }
 
 // Add this helper function near the top of the file after imports
@@ -472,14 +466,14 @@ export function validateAmountRepayWithoutApprove(
 
 export async function validateWithApprove(
   provider: ethers.Provider,
+  router: Contract,
   approveTx: string | any,
   swapTxRequest: TransactionLike<string>,
   tokenData: string,
   amountInData: string,
   amountRepayData: string,
-  chainId: number
 ): Promise<boolean> {
-  const isApprove = await isGaslessApprove(provider, approveTx, chainId);
+  const isApprove = await isGaslessApprove(provider, router, approveTx);
   if (!isApprove) {
     return false;
   }
@@ -537,6 +531,7 @@ export async function validateWithoutApprove(
  */
 export async function isGaslessSwap(
   provider: ethers.Provider,
+  router: Contract,
   approveTxOrNull: string | any | null,
   swapTx: string | any,
   chainId: number
@@ -572,12 +567,12 @@ export async function isGaslessSwap(
     if (approveTxOrNull) {
       if (!await validateWithApprove(
         provider,
+        router,
         approveTxOrNull,
         swapTxRequest,
         tokenData,
         amountInData,
         amountRepayData,
-        chainId
       )) {
         return false;
       }

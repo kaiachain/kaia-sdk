@@ -34,7 +34,6 @@ async function main() {
   console.log(`- Commission rate: ${commissionRate} bps`);
 
   const gasPrice = await web3.eth.getGasPrice();
-  const nonce = await web3.eth.getTransactionCount(senderAddr);
 
   // If sender hasn't approved, include ApproveTx first.
   const allowance = await token.methods.allowance(senderAddr, routerAddr).call();
@@ -47,7 +46,6 @@ async function main() {
       tokenAddr,
       routerAddr,
       gasPrice,
-      nonce,
     );
     txs.push(approveTx);
   } else {

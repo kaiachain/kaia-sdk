@@ -35,6 +35,61 @@ export async function getGaslessSwapRouter(
   return new Contract(GaslessSwapRouterAbi, contractAddress, context);
 }
 
+export function getAmountRepay(
+  approveRequired: boolean,
+  gasPrice: Numbers,
+): bigint {
+  const gasPriceBN = BigInt(gasPrice);
+
+  const lendTxGas = BigInt(GAS_LIMIT_LEND);
+  const approveTxGas = approveRequired ? BigInt(GAS_LIMIT_APPROVE) : BigInt(0);
+  const swapTxGas = BigInt(GAS_LIMIT_SWAP);
+
+  const R1 = gasPriceBN * lendTxGas;
+  const R2 = gasPriceBN * approveTxGas;
+  const R3 = gasPriceBN * swapTxGas;
+
+  return R1 + R2 + R3;
+}
+
+export function getMinAmountOut(
+  amountRepay: Numbers,
+  appTxFee: Numbers,
+  commissionRateBps: Numbers,
+): bigint {
+  const amountRepayBN = BigInt(amountRepay);
+  const appTxFeeBN = BigInt(appTxFee);
+  const commissionRateBpsBN = BigInt(commissionRateBps);
+  const denominator = BigInt(10000);
+  if (commissionRateBpsBN < 0 || commissionRateBpsBN >= 10000) {
+    throw new Error("Commission rate must be between 0 and 9999 basis points");
+  }
+
+  // minAmountOut = appTxFee / (1 - commissionRate) + amountRepay
+  // i.e. (amountOut - amountRepay) * (1 - commissionRate) >= appTxFee
+  // because the swap output has to be enough to repay and pay the commission.
+  const beforeCommission = appTxFeeBN * denominator / (denominator - commissionRateBpsBN);
+  return beforeCommission + amountRepayBN;
+}
+
+export async function getAmountIn(
+  router: GaslessSwapRouter,
+  tokenAddress: string,
+  minAmountOut: Numbers,
+  slippageBps: Numbers,
+): Promise<bigint> {
+  const minAmountOutBN = BigInt(minAmountOut);
+  const slippageBpsBN = BigInt(slippageBps);
+  const denominator = BigInt(10000);
+
+  // minAmountIn = DEX.getAmountIn(tokenAddress, minAmountOut * (1 + slippage))
+  // Have DEX calculate the required input to produce minAmountOut plus slippage.
+  const withSlippage = minAmountOutBN * (denominator + slippageBpsBN) / denominator;
+
+  const amountIn = await router.methods.getAmountIn(tokenAddress, withSlippage).call();
+  return BigInt(amountIn);
+}
+
 export async function getApproveTx(
   context: Web3Context<EthExecutionAPI>,
   eth: Web3Eth,
@@ -103,56 +158,4 @@ export async function getSwapTx(
     data: data,
   };
   return tx;
-}
-
-export function getAmountRepay(
-  approveRequired: boolean,
-  gasPrice: Numbers,
-): bigint {
-  const gasPriceBN = BigInt(gasPrice);
-
-  const lendTxGas = BigInt(GAS_LIMIT_LEND);
-  const approveTxGas = approveRequired ? BigInt(GAS_LIMIT_APPROVE) : BigInt(0);
-  const swapTxGas = BigInt(GAS_LIMIT_SWAP);
-
-  const R1 = gasPriceBN * lendTxGas;
-  const R2 = gasPriceBN * approveTxGas;
-  const R3 = gasPriceBN * swapTxGas;
-
-  return R1 + R2 + R3;
-}
-
-export function getMinAmountOut(
-  amountRepay: Numbers,
-  appTxFee: Numbers,
-  commissionRateBps: Numbers,
-): bigint {
-  const amountRepayBN = BigInt(amountRepay);
-  const appTxFeeBN = BigInt(appTxFee);
-  const commissionRateBpsBN = BigInt(commissionRateBps);
-  const denominator = BigInt(10000);
-
-  // minAmountOut = appTxFee / (1 - commissionRate) + amountRepay
-  // i.e. (amountOut - amountRepay) * (1 - commissionRate) >= appTxFee
-  // because the swap output has to be enough to repay and pay the commission.
-  const beforeCommission = appTxFeeBN * denominator / (denominator - commissionRateBpsBN);
-  return beforeCommission + amountRepayBN;
-}
-
-export async function getAmountIn(
-  router: GaslessSwapRouter,
-  tokenAddress: string,
-  minAmountOut: Numbers,
-  slippageBps: Numbers,
-): Promise<bigint> {
-  const minAmountOutBN = BigInt(minAmountOut);
-  const slippageBpsBN = BigInt(slippageBps);
-  const denominator = BigInt(10000);
-
-  // minAmountIn = DEX.getAmountIn(tokenAddress, minAmountOut * (1 + slippage))
-  // Have DEX calculate the required input to produce minAmountOut plus slippage.
-  const withSlippage = minAmountOutBN * (denominator + slippageBpsBN) / denominator;
-
-  const amountIn = await router.methods.getAmountIn(tokenAddress, withSlippage).call();
-  return BigInt(amountIn);
 }

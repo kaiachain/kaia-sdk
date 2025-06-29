@@ -228,45 +228,6 @@ export async function getSwapTx(
 }
 
 /**
- * Send gasless transactions
- * @param approveTxOrNull The approve transaction or null if not needed
- * @param swapTx The swap transaction
- * @param provider Optional provider to use for sending transactions
- * @returns Array of transaction hashes
- */
-export async function sendGaslessTx(
-  approveTxOrNull: string | null,
-  swapTx: string,
-  provider: ethers.Provider
-): Promise<string[]> {
-  try {
-    const network = await provider.getNetwork();
-    const chainId = Number(network.chainId);
-    validateChainId(chainId);
-
-    // Assert that provider is JsonRpcApiProvider
-    assert(
-      provider instanceof JsonRpcApiProvider,
-      "Provider is not JsonRpcApiProvider: cannot send kaia_sendRawTransactions",
-      "UNSUPPORTED_OPERATION",
-      {
-        operation: "sendGaslessTx",
-      }
-    );
-
-    if (approveTxOrNull) {
-      console.log("Sending both approve and swap transactions via RPC...");
-      return await provider.send("kaia_sendRawTransactions", [[approveTxOrNull, swapTx]]);
-    } else {
-      return await provider.send("kaia_sendRawTransactions", [[swapTx]]);
-    }
-  } catch (error) {
-    console.error("Error in sendGaslessTx:", error);
-    throw error;
-  }
-}
-
-/**
  * Check if a token is supported for gasless transactions
  * @param signer The ethers signer
  * @param token The token address

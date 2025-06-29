@@ -29,26 +29,6 @@ function validateChainId(chainId: number): string {
 }
 
 /**
- * Calculate the amount to repay based on whether approval is required and gas price
- * @param approveRequired Whether approval transaction is required
- * @param gasPrice Gas price in gkei
- * @returns The amount to repay
- */
-export function getAmountRepay(approveRequired: boolean, gasPrice: number): bigint {
-  const gasPriceBN = BigInt(gasPrice);
-
-  const lendTxGas = BigInt(GAS_LIMIT_LEND);
-  const approveTxGas = approveRequired ? BigInt(GAS_LIMIT_APPROVE) : BigInt(0);
-  const swapTxGas = BigInt(GAS_LIMIT_SWAP);
-
-  const R1 = gasPriceBN * lendTxGas;
-  const R2 = gasPriceBN * approveTxGas;
-  const R3 = gasPriceBN * swapTxGas;
-
-  return R1 + R2 + R3;
-}
-
-/**
  * Get the gasless swap router for the specified chain
  * @param provider The ethers provider
  * @param chainId The chain ID
@@ -77,6 +57,26 @@ export async function getGaslessSwapRouter(provider: ethers.Provider, address?: 
     GaslessSwapRouterAbi.abi,
     provider
   );
+}
+
+/**
+ * Calculate the amount to repay based on whether approval is required and gas price
+ * @param approveRequired Whether approval transaction is required
+ * @param gasPrice Gas price in gkei
+ * @returns The amount to repay
+ */
+export function getAmountRepay(approveRequired: boolean, gasPrice: number): bigint {
+  const gasPriceBN = BigInt(gasPrice);
+
+  const lendTxGas = BigInt(GAS_LIMIT_LEND);
+  const approveTxGas = approveRequired ? BigInt(GAS_LIMIT_APPROVE) : BigInt(0);
+  const swapTxGas = BigInt(GAS_LIMIT_SWAP);
+
+  const R1 = gasPriceBN * lendTxGas;
+  const R2 = gasPriceBN * approveTxGas;
+  const R3 = gasPriceBN * swapTxGas;
+
+  return R1 + R2 + R3;
 }
 
 /**
@@ -135,7 +135,7 @@ export async function getAmountIn(
  * Generate a approve transaction
  * @param provider The ethers provider
  * @param fromAddress The sender address
- * @param tokenAddr The token address
+ * @param tokenAddress The token address
  * @param routerAddress The router address
  * @param amount The amount to approve
  * @returns The approve transaction
@@ -143,54 +143,36 @@ export async function getAmountIn(
 export async function getApproveTx(
   provider: ethers.Provider,
   fromAddress: string,
-  tokenAddr: string,
-  routerAddress: string
+  tokenAddress: string,
+  routerAddress: string,
+  gasPrice: BigNumberish,
 ): Promise<ethers.TransactionRequest> {
-  try {
-    const network = await provider.getNetwork();
-    const chainId = Number(network.chainId);
+  const tokenInterface = new ethers.Interface([
+    "function approve(address spender, uint256 amount) external returns (bool)"
+  ]);
+  const data = tokenInterface.encodeFunctionData("approve", [
+    routerAddress,
+    MaxUint256.toString()
+  ]);
+  const nonce = await provider.getTransactionCount(fromAddress);
 
-    validateChainId(chainId);
-
-    const tokenAbi = [
-      "function approve(address spender, uint256 amount) external returns (bool)"
-    ];
-
-    const tokenInterface = new ethers.Interface(tokenAbi);
-
-    // GaslessApproveTx's allowance is only set to MaxUint256.
-    // ref: https://github.com/kaiachain/kips/pull/64
-    const approveData = tokenInterface.encodeFunctionData("approve", [
-      routerAddress,
-      MaxUint256.toString()
-    ]);
-
-    const nonce = await provider.getTransactionCount(fromAddress);
-    const feeData = await provider.getFeeData();
-    const gasPriceBN = feeData.gasPrice?.toString() || "25000000000";
-
-    return {
-      type: 0,
-      to: tokenAddr,
-      from: fromAddress,
-      nonce: nonce,
-      gasLimit: 100000,
-      gasPrice: gasPriceBN,
-      data: approveData,
-      value: 0n,
-      chainId: chainId,
-    };
-  } catch (error) {
-    console.error("Error in getApproveTx:", error);
-    throw error;
-  }
+  return {
+    type: 0,
+    from: fromAddress,
+    to: tokenAddress,
+    nonce: nonce,
+    gasLimit: GAS_LIMIT_APPROVE,
+    gasPrice: gasPrice,
+    value: 0n,
+    data: data,
+  };
 }
 
 /**
  * Generate an swap transaction
  * @param provider The ethers provider
  * @param fromAddress The sender address
- * @param tokenAddr The token address to swap
+ * @param tokenAddress The token address to swap
  * @param amountIn The amount to swap
  * @param minAmountOut The minimum amount out
  * @param amountRepay The amount to repay
@@ -201,63 +183,48 @@ export async function getApproveTx(
 export async function getSwapTx(
   provider: ethers.Provider,
   fromAddress: string,
-  tokenAddr: string,
-  amountIn: string,
-  minAmountOut: string,
-  amountRepay: string,
-  isSingle: boolean = true,
-  deadline: number = 1800
+  tokenAddress: string,
+  routerAddress: string,
+  amountIn: BigNumberish,
+  minAmountOut: BigNumberish,
+  amountRepay: BigNumberish,
+  gasPrice: BigNumberish,
+  approveRequired: boolean = false,
+  deadlineBuffer: BigNumberish = 1800,
 ): Promise<ethers.TransactionRequest> {
-  try {
-    const network = await provider.getNetwork();
-    const chainId = Number(network.chainId);
-
-    validateChainId(chainId);
-
-    const routerInfo = await getGaslessSwapRouter(provider);
-    const routerAddress = await routerInfo.getAddress();
-
-    const currentBlock = await provider.getBlock("latest");
-    if (!currentBlock) {
-      throw new Error("Failed to get latest block");
-    }
-    const deadlineTimestamp = currentBlock.timestamp + deadline;
-
-    const routerInterface = new ethers.Interface(GaslessSwapRouterAbi.abi);
-
-    const swapData = routerInterface.encodeFunctionData("swapForGas", [
-      tokenAddr,
-      amountIn,
-      minAmountOut,
-      amountRepay,
-      deadlineTimestamp
-    ]);
-
-    const baseNonce = await provider.getTransactionCount(fromAddress);
-    const nonceIncrement = isSingle ? 0 : 1;
-    const nonce = baseNonce + nonceIncrement;
-
-    const feeData = await provider.getFeeData();
-    const gasPriceBN = feeData.gasPrice?.toString() || "25000000000";
-
-    // Construct the transaction object
-    const tx: ethers.TransactionRequest = {
-      type: 0,
-      to: routerAddress,
-      from: fromAddress,
-      nonce: nonce,
-      gasLimit: 500000,
-      gasPrice: gasPriceBN,
-      data: swapData,
-      value: 0n,
-      chainId: chainId,
-    };
-
-    return tx;
-  } catch (error) {
-    console.error("Error in getSwapTx:", error);
-    throw error;
+  const latestBlock = await provider.getBlock("latest");
+  if (!latestBlock) {
+    throw new Error("Failed to get latest block");
   }
+  const deadlineTimestamp = BigInt(latestBlock.timestamp) + BigInt(deadlineBuffer);
+
+  let nonce = await provider.getTransactionCount(fromAddress);
+  if (approveRequired) {
+    nonce += 1;
+  }
+
+  const routerInterface = new ethers.Interface(GaslessSwapRouterAbi.abi);
+  const data = routerInterface.encodeFunctionData("swapForGas", [
+    tokenAddress,
+    amountIn,
+    minAmountOut,
+    amountRepay,
+    deadlineTimestamp
+  ]);
+
+  // Construct the transaction object
+  const tx: ethers.TransactionRequest = {
+    type: 0,
+    from: fromAddress,
+    to: routerAddress,
+    nonce: nonce,
+    gasLimit: GAS_LIMIT_SWAP,
+    gasPrice: gasPrice,
+    value: 0n,
+    data: data,
+  };
+
+  return tx;
 }
 
 /**

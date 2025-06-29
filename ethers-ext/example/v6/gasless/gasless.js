@@ -55,7 +55,8 @@ async function main() {
       provider,
       senderAddr,
       tokenAddr,
-      routerAddr
+      routerAddr,
+      gasPrice,
     );
     txs.push(approveTx);
   } else {
@@ -81,19 +82,25 @@ async function main() {
     provider,
     senderAddr,
     tokenAddr,
+    routerAddr,
     amountIn,
     minAmountOut,
     amountRepay,
-    !approveRequired
+    gasPrice,
+    approveRequired,
   );
   txs.push(swapTx);
 
   console.log("\nSending transactions...");
   const sentTxs = [];
   for (const tx of txs) {
+    try {
     const sendTx = await wallet.sendTransaction(tx);
     sentTxs.push(sendTx);
-    console.log(`- Tx sent: ${sendTx.hash}`);
+    console.log(`- Tx sent: (nonce: ${tx.nonce}) ${sendTx.hash}`);
+    } catch (error) {
+      console.error(`- Tx send failed: ${error}`);
+    }
   }
 
   console.log("\nWaiting for transactions to be mined...");

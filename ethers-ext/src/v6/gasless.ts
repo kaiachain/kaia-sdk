@@ -281,9 +281,6 @@ export async function isGaslessApprove(
       "function approve(address spender, uint256 amount) external returns (bool)"
     ]);
     [spender, amount] = tokenInterface.decodeFunctionData("approve", tx.data);
-    if (spender === undefined || amount === undefined) {
-      return { ok: false, error: "A2: Invalid data" };
-    }
   } catch (error) {
     return { ok: false, error: "A2: Invalid data" };
   }
@@ -524,7 +521,7 @@ export async function validateWithoutApprove(
 /**
  * Check if transactions form a valid gasless swap
  * @param approveTxOrNull The approve transaction or null if not needed
- * @param swapTx The swap transaction
+ * @param transactionOrRLP The swap transaction
  * @param chainId The chain ID
  * @param provider The ethers provider
  * @returns True if the transactions form a valid gasless swap, false otherwise
@@ -532,63 +529,98 @@ export async function validateWithoutApprove(
 export async function isGaslessSwap(
   provider: ethers.Provider,
   router: Contract,
-  approveTxOrNull: string | any | null,
-  swapTx: string | any,
-  chainId: number
-): Promise<boolean> {
+  approveTxOrNull: TransactionLike | string | null,
+  transactionOrRLP: TransactionLike | string,
+): Promise<{ ok: boolean, error?: string }> {
+  const routerAddress = await router.getAddress();
+  const swapTx = await getTransactionRequest(transactionOrRLP);
+  if (!swapTx.from || !swapTx.to || !swapTx.nonce || !swapTx.data) {
+    return { ok: false, error: "Invalid transaction" };
+  }
+
+  // S1: GaslessSwapTx.to is a whitelisted GaslessSwapRouter.
+  if (swapTx.to.toLowerCase() !== routerAddress.toLowerCase()) {
+    return { ok: false, error: "S1: Invalid router address" };
+  }
+
+  // S2. GaslessSwapTx.data is swapForGas(token, amountIn, minAmountOut, amountRepay, deadline).
+  let token: string;
+  let amountIn: bigint;
+  let minAmountOut: bigint;
+  let amountRepay: bigint;
+  let deadline: bigint;
   try {
-    const swapTxRequest = await getTransactionRequest(swapTx);
-
-    // Basic validation
-    if (!isValidSwapTxFormat(swapTxRequest)) {
-      return false;
-    }
-
-    // S1: Router address validation
-    if (!await isValidRouterAddress(provider, swapTxRequest, chainId)) {
-      return false;
-    }
-
-    // S2: Function selector validation and parameter decoding
-    const { isValid, decodedParams } = validateAndDecodeSwapFunction(swapTxRequest.data?.toString() || "");
-    if (!isValid || !decodedParams) {
-      return false;
-    }
-
-    const { tokenData, amountInData, amountRepayData } = decodedParams;
-
-    // S3: Token support validation
-    const isTokenSupported = await isGaslessSupportedToken(provider, tokenData, chainId);
-    if (!isTokenSupported) {
-      return false;
-    }
-
-    // Validation with or without approve transaction
-    if (approveTxOrNull) {
-      if (!await validateWithApprove(
-        provider,
-        router,
-        approveTxOrNull,
-        swapTxRequest,
-        tokenData,
-        amountInData,
-        amountRepayData,
-      )) {
-        return false;
-      }
-    } else {
-      if (!await validateWithoutApprove(
-        provider,
-        swapTxRequest,
-        amountRepayData
-      )) {
-        return false;
-      }
-    }
-
-    return true;
+    const routerInterface = new ethers.Interface(GaslessSwapRouterAbi.abi);
+    [token, amountIn, minAmountOut, amountRepay, deadline] = routerInterface.decodeFunctionData("swapForGas", swapTx.data);
   } catch (error) {
-    console.error("Error in isGaslessSwap:", error);
-    return false;
+    return { ok: false, error: "S2: Invalid data" };
+  }
+
+  // S3. token is a whitelisted ERC20 token.
+  const isTokenSupported = await router.isTokenSupported(token);
+  if (!isTokenSupported) {
+    return { ok: false, error: "S3: Token not supported" };
+  }
+
+  const senderNonce = await provider.getTransactionCount(swapTx.from);
+
+  if (approveTxOrNull) {
+    const isApprove = await isGaslessApprove(provider, router, approveTxOrNull);
+    if (!isApprove.ok) {
+      return isApprove;
+    }
+    const approveTx = await getTransactionRequest(approveTxOrNull);
+    if (!approveTx.from || !approveTx.to || !approveTx.nonce || !approveTx.data) {
+      return { ok: false, error: "Invalid transaction" };
+    }
+
+    // SP1: GaslessApproveTx.to=token.
+    if (!approveTx.to || approveTx.to.toLowerCase() !== token.toLowerCase()) {
+      return { ok: false, error: "SP1: Invalid token" };
+    }
+
+    // SP2: GaslessApproveTx.data.amount>=amountIn.
+    let approveSpender: string;
+    let approveAmount: bigint;
+    try {
+      const tokenInterface = new ethers.Interface([
+        "function approve(address spender, uint256 amount) external returns (bool)"
+      ]);
+      [approveSpender, approveAmount] = tokenInterface.decodeFunctionData("approve", approveTx.data);
+    } catch (error) {
+      return { ok: false, error: "A2: Invalid data" };
+    }
+    if (approveAmount < amountIn) {
+      return { ok: false, error: "SP2: Invalid amount" };
+    }
+
+    // SP3: GaslessApproveTx.nonce+1 = tx.nonce = getNonce(tx.from)+1.
+    if (approveTx.nonce !== senderNonce) {
+      return { ok: false, error: "SP3: Invalid nonce" };
+    }
+    if (swapTx.nonce !== senderNonce + 1) {
+      return { ok: false, error: "SP3: Invalid nonce" };
+    }
+
+    // SP4: amountRepay = CalcRepayAmount(GaslessApproveTx, GaslessSwapTx).
+    const expectedAmountRepay = getAmountRepay(true, Number(swapTx.gasPrice));
+    if (BigInt(amountRepay) !== BigInt(expectedAmountRepay)) {
+      console.log("amountRepay", amountRepay, expectedAmountRepay);
+      return { ok: false, error: "SP4: Invalid amount repay" };
+    }
+    return { ok: true };
+  } else {
+    // SP3: tx.nonce = getNonce(tx.from).
+    if (swapTx.nonce !== senderNonce) {
+      return { ok: false, error: "SP3: Invalid nonce" };
+    }
+
+    // SP4: amountRepay = CalcRepayAmount(GaslessSwapTx).
+    const expectedAmountRepay = getAmountRepay(false, Number(swapTx.gasPrice));
+    if (BigInt(amountRepay) !== BigInt(expectedAmountRepay)) {
+      console.log("amountRepay", amountRepay, expectedAmountRepay);
+      return { ok: false, error: "SP4: Invalid amount repay" };
+    }
+    return { ok: true };
   }
 }

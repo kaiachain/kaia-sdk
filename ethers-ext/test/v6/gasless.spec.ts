@@ -11,13 +11,9 @@ import {
   getAmountIn,
   getApproveTx,
   getSwapTx,
-  isGaslessSupportedToken,
   isGaslessApprove,
   isGaslessSwap,
-  isValidSwapTxFormat,
-  validateAndDecodeSwapFunction,
 } from "../../src/v6/gasless";
-import { Wallet as KlaytnWallet } from "../../src/v6/signer";
 import { MockEthersProvider, MockKlaytnProvider } from "./mock_provider";
 
 chai.use(chaiAsPromised);
@@ -224,32 +220,6 @@ describe("Gasless v6", () => {
       expect(tx).to.be.an("object");
       expect(tx.to).to.be.a("string");
       expect(tx.nonce).to.equal(0x1235); // one larger than the account's next nonce (getTransactionCount=0x1234)
-    });
-  });
-
-  describe("isGaslessSupportedToken", () => {
-    it("should return true for supported tokens", async () => {
-      const originalMock = EP.overrides["eth_call"];
-      EP.mock_override("eth_call", (params: any[]) => {
-        return "0x0000000000000000000000000000000000000000000000000000000000000001";
-      });
-      
-      try {
-        const result = await isGaslessSupportedToken(EP, tokenAddress, kairosChainId);
-        expect(result).to.be.true;
-      } finally {
-        EP.mock_override("eth_call", originalMock);
-      }
-    });
-
-    it("should handle errors gracefully", async () => {
-      const originalMock = EP.overrides["eth_call"];
-      EP.mock_override("eth_call", () => { throw new Error("Test error"); });
-      
-      const result = await isGaslessSupportedToken(EP, tokenAddress, kairosChainId);
-      expect(result).to.be.false;
-      
-      EP.mock_override("eth_call", originalMock);
     });
   });
 

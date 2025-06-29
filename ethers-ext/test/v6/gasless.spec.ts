@@ -28,6 +28,7 @@ chai.use(chaiAsPromised);
 const url = "https://public-en-kairos.node.kaia.io";
 const priv = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 const gsrAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
+const routerAddress = "0x4b41783732810b731569e4d944f59372f411bea2";
 const walletAddress = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 const tokenAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
 const mainnetChainId = 8217;
@@ -115,31 +116,27 @@ describe("Gasless v6", () => {
   });
 
   describe("getGaslessSwapRouter", () => {
-    it("should return router for mainnet chain ID", async () => {
-      const router = await getGaslessSwapRouter(EP, mainnetChainId);
-      expect(router.address).to.equal(gsrAddress);
+    it("should return router from Registry", async () => {
+      const originalMock = EP.overrides["eth_call"];
+      EP.mock_override("eth_call", () => "0x0000000000000000000000004b41783732810b731569e4d944f59372f411bea2");
+      try {
+        const router = await getGaslessSwapRouter(EP);
+        expect(await router.getAddress()).to.equal("0x4b41783732810b731569E4d944F59372F411BEa2");
+      } finally {
+        EP.mock_override("eth_call", originalMock);
+      }
     });
 
-    it("should return router for kairos chain ID", async () => {
-      const router = await getGaslessSwapRouter(EP, kairosChainId);
-      expect(router.address).to.equal(gsrAddress);
-    });
-
-    it("should return router for local chain ID", async () => {
-      const router = await getGaslessSwapRouter(EP, localChainId);
-      expect(router.address).to.equal(gsrAddress);
-    });
-
-    it("should throw error for unsupported chain ID", () => {
-      expect(getGaslessSwapRouter(EP, unsupportedChainId)).to.be.rejectedWith("Chain ID 1234 is not supported by this SDK");
+    it("should return router with custom address", async () => {
+      const router = await getGaslessSwapRouter(EP, "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
+      expect(await router.getAddress()).to.equal("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
     });
 
     it("should throw error when GaslessSwapRouter is not set in the registry", () => {
       const originalMock = EP.overrides["eth_call"];
       EP.mock_override("eth_call", () => "0x0000000000000000000000000000000000000000000000000000000000000000");
-
       try {
-        expect(getGaslessSwapRouter(EP, mainnetChainId)).to.be.rejectedWith("There is no valid GaslessSwapRouter for the target chain");
+        expect(getGaslessSwapRouter(EP)).to.be.rejectedWith("GaslessSwapRouter not found in the registry");
       } finally {
         EP.mock_override("eth_call", originalMock);
       }

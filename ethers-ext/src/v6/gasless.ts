@@ -1,4 +1,4 @@
-import { JsonRpcApiProvider, assert, ethers, TransactionLike, MaxUint256 } from "ethers";
+import { JsonRpcApiProvider, assert, ethers, Contract, TransactionLike, MaxUint256 } from "ethers";
 
 import { GaslessSwapRouterAbi } from "./abi/GaslessSwapRouter.js";
 import { RegistryAbi } from "./abi/Registry.js";
@@ -52,35 +52,28 @@ export function getAmountRepay(approveRequired: boolean, gasPrice: number = 25):
  * @param address Override the address of the gasless swap router (optional)
  * @returns The gasless swap router contract
  */
-export async function getGaslessSwapRouter(provider: ethers.Provider, chainId: number, address?: string): Promise<any> {
-  let routerAddr: string;
-  if (!address) {
-    // Attempt to get the address from the KIP-149 registry
-    validateChainId(chainId);
+export async function getGaslessSwapRouter(provider: ethers.Provider, address?: string): Promise<Contract> {
+  let contractAddress: string;
+  if (!address) { // Read from the KIP-149 registry.
     const registry = new ethers.Contract(
       REGISTRY_ADDRESS,
       RegistryAbi,
       provider
     );
     const addr = await registry.getActiveAddr(GASLESS_SWAP_ROUTER_NAME);
-    if (addr === undefined || addr === null || addr === ethers.ZeroHash) {
-      throw new Error(`There is no GaslessSwapRouter registered in the target chain (chainId: ${chainId})`);
+    if (addr === undefined || addr === null || addr === ethers.ZeroAddress) {
+      throw new Error("GaslessSwapRouter not found in the registry");
     }
-    routerAddr = addr;
-  } else {
-    // Otherwise use specified address
-    routerAddr = address;
+    contractAddress = addr;
+  } else { // Use the custom address.
+    contractAddress = address;
   }
 
-  const contract = new ethers.Contract(
-    routerAddr,
+  return new ethers.Contract(
+    contractAddress,
     GaslessSwapRouterAbi.abi,
     provider
   );
-
-  const contractWithAddress = Object.assign(contract, { address: routerAddr });
-
-  return contractWithAddress;
 }
 
 /**
@@ -233,8 +226,8 @@ export async function getSwapTx(
 
     validateChainId(chainId);
 
-    const routerInfo = await getGaslessSwapRouter(provider, chainId);
-    const routerAddress = routerInfo.address;
+    const routerInfo = await getGaslessSwapRouter(provider);
+    const routerAddress = await routerInfo.getAddress();
 
     const currentBlock = await provider.getBlock("latest");
     if (!currentBlock) {
@@ -331,7 +324,7 @@ export async function isGaslessSupportedToken(
   chainId: number,
 ): Promise<boolean> {
   try {
-    const gsr = await getGaslessSwapRouter(provider, chainId);
+    const gsr = await getGaslessSwapRouter(provider);
 
     return await gsr.isTokenSupported(token);
   } catch (error) {
@@ -378,8 +371,8 @@ export async function isGaslessApprove(
     const amountData = "0x" + data.slice(74);
 
     // A3: spender is a whitelisted GaslessSwapRouter.
-    const router = await getGaslessSwapRouter(provider, chainId);
-    if (spenderData.toLowerCase() !== router.address.toLowerCase()) {
+    const router = await getGaslessSwapRouter(provider);
+    if (spenderData.toLowerCase() !== (await router.getAddress()).toLowerCase()) {
       return false;
     }
 
@@ -421,8 +414,8 @@ export async function isValidRouterAddress(
 ): Promise<boolean> {
   if (!txRequest.to) { return false; }
 
-  const router = await getGaslessSwapRouter(provider, chainId);
-  return txRequest.to.toLowerCase() === router.address.toLowerCase();
+  const router = await getGaslessSwapRouter(provider);
+  return txRequest.to.toLowerCase() === (await router.getAddress()).toLowerCase();
 }
 
 export function validateAndDecodeSwapFunction(data: string): {

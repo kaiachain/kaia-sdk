@@ -38,7 +38,7 @@ async function main() {
 
   // If sender hasn't approved, include ApproveTx first.
   const allowance = await token.methods.allowance(senderAddr, routerAddr).call();
-  const approveRequired = (allowance == 0n) || true;
+  const approveRequired = (allowance == 0n);
   const txs = [];
   if (approveRequired) {
     console.log("\nAdding ApproveTx because allowance is 0");
@@ -81,7 +81,7 @@ async function main() {
   );
   txs.push(swapTx);
 
-  console.log("\nSending transactions...");
+  console.log("\nSending transactions and waiting for them to be mined...");
   const signedTxs = [];
   const txHashes = []
   for (const tx of txs) {
@@ -91,7 +91,26 @@ async function main() {
     console.log(`- Tx signed: (nonce: ${tx.nonce}) ${signResult.transactionHash} ${signResult.rawTransaction}`);
   }
   const receipts = await web3.eth.sendSignedTransactions(signedTxs);
-  console.log(receipts);
+
+  console.log("\nListing the block's transactions related to the sender...");
+  const block = await web3.eth.getBlock(receipts[0].blockNumber);
+  const names = {
+    [senderAddr.toLowerCase()]: "sender",
+    [tokenAddr.toLowerCase()]: "token",
+    [routerAddr.toLowerCase()]: "router",
+  }
+  for (const txhash of block.transactions) {
+    const tx = await web3.eth.getTransaction(txhash);
+    const fromName = names[tx.from.toLowerCase()] || tx.from;
+    const toName = names[tx.to.toLowerCase()] || tx.to;
+    if (fromName != tx.from || toName != tx.to) {
+      console.log(`- Tx ${tx.hash}: ${fromName} => ${toName}`);
+    }
+  }
+
+  console.log(`\nFinal balance of the sender ${senderAddr}`);
+  console.log(`- ${web3.utils.fromWei(await web3.eth.getBalance(senderAddr), "ether")} KAIA`);
+  console.log(`- ${web3.utils.fromWei(await token.methods.balanceOf(senderAddr).call(), tokenDecimals)} ${tokenSymbol}`);
 }
 
 main();

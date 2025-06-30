@@ -1,4 +1,4 @@
-import Eth from "web3-eth";
+import Eth, { SendSignedTransactionEvents, SendTransactionOptions } from "web3-eth";
 import {
 	decodeLog,
 	decodeParameter,
@@ -27,9 +27,11 @@ import { ENS } from "web3-eth-ens";
 import { Iban } from "web3-eth-iban";
 import { Personal } from "web3-eth-personal";
 import { Net } from "web3-net";
-import { KeyStore, Bytes, Transaction } from "web3-types";
+import { KeyStore, Bytes, Transaction, TransactionReceipt, DataFormat } from "web3-types";
 
 import { KlaytnTypedTransaction } from "./accounts/klaytn_tx.js";
+import { GaslessSwapRouter } from "./gasless/gasless.js";
+import { Web3PromiEvent } from "web3";
 
 // Type analogous to web3-eth-accounts/src/types.ts:Web3Account
 // Designed for the "account object" returned by
@@ -90,6 +92,11 @@ export interface KlaytnWeb3EthInterface extends Eth {
 	};
 	accounts: KlaytnAccountsInterface;
 	personal: Personal;
+	sendSignedTransactions: (
+		transactions: Bytes[],
+		returnFormat: DataFormat,
+		options?: SendTransactionOptions,
+	) => Web3PromiEvent<TransactionReceipt[], SendSignedTransactionEvents<DataFormat>>;
 }
 
 // This is the type of KlaytnWeb3EthInterface.accounts
@@ -160,3 +167,7 @@ export type TypedTransaction =
 	| AccessListEIP2930Transaction // type 1
 	| FeeMarketEIP1559Transaction // type 2
 	| KlaytnTypedTransaction; // Klaytn TxTypes
+
+export interface KaiaWeb3GaslessInterface {
+	getGaslessSwapRouter: (address?: string) => Promise<GaslessSwapRouter>;
+}

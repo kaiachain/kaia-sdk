@@ -7,22 +7,18 @@
   </head>
   <body>
     <body>
-    
       <p><button id="btnConnectMM" onclick="connectMM()">Connect MetaMask</button></p>
       <p><button id="btnConnectKK" onclick="connectKK()">Connect Kaikas</button></p>
       <hr/>
       <p>
-        <button id="btnNetPrivate" onclick="switchPrivateNetwork()">Switch to Private Network</button>
+        <button id="btnNetBaobab" onclick="switchBaobab()">Switch to Kairos testnet</button>
       </p>
       <hr/>
-      <p>Dapp of Gasless Swap</p>
-      <p>TestToken (From): <input type="number" id="testTokenSwapAmount" size="15" onchange="calcTargetValue()"></p>
-      <p>KAIA (To): <text id="kaiaSwapAmount"></text></p>
+      <p>User input</p>
+      <p>Desired swap output: <input type="number" id="desiredKaiaAmount" size="10" value="0.01" /> KAIA</p>
+      <p>TestToken to pay (slippage 0.5%, including gas fee): <text id="amountIn"></text></p>
       <p>
-        <div>- Estimated Fee in KAIA: <text id="kaiaEstimateFee"></text></div>
-        <div>- Estimated Fee in TestToken: <text id="testTokenEstimateFee"></text></div>
-      </p>
-      <p>
+        <button id="btnEstimate" onclick="calcTargetValue()">Estimate</button>
         <button id="btnSendGaslessByMetamask" onclick="signAndSendGaslessTxs()">Request Swap (pay in TestToken)</button>
       </p>
       <hr/>
@@ -47,7 +43,7 @@
       <hr/>
       <div class="button-group">
         <button onclick="window.location.href='index.html'">Go to home</button>
-      </div> 
+      </div>
     </body>
 
     <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>

@@ -19,11 +19,16 @@ import { context_accounts } from "./accounts/index.js";
 import {
   context_getProtocolVersion,
   context_sendSignedTransaction,
+  context_sendSignedTransactions,
   context_sendTransaction,
   context_signTransaction,
 } from "./eth/index.js";
 
-import { KaiaWeb3EthInterface } from "./index.js";
+import {
+  KaiaWeb3EthInterface,
+  KaiaWeb3GaslessInterface,
+} from "./index.js";
+import { context_gasless } from "./gasless/index.js";
 
 
 // Follow the Web3 class from the web3/src/web3.ts
@@ -38,6 +43,9 @@ export class KlaytnWeb3
   // Properties analogous to Web3 class
   public utils: typeof utils;
   public eth: KaiaWeb3EthInterface;
+
+  // Additional namespaces
+  public gasless: KaiaWeb3GaslessInterface;
 
   // Additional RPC namespaces
   public admin: AsyncNamespaceApi;
@@ -71,12 +79,10 @@ export class KlaytnWeb3
 
     // Override web3.eth.accounts methods
     const accounts = context_accounts(this);
-
-    this.eth = {
-      ...this._web3.eth,
-      accounts: accounts
-    } as KaiaWeb3EthInterface;
-
+    this.eth = Object.assign(this._web3.eth, {
+      accounts: accounts,
+      sendSignedTransactions: context_sendSignedTransactions(this._web3),
+    });
     this._accountProvider = accounts as any; // inevitable conflict in signTransaction types
     this._wallet = accounts.wallet;
 
@@ -85,7 +91,11 @@ export class KlaytnWeb3
     this.eth.getProtocolVersion = context_getProtocolVersion(this._web3);
     this.eth.sendTransaction = context_sendTransaction(this._web3);
     this.eth.sendSignedTransaction = context_sendSignedTransaction(this._web3);
+    this.eth.sendSignedTransactions = context_sendSignedTransactions(this._web3);
     this.eth.signTransaction = context_signTransaction(this._web3);
+
+    // Attach additional namespaces.
+    this.gasless = context_gasless(this._web3, this.eth);
 
     // Attach additional RPC namespaces.
     const send = this.makeSendFunction();

@@ -7,7 +7,8 @@ var signedSwapTx = null;
 var contractAddress = "0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df";
 var contractCalldata = "0xd09de08a"; // function increment()
 
-var testTokenAddr = "0x8ebc32c078f5ecc8406ddDC785c8F0e2490C1081"
+var testTokenAddr = "0xcB00BA2cAb67A3771f9ca1Fa48FDa8881B457750"
+var routerAddress = "0x4b41783732810b731569e4d944f59372f411bea2"
 
 function isKaikas() {
   return provider && provider.provider.isKaikas;
@@ -55,11 +56,6 @@ async function connect(injectedProvider) {
     console.log("accounts changed", accounts);
     $("#textAccounts").html(accounts.map((a) => a.address));
   });
-
-  // Only start polling gas fee on gasless.html page
-  if (document.getElementById("testTokenSwapAmount")) {
-    startPollingGasFee();
-  }
 }
 async function connectMM() {
   $("text").html(""); // Clear all text
@@ -271,23 +267,19 @@ async function signAndSendGaslessTxs() {
     $("#kaiaBeforeSwap").html(`${ethers_ext.formatKaia(kaiaBeforeSwap)}`);
     $("#tokenBeforeSwap").html(`${ethers_ext.formatKaia(tokenBeforeSwap)}`);
 
-    const testTokenToSwap = document.getElementById('testTokenSwapAmount')
-    const testTokenToSwapBN = BigInt(ethers_ext.parseKaia(testTokenToSwap.value))
-
     // ------- prepare transactions -------
     const signer = await provider.getSigner(accounts[0].address);
-
-    const network = await signer.provider.getNetwork();
-    const chainId = Number(network.chainId);
-
-    const gsr = ethers_ext.gasless.getGaslessSwapRouter(provider, chainId);
+    const router = await ethers_ext.gasless.getGaslessSwapRouter(provider, routerAddress);
+    const routerAddr = await router.getAddress();
+    const gasPrice = (await provider.getFeeData()).gasPrice;
 
     // ------- send approve -------
     let approveTx = await ethers_ext.gasless.getApproveTx(
       provider,
       accounts[0].address,
       testTokenAddr,
-      gsr.address
+      routerAddr,
+      gasPrice,
     );
     console.log("approveTx", approveTx);
 
@@ -299,26 +291,26 @@ async function signAndSendGaslessTxs() {
     );
 
     // ------- send swap -------
-    const currentBlock = await provider.getBlock("latest");
-    const deadlineTimestamp = BigInt(currentBlock.timestamp) + 1800n;
-
-    const feeData = await provider.getFeeData();
-    const gasPriceGkei = Number(feeData.gasPrice) / 1e9;
-    const amountRepay = ethers_ext.gasless.getAmountRepay(true, gasPriceGkei);
-
-    const appTxFee = ethers.parseUnits("0.01", "ether").toString()
-    const commissionRateBasisPoints = await ethers_ext.gasless.getCommissionRate(gsr);
-    const minAmountOut = ethers_ext.gasless.getMinAmountOut(amountRepay, appTxFee, commissionRateBasisPoints)
+    const appTxFee = ethers.parseUnits(document.getElementById('desiredKaiaAmount').value, "ether");
+    console.log("appTxFee", appTxFee);
+    const amountRepay = ethers_ext.gasless.getAmountRepay(true, gasPrice);
+    console.log("amountRepay", amountRepay);
+    const minAmountOut = ethers_ext.gasless.getMinAmountOut(amountRepay, appTxFee, 0);
+    console.log("minAmountOut", minAmountOut);
+    const amountIn = await ethers_ext.gasless.getAmountIn(router, testTokenAddr, minAmountOut, 50);
+    console.log("amountIn", amountIn);
 
     let swapTx = await ethers_ext.gasless.getSwapTx(
       provider,
       accounts[0].address,
       testTokenAddr,
-      testTokenToSwapBN.toString(),
-      minAmountOut.toString(),
-      amountRepay.toString(),
-      false,
-      Number(deadlineTimestamp)
+      routerAddr,
+      amountIn,
+      minAmountOut,
+      amountRepay,
+      gasPrice,
+      true,
+      1800,
     );
     console.log("swapTx", swapTx);
 
@@ -330,7 +322,7 @@ async function signAndSendGaslessTxs() {
     );
 
     const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
-    await sleep(30000); // wait 30s
+    await sleep(10000); // wait 10s
 
     // ------- after swap -------
     const kaiaAfterSwap = await provider.getBalance(accounts[0].address);
@@ -342,28 +334,18 @@ async function signAndSendGaslessTxs() {
   }
 }
 
-function startPollingGasFee() {
-  setInterval(async () => {
-    const feeData = await provider.getFeeData();
-    alert(JSON.stringify(feeData));
-    const gasPriceGkei = Number(feeData.gasPrice) / 1e9;
-    
-    const totalFee = ethers_ext.gasless.getAmountRepay(true, gasPriceGkei);
-    const kaiaEstimateFee = totalFee;
-    const testTokenEstimateFee = totalFee;
-    
-    $("#kaiaEstimateFee").html(`${ethers_ext.formatKaia(kaiaEstimateFee)} KAIA`);
-    $("#testTokenEstimateFee").html(`${ethers_ext.formatKaia(testTokenEstimateFee)} TEST`);
-  }, 1000);
-}
-
 async function calcTargetValue() {
-  const testTokenToSwap = document.getElementById('testTokenSwapAmount')
-  const feeData = await provider.getFeeData();
-  const gasPriceGkei = Number(feeData.gasPrice) / 1e9;
+  const appTxFee = ethers.parseUnits(document.getElementById('desiredKaiaAmount').value, "ether");
+  console.log("desiredKaiaAmount", appTxFee);
+  const router = await ethers_ext.gasless.getGaslessSwapRouter(provider, routerAddress);
+  const gasPrice = (await provider.getFeeData()).gasPrice;
+  const amountRepay = ethers_ext.gasless.getAmountRepay(true, gasPrice);
+  console.log("amountRepay", amountRepay);
+  const minAmountOut = ethers_ext.gasless.getMinAmountOut(amountRepay, appTxFee, 0);
+  console.log("minAmountOut", minAmountOut);
+  const amountIn = await ethers_ext.gasless.getAmountIn(router, testTokenAddr, minAmountOut, 50);
+  console.log("amountIn", amountIn);
 
-  const totalFee = ethers_ext.gasless.getAmountRepay(true, gasPriceGkei)
-  const formattedTotalFee = ethers_ext.formatKaia(totalFee)
-  const kaiaSwapAmount = testTokenToSwap.value - formattedTotalFee
-  $("#kaiaSwapAmount").html(`${kaiaSwapAmount}`);
+  $("#kaiaEstimateFee").html(`${ethers_ext.formatKaia(amountRepay)}`);
+  $("#testTokenEstimateFee").html(`${ethers_ext.formatKaia(amountIn)}`);
 }

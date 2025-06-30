@@ -25,14 +25,15 @@ async function main() {
   const appTxFee = ethers.parseEther("0.01").toString();
 
   // Query the environment
+  console.log(`Using token at address: ${tokenAddr}`);
   const token = new ethers.Contract(tokenAddr, ERC20_ABI, provider);
   const tokenSymbol = await token.symbol();
   const tokenDecimals = await token.decimals();
-  console.log(`Using token at address: ${tokenAddr}`);
+  const tokenBalance = await token.balanceOf(senderAddr);
 
   console.log(`\nInitial balance of the sender ${senderAddr}`);
   console.log(`- ${ethers.formatEther(await provider.getBalance(senderAddr))} KAIA`);
-  console.log(`- ${ethers.formatUnits(await token.balanceOf(senderAddr), tokenDecimals)} ${tokenSymbol}`);
+  console.log(`- ${ethers.formatUnits(tokenBalance, tokenDecimals)} ${tokenSymbol}`);
 
   const router = await gasless.getGaslessSwapRouter(provider);
   const routerAddr = await router.getAddress();
@@ -76,6 +77,12 @@ async function main() {
   const slippageBps = 50 // 0.5%
   const amountIn = await gasless.getAmountIn(router, tokenAddr, minAmountOut, slippageBps);
   console.log(`- amountIn: ${ethers.formatUnits(amountIn, tokenDecimals)} ${tokenSymbol}`);
+
+  if (tokenBalance < amountIn) {
+    console.log(`\nInsufficient balance of the token: ${ethers.formatUnits(tokenBalance, tokenDecimals)} ${tokenSymbol}`);
+    console.log(`- Please transfer more ${tokenSymbol} to the sender ${senderAddr}`);
+    return;
+  }
 
   const swapTx = await gasless.getSwapTx(
     provider,

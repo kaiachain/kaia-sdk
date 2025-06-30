@@ -16,14 +16,15 @@ const ERC20_ABI = JSON.parse('[{"inputs":[],"name":"name","outputs":[{"internalT
 async function main() {
   const appTxFee = web3.utils.toWei("0.01", "ether");
 
+  console.log(`Using token at address: ${tokenAddr}`);
   const token = new web3.eth.Contract(ERC20_ABI, tokenAddr);
   const tokenSymbol = await token.methods.symbol().call();
   const tokenDecimals = parseInt(await token.methods.decimals().call());
-  console.log(`Using token at address: ${tokenAddr}`);
+  const tokenBalance = await token.methods.balanceOf(senderAddr).call();
 
   console.log(`\nInitial balance of the sender ${senderAddr}`);
   console.log(`- ${web3.utils.fromWei(await web3.eth.getBalance(senderAddr), "ether")} KAIA`);
-  console.log(`- ${web3.utils.fromWei(await token.methods.balanceOf(senderAddr).call(), tokenDecimals)} ${tokenSymbol}`);
+  console.log(`- ${web3.utils.fromWei(tokenBalance, tokenDecimals)} ${tokenSymbol}`);
 
   const router = await web3.gasless.getGaslessSwapRouter();
   const routerAddr = await router.options.address;
@@ -66,6 +67,12 @@ async function main() {
   const slippageBps = 50 // 0.5%
   const amountIn = await web3.gasless.getAmountIn(router, tokenAddr, minAmountOut, slippageBps);
   console.log(`- amountIn: ${web3.utils.fromWei(amountIn, tokenDecimals)} ${tokenSymbol}`);
+
+  if (tokenBalance < amountIn) {
+    console.log(`\nInsufficient balance of the token: ${web3.utils.fromWei(tokenBalance, tokenDecimals)} ${tokenSymbol}`);
+    console.log(`- Please transfer more ${tokenSymbol} to the sender ${senderAddr}`);
+    return;
+  }
 
   const swapTx = await web3.gasless.getSwapTx(
     senderAddr,

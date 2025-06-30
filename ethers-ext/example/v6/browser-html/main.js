@@ -345,7 +345,6 @@ async function signAndSendGaslessTxs() {
 function startPollingGasFee() {
   setInterval(async () => {
     const feeData = await provider.getFeeData();
-    // alert(JSON.stringify(feeData));
     const gasPriceGkei = Number(feeData.gasPrice) / 1e9;
     
     const totalFee = ethers_ext.gasless.getAmountRepay(true, gasPriceGkei);

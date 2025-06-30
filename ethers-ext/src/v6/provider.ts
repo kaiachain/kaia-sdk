@@ -164,12 +164,4 @@ export class Web3Provider extends EthersWeb3Provider {
   async signMessage(message: string): Promise<any> {
     return await this._sendFunction("eth_sign", [message]);
   }
-
-  async getNetwork(): Promise<any> {
-    return await this._sendFunction("net_version", []);
-  }
-
-  // async getFeeData(): Promise<any> {
-  //   return await this._sendFunction("eth_feeData", []);
-  // }
 }

@@ -43,7 +43,7 @@ async function connect(injectedProvider) {
 
   accounts = await provider.listAccounts(); // internally eth_accounts
   console.log("accounts", accounts);
-  $("#textAccounts").html(accounts.map(
+  $("#textAccount").html(accounts.map(
     (a, i) => {
       if (i == 0) {
         return a.address
@@ -53,7 +53,7 @@ async function connect(injectedProvider) {
   injectedProvider.on("accountsChanged", async (changedAccounts) => {
     accounts = changedAccounts;
     console.log("accounts changed", accounts);
-    $("#textAccounts").html(accounts.map((a) => a.address));
+    $("#textAccount").html(accounts.map((a) => a.address));
   });
 
   // Only start polling gas fee on gasless.html page
@@ -345,7 +345,7 @@ async function signAndSendGaslessTxs() {
 function startPollingGasFee() {
   setInterval(async () => {
     const feeData = await provider.getFeeData();
-    alert(JSON.stringify(feeData));
+    // alert(JSON.stringify(feeData));
     const gasPriceGkei = Number(feeData.gasPrice) / 1e9;
     
     const totalFee = ethers_ext.gasless.getAmountRepay(true, gasPriceGkei);

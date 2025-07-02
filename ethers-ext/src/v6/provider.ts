@@ -163,13 +163,10 @@ export class Web3Provider extends EthersWeb3Provider {
   }
 
   async estimateGas(tx: any): Promise<any> {
-    if (this.isMobile) {
-      if (!isHexString(tx.value)) {
-        tx.value = "0x" + BigInt(tx.value || 0).toString(16);
-      }
-      return await this._sendFunction("eth_estimateGas", [tx]);
+    if (!isHexString(tx.value)) {
+      tx.value = "0x" + BigInt(tx.value || 0).toString(16);
     }
-    return super.estimateGas(tx);
+    return await this._sendFunction("eth_estimateGas", [tx]);
   }
 
   async signMessage(message: string): Promise<any> {

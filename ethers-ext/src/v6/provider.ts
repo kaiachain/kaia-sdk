@@ -53,6 +53,7 @@ export class Web3Provider extends EthersWeb3Provider {
   personal: AsyncNamespaceApi;
   txpool: AsyncNamespaceApi;
   isKaikas?: boolean;
+  isMobile?: boolean;
   private _sendFunction: (method: string, params: any) => Promise<any>;
   
   constructor(provider: any, network?: any) {
@@ -66,23 +67,24 @@ export class Web3Provider extends EthersWeb3Provider {
     super(provider, network);
     //  temporary solution because this.provider is not receive isKaikas from provider
     this.provider.isKaikas = provider.isKaikas;
+    this.provider.isMobile = provider?.sendAsync && provider?.isMobile;
 
     const send = async (method: string, params: any = []) => {
+      if (provider.isKaikas) {
+        method = method.replace("eth_", "klay_");
+      }
+
       if (provider?.send) {
         return super.send(method, params);
-      } else if (provider?.sendAsync && provider?.isMobile) {
+      } else if (this.isMobile) {
         if (method === "wallet_switchEthereumChain") {
           method = "wallet_switchKlaytnChain";
         }
         if (method === "wallet_addEthereumChain") {
           method = "wallet_addKlaytnChain";
         }
-        if (method === "eth_sign") {
-          method = "klay_sign";
-        }
 
-        method = method.replace("eth_", "kaia_");
-        if (method === "kaia_requestAccounts" || method == "kaia_accounts") {
+        if (method.endsWith("_requestAccounts") || method.endsWith("_accounts")) {
           return provider?.enable();
         } else {
           return new Promise((resolve, reject) => {
@@ -146,12 +148,18 @@ export class Web3Provider extends EthersWeb3Provider {
     return accounts.map((a) => new JsonRpcSigner(this, a));
   }
 
-  async getTransaction(txhash: string): Promise<any> {
-    return await this._sendFunction("eth_getTransactionByHash", [txhash]);
-  }
+  // async getTransaction(txhash: string): Promise<any> {
+  //   if (this.isMobile) {
+  //     return await this._sendFunction("eth_getTransactionByHash", [txhash]);
+  //   }
+  //   return super.getTransaction(txhash);
+  // }
 
   async getTransactionCount(address: string): Promise<number> {
-    return await this._sendFunction("eth_getTransactionCount", [address]);
+    if (this.isMobile) {
+      return await this._sendFunction("eth_getTransactionCount", [address]);
+    }
+    return super.getTransactionCount(address);
   }
 
   async estimateGas(tx: any): Promise<any> {
@@ -165,11 +173,14 @@ export class Web3Provider extends EthersWeb3Provider {
     return await this._sendFunction("eth_sign", [message]);
   }
 
-  async getNetwork(): Promise<any> {
-    return await this._sendFunction("net_version", []);
+  async getGasPrice(): Promise<any> {
+    return await this._sendFunction("eth_gasPrice", []);
   }
 
-  // async getFeeData(): Promise<any> {
-  //   return await this._sendFunction("eth_feeData", []);
-  // }
+  async getFeeData(): Promise<any> {
+    if (this.isMobile) {
+      return { gasPrice: (await this.getGasPrice()) };
+    }
+    return super.getFeeData();
+  }
 }

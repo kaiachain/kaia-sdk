@@ -1,6 +1,6 @@
 {
   "name": "@kaiachain/ethers-ext",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "license": "MIT",
   "description": "ethers.js extension for kaia blockchain",
   "keywords": [
@@ -101,7 +101,7 @@
     "@ethersproject/transactions": "^5.7.0",
     "@ethersproject/wallet": "^5.7.0",
     "@ethersproject/web": "^5.7.1",
-    "@kaiachain/js-ext-core": "^2.0.7",
+    "@kaiachain/js-ext-core": "^2.0.8",
     "@kaiachain/web3rpc": "^2.0.0",
     "ethers": "^6.12.1",
     "lodash": "^4.17.21"

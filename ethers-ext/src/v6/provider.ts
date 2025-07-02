@@ -4,6 +4,7 @@ import {
   JsonRpcProvider as EthersJsonRpcProvider,
   BrowserProvider as EthersWeb3Provider,
   assert,
+  isHexString
 } from "ethers";
 
 import { asyncOpenApi, AsyncNamespaceApi } from "@kaiachain/js-ext-core";
@@ -52,14 +53,58 @@ export class Web3Provider extends EthersWeb3Provider {
   personal: AsyncNamespaceApi;
   txpool: AsyncNamespaceApi;
   isKaikas?: boolean;
+  isMobile?: boolean;
+  private _sendFunction: (method: string, params: any) => Promise<any>;
+  
   constructor(provider: any, network?: any) {
+    // Making window.klaytn to EIP1193 compatible request,chainId
+    if (!provider.request) {
+      provider.request = async (_method: any, _params: any) => {};
+    }
+    if (!provider.chainId) {
+      provider.chainId = undefined;
+    }
     super(provider, network);
     //  temporary solution because this.provider is not receive isKaikas from provider
     this.provider.isKaikas = provider.isKaikas;
+    this.provider.isMobile = provider?.sendAsync && provider?.isMobile;
 
-    const send = (method: string, params: any) => {
-      return this.send(method, params);
+    const send = async (method: string, params: any = []) => {
+      if (provider.isKaikas) {
+        method = method.replace("eth_", "klay_");
+      }
+
+      if (provider?.send) {
+        return super.send(method, params);
+      } else if (this.isMobile) {
+        if (method === "wallet_switchEthereumChain") {
+          method = "wallet_switchKlaytnChain";
+        }
+        if (method === "wallet_addEthereumChain") {
+          method = "wallet_addKlaytnChain";
+        }
+
+        if (method.endsWith("_requestAccounts") || method.endsWith("_accounts")) {
+          return provider?.enable();
+        } else {
+          return new Promise((resolve, reject) => {
+            provider.sendAsync({ method, params }, (err: any, result: any) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(result?.result || "");
+              }
+            });
+          });
+        }
+      } else {
+        throw new Error("Provider does not support sendAsync or send methods");
+      }
     };
+
+    // Store the send function for use in the override
+    this._sendFunction = send;
+
     const { AdminApi, DebugApi, GovernanceApi, KlayApi, NetApi, PersonalApi, TxpoolApi } = web3rpc
 
     this.admin = asyncOpenApi(send, AdminApi);
@@ -92,5 +137,50 @@ export class Web3Provider extends EthersWeb3Provider {
     }
 
     return Promise.resolve(new JsonRpcSigner(this, addressOrIndex));
+  }
+
+  override async send(method: string, params: Array<any> | Record<string, any>): Promise<any> {
+    return this._sendFunction(method, params);
+  }
+
+  override async listAccounts(): Promise<Array<JsonRpcSigner>> {
+    const accounts: Array<string> = await this.send("eth_accounts", []);
+    return accounts.map((a) => new JsonRpcSigner(this, a));
+  }
+
+  // async getTransaction(txhash: string): Promise<any> {
+  //   if (this.isMobile) {
+  //     return await this._sendFunction("eth_getTransactionByHash", [txhash]);
+  //   }
+  //   return super.getTransaction(txhash);
+  // }
+
+  async getTransactionCount(address: string): Promise<number> {
+    if (this.isMobile) {
+      return await this._sendFunction("eth_getTransactionCount", [address]);
+    }
+    return super.getTransactionCount(address);
+  }
+
+  async estimateGas(tx: any): Promise<any> {
+    if (!isHexString(tx.value)) {
+      tx.value = "0x" + BigInt(tx.value || 0).toString(16);
+    }
+    return await this._sendFunction("eth_estimateGas", [tx]);
+  }
+
+  async signMessage(message: string): Promise<any> {
+    return await this._sendFunction("eth_sign", [message]);
+  }
+
+  async getGasPrice(): Promise<any> {
+    return await this._sendFunction("eth_gasPrice", []);
+  }
+
+  async getFeeData(): Promise<any> {
+    if (this.isMobile) {
+      return { gasPrice: (await this.getGasPrice()) };
+    }
+    return super.getFeeData();
   }
 }

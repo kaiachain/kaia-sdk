@@ -114,7 +114,7 @@ describe("web3.eth", () => {
     P.mock_override("klay_sendRawTransaction", mockSendRawTransaction);
 
     // To test additional RPC namespaces
-    P.mock_override("admin_datadir", () => "/home/ubuntu/klaytn/data");
+    P.mock_override("admin_datadir", () => "/var/kend/data");
     P.mock_override("debug_isPProfRunning", () => false);
     P.mock_override("governance_idxCache", () => [0]);
     P.mock_override("klay_blockNumber", () => "0x64");
@@ -124,6 +124,11 @@ describe("web3.eth", () => {
     P.mock_override("txpool_status", () => {
       return { pending: 1, queued: 2 };
     });
+
+    // To Test eth RPC functions
+    P.mock_override("eth_getBalance", () => "0x246ddf97976680000"); // 42eth
+    P.mock_override("eth_gasPrice", () => "0x66720b300"); // 27.5gwei
+    P.mock_override("eth_maxPriorityFeePerGas", () => "0x59682f00"); // 1.5gwei
   });
 
   it("getProtocolVersion()", async () => {
@@ -133,7 +138,7 @@ describe("web3.eth", () => {
   });
 
   it("sendSignedTransaction()", async () => {
-    async function checkSend(W3: Web3, rawTx: string, receipt: Receipt) {
+    async function checkSend(W3: Web3 | KaiaWeb3, rawTx: string, receipt: Receipt) {
       let onSent: string = "";
       let onTxHash: string = "";
       let onRc: Receipt = {};
@@ -156,7 +161,7 @@ describe("web3.eth", () => {
   });
 
   it("additional RPC namespaces", async () => {
-    assert.deepEqual(await KW3.admin.datadir(), "/home/ubuntu/klaytn/data");
+    assert.deepEqual(await KW3.admin.datadir(), "/var/kend/data");
     assert.deepEqual(await KW3.debug.isPProfRunning(), false);
     assert.deepEqual(await KW3.governance.idxCache(), [0]);
     assert.deepEqual(await KW3.klay.blockNumber(), "0x64");
@@ -165,4 +170,28 @@ describe("web3.eth", () => {
     assert.deepEqual(await KW3.personal.listAccounts(), ["0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"]);
     assert.deepEqual(await KW3.txpool.status(), { pending: 1, queued: 2 });
   });
+
+  it("eth functions", async () => {
+    assert.deepEqual(await EW3.eth.getBalance("0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"), 42000000000000000000n);
+    assert.deepEqual(await KW3.eth.getBalance("0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266"), 42000000000000000000n);
+
+    // calculateFeeData returns {
+    //   gasPrice = eth_gasPrice
+    //   maxFeePerGas = baseFeePerGas * 2 + eth_maxPriorityFeePerGas
+    //   maxPriorityFeePerGas = eth_maxPriorityFeePerGas
+    //   baseFeePerGas = eth_getBlock(latest).baseFeePerGas
+    // }
+    assert.deepEqual(await EW3.eth.calculateFeeData(2n), {
+      gasPrice: 27500000000n,
+      maxFeePerGas: 51500000000n,
+      maxPriorityFeePerGas: 1500000000n,
+      baseFeePerGas: 25000000000n,
+    });
+    assert.deepEqual(await KW3.eth.calculateFeeData(2n), {
+      gasPrice: 27500000000n,
+      maxFeePerGas: 51500000000n,
+      maxPriorityFeePerGas: 1500000000n,
+      baseFeePerGas: 25000000000n,
+    });
+  })
 });

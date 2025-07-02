@@ -44,7 +44,7 @@ async function connect(injectedProvider) {
 
   accounts = await provider.listAccounts(); // internally eth_accounts
   console.log("accounts", accounts);
-  $("#textAccounts").html(accounts.map(
+  $("#textAccount").html(accounts.map(
     (a, i) => {
       if (i == 0) {
         return a.address
@@ -54,7 +54,7 @@ async function connect(injectedProvider) {
   injectedProvider.on("accountsChanged", async (changedAccounts) => {
     accounts = changedAccounts;
     console.log("accounts changed", accounts);
-    $("#textAccounts").html(accounts.map((a) => a.address));
+    $("#textAccount").html(accounts.map((a) => a.address));
   });
 }
 async function connectMM() {
@@ -282,13 +282,16 @@ async function signAndSendGaslessTxs() {
       gasPrice,
     );
     console.log("approveTx", approveTx);
-
-    const approveSentTx = await signer.sendTransaction(approveTx);
-    console.log("approveSentTx", approveSentTx.toJSON());
-    const approveTxhash = approveSentTx.hash;
-    $("#textApproveTxhash").html(
-      approveTxhash
-    );
+    try {
+      const approveSentTx = await signer.sendTransaction(approveTx);
+      console.log("approveSentTx", JSON.stringify(approveSentTx));
+      const approveTxhash = approveSentTx.hash;
+      $("#textApproveTxhash").html(
+        approveTxhash
+      );
+    } catch (err) {
+      console.error(err);
+    }
 
     // ------- send swap -------
     const appTxFee = ethers.parseUnits(document.getElementById('desiredKaiaAmount').value, "ether");
@@ -299,6 +302,9 @@ async function signAndSendGaslessTxs() {
     console.log("minAmountOut", minAmountOut);
     const amountIn = await ethers_ext.gasless.getAmountIn(router, testTokenAddr, minAmountOut, 50);
     console.log("amountIn", amountIn);
+
+    const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
+    await sleep(5000); // wait 5s
 
     let swapTx = await ethers_ext.gasless.getSwapTx(
       provider,
@@ -315,13 +321,12 @@ async function signAndSendGaslessTxs() {
     console.log("swapTx", swapTx);
 
     const swapSentTx = await signer.sendTransaction(swapTx);
-    console.log("swapSentTx", swapSentTx.toJSON());
+    console.log("swapSentTx", JSON.stringify(swapSentTx));
     const swapTxhash = swapSentTx.hash;
     $("#textSwapTxhash").html(
       swapTxhash
     );
 
-    const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
     await sleep(10000); // wait 10s
 
     // ------- after swap -------

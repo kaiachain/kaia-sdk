@@ -1,0 +1,248 @@
+openapi: "3.0.2"
+info:
+  title: KAIA OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /governance/status:
+    post:
+      operationId: status
+      summary: "governance_status"
+      description: |
+        Returns a summary of the block header-based governance status.
+
+        **JSONRPC:** `governance_status`
+
+      tags:
+        - governance
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  required:
+                    - method
+                  properties:
+                    method:
+                      type: string
+                      default: 'governance_status'
+
+      responses:
+        200:
+          description: Returns a summary of the block header-based governance status.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        description: Returns a summary of the block header-based governance status.
+                        required:
+                          - groupedVotes
+                          - governances
+                          - govHistory
+                          - nodeAddress
+                          - myVotes
+                        properties:
+                          groupedVotes:
+                            type: object
+                            description: Casted votes grouped by epoch
+                          governances:
+                            type: object
+                            description: Governance parameter changes after each parameter-changing epoch
+                          govHistory:
+                            type: object
+                            description: Governance parameter sets after each parameter-changing epoch
+                          nodeAddress:
+                            type: string
+                            description: The current node's address
+                          myVotes:
+                            type: array
+                            description: Votes cast by the current node
+                        example: {
+                          jsonrpc: "2.0",
+                          id: 1,
+                          result: {
+                            groupedVotes: {
+                              "138": {
+                                "83863326": {
+                                  "Voter": "0x99fb17d324fa0e07f23b49d09028ac0919414db6",
+                                  "Name": "governance.unitprice",
+                                  "Value": 750000000000
+                                }
+                              },
+                              "148": {
+                                "89983211": {
+                                  Voter: "0x99fb17d324fa0e07f23b49d09028ac0919414db6",
+                                  Name: "governance.unitprice",
+                                  Value: 250000000000
+                                }
+                              },
+                              "173": {
+                                "105193190": {
+                                  Voter: "0x99fb17d324fa0e07f23b49d09028ac0919414db6",
+                                  Name: "reward.mintingamount",
+                                  Value: 6400000000000000000
+                                },
+                                "105193221": {
+                                  Voter: "0x99fb17d324fa0e07f23b49d09028ac0919414db6",
+                                  Name: "reward.ratio",
+                                  Value: "50/40/10"
+                                }
+                              },
+                            },
+                            governances: {
+                              "0": {
+                                "governance.governancemode": "single",
+                                "governance.governingnode": "0x99fb17d324fa0e07f23b49d09028ac0919414db6",
+                                "governance.unitprice": 25000000000,
+                                "istanbul.committeesize": 22,
+                                "istanbul.epoch": 604800,
+                                "istanbul.policy": 2,
+                                "reward.deferredtxfee": true,
+                                "reward.minimumstake": "5000000",
+                                "reward.mintingamount": "9600000000000000000",
+                                "reward.proposerupdateinterval": 3600,
+                                "reward.ratio": "34/54/12",
+                                "reward.stakingupdateinterval": 86400,
+                                "reward.useginicoeff": true
+                              },
+                              "105235200": {
+                                "reward.mintingamount": "6400000000000000000",
+                                "reward.ratio": "50/40/10"
+                              },
+                              "84067200": {
+                                "governance.unitprice": 750000000000
+                              },
+                              "90115200": {
+                                "governance.unitprice": 250000000000
+                              }
+                            },
+                            govHistory: {
+                              "0": {
+                                GovernanceMode: "single",
+                                GoverningNode: "0x99fb17d324fa0e07f23b49d09028ac0919414db6",
+                                GovParamContract: "0x0000000000000000000000000000000000000000",
+                                CommitteeSize: 22,
+                                ProposerPolicy: 2,
+                                Epoch: 604800,
+                                Ratio: "34/54/12",
+                                Kip82Ratio: "20/80",
+                                StakingUpdateInterval: 86400,
+                                ProposerUpdateInterval: 3600,
+                                MintingAmount: 9600000000000000000,
+                                MinimumStake: 5000000,
+                                UseGiniCoeff: true,
+                                DeferredTxFee: true,
+                                LowerBoundBaseFee: 25000000000,
+                                UpperBoundBaseFee: 750000000000,
+                                GasTarget: 30000000,
+                                MaxBlockGasUsedForBaseFee: 60000000,
+                                BaseFeeDenominator: 20,
+                                DeriveShaImpl: 0,
+                                UnitPrice: 25000000000
+                              },
+                              "105235200": {
+                                GovernanceMode: "single",
+                                GoverningNode: "0x99fb17d324fa0e07f23b49d09028ac0919414db6",
+                                GovParamContract: "0x0000000000000000000000000000000000000000",
+                                CommitteeSize: 22,
+                                ProposerPolicy: 2,
+                                Epoch: 604800,
+                                Ratio: "50/40/10",
+                                Kip82Ratio: "20/80",
+                                StakingUpdateInterval: 86400,
+                                ProposerUpdateInterval: 3600,
+                                MintingAmount: 6400000000000000000,
+                                MinimumStake: 5000000,
+                                UseGiniCoeff: true,
+                                DeferredTxFee: true,
+                                LowerBoundBaseFee: 25000000000,
+                                UpperBoundBaseFee: 750000000000,
+                                GasTarget: 30000000,
+                                MaxBlockGasUsedForBaseFee: 60000000,
+                                BaseFeeDenominator: 20,
+                                DeriveShaImpl: 0,
+                                UnitPrice: 250000000000
+                              },
+                              "84067200": {
+                                GovernanceMode: "single",
+                                GoverningNode: "0x99fb17d324fa0e07f23b49d09028ac0919414db6",
+                                GovParamContract: "0x0000000000000000000000000000000000000000",
+                                CommitteeSize: 22,
+                                ProposerPolicy: 2,
+                                Epoch: 604800,
+                                Ratio: "34/54/12",
+                                Kip82Ratio: "20/80",
+                                StakingUpdateInterval: 86400,
+                                ProposerUpdateInterval: 3600,
+                                MintingAmount: 9600000000000000000,
+                                MinimumStake: 5000000,
+                                UseGiniCoeff: true,
+                                DeferredTxFee: true,
+                                LowerBoundBaseFee: 25000000000,
+                                UpperBoundBaseFee: 750000000000,
+                                GasTarget: 30000000,
+                                MaxBlockGasUsedForBaseFee: 60000000,
+                                BaseFeeDenominator: 20,
+                                DeriveShaImpl: 0,
+                                UnitPrice: 750000000000
+                              },
+                              "90115200": {
+                                GovernanceMode: "single",
+                                GoverningNode: "0x99fb17d324fa0e07f23b49d09028ac0919414db6",
+                                GovParamContract: "0x0000000000000000000000000000000000000000",
+                                CommitteeSize: 22,
+                                ProposerPolicy: 2,
+                                Epoch: 604800,
+                                Ratio: "34/54/12",
+                                Kip82Ratio: "20/80",
+                                StakingUpdateInterval: 86400,
+                                ProposerUpdateInterval: 3600,
+                                MintingAmount: 9600000000000000000,
+                                MinimumStake: 5000000,
+                                UseGiniCoeff: true,
+                                DeferredTxFee: true,
+                                LowerBoundBaseFee: 25000000000,
+                                UpperBoundBaseFee: 750000000000,
+                                GasTarget: 30000000,
+                                MaxBlockGasUsedForBaseFee: 60000000,
+                                BaseFeeDenominator: 20,
+                                DeriveShaImpl: 0,
+                                UnitPrice: 250000000000
+                              }
+                            },
+                            nodeAddress: "0x5bffb145129d707b65dd03911d73e79e482c35d1",
+                            myVotes: []
+                          }
+                        }
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../code-samples/curl/governance/status.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../code-samples/java/src/main/java/opensdk/sdk/apis/governance/GovernanceStatusExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../code-samples/javascript/governance/status.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../code-samples/python/governance/status.py"

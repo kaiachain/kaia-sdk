@@ -15,7 +15,9 @@ paths:
       operationId: getRewardsAccumulated
       summary: "governance_getRewardsAccumulated"
       description: |
-        The API returns accumulated reward information in a given block range ( between firstBlock and lastBlock).
+        Returns the accumulated block rewards distribution in the given block number range. This is essentially a sum of kaia_getRewards outputs.
+
+        **NOTE**: Prior to Kaia v2.0.0, the firstBlockTime and lastBlockTime fields were human-readable time string. In Kaia v2.0.0 or later, the fields are unix timestamps.
 
         **JSONRPC:** `governance_getRewardsAccumulated`
 
@@ -23,17 +25,17 @@ paths:
         - governance
 
       parameters:
-        - name: firstBlock
+        - name: first
           required: true
           schema:
-            $ref: "../../components/schemas/common/Common.yaml#/components/schemas/IntegerBlockNumber"
-          description: First block
+            $ref: "../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+          description: First block of the range, inclusive.
           in: query
-        - name: lastBlock
+        - name: last
           required: true
           schema:
-            $ref: "../../components/schemas/common/Common.yaml#/components/schemas/IntegerBlockNumber"
-          description: Last block
+            $ref: "../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrHashOrTag"
+          description: Last block of the range, inclusive.
           in: query
 
       requestBody:
@@ -65,7 +67,7 @@ paths:
 
       responses:
         200:
-          description: Accumulated reward information in a given block range
+          description: Returns the accumulated reward distribution details.
           content:
             application/json:
               schema:

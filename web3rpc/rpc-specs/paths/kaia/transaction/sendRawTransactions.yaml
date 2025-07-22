@@ -1,0 +1,100 @@
+openapi: "3.0.2"
+info:
+  title: KAIA OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/transaction/sendRawTransactions:
+    post:
+      operationId: .sendRawTransactions
+      summary: "[Transaction] kaia_sendRawTransactions"
+      description: |
+        Send multiple signed RLP-encoded transactions. It can be useful when an RLP endpoint is actually load-balancing to multiple nodes, and the user needs to make sure that multiple transactions are sent to the same node. Important when you send [KIP-245](https://github.com/kaiachain/kips/blob/main/KIPs/kip-245.md) bundled transactions.
+
+        **NOTE:** If you deployed a contract, use kaia_getTransactionReceipt to get the contract address.
+
+        **JSONRPC:** `kaia_sendRawTransactions`
+
+      tags:
+        - kaia
+
+      parameters:
+        - name: singedTransactionData
+          required: true
+          schema:
+            type: string
+            format: DATA
+          description: The signed transaction data.
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaSendRawTransactionsReq"
+
+      responses:
+        200:
+          description: Returns the array of transaction hashes.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: array
+                        format: 32-byte DATA
+                        description: "Returns the array of transaction hashes."
+                        example: [
+                          "0x6f2b444a031f5932d013abbaead8d6058832b4f23c8dcad65f482295f87ab11c",
+                          "0xf66f892efee21847b3686d325234f15e7de0bdde38d607493bda2ae0767e10e3"
+                        ]
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/transaction/sendRawTransactions.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/transaction/KaiaSendRawTransactionsExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/transaction/sendRawTransactions.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/transaction/sendRawTransactions.py"
+
+components:
+  schemas:
+    KaiaSendRawTransactionsReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_sendRawTransactions'
+        params:
+          type: array
+          description: An array of one or more signed transaction data.
+          items:
+            type: string
+            format:  DATA
+            title: SingedTransactionData
+            description: An array of one or more signed transaction data.
+          example:  ["0x01f8ae8203e98085066720b300830186a094cb00ba2cab67a3771f9ca1fa48fda8881b45775080b844095ea7b30000000000000000000000004b41783732810b731569e4d944f59372f411bea2ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc080a0a288a06b1f6dc556e9e651d30cc8b985e58ecb418facb9666d5c49af5f4331f7a04068642611bf8f99d31e61e4386cc91130d3b55c386ec97b02a9c98d01aa61af", "0xf9010c0585066720b3008307a120944b41783732810b731569e4d944f59372f411bea280b8a480426901000000000000000000000000cb00ba2cab67a3771f9ca1fa48fda8881b457750000000000000000000000000000000000000000000000000494a02fda18ed1ce0000000000000000000000000000000000000000000000004596784b50f8f8000000000000000000000000000000000000000000000000000032e6c90c04f80000000000000000000000000000000000000000000000000000000000683570348207f5a01ea30dd90c2b2938c664236c910b0ee41e9fa949c4917e726b91a1c543095304a07afd83df326fbe3f0a305433139165d5b3872378e1a9129bc3ab3ab68da186a2"]

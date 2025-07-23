@@ -1,0 +1,107 @@
+openapi: "3.0.2"
+info:
+  title: KAIA OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /debug/inspection/isGaslessTx:
+    post:
+      operationId: isGaslessTx
+      summary: "[Inspection] debug_isGaslessTx"
+      description: |
+        Determine if the given raw transaction(s) are executable [KIP-247](https://kips.kaia.io/KIPs/kip-247) gasless transactions.
+
+        **JSONRPC:** `debug_isGaslessTx`
+
+      tags:
+        - debug
+
+      parameters:
+        - name: signedTransactionData
+          required: true
+          schema:
+            type: array
+          description: An array of one or more signed transaction data.
+          in: query
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/DebugIsGaslessTxReq"
+
+      responses:
+        200:
+          description: Returns if the transaction bundle is executable. If not, return the reason.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: object
+                        description: "Returns if the transaction bundle is executable. If not, return the reason."
+                        properties:
+                          isGasless:
+                            type: boolean
+                            description: "True if the transaction bundle is executable, false otherwise."
+                          reason:
+                            type: string
+                            description: "Reason why the transaction bundle is not executable, if applicable."
+                        example: {
+                          "jsonrpc": "2.0",
+                          "id": 1,
+                          "result": {
+                            "isGasless": false,
+                            "reason": "first transaction is not an approve transaction"
+                          }
+                        }
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/debug/inspection/isGaslessTx.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/debug/inspection/DebugIsGaslessTxExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/debug/inspection/isGaslessTx.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/debug/inspection/isGaslessTx.py"
+
+components:
+  schemas:
+    DebugIsGaslessTxReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'debug_isGaslessTx'
+        params:
+          type: array
+          description: An array of one or more signed transaction data.
+          items:
+            type: string
+            format: <DATA[]>
+            title: SignedTransactionData
+            description: An array of one or more signed transaction data.
+          example: ["0x01f8ae8203e98085066720b300830186a094cb00ba2cab67a3771f9ca1fa48fda8881b45775080b844095ea7b30000000000000000000000004b41783732810b731569e4d944f59372f411bea2ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc080a0a288a06b1f6dc556e9e651d30cc8b985e58ecb418facb9666d5c49af5f4331f7a04068642611bf8f99d31e61e4386cc91130d3b55c386ec97b02a9c98d01aa61af", "0xf9010c0585066720b3008307a120944b41783732810b731569e4d944f59372f411bea280b8a480426901000000000000000000000000cb00ba2cab67a3771f9ca1fa48fda8881b457750000000000000000000000000000000000000000000000000494a02fda18ed1ce0000000000000000000000000000000000000000000000004596784b50f8f8000000000000000000000000000000000000000000000000000032e6c90c04f80000000000000000000000000000000000000000000000000000000000683570348207f5a01ea30dd90c2b2938c664236c910b0ee41e9fa949c4917e726b91a1c543095304a07afd83df326fbe3f0a305433139165d5b3872378e1a9129bc3ab3ab68da186a2"]

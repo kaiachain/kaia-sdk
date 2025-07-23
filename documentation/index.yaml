@@ -50,6 +50,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/kaia/account/isContractAccount.yaml#/paths/~1kaia~1account~1isContractAccount
   /kaia/account/sign:
     $ref: ../web3rpc/rpc-specs/paths/kaia/account/sign.yaml#/paths/~1kaia~1account~1sign
+  /kaia/account/getStorageAt:
+    $ref: ../web3rpc/rpc-specs/paths/kaia/account/getStorageAt.yaml#/paths/~1kaia~1account~1getStorageAt
 
   # kaia/block
   /kaia/block/blockNumber:
@@ -84,8 +86,6 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/kaia/block/getHeaderByNumber.yaml#/paths/~1kaia~1block~1getHeaderByNumber
   /kaia/block/getRewards:
     $ref: ../web3rpc/rpc-specs/paths/kaia/block/getRewards.yaml#/paths/~1kaia~1block~1getRewards
-  /kaia/block/getStorageAt:
-    $ref: ../web3rpc/rpc-specs/paths/kaia/block/getStorageAt.yaml#/paths/~1kaia~1block~1getStorageAt
   /kaia/block/syncing:
     $ref: ../web3rpc/rpc-specs/paths/kaia/block/syncing.yaml#/paths/~1kaia~1block~1syncing
 
@@ -124,6 +124,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/kaia/transaction/resend.yaml#/paths/~1kaia~1transaction~1resend
   /kaia/transaction/sendRawTransaction:
     $ref: ../web3rpc/rpc-specs/paths/kaia/transaction/sendRawTransaction.yaml#/paths/~1kaia~1transaction~1sendRawTransaction
+  /kaia/transaction/sendRawTransactions:
+    $ref: ../web3rpc/rpc-specs/paths/kaia/transaction/sendRawTransactions.yaml#/paths/~1kaia~1transaction~1sendRawTransactions
   /kaia/transaction/sendTransaction:
     $ref: ../web3rpc/rpc-specs/paths/kaia/transaction/sendTransaction.yaml#/paths/~1kaia~1transaction~1sendTransaction
   /kaia/transaction/sendTransactionAsFeePayer:
@@ -146,6 +148,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/getChainConfig.yaml#/paths/~1kaia~1configuration~1getChainConfig
   /kaia/configuration/isParallelDBWrite:
     $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/isParallelDBWrite.yaml#/paths/~1kaia~1configuration~1isParallelDBWrite
+  /kaia/configuration/isConsoleLogEnabled:
+    $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/isConsoleLogEnabled.yaml#/paths/~1kaia~1configuration~1isConsoleLogEnabled
   /kaia/configuration/isSenderTxHashIndexingEnabled:
     $ref: ../web3rpc/rpc-specs/paths/kaia/configuration/isSenderTxHashIndexingEnabled.yaml#/paths/~1kaia~1configuration~1isSenderTxHashIndexingEnabled
   /kaia/configuration/protocolVersion:
@@ -200,6 +204,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/kaia/miscellaneous/getProof.yaml#/paths/~1kaia~1miscellaneous~1getProof
   /kaia/miscellaneous/getTotalSupply:
     $ref: ../web3rpc/rpc-specs/paths/kaia/miscellaneous/getTotalSupply.yaml#/paths/~1kaia~1miscellaneous~1getTotalSupply
+  /kaia/miscellaneous/getBlsInfos:
+    $ref: ../web3rpc/rpc-specs/paths/kaia/miscellaneous/getBlsInfos.yaml#/paths/~1kaia~1miscellaneous~1getBlsInfos
 
   # klay/account
   /klay/account/accountCreated:
@@ -224,6 +230,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/klay/account/isContractAccount.yaml#/paths/~1klay~1account~1isContractAccount
   /klay/account/sign:
     $ref: ../web3rpc/rpc-specs/paths/klay/account/sign.yaml#/paths/~1klay~1account~1sign
+  /klay/account/getStorageAt:
+    $ref: ../web3rpc/rpc-specs/paths/klay/account/getStorageAt.yaml#/paths/~1klay~1account~1getStorageAt
 
   # klay/block
   /klay/block/blockNumber:
@@ -258,8 +266,6 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/klay/block/getHeaderByNumber.yaml#/paths/~1klay~1block~1getHeaderByNumber
   /klay/block/getRewards:
     $ref: ../web3rpc/rpc-specs/paths/klay/block/getRewards.yaml#/paths/~1klay~1block~1getRewards
-  /klay/block/getStorageAt:
-    $ref: ../web3rpc/rpc-specs/paths/klay/block/getStorageAt.yaml#/paths/~1klay~1block~1getStorageAt
   /klay/block/syncing:
     $ref: ../web3rpc/rpc-specs/paths/klay/block/syncing.yaml#/paths/~1klay~1block~1syncing
 
@@ -298,6 +304,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/klay/transaction/resend.yaml#/paths/~1klay~1transaction~1resend
   /klay/transaction/sendRawTransaction:
     $ref: ../web3rpc/rpc-specs/paths/klay/transaction/sendRawTransaction.yaml#/paths/~1klay~1transaction~1sendRawTransaction
+  /klay/transaction/sendRawTransactions:
+    $ref: ../web3rpc/rpc-specs/paths/klay/transaction/sendRawTransactions.yaml#/paths/~1klay~1transaction~1sendRawTransactions
   /klay/transaction/sendTransaction:
     $ref: ../web3rpc/rpc-specs/paths/klay/transaction/sendTransaction.yaml#/paths/~1klay~1transaction~1sendTransaction
   /klay/transaction/sendTransactionAsFeePayer:
@@ -316,6 +324,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/klay/configuration/getChainConfig.yaml#/paths/~1klay~1configuration~1getChainConfig
   /klay/configuration/isParallelDBWrite:
     $ref: ../web3rpc/rpc-specs/paths/klay/configuration/isParallelDBWrite.yaml#/paths/~1klay~1configuration~1isParallelDBWrite
+  /klay/configuration/isConsoleLogEnabled:
+    $ref: ../web3rpc/rpc-specs/paths/klay/configuration/isConsoleLogEnabled.yaml#/paths/~1klay~1configuration~1isConsoleLogEnabled
   /klay/configuration/isSenderTxHashIndexingEnabled:
     $ref: ../web3rpc/rpc-specs/paths/klay/configuration/isSenderTxHashIndexingEnabled.yaml#/paths/~1klay~1configuration~1isSenderTxHashIndexingEnabled
   /klay/configuration/protocolVersion:
@@ -391,6 +401,8 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/eth/account/getTransactionCount.yaml#/paths/~1eth~1account~1getTransactionCount
   /eth/account/sign:
     $ref: ../web3rpc/rpc-specs/paths/eth/account/sign.yaml#/paths/~1eth~1account~1sign
+  /eth/account/getStorageAt:
+    $ref: ../web3rpc/rpc-specs/paths/eth/account/getStorageAt.yaml#/paths/~1eth~1account~1getStorageAt
 
   # eth/block
   /eth/block/blockNumber:
@@ -407,8 +419,6 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/eth/block/getHeaderByHash.yaml#/paths/~1eth~1block~1getHeaderByHash
   /eth/block/getHeaderByNumber:
     $ref: ../web3rpc/rpc-specs/paths/eth/block/getHeaderByNumber.yaml#/paths/~1eth~1block~1getHeaderByNumber
-  /eth/block/getStorageAt:
-    $ref: ../web3rpc/rpc-specs/paths/eth/block/getStorageAt.yaml#/paths/~1eth~1block~1getStorageAt
   /eth/block/getUncleByBlockHashAndIndex:
     $ref: ../web3rpc/rpc-specs/paths/eth/block/getUncleByBlockHashAndIndex.yaml#/paths/~1eth~1block~1getUncleByBlockHashAndIndex
   /eth/block/getUncleByBlockNumberAndIndex:
@@ -576,6 +586,12 @@ paths:
   /debug/logging/vmodule:
     $ref: ../web3rpc/rpc-specs/paths/debug/logging/vmodule.yaml#/paths/~1debug~1logging~1vmodule
 
+  # debug/inspection:
+  /debug/inspection/isGaslessTx:
+    $ref: ../web3rpc/rpc-specs/paths/debug/inspection/isGaslessTx.yaml#/paths/~1debug~1inspection~1isGaslessTx
+  /debug/inspection/gaslessInfo:
+    $ref: ../web3rpc/rpc-specs/paths/debug/inspection/gaslessInfo.yaml#/paths/~1debug~1inspection~1gaslessInfo
+
   # debug/blockchainInspection:
   /debug/others/chaindbCompact:
     $ref: ../web3rpc/rpc-specs/paths/debug/others/chaindbCompact.yaml#/paths/~1debug~1others~1chaindbCompact
@@ -718,6 +734,10 @@ paths:
     $ref: ../web3rpc/rpc-specs/paths/governance/vote.yaml#/paths/~1governance~1vote
   /governance/votes:
     $ref: ../web3rpc/rpc-specs/paths/governance/votes.yaml#/paths/~1governance~1votes
+  /governance/status:
+    $ref: ../web3rpc/rpc-specs/paths/governance/status.yaml#/paths/~1governance~1status
+  /governance/getRewardsAccumulated:
+    $ref: ../web3rpc/rpc-specs/paths/governance/getRewardsAccumulated.yaml#/paths/~1governance~1getRewardsAccumulated
 
   # admin
   /admin/addPeer:

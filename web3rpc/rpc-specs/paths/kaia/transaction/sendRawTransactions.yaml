@@ -25,11 +25,10 @@ paths:
         - kaia
 
       parameters:
-        - name: singedTransactionData
+        - name: signedTransactionData
           required: true
           schema:
-            type: string
-            format: DATA
+            type: array
           description: The signed transaction data.
           in: query
 
@@ -51,6 +50,13 @@ paths:
                   - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
                   - type: object
                     properties:
+                      jsonrpc:
+                        type: string
+                        example: "2.0"
+                      id:
+                        type: integer
+                        format: int64
+                        example: 1
                       result:
                         type: array
                         format: 32-byte DATA

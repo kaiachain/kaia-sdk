@@ -23,11 +23,10 @@ paths:
         - debug
 
       parameters:
-        - name: singedTransactionData
+        - name: signedTransactionData
           required: true
           schema:
             type: array
-            format: <DATA[]>
           description: An array of one or more signed transaction data.
           in: query
 

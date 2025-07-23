@@ -12,7 +12,7 @@ servers:
 paths:
   /governance/status:
     post:
-      operationId: status
+      operationId: governanceStatus
       summary: "governance_status"
       description: |
         Returns a summary of the block header-based governance status.
@@ -46,6 +46,13 @@ paths:
                   - $ref: "../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
                   - type: object
                     properties:
+                      jsonrpc:
+                        type: string
+                        example: "2.0"
+                      id:
+                        type: integer
+                        format: int64
+                        example: 1
                       result:
                         type: object
                         description: Returns a summary of the block header-based governance status.

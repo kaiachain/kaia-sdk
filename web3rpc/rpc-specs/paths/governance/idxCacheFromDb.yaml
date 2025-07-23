@@ -15,6 +15,8 @@ paths:
       operationId: idxCacheFromDb
       summary: "governance_idxCacheFromDb"
       description: |
+        **NOTE**: This API is no longer supported in Kaia v2.0.0 or later. Use kaia_getChainConfig, kaia_getParams, and  governance_status instead.
+
         The idxCacheFromDb returns an array that contains all block numbers on which a governance change ever happened. The result of idxCacheFromDb is the same or longer than that of idxCache
 
         **JSONRPC:** `governance_idxCacheFromDb`

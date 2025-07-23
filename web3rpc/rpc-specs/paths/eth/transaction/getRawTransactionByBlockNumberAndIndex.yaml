@@ -45,7 +45,7 @@ paths:
 
       responses:
         200:
-          description: Returns the bytes of the transaction for the given block number and index.
+          description: Returns the bytes of the raw RLP-encoded transaction, or an empty hex string when no transaction was found.
           content:
             application/json:
               schema:

@@ -16,6 +16,8 @@ paths:
       summary: "[Filter] eth_getLogs"
       description: |
         Returns an array of all logs matching a given filter object.
+
+        **NOTE**: In Kaia v2.0.0 or later, the pending blocks are not captured by this API. The "pending" block argument will be treated as the "latest" block.
         
         The execution of this API can be limited by two node configurations to manage resources of Kaia node safely.
         

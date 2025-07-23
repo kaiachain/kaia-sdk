@@ -1,0 +1,67 @@
+openapi: "3.0.2"
+info:
+  title: KAIA OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/configuration/isConsoleLogEnabled:
+    post:
+      operationId: .isConsoleLogEnabled
+      summary: "[Configuration] kaia_isConsoleLogEnabled"
+      description: |
+        Returns true if the current node has the console.log debugging feature enabled. The feature is only enabled if you run the node with specific flag which is disabled by default.
+
+        **JSONRPC:** `kaia_isConsoleLogEnabled`
+      tags:
+        - kaia
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - type: object
+                  properties:
+                    method:
+                      type: string
+                      default: "kaia_isConsoleLogEnabled"
+
+      responses:
+        200:
+          description: Returns true if the node has enabled the console.log debugging feature.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - type: object
+                    properties:
+                      result:
+                        type: boolean
+                        description: "Returns true if the node has enabled the console.log debugging feature."
+                        example: true
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/configuration/isConsoleLogEnabled.sh"
+        - lang: "Java"
+          label: "Java"
+          source:
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/configuration/KaiaIsConsoleLogEnabledExample.java"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/configuration/isConsoleLogEnabled.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/configuration/isConsoleLogEnabled.py"

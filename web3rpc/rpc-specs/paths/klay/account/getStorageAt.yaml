@@ -10,18 +10,18 @@ servers:
   - url: http://localhost:7151
 
 paths:
-  /kaia/block/getStorageAt:
+  /klay/account/getStorageAt:
     post:
-      operationId: .getStorageAt
-      summary: "[Block] kaia_getStorageAt"
+      operationId: getStorageAt
+      summary: "[Account] klay_getStorageAt"
       description: |
         Returns the value from a storage position at a given address.
 
         **NOTE:** *In versions earlier than Kaia v1.7.0, only integer block number, the string "earliest" and "latest" are available.*
 
-        **JSONRPC:** `kaia_getStorageAt`
+        **JSONRPC:** `klay_getStorageAt`
       tags:
-        - kaia
+        - klay
 
       parameters:
         - name: storageAddress
@@ -51,7 +51,7 @@ paths:
             schema:
               allOf:
                 - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
-                - $ref: "#/components/schemas/KaiaGetStorageAtReq"
+                - $ref: "#/components/schemas/KlayGetStorageAtReq"
 
       responses:
         200:
@@ -73,23 +73,23 @@ paths:
         - lang: "Shell"
           label: "Curl"
           source:
-            $ref: "../../../code-samples/curl/kaia/block/getStorageAt.sh"
+            $ref: "../../../code-samples/curl/klay/account/getStorageAt.sh"
         - lang: "Java"
           label: "Java"
           source:
-            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/kaia/block/KaiaGetStorageAtExample.java"
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/klay/account/KlayGetStorageAtExample.java"
         - lang: "JavaScript"
           label: "Javascript"
           source:
-            $ref: "../../../code-samples/javascript/kaia/block/getStorageAt.js"
+            $ref: "../../../code-samples/javascript/klay/account/getStorageAt.js"
         - lang: "Python"
           label: "Python"
           source:
-            $ref: "../../../code-samples/python/kaia/block/getStorageAt.py"
+            $ref: "../../../code-samples/python/klay/account/getStorageAt.py"
 
 components:
   schemas:
-    KaiaGetStorageAtReq:
+    KlayGetStorageAtReq:
       type: object
       required:
         - method
@@ -97,7 +97,7 @@ components:
       properties:
         method:
           type: string
-          default: 'kaia_getStorageAt'
+          default: 'klay_getStorageAt'
         params:
           type: array
           items:

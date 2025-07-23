@@ -15,6 +15,8 @@ paths:
       operationId: chainConfig
       summary: "governance_chainConfig"
       description: |
+        **NOTE**: This API is no longer supported in Kaia v2.0.0 or later. Use kaia_getChainConfig, kaia_getParams, and  governance_status instead.
+
         The chainConfig property provides the latest chain configuration. This is equivalent to chainConfigAt() with an empty parameter.
 
         **NOTE:** In versions earlier than Kaia v1.10.0, this API returned the initial chain configuration. However, due to its confusing name, it is updated since Kaia v1.10.0. To query the initial chain configuration, use chainConfigAt(0) instead.

@@ -10,10 +10,10 @@ servers:
   - url: http://localhost:7151
 
 paths:
-  /eth/block/getStorageAt:
+  /eth/account/getStorageAt:
     post:
       operationId: getStorageAt
-      summary: "[Block] eth_getStorageAt"
+      summary: "[Account] eth_getStorageAt"
       description: |
         Returns the value from a storage position at a given address
 
@@ -65,19 +65,19 @@ paths:
         - lang: "Shell"
           label: "Curl"
           source:
-            $ref: "../../../code-samples/curl/eth/block/getStorageAt.sh"
+            $ref: "../../../code-samples/curl/eth/account/getStorageAt.sh"
         - lang: "Java"
           label: "Java"
           source:
-            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/eth/block/EthGetStorageAtExample.java"
+            $ref: "../../../code-samples/java/src/main/java/opensdk/sdk/apis/eth/account/EthGetStorageAtExample.java"
         - lang: "JavaScript"
           label: "Javascript"
           source:
-            $ref: "../../../code-samples/javascript/eth/block/getStorageAt.js"
+            $ref: "../../../code-samples/javascript/eth/account/getStorageAt.js"
         - lang: "Python"
           label: "Python"
           source:
-            $ref: "../../../code-samples/python/eth/block/getStorageAt.py"
+            $ref: "../../../code-samples/python/eth/account/getStorageAt.py"
 
 components:
   schemas:

@@ -59,6 +59,8 @@ paths:
     $ref: ../kaia/account/isContractAccount.yaml#/paths/~1kaia~1account~1isContractAccount
   /kaia/account/sign:
     $ref: ../kaia/account/sign.yaml#/paths/~1kaia~1account~1sign
+  /kaia/account/getStorageAt:
+    $ref: ../kaia/account/getStorageAt.yaml#/paths/~1kaia~1account~1getStorageAt
 
   # kaia/block
   /kaia/block/blockNumber:
@@ -93,8 +95,6 @@ paths:
     $ref: ../kaia/block/getHeaderByNumber.yaml#/paths/~1kaia~1block~1getHeaderByNumber
   /kaia/block/getRewards:
     $ref: ../kaia/block/getRewards.yaml#/paths/~1kaia~1block~1getRewards
-  /kaia/block/getStorageAt:
-    $ref: ../kaia/block/getStorageAt.yaml#/paths/~1kaia~1block~1getStorageAt
   /kaia/block/syncing:
     $ref: ../kaia/block/syncing.yaml#/paths/~1kaia~1block~1syncing
 
@@ -133,6 +133,8 @@ paths:
     $ref: ../kaia/transaction/pendingTransactions.yaml#/paths/~1kaia~1transaction~1pendingTransactions
   /kaia/transaction/sendRawTransaction:
     $ref: ../kaia/transaction/sendRawTransaction.yaml#/paths/~1kaia~1transaction~1sendRawTransaction
+  /kaia/transaction/sendRawTransactions:
+    $ref: ../kaia/transaction/sendRawTransactions.yaml#/paths/~1kaia~1transaction~1sendRawTransactions
   /kaia/transaction/sendTransaction:
     $ref: ../kaia/transaction/sendTransaction.yaml#/paths/~1kaia~1transaction~1sendTransaction
   /kaia/transaction/sendTransactionAsFeePayer:
@@ -155,6 +157,8 @@ paths:
     $ref: ../kaia/configuration/getChainConfig.yaml#/paths/~1kaia~1configuration~1getChainConfig
   /kaia/configuration/isParallelDBWrite:
     $ref: ../kaia/configuration/isParallelDBWrite.yaml#/paths/~1kaia~1configuration~1isParallelDBWrite
+  /kaia/configuration/isConsoleLogEnabled:
+    $ref: ../kaia/configuration/isConsoleLogEnabled.yaml#/paths/~1kaia~1configuration~1isConsoleLogEnabled
   /kaia/configuration/isSenderTxHashIndexingEnabled:
     $ref: ../kaia/configuration/isSenderTxHashIndexingEnabled.yaml#/paths/~1kaia~1configuration~1isSenderTxHashIndexingEnabled
   /kaia/configuration/protocolVersion:
@@ -211,6 +215,8 @@ paths:
     $ref: ../kaia/miscellaneous/getProof.yaml#/paths/~1kaia~1miscellaneous~1getProof
   /kaia/miscellaneous/getTotalSupply:
     $ref: ../kaia/miscellaneous/getTotalSupply.yaml#/paths/~1kaia~1miscellaneous~1getTotalSupply
+  /kaia/miscellaneous/getBlsInfos:
+    $ref: ../kaia/miscellaneous/getBlsInfos.yaml#/paths/~1kaia~1miscellaneous~1getBlsInfos
 
   # klay/account
   /klay/account/accountCreated:
@@ -235,6 +241,8 @@ paths:
     $ref: ../klay/account/isContractAccount.yaml#/paths/~1klay~1account~1isContractAccount
   /klay/account/sign:
     $ref: ../klay/account/sign.yaml#/paths/~1klay~1account~1sign
+  /klay/account/getStorageAt:
+    $ref: ../klay/account/getStorageAt.yaml#/paths/~1klay~1account~1getStorageAt
 
   # klay/block
   /klay/block/blockNumber:
@@ -269,8 +277,6 @@ paths:
     $ref: ../klay/block/getHeaderByNumber.yaml#/paths/~1klay~1block~1getHeaderByNumber
   /klay/block/getRewards:
     $ref: ../klay/block/getRewards.yaml#/paths/~1klay~1block~1getRewards
-  /klay/block/getStorageAt:
-    $ref: ../klay/block/getStorageAt.yaml#/paths/~1klay~1block~1getStorageAt
   /klay/block/syncing:
     $ref: ../klay/block/syncing.yaml#/paths/~1klay~1block~1syncing
 
@@ -309,6 +315,8 @@ paths:
     $ref: ../klay/transaction/pendingTransactions.yaml#/paths/~1klay~1transaction~1pendingTransactions
   /klay/transaction/sendRawTransaction:
     $ref: ../klay/transaction/sendRawTransaction.yaml#/paths/~1klay~1transaction~1sendRawTransaction
+  /klay/transaction/sendRawTransactions:
+    $ref: ../klay/transaction/sendRawTransactions.yaml#/paths/~1klay~1transaction~1sendRawTransactions
   /klay/transaction/sendTransaction:
     $ref: ../klay/transaction/sendTransaction.yaml#/paths/~1klay~1transaction~1sendTransaction
   /klay/transaction/sendTransactionAsFeePayer:
@@ -328,6 +336,8 @@ paths:
     $ref: ../klay/configuration/getChainConfig.yaml#/paths/~1klay~1configuration~1getChainConfig
   /klay/configuration/isParallelDBWrite:
     $ref: ../klay/configuration/isParallelDBWrite.yaml#/paths/~1klay~1configuration~1isParallelDBWrite
+  /klay/configuration/isConsoleLogEnabled:
+    $ref: ../klay/configuration/isConsoleLogEnabled.yaml#/paths/~1klay~1configuration~1isConsoleLogEnabled
   /klay/configuration/isSenderTxHashIndexingEnabled:
     $ref: ../klay/configuration/isSenderTxHashIndexingEnabled.yaml#/paths/~1klay~1configuration~1isSenderTxHashIndexingEnabled
   /klay/configuration/protocolVersion:
@@ -460,6 +470,12 @@ paths:
     $ref: ../debug/logging/verbosityByName.yaml#/paths/~1debug~1logging~1verbosityByName
   /debug/logging/vmodule:
     $ref: ../debug/logging/vmodule.yaml#/paths/~1debug~1logging~1vmodule
+
+  # debug/inspection:
+  /debug/inspection/isGaslessTx:
+    $ref: ../debug/inspection/isGaslessTx.yaml#/paths/~1debug~1inspection~1isGaslessTx
+  /debug/inspection/gaslessInfo:
+    $ref: ../debug/inspection/gaslessInfo.yaml#/paths/~1debug~1inspection~1gaslessInfo
 
   # debug/blockchainInspection:
   /debug/blockchainInspection/dumpBlock:
@@ -610,6 +626,8 @@ paths:
     $ref: ../governance/getParams.yaml#/paths/~1governance~1getParams
   /governance/getChainConfig:
     $ref: ../governance/getChainConfig.yaml#/paths/~1governance~1getChainConfig
+  /governance/status:
+    $ref: ../governance/status.yaml#/paths/~1governance~1status
   /governance/getRewardsAccumulated:
     $ref: ../governance/getRewardsAccumulated.yaml#/paths/~1governance~1getRewardsAccumulated
 

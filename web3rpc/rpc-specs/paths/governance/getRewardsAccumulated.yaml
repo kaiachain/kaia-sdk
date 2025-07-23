@@ -80,9 +80,11 @@ paths:
                         description: Accumulated reward information in a given block range
                         properties:
                           firstBlockTime:
-                            type: string
+                            type: number
+                            format: integer
                           lastBlockTime:
-                            type: string
+                            type: number
+                            format: integer
                           firstBlock:
                             type: number
                             format: integer
@@ -113,50 +115,22 @@ paths:
                           rewards:
                             type: object
                         example: {
-                          "firstBlockTime": "2023-05-29 15:11:27 +0900 KST",
-                          "lastBlockTime": "2023-05-29 19:38:11 +0900 KST",
-                          "firstBlock": 123400489,
-                          "lastBlock": 123416489,
-                          "totalMinted": 102406400000000000000000,
-                          "totalTxFee": 1012877568458206944160,
-                          "totalBurntTxFee": 1012877568458206944160,
-                          "totalProposerRewards": 10240640000000000224014,
-                          "totalStakingRewards": 40962559999999999775986,
-                          "totalKFFRewards": 20481280000000000000000,
-                          "totalKCFRewards": 30721920000000000000000,
+                          "firstBlockTime": 1561547992,
+                          "lastBlockTime": 1561548008,
+                          "firstBlock": 4096,
+                          "lastBlock": 4112,
+                          "totalMinted": 163200000000000000000,
+                          "totalTxFee": 0,
+                          "totalBurntTxFee": 0,
+                          "totalProposerRewards": 163200000000000000000,
+                          "totalStakingRewards": 0,
+                          "totalKIFRewards": 0,
+                          "totalKEFRewards": 0,
                           "rewards": {
-                              "0x04185389ec237dba242888a5a28b5555d011a223": 341760000000000007476,
-                              "0x064ce4c3e8409a544ce91245f9f8cfc33bde8925": 341158409421920578070,
-                              "0x0bb09aab5276ae532e33caf69d00a624adbc3fdf": 4692517369325951639990,
-                              "0x0c41cce8ddaea235f97745a13207421dca7340fa": 341158442792400102695,
-                              "0x179679457f93094a4e7186abcb2089661e92fc22": 4670094563747132209866,
-                              "0x186de0382923086f73367bab16af09aeda4e54bf": 3344700808386003997995,
-                              "0x1a147924d0489fccf53471904dc271b9d20157a4": 812253494122089774069,
-                              "0x24e593fb29731e54905025c230727dc28d229f77": 341120033370479516086,
-                              "0x2b2a7a1d29a203f60e0a964fc64231265a49cd97": 405647783029499903389,
-                              "0x2fd3ff6e4ead7430ea25bab5e5b2b073492b7e6e": 4179365177477290146362,
-                              "0x4b87df856044f2580ca62f44f6e15121d7ebcc91": 943429290876805235278,
-                              "0x5459c9591c3c3f260eff1a538d84610015332c91": 399791330615756805978,
-                              "0x54e8bc489cee5ab638920cc80160d8095df846b1": 1342241347422787927227,
-                              "0x5ed9914689a2fafb55a0c99a1c10d2f911d37734": 1150518010638720583027,
-                              "0x5f1dbd747996d8d31e2ab0317be7ffffd155522a": 507972397569861326690,
-                              "0x75239993ac422a4e6a7441d5ab47ed6e91faf306": 9708690430353790307357,
-                              "0x758476368db33864b704f41cc63b8460f8e7d39a": 719558444429276229872,
-                              "0x85d82d811743b4b8f3c48f3e48a1664d1ffc2c10": 20481280000000000000000,
-                              "0x999999999939ba65abb254339eec0b2a0dac80e9": 2546664690927360639974,
-                              "0xac7f6f8a63733877a78917dc798ed7693095be7b": 976294207626140822860,
-                              "0xadb287e1f8405f085c740e791a3914f9b07acae0": 4834561973146129955927,
-                              "0xb89a760eb082dbae4f334a9374fa32e7b077e00d": 341120033370479516086,
-                              "0xbb121974208b9282e72cb0da7f48d8ae14dba954": 477271623157965876433,
-                              "0xc8e7053dc17bce47d2317718734ef087be40a023": 533654318603814390326,
-                              "0xcd7cd61f0b221a61405640b8ba10f1455cce6d51": 1153716971545888984956,
-                              "0xda5609a74470689a3b51cb53ee3c499b0f54f31a": 401005661421389210969,
-                              "0xdbd3fbdc9e1965855b773a4746f27165b787fe3c": 1153644257271028044532,
-                              "0xdc7dda990c08513962d5ae6dfb195b1f6879bfaf": 1954666498718499702479,
-                              "0xdd4c8d805fc110369d3b148a6692f283ffbdccd3": 30721920000000000000000,
-                              "0xdedbab7de9551a2bee78792638af67d59b8675c6": 1285976941809533886160,
-                              "0xe3d49ffc285c668425b2966b683776f632859efa": 714216865143954209314,
-                              "0xf786c3720a10cb48c8f12d0ac2086dcf227c7cde": 588428623678048468557
+                            "0x571e53df607be97431a5bbefca1dffe5aef56f4d": 38400000000000000000,
+                            "0x5cb1a7dccbd0dc446e3640898ede8820368554c8": 48000000000000000000,
+                            "0x99fb17d324fa0e07f23b49d09028ac0919414db6": 38400000000000000000,
+                            "0xb74ff9dea397fe9e231df545eb53fe2adf776cb2": 38400000000000000000
                           }
                         }
 

@@ -44,8 +44,7 @@ paths:
                     properties:
                       result:
                         type: string
-                        format: hex
-                        description: The integer of the kaia protocol version. "1001" Kaia Kairos testnet."8217" Kaia Cypress mainnet.
+                        description: The string representation of the kaia protocol version. "1001" Kaia Kairos testnet."8217" Kaia Cypress mainnet.
                         example: "1001"
 
       x-codeSamples:

@@ -97,6 +97,8 @@ paths:
     $ref: ./transaction/getTransactionReceipt.yaml#/paths/~1klay~1transaction~1getTransactionReceipt
   /klay/transaction/sendRawTransaction:
     $ref: ./transaction/sendRawTransaction.yaml#/paths/~1klay~1transaction~1sendRawTransaction
+  /klay/transaction/sendRawTransactions:
+    $ref: ./transaction/sendRawTransactions.yaml#/paths/~1klay~1transaction~1sendRawTransactions
   /klay/transaction/estimateComputationCost:
     $ref: ./transaction/estimateComputationCost.yaml#/paths/~1klay~1transaction~1estimateComputationCost
   /klay/transaction/sendTransaction:
@@ -129,6 +131,8 @@ paths:
     $ref: ./configuration/clientVersion.yaml#/paths/~1klay~1configuration~1clientVersion
   /klay/configuration/isParallelDBWrite:
     $ref: ./configuration/isParallelDBWrite.yaml#/paths/~1klay~1configuration~1isParallelDBWrite
+  /klay/configuration/isConsoleLogEnabled:
+    $ref: ./configuration/isConsoleLogEnabled.yaml#/paths/~1klay~1configuration~1isConsoleLogEnabled
   /klay/configuration/isSenderTxHashIndexingEnabled:
     $ref: ./configuration/isSenderTxHashIndexingEnabled.yaml#/paths/~1klay~1configuration~1isSenderTxHashIndexingEnabled
   /klay/configuration/protocolVersion:

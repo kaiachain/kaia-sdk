@@ -59,6 +59,7 @@ paths:
     $ref: ./block/getBlockTransactionCountByNumber.yaml#/paths/~1eth~1block~1getBlockTransactionCountByNumber
   /eth/block/getBlockReceipt:
     $ref: ./block/getBlockReceipts.yaml#/paths/~1eth~1block~1getBlockReceipts
+
   # eth/transaction
   /eth/transaction/call:
     $ref: ./transaction/call.yaml#/paths/~1eth~1transaction~1call
@@ -76,7 +77,6 @@ paths:
     $ref: ./transaction/sendTransaction.yaml#/paths/~1eth~1transaction~1sendTransaction
   /eth/transaction/signTransaction:
     $ref: ./transaction/signTransaction.yaml#/paths/~1eth~1transaction~1signTransaction
-
   /eth/transaction/pendingTransactions:
     $ref: ./transaction/pendingTransactions.yaml#/paths/~1eth~1transaction~1pendingTransactions
   /eth/transaction/fillTransaction:
@@ -91,10 +91,10 @@ paths:
     $ref: ./transaction/getRawTransactionByHash.yaml#/paths/~1eth~1transaction~1getRawTransactionByHash
   /eth/transaction/resend:
     $ref: ./transaction/resend.yaml#/paths/~1eth~1transaction~1resend
+
   # eth/config
   /eth/config/chainID:
     $ref: ./config/chainId.yaml#/paths/~1eth~1config~1chainId
- 
   /eth/config/coinbase:
     $ref: ./config/coinbase.yaml#/paths/~1eth~1config~1coinbase
   /eth/config/etherbase:
@@ -111,6 +111,7 @@ paths:
     $ref: ./gas/maxPriorityFeePerGas.yaml#/paths/~1eth~1gas~1maxPriorityFeePerGas
   /eth/gas/gasPrice:
     $ref: ./gas/gasPrice.yaml#/paths/~1eth~1gas~1gasPrice
+
   # eth/filter
   /eth/filter/getFilterLogs:
     $ref: ./filter/getFilterLogs.yaml#/paths/~1eth~1filter~1getFilterLogs

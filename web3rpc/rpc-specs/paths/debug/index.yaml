@@ -145,3 +145,9 @@ paths:
     $ref: ./runtimeTracing/startGoTrace.yaml#/paths/~1debug~1runtimeTracing~1startGoTrace
   /debug/runtimeTracing/stopGoTrace:
     $ref: ./runtimeTracing/stopGoTrace.yaml#/paths/~1debug~1runtimeTracing~1stopGoTrace
+
+  # debug/inspection:
+  /debug/inspection/isGaslessTx:
+    $ref: ./inspection/isGaslessTx.yaml#/paths/~1debug~1inspection~1isGaslessTx
+  /debug/inspection/gaslessInfo:
+    $ref: ./inspection/gaslessInfo.yaml#/paths/~1debug~1inspection~1gaslessInfo

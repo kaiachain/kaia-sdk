@@ -47,3 +47,7 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/governance/vote.yaml#/paths/~1governance~1vote
   /governance/votes:
     $ref: ../../web3rpc/rpc-specs/paths/governance/votes.yaml#/paths/~1governance~1votes
+  /governance/getRewardsAccumulated:
+    $ref: ../../web3rpc/rpc-specs/paths/governance/getRewardsAccumulated.yaml#/paths/~1governance~1getRewardsAccumulated
+  /governance/status:
+    $ref: ../../web3rpc/rpc-specs/paths/governance/status.yaml#/paths/~1governance~1status

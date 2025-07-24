@@ -39,6 +39,8 @@ paths:
     $ref: ./account/getTransactionCount.yaml#/paths/~1klay~1account~1getTransactionCount
   /klay/account/isContractAccount:
     $ref: ./account/isContractAccount.yaml#/paths/~1klay~1account~1isContractAccount
+  /klay/account/getStorageAt:
+    $ref: ./account/getStorageAt.yaml#/paths/~1klay~1account~1getStorageAt
 
   # klay/block
   /klay/block/blockNumber:
@@ -69,8 +71,6 @@ paths:
     $ref: ./block/getHeaderByHash.yaml#/paths/~1klay~1block~1getHeaderByHash
   /klay/getRewards:
     $ref: ./block/getRewards.yaml#/paths/~1klay~1block~1getRewards
-  /klay/getStorageAt:
-    $ref: ./block/getStorageAt.yaml#/paths/~1klay~1block~1getStorageAt
   /klay/block/syncing:
     $ref: ./block/syncing.yaml#/paths/~1klay~1block~1syncing
   /klay/block/getBlockWithConsensusInfoByNumberRange:

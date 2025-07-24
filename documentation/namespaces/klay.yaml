@@ -40,6 +40,8 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/klay/account/getTransactionCount.yaml#/paths/~1klay~1account~1getTransactionCount
   /klay/account/isContractAccount:
     $ref: ../../web3rpc/rpc-specs/paths/klay/account/isContractAccount.yaml#/paths/~1klay~1account~1isContractAccount
+  /klay/account/getStorageAt:
+    $ref: ../../web3rpc/rpc-specs/paths/klay/account/getStorageAt.yaml#/paths/~1klay~1account~1getStorageAt
 
   # klay/block
   /klay/block/blockNumber:
@@ -70,8 +72,6 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/klay/block/getHeaderByHash.yaml#/paths/~1klay~1block~1getHeaderByHash
   /klay/getRewards:
     $ref: ../../web3rpc/rpc-specs/paths/klay/block/getRewards.yaml#/paths/~1klay~1block~1getRewards
-  /klay/getStorageAt:
-    $ref: ../../web3rpc/rpc-specs/paths/klay/block/getStorageAt.yaml#/paths/~1klay~1block~1getStorageAt
   /klay/block/syncing:
     $ref: ../../web3rpc/rpc-specs/paths/klay/block/syncing.yaml#/paths/~1klay~1block~1syncing
   /klay/block/getBlockWithConsensusInfoByNumberRange:

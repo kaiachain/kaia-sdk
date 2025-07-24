@@ -39,7 +39,8 @@ paths:
     $ref: ./account/getTransactionCount.yaml#/paths/~1kaia~1account~1getTransactionCount
   /kaia/account/isContractAccount:
     $ref: ./account/isContractAccount.yaml#/paths/~1kaia~1account~1isContractAccount
-
+  /kaia/account/getStorageAt:
+    $ref: ./account/getStorageAt.yaml#/paths/~1kaia~1account~1getStorageAt
   # kaia/block
   /kaia/block/blockNumber:
     $ref: ./block/blockNumber.yaml#/paths/~1kaia~1block~1blockNumber
@@ -69,8 +70,6 @@ paths:
     $ref: ./block/getHeaderByHash.yaml#/paths/~1kaia~1block~1getHeaderByHash
   /kaia/getRewards:
     $ref: ./block/getRewards.yaml#/paths/~1kaia~1block~1getRewards
-  /kaia/getStorageAt:
-    $ref: ./block/getStorageAt.yaml#/paths/~1kaia~1block~1getStorageAt
   /kaia/block/syncing:
     $ref: ./block/syncing.yaml#/paths/~1kaia~1block~1syncing
   /kaia/block/getBlockWithConsensusInfoByNumberRange:

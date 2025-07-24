@@ -146,3 +146,9 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/debug/runtimeTracing/startGoTrace.yaml#/paths/~1debug~1runtimeTracing~1startGoTrace
   /debug/runtimeTracing/stopGoTrace:
     $ref: ../../web3rpc/rpc-specs/paths/debug/runtimeTracing/stopGoTrace.yaml#/paths/~1debug~1runtimeTracing~1stopGoTrace
+
+  # debug/inspection:
+  /debug/inspection/isGaslessTx:
+    $ref: ../../web3rpc/rpc-specs/paths/debug/inspection/isGaslessTx.yaml#/paths/~1debug~1inspection~1isGaslessTx
+  /debug/inspection/gaslessInfo:
+    $ref: ../../web3rpc/rpc-specs/paths/debug/inspection/gaslessInfo.yaml#/paths/~1debug~1inspection~1gaslessInfo

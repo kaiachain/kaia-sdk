@@ -25,11 +25,15 @@ paths:
         - klay
 
       parameters:
-        - name: signedTransactionData
+        - name: signedTransactionsData
           required: true
           schema:
             type: array
-          description: An array of one or more signed transaction data.
+            items:
+              type: string
+              format: DATA
+              description: Signed transaction data
+          description: The signed transaction data.
           in: query
 
       requestBody:
@@ -59,7 +63,10 @@ paths:
                         example: 1
                       result:
                         type: array
-                        format: 32-byte DATA
+                        items:
+                          type: string
+                          format: 32-byte DATA
+                          description: Transaction hash
                         description: "Returns the array of transaction hashes."
                         example: [
                           "0x6f2b444a031f5932d013abbaead8d6058832b4f23c8dcad65f482295f87ab11c",

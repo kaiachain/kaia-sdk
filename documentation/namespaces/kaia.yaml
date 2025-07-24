@@ -40,6 +40,8 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/account/getTransactionCount.yaml#/paths/~1kaia~1account~1getTransactionCount
   /kaia/account/isContractAccount:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/account/isContractAccount.yaml#/paths/~1kaia~1account~1isContractAccount
+  /kaia/account/getStorageAt:
+    $ref: ../../web3rpc/rpc-specs/paths/kaia/account/getStorageAt.yaml#/paths/~1kaia~1account~1getStorageAt
 
   # kaia/block
   /kaia/block/blockNumber:
@@ -70,8 +72,6 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/block/getHeaderByHash.yaml#/paths/~1kaia~1block~1getHeaderByHash
   /kaia/getRewards:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/block/getRewards.yaml#/paths/~1kaia~1block~1getRewards
-  /kaia/getStorageAt:
-    $ref: ../../web3rpc/rpc-specs/paths/kaia/block/getStorageAt.yaml#/paths/~1kaia~1block~1getStorageAt
   /kaia/block/syncing:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/block/syncing.yaml#/paths/~1kaia~1block~1syncing
   /kaia/block/getBlockWithConsensusInfoByNumberRange:

@@ -27,6 +27,8 @@ paths:
     $ref: ./account/sign.yaml#/paths/~1eth~1account~1sign
   /eth/account/getTransactionCount:
     $ref: ./account/getTransactionCount.yaml#/paths/~1eth~1account~1getTransactionCount
+  /eth/account/getStorageAt:
+    $ref: ./account/getStorageAt.yaml#/paths/~1eth~1account~1getStorageAt
 
   # eth/block
   /eth/block/blockNumber:
@@ -41,8 +43,6 @@ paths:
     $ref: ./block/getHeaderByNumber.yaml#/paths/~1eth~1block~1getHeaderByNumber
   /eth/block/getHeaderByHash:
     $ref: ./block/getHeaderByHash.yaml#/paths/~1eth~1block~1getHeaderByHash
-  /eth/block/getStorageAt:
-    $ref: ./block/getStorageAt.yaml#/paths/~1eth~1block~1getStorageAt
   /eth/block/getUncleCountByBlockHash:
     $ref: ./block/getUncleCountByBlockHash.yaml#/paths/~1eth~1block~1getUncleCountByBlockHash
   /eth/block/getUncleByBlockHashAndIndex:

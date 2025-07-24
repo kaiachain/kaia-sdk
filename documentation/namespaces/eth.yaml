@@ -29,6 +29,8 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/eth/account/getTransactionCount.yaml#/paths/~1eth~1account~1getTransactionCount
   /eth/account/sign:
     $ref: ../../web3rpc/rpc-specs/paths/eth/account/sign.yaml#/paths/~1eth~1account~1sign
+  /eth/account/getStorageAt:
+    $ref: ../../web3rpc/rpc-specs/paths/eth/account/getStorageAt.yaml#/paths/~1eth~1account~1getStorageAt
 
   # eth/block
   /eth/block/blockNumber:
@@ -43,8 +45,6 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/eth/block/getHeaderByNumber.yaml#/paths/~1eth~1block~1getHeaderByNumber
   /eth/block/getHeaderByHash:
     $ref: ../../web3rpc/rpc-specs/paths/eth/block/getHeaderByHash.yaml#/paths/~1eth~1block~1getHeaderByHash
-  /eth/block/getStorageAt:
-    $ref: ../../web3rpc/rpc-specs/paths/eth/block/getStorageAt.yaml#/paths/~1eth~1block~1getStorageAt
   /eth/block/getUncleCountByBlockHash:
     $ref: ../../web3rpc/rpc-specs/paths/eth/block/getUncleCountByBlockHash.yaml#/paths/~1eth~1block~1getUncleCountByBlockHash
   /eth/block/getUncleByBlockHashAndIndex:

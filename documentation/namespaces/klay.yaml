@@ -40,6 +40,8 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/klay/account/getTransactionCount.yaml#/paths/~1klay~1account~1getTransactionCount
   /klay/account/isContractAccount:
     $ref: ../../web3rpc/rpc-specs/paths/klay/account/isContractAccount.yaml#/paths/~1klay~1account~1isContractAccount
+  /klay/account/getStorageAt:
+    $ref: ../../web3rpc/rpc-specs/paths/klay/account/getStorageAt.yaml#/paths/~1klay~1account~1getStorageAt
 
   # klay/block
   /klay/block/blockNumber:
@@ -70,8 +72,6 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/klay/block/getHeaderByHash.yaml#/paths/~1klay~1block~1getHeaderByHash
   /klay/getRewards:
     $ref: ../../web3rpc/rpc-specs/paths/klay/block/getRewards.yaml#/paths/~1klay~1block~1getRewards
-  /klay/getStorageAt:
-    $ref: ../../web3rpc/rpc-specs/paths/klay/block/getStorageAt.yaml#/paths/~1klay~1block~1getStorageAt
   /klay/block/syncing:
     $ref: ../../web3rpc/rpc-specs/paths/klay/block/syncing.yaml#/paths/~1klay~1block~1syncing
   /klay/block/getBlockWithConsensusInfoByNumberRange:
@@ -98,6 +98,8 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/klay/transaction/getTransactionReceipt.yaml#/paths/~1klay~1transaction~1getTransactionReceipt
   /klay/transaction/sendRawTransaction:
     $ref: ../../web3rpc/rpc-specs/paths/klay/transaction/sendRawTransaction.yaml#/paths/~1klay~1transaction~1sendRawTransaction
+  /klay/transaction/sendRawTransactions:
+    $ref: ../../web3rpc/rpc-specs/paths/klay/transaction/sendRawTransactions.yaml#/paths/~1klay~1transaction~1sendRawTransactions
   /klay/transaction/estimateComputationCost:
     $ref: ../../web3rpc/rpc-specs/paths/klay/transaction/estimateComputationCost.yaml#/paths/~1klay~1transaction~1estimateComputationCost
   /klay/transaction/sendTransaction:
@@ -130,6 +132,8 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/klay/configuration/clientVersion.yaml#/paths/~1klay~1configuration~1clientVersion
   /klay/configuration/isParallelDBWrite:
     $ref: ../../web3rpc/rpc-specs/paths/klay/configuration/isParallelDBWrite.yaml#/paths/~1klay~1configuration~1isParallelDBWrite
+  /klay/configuration/isConsoleLogEnabled:
+    $ref: ../../web3rpc/rpc-specs/paths/klay/configuration/isConsoleLogEnabled.yaml#/paths/~1klay~1configuration~1isConsoleLogEnabled
   /klay/configuration/isSenderTxHashIndexingEnabled:
     $ref: ../../web3rpc/rpc-specs/paths/klay/configuration/isSenderTxHashIndexingEnabled.yaml#/paths/~1klay~1configuration~1isSenderTxHashIndexingEnabled
   /klay/configuration/protocolVersion:

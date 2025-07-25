@@ -25,7 +25,7 @@ paths:
         - klay
 
       parameters:
-        - name: signedTransactionData
+        - name: singedTransactionData
           required: true
           schema:
             type: string
@@ -87,9 +87,11 @@ components:
           type: string
           default: 'klay_sendRawTransaction'
         params:
-          
-          type: string
-          format:  DATA
-          title: SignedTransactionData
+          type: array
           description: The signed transaction data.
-          example:  "0xaca5d9a1ed8b86b1ef61431b2bedfc99a66eaefc3a7e1cffdf9ff53653956a67"
+          items:
+            type: string
+            format:  DATA
+            title: SingedTransactionData
+            description: The signed transaction data.
+          example: ["0xaca5d9a1ed8b86b1ef61431b2bedfc99a66eaefc3a7e1cffdf9ff53653956a67"]

@@ -11,6 +11,8 @@ import KlaytnVT from './components/KlaytnVT';
 import KlaytnSC from './components/KlaytnSC';
 import KlaytnFeeDelVT from './components/KlaytnFeeDelVT';
 import KlaytnFeeDelSC from './components/KlaytnFeeDelSC';
+import KlaytnFeeDelServiceVT from './components/KlaytnFeeDelServiceVT';
+import KlaytnFeeDelServiceSC from './components/KlaytnFeeDelServiceSC';
 
 enum Menu {
   None,
@@ -21,6 +23,8 @@ enum Menu {
   KlaytnSC,
   KlaytnFeeDelVT,
   KlaytnFeeDelSC,
+  KlaytnFeeDelServiceVT,
+  KlaytnFeeDelServiceSC,
 }
 
 function App() {
@@ -52,7 +56,7 @@ function App() {
         account.isKaikas ? (
         <div>
           <hr/>
-          <h3>Klaytn Features</h3>
+          <h3>Kaia Features</h3>
           <h3>Send ValueTransfer tx</h3>
           <button onClick={() => setMenu(Menu.KlaytnVT)}>Expand</button>
           { menu === Menu.KlaytnVT ? <KlaytnVT account={account} /> : null }
@@ -65,6 +69,12 @@ function App() {
           <h3>Sign and Send FeeDelegatedSmartContractExecution tx</h3>
           <button onClick={() => setMenu(Menu.KlaytnFeeDelSC)}>Expand</button>
           { menu === Menu.KlaytnFeeDelSC ? <KlaytnFeeDelSC account={account} /> : null }
+          <h3>Sign and Send Fee Delegated Service ValueTransfer tx</h3>
+          <button onClick={() => setMenu(Menu.KlaytnFeeDelServiceVT)}>Expand</button>
+          { menu === Menu.KlaytnFeeDelServiceVT ? <KlaytnFeeDelServiceVT account={account} /> : null }
+          <h3>Sign and Send FeeDelegated Service SmartContractExecution tx</h3>
+          <button onClick={() => setMenu(Menu.KlaytnFeeDelServiceSC)}>Expand</button>
+          { menu === Menu.KlaytnFeeDelServiceSC ? <KlaytnFeeDelServiceSC account={account} /> : null }
         </div>
       ) : null }
     </div>

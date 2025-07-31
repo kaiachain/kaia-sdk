@@ -7,24 +7,25 @@ type Props = {
   account: Account;
 };
 
-// https://baobab.klaytnscope.com/account/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
+// https://kairos.kaiascan.io/address/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
 var contractAddress = "0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df";
 var contractCalldata = "0xd09de08a"; // function increment()
 
-function KlaytnFeeDelSC({ account }: Props) {
+function KlaytnFeeDelServiceSC({ account }: Props) {
   const [txhash, setTxhash] = useState<string>("");
   const [error, setError] = useState<any>(null);
 
   async function handleSubmit(e: any) {
     e.preventDefault();
     const tx = {
+      from: account.address,
       type: TxType.FeeDelegatedSmartContractExecution,
       to: e.target.to.value,
       data: e.target.data.value,
     };
 
     try {
-      const txhash = await doSignTx(account, tx, false);
+      const txhash = await doSignTx(account, tx, true);
       setTxhash(txhash);
     } catch (e: any) {
       setError(e);
@@ -44,4 +45,4 @@ function KlaytnFeeDelSC({ account }: Props) {
   );
 };
 
-export default KlaytnFeeDelSC;
+export default KlaytnFeeDelServiceSC;

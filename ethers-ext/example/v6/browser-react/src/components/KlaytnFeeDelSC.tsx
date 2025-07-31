@@ -7,7 +7,7 @@ type Props = {
   account: Account;
 };
 
-// https://baobab.klaytnscope.com/account/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
+// https://kairos.kaiascan.io/address/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
 var contractAddress = "0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df";
 var contractCalldata = "0xd09de08a"; // function increment()
 
@@ -24,7 +24,7 @@ function KlaytnFeeDelSC({ account }: Props) {
     };
 
     try {
-      const txhash = await doSignTx(account, tx);
+      const txhash = await doSignTx(account, tx, false);
       setTxhash(txhash);
     } catch (e: any) {
       setError(e);

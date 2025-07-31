@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { Account } from '../types';
 import { doSignTx } from '../util';
-import { TxType } from '@kaiachain/viem-ext';
+import { TxType } from '@kaiachain/js-ext-core';
 
 type Props = {
   account: Account;
 };
 
-// https://baobab.klaytnscope.com/account/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
+// https://kairos.kaiascan.io/address/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
 var contractAddress = "0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df";
 var contractCalldata = "0xd09de08a"; // function increment()
 
-function KlaytnFeeDelSC({ account }: Props) {
+function KlaytnFeeDelServiceSC({ account }: Props) {
   const [txhash, setTxhash] = useState<string>("");
   const [error, setError] = useState<any>(null);
 
@@ -24,7 +24,7 @@ function KlaytnFeeDelSC({ account }: Props) {
     };
 
     try {
-      const txhash = await doSignTx(account, tx, false);
+      const txhash = await doSignTx(account, tx, true);
       setTxhash(txhash);
     } catch (e: any) {
       setError(e);
@@ -39,9 +39,9 @@ function KlaytnFeeDelSC({ account }: Props) {
         <p><input type="submit"></input></p>
       </form>
       {txhash ? <a target="_blank" href={txhash} rel="noreferrer">{txhash}</a> : null}
-      {error ? <text><b style={{ color: "red" }}>{error}</b></text> : null}
-    </div>
-  );
+    {error ? <text><b style={{ color: "red" }}>{error}</b></text> : null}
+  </div>
+);
 };
 
-export default KlaytnFeeDelSC;
+export default KlaytnFeeDelServiceSC;

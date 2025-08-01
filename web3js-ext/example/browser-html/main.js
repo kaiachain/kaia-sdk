@@ -69,13 +69,13 @@ async function switchNetwork(networkSpec) {
     });
   }
 }
-async function switchBaobab() {
+async function switchKairos() {
   await switchNetwork({
     chainId: "0x3e9",
-    chainName: "Klaytn Baobab",
+    chainName: "Kaia Kairos",
     nativeCurrency: {
-      name: "KLAY",
-      symbol: "KLAY",
+      name: "KAIA",
+      symbol: "KAIA",
       decimals: 18,
     },
     rpcUrls: ["https://public-en-kairos.node.kaia.io"],

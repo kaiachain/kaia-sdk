@@ -36,7 +36,7 @@ function LegacyVT({ account }: Props) {
           <input type="text" name="to" defaultValue={account.address}></input>
         </p>
         <p>
-          Amount (ETH/KLAY):{" "}
+          Amount (ETH/KAIA):{" "}
           <input type="text" name="amount" defaultValue="0.01"></input>
         </p>
         <p>

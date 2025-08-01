@@ -1,6 +1,6 @@
 import { createWalletClient, custom, JsonRpcAccount, kairos } from '@kaiachain/viem-ext'
 import { Account } from '../types';
-import { baobabNetworkSpec, switchNetwork } from '../util';
+import { kairosNetworkSpec, switchNetwork } from '../util';
 
 type Props = {
   account: Account;
@@ -35,7 +35,7 @@ function Connect({ account, setAccount }: Props) {
     const accounts = await (client as any).requestAddresses()
 
     // Default to Baobab network
-    await switchNetwork(client as any, baobabNetworkSpec);
+    await switchNetwork(client as any, kairosNetworkSpec);
 
     setAccount({
       provider: client,
@@ -84,7 +84,7 @@ function Connect({ account, setAccount }: Props) {
 
   async function connectKK() {
     if (!window.klaytn) {
-      alert("Please install Kaikas");
+      alert("Please install Kaia Wallet");
     } else {
       await connect(window.klaytn);
     }

@@ -101,14 +101,14 @@ export async function switchNetwork(
   }
 }
 
-export const baobabNetworkSpec = {
+export const kairosNetworkSpec = {
   chainId: "0x3e9",
-  chainName: "Klaytn Baobab",
+  chainName: "Kaia Kairos",
   nativeCurrency: {
-    name: "KLAY",
-    symbol: "KLAY",
+    name: "KAIA",
+    symbol: "KAIA",
     decimals: 18,
   },
   rpcUrls: ["https://public-en-kairos.node.kaia.io"],
-  blockExplorerUrls: ["https://baobab.klaytnscope.com/"],
+  blockExplorerUrls: ["https://kairos.kaiascan.io/"],
 };

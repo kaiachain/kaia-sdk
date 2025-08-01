@@ -62,9 +62,9 @@ async function doSendTxAsFeePayer(signedTx: string) {
 
 export function getTxhashUrl(chainId: number, txhash: string): string {
   if (chainId === 1001) {
-    return "https://baobab.klaytnscope.com/tx/" + txhash;
+    return "https://kairos.kaiascan.io/tx/" + txhash;
   } else if (chainId === 8271) {
-    return "https://klaytnscope.com/tx/" + txhash;
+    return "https://kaiascan.io/tx/" + txhash;
   }
   return "Can not support your chainId";
 }
@@ -81,14 +81,14 @@ export async function switchNetwork(provider: Web3Provider, networkSpec: any) {
   }
 }
 
-export const baobabNetworkSpec = {
+export const kairosNetworkSpec = {
   chainId: "0x3e9",
-  chainName: "Klaytn Baobab",
+  chainName: "Kaia Kairos",
   nativeCurrency: {
-    name: "KLAY",
-    symbol: "KLAY",
+    name: "KAIA",
+    symbol: "KAIA",
     decimals: 18,
-  },
+  },,
   rpcUrls: ["https://public-en-kairos.node.kaia.io"],
-  blockExplorerUrls: ["https://baobab.klaytnscope.com/"],
+  blockExplorerUrls: ["https://kairos.kaiascan.io/"],
 }

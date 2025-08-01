@@ -81,7 +81,7 @@ async function switchNetwork(networkSpec) {
     await provider.send("wallet_addEthereumChain", [networkSpec]);
   }
 }
-async function switchBaobab() {
+async function switchKairos() {
   await switchNetwork({
     chainId: "0x3e9",
     chainName: "Kaia Kairos",

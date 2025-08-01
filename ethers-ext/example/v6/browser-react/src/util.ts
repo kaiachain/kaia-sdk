@@ -1,4 +1,4 @@
-import { BrowserProvider, JsonRpcProvider } from "ethers6";
+import { BrowserProvider, JsonRpcProvider } from "ethers";
 import { Wallet } from "@kaiachain/ethers-ext/v6";
 import { Account } from "./types";
 
@@ -117,7 +117,7 @@ export async function switchNetwork(
   }
 }
 
-export const baobabNetworkSpec = {
+export const kairosNetworkSpec = {
   chainId: "0x3e9",
   chainName: "Kaia Kairos",
   nativeCurrency: {

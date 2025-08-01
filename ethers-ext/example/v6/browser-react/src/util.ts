@@ -1,4 +1,4 @@
-import { BrowserProvider, JsonRpcProvider } from "ethers6";
+import { BrowserProvider, JsonRpcProvider } from "ethers";
 import { Wallet } from "@kaiachain/ethers-ext/v6";
 import { Account } from "./types";
 

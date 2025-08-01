@@ -43,7 +43,7 @@ function App() {
           <button onClick={() => setMenu(Menu.SignMsg)}>Expand</button>
           { menu === Menu.SignMsg ? <SignMsg account={account} /> : null }
 
-          <h3>Send KLAY/ETH</h3>
+          <h3>Send KAIA/ETH</h3>
           <button onClick={() => setMenu(Menu.LegacyVT)}>Expand</button>
           { menu === Menu.LegacyVT ? <LegacyVT account={account} /> : null }
 

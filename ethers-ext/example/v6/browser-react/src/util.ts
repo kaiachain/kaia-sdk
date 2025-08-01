@@ -117,7 +117,7 @@ export async function switchNetwork(
   }
 }
 
-export const baobabNetworkSpec = {
+export const kairosNetworkSpec = {
   chainId: "0x3e9",
   chainName: "Kaia Kairos",
   nativeCurrency: {

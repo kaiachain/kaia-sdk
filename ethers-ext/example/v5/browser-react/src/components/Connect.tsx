@@ -1,6 +1,6 @@
 import { Web3Provider } from '@kaiachain/ethers-ext'
 import { Account } from '../types';
-import { baobabNetworkSpec, switchNetwork } from '../util';
+import { kairosNetworkSpec, switchNetwork } from '../util';
 
 type Props = {
   account: Account;
@@ -33,7 +33,7 @@ function Connect({ account, setAccount }: Props) {
     console.log("accounts", accounts);
 
     // Default to Baobab network
-    await switchNetwork(provider, baobabNetworkSpec);
+    await switchNetwork(provider, kairosNetworkSpec);
 
     setAccount({
       provider: provider,
@@ -76,7 +76,7 @@ function Connect({ account, setAccount }: Props) {
 
   async function connectKK() {
     if (!window.klaytn) {
-      alert("Please install Kaikas");
+      alert("Please install Kaia Wallet");
     } else {
       await connect(window.klaytn);
     }
@@ -85,7 +85,7 @@ function Connect({ account, setAccount }: Props) {
   return (
     <div>
       <button onClick={connectMM}>Connect MetaMask</button>
-      <button onClick={connectKK}>Connect Kaikas</button>
+      <button onClick={connectKK}>Connect Kaia Wallet</button>
     </div>
   );
 };

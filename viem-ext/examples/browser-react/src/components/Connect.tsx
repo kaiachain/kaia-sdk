@@ -93,7 +93,7 @@ function Connect({ account, setAccount }: Props) {
   return (
     <div>
       <button onClick={connectMM}>Connect MetaMask</button>
-      <button onClick={connectKK}>Connect Kaikas</button>
+      <button onClick={connectKK}>Connect Kaia Wallet</button>
     </div>
   );
 };

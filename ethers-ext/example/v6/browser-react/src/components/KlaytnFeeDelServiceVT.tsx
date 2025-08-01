@@ -1,27 +1,27 @@
 import { useState } from "react";
 import { Account } from "../types";
 import { doSignTx } from "../util";
-import { parseKaia, TxType } from "@kaiachain/viem-ext";
+import { TxType } from "@kaiachain/js-ext-core";
+import { parseKaia } from "@kaiachain/ethers-ext/v6";
 
 type Props = {
   account: Account;
 };
 
-function KlaytnFeeDelVT({ account }: Props) {
+function KlaytnFeeDelServiceVT({ account }: Props) {
   const [txhash, setTxhash] = useState<string>("");
   const [error, setError] = useState<any>(null);
 
   async function handleSubmit(e: any) {
     e.preventDefault();
     const tx = {
-      from: account.address,
       type: TxType.FeeDelegatedValueTransfer,
       to: e.target.to.value,
       value: parseKaia(e.target.amount.value),
     };
 
     try {
-      const txhash = await doSignTx(account, tx, false);
+      const txhash = await doSignTx(account, tx, true);
       setTxhash(txhash);
     } catch (e: any) {
       setError(e);
@@ -56,4 +56,4 @@ function KlaytnFeeDelVT({ account }: Props) {
   );
 }
 
-export default KlaytnFeeDelVT;
+export default KlaytnFeeDelServiceVT;

@@ -21,7 +21,7 @@ function KlaytnFeeDelVT({ account }: Props) {
     };
 
     try {
-      const txhash = await doSignTx(account, tx);
+      const txhash = await doSignTx(account, tx, false);
       setTxhash(txhash);
     } catch (e: any) {
       setError(e);

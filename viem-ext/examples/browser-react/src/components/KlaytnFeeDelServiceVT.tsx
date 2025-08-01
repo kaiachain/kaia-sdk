@@ -7,7 +7,7 @@ type Props = {
   account: Account;
 };
 
-function KlaytnFeeDelVT({ account }: Props) {
+function KlaytnFeeDelServiceVT({ account }: Props) {
   const [txhash, setTxhash] = useState<string>("");
   const [error, setError] = useState<any>(null);
 
@@ -21,7 +21,7 @@ function KlaytnFeeDelVT({ account }: Props) {
     };
 
     try {
-      const txhash = await doSignTx(account, tx, false);
+      const txhash = await doSignTx(account, tx, true);
       setTxhash(txhash);
     } catch (e: any) {
       setError(e);
@@ -56,4 +56,4 @@ function KlaytnFeeDelVT({ account }: Props) {
   );
 }
 
-export default KlaytnFeeDelVT;
+export default KlaytnFeeDelServiceVT;

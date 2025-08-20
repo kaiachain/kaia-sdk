@@ -31,7 +31,7 @@ import { KeyStore, Bytes, Transaction, TransactionReceipt, DataFormat } from "we
 
 import { KlaytnTypedTransaction } from "./accounts/klaytn_tx.js";
 import { GaslessSwapRouter } from "./gasless/gasless.js";
-import { Web3PromiEvent } from "web3";
+import { Web3PromiEvent } from "web3-core";
 
 // Type analogous to web3-eth-accounts/src/types.ts:Web3Account
 // Designed for the "account object" returned by

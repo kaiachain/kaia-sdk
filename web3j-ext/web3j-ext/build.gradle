@@ -61,18 +61,6 @@ publishing {
                     connection = 'scm:git:https://github.com/kaiachain/kaia-sdk.git'
                     developerConnection = 'scm:git:ssh://github.com:kaiachain/kaia-sdk.git'
                 }
-                developers {
-                    developer {
-                        id = "jack"
-                        name = "jack"
-                        email = "jack.jin@klaytn.foundation"
-                    }
-                    developer {
-                        id = "jay"
-                        name = "jay"
-                        email = "jay.sep@klaytn.foundation"
-                    }
-                }
             }
         }
     }

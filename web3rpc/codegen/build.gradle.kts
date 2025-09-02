@@ -27,7 +27,7 @@ buildscript {
 
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-    id("org.jetbrains.kotlin.jvm") version "1.7.20"
+    id("org.jetbrains.kotlin.jvm") version "1.9.22"
 
     // Apply the java-library plugin for API and implementation separation.
     `java-library`

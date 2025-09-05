@@ -9,20 +9,20 @@
   <body>
     <body>
       <p><button id="btnConnectMM" onclick="connectMM()">Connect MetaMask</button></p>
-      <p><button id="btnConnectKK" onclick="connectKK()">Connect Kaikas</button></p>
+      <p><button id="btnConnectKK" onclick="connectKK()">Connect Kaia Wallet</button></p>
       <hr/>
       <p>
-        <button id="btnNetBaobab" onclick="switchBaobab()">Switch to Baobab</button>
+        <button id="btnNetKairos" onclick="switchKairos()">Switch to Kairos</button>
       </p>
       <hr/>
-      <p>For MetaMask and Kaikas</p>
+      <p>For MetaMask and Kaia Wallet</p>
       <p><button id="btnSignMsg" onclick="signMsg()">Sign message</button></p>
       <p>
-        <button id="btnLegacyVT" onclick="sendLegacyVT()">Send Legacy or Dynamic Fee tx (send ETH/KLAY)</button>
+        <button id="btnLegacyVT" onclick="sendLegacyVT()">Send Legacy or Dynamic Fee tx (send ETH/KAIA)</button>
         <button id="btnLegacySC" onclick="sendLegacySC()">Send Legacy or Dynamic Fee tx (call contract)</button>
       </p>
       <hr/>
-      <p>For Kaikas</p>
+      <p>For Kaia Wallet</p>
       <p>
         <button id="btnKlaytnVT" onclick="sendKlaytnVT()">Send ValueTransfer tx</button>
         <button id="btnKlaytnSC" onclick="sendKlaytnSC()">Send SmartContractExecution tx</button>
@@ -30,6 +30,10 @@
       <p>
         <button id="btnFeeDelegatedVT" onclick="sendFeeDelegatedVT()">Sign and Send FeeDelegatedValueTransfer tx</button>
         <button id="btnFeeDelegatedSC" onclick="sendFeeDelegatedSC()">Sign and Send FeeDelegatedSmartContractExecution tx</button>
+      </p>
+      <p>
+        <button id="btnFeeDelegatedServiceVT" onclick="sendFeeDelegatedServiceVT()">Sign and Send Fee Delegation Service ValueTransfer tx</button>
+        <button id="btnFeeDelegatedServiceSC" onclick="sendFeeDelegatedServiceSC()">Sign and Send Fee Delegation Service SmartContractExecution tx</button>
       </p>
       <hr/>
       <p>

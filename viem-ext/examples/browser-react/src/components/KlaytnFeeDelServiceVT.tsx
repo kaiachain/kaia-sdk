@@ -1,27 +1,27 @@
 import { useState } from "react";
 import { Account } from "../types";
-import { doSendTx } from "../util";
-import { parseKaia } from "@kaiachain/ethers-ext/v6";
+import { doSignTx } from "../util";
+import { parseKaia, TxType } from "@kaiachain/viem-ext";
 
 type Props = {
   account: Account;
 };
 
-function LegacyVT({ account }: Props) {
+function KlaytnFeeDelServiceVT({ account }: Props) {
   const [txhash, setTxhash] = useState<string>("");
   const [error, setError] = useState<any>(null);
 
   async function handleSubmit(e: any) {
     e.preventDefault();
-    const toAddr = e.target.to.value;
-    const valuePeb = parseKaia(e.target.amount.value);
     const tx = {
-      to: toAddr,
-      value: valuePeb,
+      from: account.address,
+      type: TxType.FeeDelegatedValueTransfer,
+      to: e.target.to.value,
+      value: parseKaia(e.target.amount.value),
     };
 
     try {
-      const txhash = await doSendTx(account, tx);
+      const txhash = await doSignTx(account, tx, true);
       setTxhash(txhash);
     } catch (e: any) {
       setError(e);
@@ -36,8 +36,7 @@ function LegacyVT({ account }: Props) {
           <input type="text" name="to" defaultValue={account.address}></input>
         </p>
         <p>
-          Amount (ETH/KAIA):{" "}
-          <input type="text" name="amount" defaultValue="0.01"></input>
+          Value: <input type="text" name="amount" defaultValue="0.01"></input>
         </p>
         <p>
           <input type="submit"></input>
@@ -57,4 +56,4 @@ function LegacyVT({ account }: Props) {
   );
 }
 
-export default LegacyVT;
+export default KlaytnFeeDelServiceVT;

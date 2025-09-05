@@ -32,7 +32,7 @@ function LegacyVT({ account }: Props) {
     <div className="menu-component">
       <form onSubmit={handleSubmit}>
         <p>To: <input type="text" name="to" defaultValue={account.address}></input></p>
-        <p>Amount (ETH/KLAY): <input type="text" name="amount" defaultValue="0.01"></input></p>
+        <p>Amount (ETH/KAIA): <input type="text" name="amount" defaultValue="0.01"></input></p>
         <p><input type="submit"></input></p>
       </form>
       { txhash? <a target="_blank" href={txhash} rel="noreferrer">{txhash}</a> : null }

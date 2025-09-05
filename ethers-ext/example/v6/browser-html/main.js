@@ -3,12 +3,14 @@ var accounts = null;
 var signedApproveTx = null;
 var signedSwapTx = null;
 
-// https://baobab.klaytnscope.com/account/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
+// https://kairos.kaiascan.io/address/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
 var contractAddress = "0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df";
 var contractCalldata = "0xd09de08a"; // function increment()
 
 var testTokenAddr = "0xcB00BA2cAb67A3771f9ca1Fa48FDa8881B457750"
 var routerAddress = "0x4b41783732810b731569e4d944f59372f411bea2"
+
+var feeDelegationURL = "https://fee-delegation-kairos.kaia.io"; // TESTNET Fee Delegation Service
 
 function isKaikas() {
   return provider && provider.provider.isKaikas;
@@ -79,17 +81,17 @@ async function switchNetwork(networkSpec) {
     await provider.send("wallet_addEthereumChain", [networkSpec]);
   }
 }
-async function switchBaobab() {
+async function switchKairos() {
   await switchNetwork({
     chainId: "0x3e9",
-    chainName: "Klaytn Baobab",
+    chainName: "Kaia Kairos",
     nativeCurrency: {
-      name: "KLAY",
-      symbol: "KLAY",
+      name: "KAIA",
+      symbol: "KAIA",
       decimals: 18,
     },
     rpcUrls: ["https://public-en-kairos.node.kaia.io"],
-    blockExplorerUrls: ["https://baobab.klaytnscope.com/"],
+    blockExplorerUrls: ["https://kairos.kaiascan.io/"],
   });
 }
 async function switchPrivateNetwork() {
@@ -156,7 +158,7 @@ async function doSendTx(makeTxRequest) {
     const sentTx = await signer.sendTransaction(txRequest);
     console.log("sentTx", sentTx);
     const txhash = sentTx.hash;
-    const explorerUrl = "https://baobab.klaytnscope.com/tx/";
+    const explorerUrl = "https://kairos.kaiascan.io/tx/";
     $("#textTxhash").html(
       `<a href="${explorerUrl}${txhash}" target="_blank">${txhash}</a>`
     );
@@ -214,13 +216,33 @@ async function doSendTxAsFeePayer(signedTx) {
   const sentTx = await feePayerWallet.sendTransactionAsFeePayer(signedTx);
   console.log("sentTx", sentTx);
   const txhash = sentTx.hash;
-  const explorerUrl = "https://baobab.klaytnscope.com/tx/";
+  const explorerUrl = "https://kairos.kaiascan.io/tx/";
   $("#textTxhash").html(
     `<a href="${explorerUrl}${txhash}" target="_blank">${txhash}</a>`
   );
 }
 
-async function doSignTx(makeTxRequest) {
+async function doSendTxToFeeDelegationService(signedTx) {
+  const response = await fetch(`${feeDelegationURL}/api/signAsFeePayer`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      // 'Authorization': 'Bearer your_kaia_api_key' // FOR MAINNET; OTHERWISE, SENDER OR CONTRACT ADDRESS MUST BE WHITELISTED
+    },
+    body: JSON.stringify({
+      userSignedTx: { raw: signedTx }
+    })
+  });
+
+  const result = await response.json();
+  const txhash = result.data.hash;
+  const explorerUrl = "https://kairos.kaiascan.io/tx/";
+  $("#textTxhash").html(
+    `<a href="${explorerUrl}${txhash}" target="_blank">${txhash}</a>`
+  );
+}
+
+async function doSignTx(makeTxRequest, isFeeDelegationService) {
   try {
     const signer = await provider.getSigner(accounts[0].address);
     const address = await signer.getAddress();
@@ -230,7 +252,12 @@ async function doSignTx(makeTxRequest) {
     console.log("signedTx", signedTx);
     $("#textSignedTx").html(`${signedTx}`);
 
-    await doSendTxAsFeePayer(signedTx);
+    if (isFeeDelegationService) {
+      // Send to Fee Delegation Service if isFeeDelegationService is true
+      await doSendTxToFeeDelegationService(signedTx);
+    } else {
+      await doSendTxAsFeePayer(signedTx);
+    }
   } catch (err) {
     console.error(err);
     $("#textTxhash").html(`Error: ${err.message}`);
@@ -243,7 +270,7 @@ async function sendFeeDelegatedVT() {
       to: address, // send to myself
       value: 0,
     };
-  });
+  }, false);
 }
 async function sendFeeDelegatedSC() {
   doSignTx(async () => {
@@ -252,7 +279,26 @@ async function sendFeeDelegatedSC() {
       to: contractAddress,
       data: contractCalldata,
     };
-  });
+  }, false);
+}
+
+async function sendFeeDelegatedServiceVT() {
+  doSignTx(async (address) => {
+    return {
+      type: ethers_ext.TxType.FeeDelegatedValueTransfer, // 0x09
+      to: address, // send to myself
+      value: 0,
+    };
+  }, true);
+}
+async function sendFeeDelegatedServiceSC() {
+  doSignTx(async () => {
+    return {
+      type: ethers_ext.TxType.FeeDelegatedSmartContractExecution, // 0x09
+      to: contractAddress,
+      data: contractCalldata,
+    };
+  }, true);
 }
 
 async function signAndSendGaslessTxs() {

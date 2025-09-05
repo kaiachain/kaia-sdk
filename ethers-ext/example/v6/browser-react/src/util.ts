@@ -1,4 +1,4 @@
-import { BrowserProvider, JsonRpcProvider } from "ethers6";
+import { BrowserProvider, JsonRpcProvider } from "ethers";
 import { Wallet } from "@kaiachain/ethers-ext/v6";
 import { Account } from "./types";
 
@@ -21,7 +21,7 @@ export async function doSendTx(account: Account, txRequest: any): Promise<any> {
   }
 }
 
-export async function doSignTx(account: Account, txRequest: any): Promise<any> {
+export async function doSignTx(account: Account, txRequest: any, isFeeDelegationService: boolean): Promise<any> {
   try {
     if (!account.provider) {
       throw new Error("wallet not connected");
@@ -36,7 +36,12 @@ export async function doSignTx(account: Account, txRequest: any): Promise<any> {
     const signedTx = await signer.signTransaction(txRequest);
     console.log("signedTx", signedTx);
 
-    return await doSendTxAsFeePayer(signedTx);
+    if (isFeeDelegationService) {
+      // Send to Fee Delegation Service if isFeeDelegationService is true
+      return await doSendTxToFeeDelegationService(signedTx);
+    } else {
+      return await doSendTxAsFeePayer(signedTx);
+    }
   } catch (err) {
     console.error(err);
   }
@@ -63,11 +68,34 @@ async function doSendTxAsFeePayer(signedTx: string) {
   }
 }
 
+async function doSendTxToFeeDelegationService(signedTx: string) {
+  try {
+    const feeDelegationURL = "https://fee-delegation-kairos.kaia.io"; // TESTNET Fee Delegation Service
+    const response = await fetch(`${feeDelegationURL}/api/signAsFeePayer`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // 'Authorization': 'Bearer your_kaia_api_key' // FOR MAINNET; OTHERWISE, SENDER OR CONTRACT ADDRESS MUST BE WHITELISTED
+      },
+      body: JSON.stringify({
+        userSignedTx: { raw: signedTx }
+      })
+    });
+  
+    const result = await response.json();
+    const txhash = result.data.hash;
+
+    return getTxhashUrl(1001, txhash);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 export function getTxhashUrl(chainId: number, txhash: string): string {
   if (chainId === 1001) {
-    return "https://baobab.klaytnscope.com/tx/" + txhash;
+    return "https://kairos.kaiascan.io/tx/" + txhash;
   } else if (chainId === 8271) {
-    return "https://klaytnscope.com/tx/" + txhash;
+    return "https://kaiascan.io/tx/" + txhash;
   }
   return "Can not support your chainId";
 }
@@ -89,14 +117,14 @@ export async function switchNetwork(
   }
 }
 
-export const baobabNetworkSpec = {
+export const kairosNetworkSpec = {
   chainId: "0x3e9",
-  chainName: "Klaytn Baobab",
+  chainName: "Kaia Kairos",
   nativeCurrency: {
-    name: "KLAY",
-    symbol: "KLAY",
+    name: "KAIA",
+    symbol: "KAIA",
     decimals: 18,
   },
   rpcUrls: ["https://public-en-kairos.node.kaia.io"],
-  blockExplorerUrls: ["https://baobab.klaytnscope.com/"],
+  blockExplorerUrls: ["https://kairos.kaiascan.io/"],
 };

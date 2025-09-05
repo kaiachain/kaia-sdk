@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'io.kaia'
-version 'v2.0.9'
+version 'v2.1.0'
 
 repositories {
     mavenCentral()

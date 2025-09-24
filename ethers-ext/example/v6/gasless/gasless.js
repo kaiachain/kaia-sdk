@@ -3,7 +3,8 @@ const ethers = require("ethers6");
 const { Wallet, gasless } = require("@kaiachain/ethers-ext/v6");
 
 // Replace with ERC20 token address to be spent
-const tokenAddr = "0xcB00BA2cAb67A3771f9ca1Fa48FDa8881B457750"; // Kairos:TEST token
+// You can receive 1 USD₮ on Kairos network from https://www.kaia.io/faucet
+const tokenAddr = "0xd077a400968890eacc75cdc901f0356c943e4fdb"; // Kairos:USD₮ token
 //const tokenAddr = "0x8ebc32c078f5ecc8406ddDC785c8F0e2490C1081";
 // Replace with your wallet address and private key
 const senderAddr = "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720";
@@ -74,7 +75,7 @@ async function main() {
   console.log(`- amountRepay: ${ethers.formatEther(amountRepay)} KAIA`);
   const minAmountOut = gasless.getMinAmountOut(amountRepay, appTxFee, commissionRate);
   console.log(`- minAmountOut: ${ethers.formatEther(minAmountOut)} KAIA`);
-  const slippageBps = 50 // 0.5%
+  const slippageBps = 50; // 0.5%
   const amountIn = await gasless.getAmountIn(router, tokenAddr, minAmountOut, slippageBps);
   console.log(`- amountIn: ${ethers.formatUnits(amountIn, tokenDecimals)} ${tokenSymbol}`);
 
@@ -117,7 +118,7 @@ async function main() {
     [senderAddr.toLowerCase()]: "sender",
     [tokenAddr.toLowerCase()]: "token",
     [routerAddr.toLowerCase()]: "router",
-  }
+  };
   for (const txhash of block.transactions) {
     const tx = await provider.getTransaction(txhash);
     const fromName = names[tx.from.toLowerCase()] || tx.from;

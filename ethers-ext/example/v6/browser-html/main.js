@@ -110,13 +110,14 @@ async function switchPrivateNetwork() {
 
 async function signMsg() {
   try {
+    let signature = null;
+    const message = "Hello dapp";
     if (isKaikas()) {
       const { hexlify, toUtf8Bytes } = ethers;
       const signer = await provider.getSigner(accounts[0].address);
-      const message = "Hello dapp";
       const hexMessage = hexlify(toUtf8Bytes(message));
 
-      const signature = await provider.send("eth_sign", [
+      signature = await provider.send("eth_sign", [
         await signer.getAddress(),
         hexMessage,
       ]);
@@ -135,13 +136,17 @@ async function signMsg() {
       const signer = await provider.getSigner(accounts[0].address);
       const message = "Hello dapp";
       
-      const signature = await signer.signMessage(message);
+      signature = await signer.signMessage(message);
       console.log("signature", signature);
       $("#textSignature").html(signature);
 
       const recoveredAddress = ethers.verifyMessage(message, signature);
       console.log("recoveredAddress", recoveredAddress);
       $("#textRecoveredAddress").html(recoveredAddress);
+    }
+    return {
+      signature: signature,
+      message: message,
     }
   } catch (err) {
     console.error(err);
@@ -399,4 +404,33 @@ async function calcTargetValue() {
 
   $("#kaiaEstimateFee").html(`${ethers_ext.formatKaia(amountRepay)}`);
   $("#testTokenEstimateFee").html(`${ethers_ext.formatKaia(amountIn)}`);
+}
+
+// Derive Finschia address
+async function deriveFinschiaAddress() {
+  try {
+    const { signature, message } = await signMsg();
+    const digest = ethers.hashMessage(message);
+
+    const recoveredPubKey = ethers.SigningKey.recoverPublicKey(digest, signature);
+    console.log('Recovered public key:', recoveredPubKey);
+    
+    const pubKeyBytes = ethers.getBytes(recoveredPubKey);
+    const compressedPubKey = ethers.SigningKey.computePublicKey(pubKeyBytes, true);
+    console.log('Compressed public key:', ethers.hexlify(compressedPubKey));
+    
+     const sha256Hash = ethers.sha256(compressedPubKey);
+     console.log('SHA256 hash:', sha256Hash);
+     const ripemd160HashHex = await ripemd160(ethers.getBytes(sha256Hash));
+     console.log('RIPEMD160 hash (hex):', ripemd160HashHex);
+     const ripemd160Bytes = ethers.getBytes('0x' + ripemd160HashHex);
+     const words = bech32.toWords(ripemd160Bytes);
+     const finschiaAddress = bech32.encode("link", words);
+     console.log('Finschia address:', finschiaAddress);
+    
+    $("#textDerivedFinschiaAddress").html(finschiaAddress);
+  } catch (error) {
+    console.error('Error deriving Finschia address:', error);
+    throw error;
+  }
 }

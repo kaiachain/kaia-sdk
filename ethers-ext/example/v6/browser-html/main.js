@@ -6,6 +6,7 @@ var signedSwapTx = null;
 // https://kairos.kaiascan.io/address/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
 var contractAddress = "0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df";
 var contractCalldata = "0xd09de08a"; // function increment()
+var holderVerifierAddress = "0x25a750ac0d5f19b43dc5195dc592239687f8215b";
 
 var testTokenAddr = "0xcB00BA2cAb67A3771f9ca1Fa48FDa8881B457750"
 var routerAddress = "0x4b41783732810b731569e4d944f59372f411bea2"
@@ -135,7 +136,7 @@ async function signMsg() {
     } else {
       const signer = await provider.getSigner(accounts[0].address);
       const message = "Hello dapp";
-      
+
       signature = await signer.signMessage(message);
       console.log("signature", signature);
       $("#textSignature").html(signature);
@@ -414,42 +415,78 @@ async function deriveFinschiaAddress() {
 
     const recoveredPubKey = ethers.SigningKey.recoverPublicKey(digest, signature);
     console.log('Recovered public key:', recoveredPubKey);
-    
-    const pubKeyBytes = ethers.getBytes(recoveredPubKey);
-    const compressedPubKey = ethers.SigningKey.computePublicKey(pubKeyBytes, true);
-    console.log('Compressed public key:', ethers.hexlify(compressedPubKey));
-    
-    const sha256Hash = ethers.sha256(compressedPubKey);
-    console.log('SHA256 hash:', sha256Hash);
-    const ripemd160HashHex = ethers.ripemd160(ethers.getBytes(sha256Hash));
-    console.log('RIPEMD160 hash (hex):', ripemd160HashHex);
-    const ripemd160Bytes = ethers.getBytes(ripemd160HashHex);
-    const words = bech32.bech32.toWords(ripemd160Bytes);
-    const finschiaAddress = bech32.bech32.encode("link", words);
+
+    const finschiaAddress = pubkeyToFinschiaAddress(recoveredPubKey);
     console.log('Finschia address:', finschiaAddress);
-  
+
     $("#textDerivedFinschiaAddress").html(finschiaAddress);
 
     // Call getRecord from the bridge contract
-    const contractAddress = "0x25a750ac0d5f19b43dc5195dc592239687f8215b";
-    const contractABI = [
+    const holderVerifierABI = [
       "function getRecord(string) view returns (uint256, bool)"
     ];
-    
+
     // Use a specific RPC provider for Kaia Kairos testnet
     const rpcProvider = new ethers.JsonRpcProvider("https://public-en-kairos.node.kaia.io");
-    const contract = new ethers.Contract(contractAddress, contractABI, rpcProvider);
-    
+    const contract = new ethers.Contract(holderVerifierAddress, holderVerifierABI, rpcProvider);
+
     const result = await contract.getRecord(finschiaAddress);
     const conyBalance = result[0];
     const provisioned = result[1];
     console.log('ConyBalance:', conyBalance.toString());
     console.log('Provisioned:', provisioned);
-    
+
     $("#textConyBalance").html(conyBalance.toString());
     $("#textProvisioned").html(provisioned ? "true" : "false");
   } catch (error) {
     console.error('Error deriving Finschia address:', error);
     throw error;
   }
+}
+
+async function sendRequestProvision(data) {
+  doSendTx(async () => {
+    return {
+      to: holderVerifierAddress,
+      data: data,
+    };
+  });
+}
+
+async function requestProvision() {
+  try {
+    await switchKairos();
+    const { signature, message } = await signMsg();
+    const digest = ethers.hashMessage(message);
+    const recoveredPubKey = ethers.SigningKey.recoverPublicKey(digest, signature);
+    const finschiaAddress = pubkeyToFinschiaAddress(recoveredPubKey);
+
+    const holderVerifierABI = [
+      "function requestProvision(bytes, string, bytes32, bytes)",
+      "event ProvisionRequested(string indexed fnsaAddr, address indexed kaiaAddr, uint256 conyBalance, uint256 kaiaAmount)"
+    ];
+    const contract = new ethers.Contract(holderVerifierAddress, holderVerifierABI, provider);
+    const iface = new ethers.Interface(holderVerifierABI);
+    const calldata = iface.encodeFunctionData("requestProvision", [recoveredPubKey, finschiaAddress, digest, signature]);
+    await sendRequestProvision(calldata);
+
+    // Fetch event data from the bridge contract
+    const eventFilter = contract.filters.ProvisionRequested(finschiaAddress);
+    const events = await contract.queryFilter(eventFilter);
+    console.log('Provision requested events:', events);
+  } catch (error) {
+    console.error('Error requesting provision:', error);
+    throw error;
+  }
+}
+
+function pubkeyToFinschiaAddress(pubkey) {
+  const pubKeyBytes = ethers.getBytes(pubkey);
+  const compressedPubKey = ethers.SigningKey.computePublicKey(pubKeyBytes, true);
+  const sha256Hash = ethers.sha256(compressedPubKey);
+  const ripemd160HashHex = ethers.ripemd160(ethers.getBytes(sha256Hash));
+  const ripemd160Bytes = ethers.getBytes(ripemd160HashHex);
+  const words = bech32.bech32.toWords(ripemd160Bytes);
+  const finschiaAddress = bech32.bech32.encode("link", words);
+  return finschiaAddress;
 }

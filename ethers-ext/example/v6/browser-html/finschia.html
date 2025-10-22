@@ -22,6 +22,8 @@
       </p>
       <p>
         <div>derived finschia address: <text id="textDerivedFinschiaAddress"></text></div>
+        <div>cony balance: <text id="textConyBalance"></text></div>
+        <div>provisioned: <text id="textProvisioned"></text></div>
       </p>
 
       <hr/>
@@ -29,14 +31,7 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.1/ethers.umd.min.js" integrity="sha512-UvwB92yhzWWQstXZT31l1Fc7wv3sRG7uWBSFZ6TeJ0LIfBe8oM9p2oufp1Y5nuBAso+FYHR03WocHr5+wqWJ7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="module">
-        import * as bech32Module from "https://cdn.jsdelivr.net/npm/bech32@2.0.0/+esm";
-        window.bech32 = bech32Module.bech32;
-      </script>
-    <script type="module">
-        import { ripemd160 } from "https://cdn.jsdelivr.net/npm/hash-wasm@4.12.0/+esm";
-        window.ripemd160 = ripemd160;
-      </script>
+    <script src="https://bundle.run/bech32@2.0.0"></script>
     
     <!-- to use remote ethers -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/@kaiachain/ethers-ext@latest/dist/ethers-ext.v6.bundle.js"></script> -->

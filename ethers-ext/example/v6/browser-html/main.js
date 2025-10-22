@@ -419,16 +419,35 @@ async function deriveFinschiaAddress() {
     const compressedPubKey = ethers.SigningKey.computePublicKey(pubKeyBytes, true);
     console.log('Compressed public key:', ethers.hexlify(compressedPubKey));
     
-     const sha256Hash = ethers.sha256(compressedPubKey);
-     console.log('SHA256 hash:', sha256Hash);
-     const ripemd160HashHex = await ripemd160(ethers.getBytes(sha256Hash));
-     console.log('RIPEMD160 hash (hex):', ripemd160HashHex);
-     const ripemd160Bytes = ethers.getBytes('0x' + ripemd160HashHex);
-     const words = bech32.toWords(ripemd160Bytes);
-     const finschiaAddress = bech32.encode("link", words);
-     console.log('Finschia address:', finschiaAddress);
-    
+    const sha256Hash = ethers.sha256(compressedPubKey);
+    console.log('SHA256 hash:', sha256Hash);
+    const ripemd160HashHex = ethers.ripemd160(ethers.getBytes(sha256Hash));
+    console.log('RIPEMD160 hash (hex):', ripemd160HashHex);
+    const ripemd160Bytes = ethers.getBytes(ripemd160HashHex);
+    const words = bech32.bech32.toWords(ripemd160Bytes);
+    const finschiaAddress = bech32.bech32.encode("link", words);
+    console.log('Finschia address:', finschiaAddress);
+  
     $("#textDerivedFinschiaAddress").html(finschiaAddress);
+
+    // Call getRecord from the bridge contract
+    const contractAddress = "0x25a750ac0d5f19b43dc5195dc592239687f8215b";
+    const contractABI = [
+      "function getRecord(string) view returns (uint256, bool)"
+    ];
+    
+    // Use a specific RPC provider for Kaia Kairos testnet
+    const rpcProvider = new ethers.JsonRpcProvider("https://public-en-kairos.node.kaia.io");
+    const contract = new ethers.Contract(contractAddress, contractABI, rpcProvider);
+    
+    const result = await contract.getRecord(finschiaAddress);
+    const conyBalance = result[0];
+    const provisioned = result[1];
+    console.log('ConyBalance:', conyBalance.toString());
+    console.log('Provisioned:', provisioned);
+    
+    $("#textConyBalance").html(conyBalance.toString());
+    $("#textProvisioned").html(provisioned ? "true" : "false");
   } catch (error) {
     console.error('Error deriving Finschia address:', error);
     throw error;

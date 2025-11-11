@@ -505,6 +505,8 @@ async function requestProvision() {
       $("#btnRequestClaim").prop("disabled", false);
       $("#textProvisioned").html("true");
     }
+
+    await getBalance();
   } catch (error) {
     console.error('Error requesting provision:', error);
     throw error;

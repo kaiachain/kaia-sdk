@@ -6,8 +6,10 @@ var signedSwapTx = null;
 // https://kairos.kaiascan.io/address/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
 var contractAddress = "0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df";
 var contractCalldata = "0xd09de08a"; // function increment()
-var holderVerifierAddress = "0x610178dA211FEF7D417bC0e6FeD39F05609AD788";
-var bridgeAddress = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853";
+
+// Kairos contracts
+var holderVerifierAddress = "0x6dc8f41BFfD51C20437df7B0eD5E17716802E4EF";
+var bridgeAddress = "0xF02C6c29611e7eC05e4429ce440E1fF40c9b730a";
 
 var testTokenAddr = "0xcB00BA2cAb67A3771f9ca1Fa48FDa8881B457750"
 var routerAddress = "0x4b41783732810b731569e4d944f59372f411bea2"
@@ -428,9 +430,6 @@ async function deriveFinschiaAddress() {
       "function getRecord(string) view returns (uint256, uint64)",
     ];
 
-    // Use a specific RPC provider for Kaia Kairos testnet
-    //const rpcProvider = new ethers.JsonRpcProvider("https://public-en-kairos.node.kaia.io");
-    //const rpcProvider = new ethers_ext.JsonRpcProvider("http://localhost:8545");
     const contract = new ethers.Contract(holderVerifierAddress, holderVerifierABI, provider);
 
     const result = await contract.getRecord(finschiaAddress);

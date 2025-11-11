@@ -6,7 +6,8 @@ var signedSwapTx = null;
 // https://kairos.kaiascan.io/address/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
 var contractAddress = "0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df";
 var contractCalldata = "0xd09de08a"; // function increment()
-var holderVerifierAddress = "0x25a750ac0d5f19b43dc5195dc592239687f8215b";
+var holderVerifierAddress = "0x610178dA211FEF7D417bC0e6FeD39F05609AD788";
+var bridgeAddress = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853";
 
 var testTokenAddr = "0xcB00BA2cAb67A3771f9ca1Fa48FDa8881B457750"
 var routerAddress = "0x4b41783732810b731569e4d944f59372f411bea2"
@@ -307,6 +308,8 @@ async function sendFeeDelegatedServiceSC() {
   }, true);
 }
 
+const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
+
 async function signAndSendGaslessTxs() {
   try {
     // ------- before swap -------
@@ -355,7 +358,6 @@ async function signAndSendGaslessTxs() {
     const amountIn = await ethers_ext.gasless.getAmountIn(router, testTokenAddr, minAmountOut, 50);
     console.log("amountIn", amountIn);
 
-    const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
     await sleep(5000); // wait 5s
 
     let swapTx = await ethers_ext.gasless.getSwapTx(
@@ -421,61 +423,145 @@ async function deriveFinschiaAddress() {
 
     $("#textDerivedFinschiaAddress").html(finschiaAddress);
 
-    // Call getRecord from the bridge contract
+    // Call getRecord from the HolderVerifier contract
     const holderVerifierABI = [
-      "function getRecord(string) view returns (uint256, bool)"
+      "function getRecord(string) view returns (uint256, uint64)",
     ];
 
     // Use a specific RPC provider for Kaia Kairos testnet
-    const rpcProvider = new ethers.JsonRpcProvider("https://public-en-kairos.node.kaia.io");
-    const contract = new ethers.Contract(holderVerifierAddress, holderVerifierABI, rpcProvider);
+    //const rpcProvider = new ethers.JsonRpcProvider("https://public-en-kairos.node.kaia.io");
+    //const rpcProvider = new ethers_ext.JsonRpcProvider("http://localhost:8545");
+    const contract = new ethers.Contract(holderVerifierAddress, holderVerifierABI, provider);
 
     const result = await contract.getRecord(finschiaAddress);
     const conyBalance = result[0];
-    const provisioned = result[1];
+    const provisionSeq = result[1];
     console.log('ConyBalance:', conyBalance.toString());
-    console.log('Provisioned:', provisioned);
+    console.log('ProvisionSeq:', provisionSeq.toString());
 
     $("#textConyBalance").html(conyBalance.toString());
-    $("#textProvisioned").html(provisioned ? "true" : "false");
+    $("#textProvisioned").html(provisionSeq > 0 ? "true" : "false");
+
+    await getBalance();
+
+    // check if provision was claimed
+    const bridgeABI = [
+      "function claimed(uint64) view returns (bool)",
+    ];
+    const bridgeContract = new ethers.Contract(bridgeAddress, bridgeABI, provider);
+    const claimed = await bridgeContract.claimed(provisionSeq);
+    console.log("claimed", claimed);
+    $("#textClaimed").html(claimed ? "true" : "false");
+
+    if (provisionSeq == 0 && conyBalance > 0) {
+      $("#btnRequestProvision").prop("disabled", false);
+    } else if (provisionSeq > 0 && !claimed) {
+      $("#btnRequestClaim").prop("disabled", false);
+    }
   } catch (error) {
     console.error('Error deriving Finschia address:', error);
     throw error;
   }
 }
 
-async function sendRequestProvision(data) {
-  doSendTx(async () => {
-    return {
-      to: holderVerifierAddress,
-      data: data,
-    };
-  });
+async function getBalance() {
+  const balance = await provider.getBalance(accounts[0].address);
+  $("#textBalance").html(`${ethers_ext.formatKaia(balance)}`);
 }
 
 async function requestProvision() {
   try {
-    await switchKairos();
     const { signature, message } = await signMsg();
     const digest = ethers.hashMessage(message);
     const recoveredPubKey = ethers.SigningKey.recoverPublicKey(digest, signature);
+    console.log("recoveredPubKey", recoveredPubKey);
     const finschiaAddress = pubkeyToFinschiaAddress(recoveredPubKey);
+    console.log("finschiaAddress", finschiaAddress);
 
     const holderVerifierABI = [
       "function requestProvision(bytes, string, bytes32, bytes)",
-      "event ProvisionRequested(string indexed fnsaAddr, address indexed kaiaAddr, uint256 conyBalance, uint256 kaiaAmount)"
     ];
-    const contract = new ethers.Contract(holderVerifierAddress, holderVerifierABI, provider);
     const iface = new ethers.Interface(holderVerifierABI);
     const calldata = iface.encodeFunctionData("requestProvision", [recoveredPubKey, finschiaAddress, digest, signature]);
-    await sendRequestProvision(calldata);
+    const signer = await provider.getSigner(accounts[0].address);
+    const txRequest = {
+      to: holderVerifierAddress,
+      data: calldata,
+    };
 
-    // Fetch event data from the bridge contract
-    const eventFilter = contract.filters.ProvisionRequested(finschiaAddress);
-    const events = await contract.queryFilter(eventFilter);
-    console.log('Provision requested events:', events);
+    const sentTx = await signer.sendTransaction(txRequest);
+    console.log("sentTx", sentTx);
+    const txhash = sentTx.hash;
+    const explorerUrl = "https://kairos.kaiascan.io/tx/";
+    $("#textProvisionTxhash").html(
+      `<a href="${explorerUrl}${txhash}" target="_blank">${txhash}</a>`
+    );
+    await sentTx.wait();
+
+    const seqNumber = await getSeqNumber(finschiaAddress);
+    // If seqNumber is greater than 0, the requestProvision has been successful
+    if (seqNumber > 0) {
+      $("#btnRequestProvision").prop("disabled", true);
+      $("#btnRequestClaim").prop("disabled", false);
+      $("#textProvisioned").html("true");
+    }
   } catch (error) {
     console.error('Error requesting provision:', error);
+    throw error;
+  }
+}
+
+async function getSeqNumber(fnsaAddress) {
+  const holderVerifierABI = [
+    "function provisionSeq(string) view returns (uint64)",
+  ];
+  const contract = new ethers.Contract(holderVerifierAddress, holderVerifierABI, provider);
+  const seqNumber = await contract.provisionSeq(fnsaAddress);
+  console.log("seqNumber", seqNumber);
+  return seqNumber;
+}
+
+async function requestClaim() {
+  try {
+    const finschiaAddress = $("#textDerivedFinschiaAddress").text();
+
+    const seqNumber = await getSeqNumber(finschiaAddress);
+    console.log("requestClaim: seqNumber", seqNumber);
+
+    if (seqNumber == 0n) {
+      alert("No claimable provision found");
+      $("#btnRequestClaim").prop("disabled", true);
+      return;
+    }
+
+    const bridgeABI = [
+      "function requestClaim(uint64)"
+    ];
+    const iface = new ethers.Interface(bridgeABI);
+    const calldata = iface.encodeFunctionData("requestClaim", [seqNumber]);
+    const signer = await provider.getSigner(accounts[0].address);
+    const txRequest = {
+      to: bridgeAddress,
+      data: calldata,
+    };
+
+    const sentTx = await signer.sendTransaction(txRequest);
+    console.log("sentTx", sentTx);
+    const txhash = sentTx.hash;
+    const explorerUrl = "https://kairos.kaiascan.io/tx/";
+    $("#textClaimTxhash").html(
+      `<a href="${explorerUrl}${txhash}" target="_blank">${txhash}</a>`
+    );
+    const receipt = await sentTx.wait();
+
+    if (receipt.status == 1) {
+      $("#btnRequestClaim").prop("disabled", true);
+      $("#textClaimed").html("true");
+    }
+    // update the balance
+    await getBalance();
+  } catch (error) {
+    console.error('Error requesting claim:', error);
     throw error;
   }
 }

@@ -9,6 +9,10 @@
     <body>
       <p><button id="btnConnectMM" onclick="connectMM()">Connect MetaMask</button></p>
       <hr/>
+      <p>
+        <button id="btnNetKairos" onclick="switchKairos()">Switch to Kairos</button>
+      </p>
+      <hr/>
       <p>For MetaMask</p>
       <p><button id="btnDeriveFinschiaAddress" onclick="deriveFinschiaAddress()">Derive Finschia address</button></p>
       <p>
@@ -23,10 +27,19 @@
         <div>derived finschia address: <text id="textDerivedFinschiaAddress"></text></div>
         <div>cony balance: <text id="textConyBalance"></text></div>
         <div>provisioned: <text id="textProvisioned"></text></div>
+        <div>claimed: <text id="textClaimed"></text></div>
       </p>
 
-      <p><button id="btnRequestProvision" onclick="requestProvision()">Request Provision</button></p>
+      <p><button id="btnRequestProvision" onclick="requestProvision()" disabled>Request Provision</button></p>
+      <p>
+        <div>Provision txhash: <text id="textProvisionTxhash"></text></div>
+      </p>
       <hr/>
+      <p><button id="btnRequestClaim" onclick="requestClaim()" disabled>Request Claim</button></p>
+      <p>
+        <div>balance: <text id="textBalance"></text></div>
+        <div>Claim txhash: <text id="textClaimTxhash"></text></div>
+      </p>
     </body>
 
     <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>

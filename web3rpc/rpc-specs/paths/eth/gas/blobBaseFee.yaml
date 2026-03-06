@@ -1,0 +1,64 @@
+openapi: "3.0.2"
+info:
+  title: KAIA Open API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /eth/gas/blobBaseFee:
+    post:
+      summary: "[Gas] eth_blobBaseFee"
+      tags:
+        - eth
+      operationId: blobBaseFee
+      description: |
+        Returns the expected base fee for blobs in the next block.
+
+        **JSONRPC:** `eth_blobBaseFee`
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/EthBlobBaseFeeReq"
+
+      responses:
+        200:
+          description: Returns the expected base fee in kei, represented in hexadecimal format.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/EthBlobBaseFeeResp"
+
+components:
+  schemas:
+    EthBlobBaseFeeReq:
+      type: object
+      required:
+        - method
+      properties:
+        method:
+          type: string
+          default: 'eth_blobBaseFee'
+        params:
+          type: array
+          items: {}
+          example: []
+
+    EthBlobBaseFeeResp:
+      type: object
+      properties:
+        result:
+          type: string
+          format: hex
+          description: The expected blob base fee in kei, represented in hexadecimal format.
+          example: "0x2e90edd000"

@@ -1,0 +1,145 @@
+openapi: "3.0.2"
+info:
+  title: KAIA Open API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /eth/miscellaneous/getBlobSidecarByTxHash:
+    post:
+      summary: "[Miscellaneous] eth_getBlobSidecarByTxHash"
+      tags:
+        - eth
+      operationId: getBlobSidecarByTxHash
+      description: |
+        Returns the blob sidecar (data blob) associated with a specific transaction hash.
+
+        **JSONRPC:** `eth_getBlobSidecarByTxHash`
+
+      parameters:
+        - name: transactionHash
+          in: query
+          description: Hash of a transaction that includes a blob.
+          required: true
+          schema:
+            type: string
+            format: 32-byte DATA
+        - name: isFull
+          in: query
+          description: If true (default), returns the complete blob data. If false, returns only the first 32 bytes of each blob.
+          required: false
+          schema:
+            type: boolean
+            default: true
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/EthGetBlobSidecarByTxHashReq"
+
+      responses:
+        200:
+          description: Returns the blob sidecar object associated with the transaction.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/EthGetBlobSidecarByTxHashResp"
+
+components:
+  schemas:
+    EthGetBlobSidecarByTxHashReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'eth_getBlobSidecarByTxHash'
+        params:
+          type: array
+          items:
+            properties:
+              TransactionHash:
+                type: string
+                format: 32-byte DATA
+                title: TransactionHash
+                description: Hash of a transaction that includes a blob.
+              IsFull:
+                type: boolean
+                title: IsFull
+                description: If true (default), returns the complete blob data. If false, returns only the first 32 bytes of each blob.
+          example: ["0xb4687ea17a0908a4dce2d83f8c2566881474b9da30ee8b8979b028778761c9d7", false]
+
+    EthGetBlobSidecarByTxHashResp:
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            blobSidecar:
+              type: object
+              description: Contains the blob data, commitments and proofs.
+              properties:
+                blobs:
+                  type: array
+                  items:
+                    type: string
+                    format: DATA
+                  description: Array of blob data in hexadecimal format (complete data or first 32 bytes depending on full flag).
+                commitments:
+                  type: array
+                  items:
+                    type: string
+                    format: DATA
+                  description: Array of KZG commitments for the blobs.
+                proofs:
+                  type: array
+                  items:
+                    type: string
+                    format: DATA
+                  description: Array of KZG proofs for blob verification.
+            blockHash:
+              type: string
+              format: 32-byte DATA
+              description: The hash of the block the blob is associated with.
+            blockNumber:
+              type: string
+              format: hex
+              description: The block number in hexadecimal format.
+            txHash:
+              type: string
+              format: 32-byte DATA
+              description: The hash of the transaction that includes the blob.
+            txIndex:
+              type: string
+              format: hex
+              description: The index of the transaction in the block.
+          example:
+            {
+              "blobSidecar": {
+                "blobs": [
+                  "0x4c6f6e67206c6976652074686520424c4f427321000000000000000000000000"
+                ],
+                "commitments": [
+                  "0x86d92681fe75507804ebb73a253ff4221c88c09539aa0d46aa41e431c7ead0e90317181c1f252c2716b6b2c36ca72046"
+                ],
+                "proofs": [
+                  "0x9178a787bc5d1870471c5a0327792f98e33c5e859a12647172ed50f3073414c7f5c7f066a6b65c88b3a0c6bd3e63484b"
+                ]
+              },
+              "blockHash": "0x1683db8c05f898cd9084a8905b3fa2a64b1380b6543e963ea15d2858b241c339",
+              "blockNumber": "0xc77238e",
+              "txHash": "0xb4687ea17a0908a4dce2d83f8c2566881474b9da30ee8b8979b028778761c9d7",
+              "txIndex": "0x0"
+            }

@@ -39,6 +39,12 @@ paths:
                   - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
                   - $ref: "#/components/schemas/EthBlobBaseFeeResp"
 
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/eth/gas/blobBaseFee.sh"
+
 components:
   schemas:
     EthBlobBaseFeeReq:

@@ -6,5 +6,5 @@ curl -X 'POST' \
   "method": "eth_getBlobSidecarByTxHash",
   "id": 1,
   "jsonrpc": "2.0",
-  "params": ["0xb4687ea17a0908a4dce2d83f8c2566881474b9da30ee8b8979b028778761c9d7", false]
+  "params": ["0xe24ecc1f10799b512817f928a0a45e71b170bd221e2791fdeba992c5bf51418c", false]
 }'

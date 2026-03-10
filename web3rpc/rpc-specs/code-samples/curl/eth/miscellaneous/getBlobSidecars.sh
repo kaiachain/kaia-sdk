@@ -6,5 +6,5 @@ curl -X 'POST' \
   "method": "eth_getBlobSidecars",
   "id": 1,
   "jsonrpc": "2.0",
-  "params": [209134478]
+  "params": [211461083, false]
 }'

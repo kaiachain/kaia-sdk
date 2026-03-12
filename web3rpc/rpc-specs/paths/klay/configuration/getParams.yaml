@@ -73,7 +73,7 @@ paths:
               </tr>
               <tr>
                   <td><code>reward.ratio</code></td>
-                  <td>STRING. Reward distribution ratio among GC/KIF/KEF. Three integers separated by "/" that adds up to 100. e.g., 50/40/10. (Since Osaka) Reward distribution ratio among GC/KIF/KEF/KPF. Four integers separated by "/" that adds up to 100. Note that the fourth ratio is expected to be used when <code>reward.useflexreward</code> is true. Otherwise, the fourth ratio falls back to the second ratio. If <code>reward.useflexreward</code> is true and the fourth ratio is unspecified, it defaults to 0. For more details, refer to our <a href="https://github.com/kaiachain/kaia/blob/dev/kaiax/reward/README.md">reward module README</a>. e.g., <code>40/30/20/10</code></td>
+                  <td>STRING. Reward distribution ratio among GC/KIF/KEF. Three integers separated by "/" that adds up to 100. e.g., <code>50/40/10</code>. (Since Osaka) Reward distribution ratio among GC/KIF/KEF/KPF. Four integers separated by "/" that adds up to 100. Note that the fourth ratio is expected to be used when <code>reward.useflexreward</code> is true. Otherwise, the fourth ratio falls back to the second ratio. If <code>reward.useflexreward</code> is true and the fourth ratio is unspecified, it defaults to 0. For more details, refer to our <a href="https://github.com/kaiachain/kaia/blob/dev/kaiax/reward/README.md">reward module README</a>. e.g., <code>40/30/20/10</code></td>
               </tr>
               <tr>
                   <td><code>reward.kip82ratio</code></td>

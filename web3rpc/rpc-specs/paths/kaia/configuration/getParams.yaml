@@ -73,7 +73,7 @@ paths:
               </tr>
               <tr>
                   <td><code>reward.ratio</code></td>
-                  <td>STRING. Reward distribution ratio among GC/KIF/KEF. Three integers separated by "/" that adds up to 100. e.g., <code>50/40/10</code></td>
+                  <td>STRING. Reward distribution ratio among GC/KIF/KEF. Three integers separated by "/" that adds up to 100. e.g., <code>50/40/10</code>. (Since Osaka) Reward distribution ratio among GC/KIF/KEF/KPF. Four integers separated by "/" that adds up to 100. Note that the fourth ratio is expected to be used when <code>reward.useflexreward</code> is true. Otherwise, the fourth ratio falls back to the second ratio. If <code>reward.useflexreward</code> is true and the fourth ratio is unspecified, it defaults to 0. For more details, refer to our <a href="https://github.com/kaiachain/kaia/blob/dev/kaiax/reward/README.md">reward module README</a>. e.g., <code>40/30/20/10</code></td>
               </tr>
               <tr>
                   <td><code>reward.kip82ratio</code></td>
@@ -100,6 +100,14 @@ paths:
                   <td>NUMBER. (Before Kaia) The block interval in which staking information is updated. This parameter is immutable. This parameter is no longer used since Kaia, so <code>1</code> is displayed in the APIs. e.g., <code>86400</code></td>
               </tr>
               <tr>
+                  <td><code>reward.stakingrewardthreshold</code></td>
+                  <td>STRING. (Since Osaka) Staking rewards distribution threshold amount in KAIA. If <code>reward.useflexreward</code> is true, staking rewards are distributed proportionally to (StakingAmount - StakingRewardThreshold). Note that it must be in string type because the number can be too big for JavaScript to handle. e.g., <code>5000000</code> (5 million KAIA)</td>
+              </tr>
+              <tr>
+                  <td><code>reward.useflexreward</code></td>
+                  <td>BOOL. (Since Osaka) If false, <code>reward.stakingrewardthreshold</code> and the fourth ratio of <code>reward.ratio</code> is ignored. If true, reward is distributed among GC/KIF/KEF/KPF and the staking rewards are distributed proportionally to (StakingAmount - StakingRewardThreshold). e.g., <code>false</code></td>
+              </tr>
+              <tr>
                   <td><code>kip71.lowerboundbasefee</code></td>
                   <td>NUMBER. The lowest possible base fee in kei. e.g., <code>25000000000</code></td>
               </tr>
@@ -118,6 +126,18 @@ paths:
               <tr>
                   <td><code>kip71.maxblockgasusedforbasefee</code></td>
                   <td>NUMBER. The maximum block gas recognized in base fee calculation. e.g., <code>60000000</code></td>
+              </tr>
+              <tr>
+                  <td><code>blobschedule.&lt;fork&gt;.target</code></td>
+                  <td>NUMBER. (Since Osaka) The expected number of blobs per block. e.g., <code>1</code></td>
+              </tr>
+              <tr>
+                  <td><code>blobschedule.&lt;fork&gt;.max</code></td>
+                  <td>NUMBER. (Since Osaka) The maximum number of blobs per block. e.g., <code>1</code></td>
+              </tr>
+              <tr>
+                  <td><code>blobschedule.&lt;fork&gt;.baseFeeUpdateFraction</code></td>
+                  <td>NUMBER. (Since Osaka) Determines how blob gas pricing adjusts per block. To ensure consistency, when a regular hardfork changes any of these parameters, it MUST do so by adding an entry to the blob schedule configuration. e.g., <code>5007716</code></td>
               </tr>
             </tbody>
         </table>

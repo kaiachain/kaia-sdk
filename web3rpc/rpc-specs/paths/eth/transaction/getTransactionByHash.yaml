@@ -98,17 +98,21 @@ components:
               {
                 "blockHash": "0xd49c770e1c6fdf340e25aca6d2de0ddf3d10873582b62b7ad604ff5b291bdbe5",
                 "blockNumber": "0xd017a7",
+                "blobVersionedHashes": [
+                  "0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+                ],
                 "from": "0x46705dfff24256421a05d056c29e81bdc09723b8",
                 "gas": "0x19a28",
                 "gasPrice": "0x5d21dba00",
                 "hash": "0x73af85890dd29691ff807b8d9e10c5a4d3349d28b6b143fa5e46db2c61b376e9",
                 "input": "0xa9059cbb000000000000000000000000cad1d9c2ad1860d4d4fb53782720279c60ae4de8000000000000000000000000000000000000000000000000000000000cd0a3c0",
+                "maxFeePerBlobGas": "0x5d21dba00",
                 "nonce": "0x1bea18",
                 "r": "0x85d848276f22f8ce5aa17cd27ded21269e17cacc258ef2aaece296497803aa9",
                 "s": "0x2d9ae07f349c66628b02db7033a8a35d18f6338c39f995d7e8336d635002df54",
                 "to": "0xdac17f958d2ee523a2206206994597c13d831ec7",
                 "transactionIndex": "0x3",
-                "type": "0x0",
+                "type": "0x3",
                 "v": "0x25",
                 "value": "0x0"
               }

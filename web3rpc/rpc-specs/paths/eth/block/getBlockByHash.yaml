@@ -132,10 +132,18 @@ components:
           type: string
           format: hex
           description: The base fee per gas.
+        blobGasUsed:
+          type: string
+          format: hex
+          description: The total blob gas used by all transactions in the block.
         difficulty:
           type: string
           format: hex
           description: The integer of the difficulty for this block
+        excessBlobGas:
+          type: string
+          format: hex
+          description: The excess blob gas used in the block.
         extraData:
           type: string
           format: DATA
@@ -223,7 +231,9 @@ components:
       example:
         {
           baseFeePerGas: "0x5d21dba00",
+          blobGasUsed: "0x0",
           difficulty: "0x1",
+          excessBlobGas: "0x0",
           extraData: "0xd8820505846b6c617988676f312e31312e328664617277696e00000000000000f89ed594e733cb4d279da696f30d470f8c04decb54fcb0d2b841f1f600d136f93a5a2d9c12a7a9f6d7ba80a047c3910a2bbc01e38bcce25e48ed2004d21f134df5efaf1f8cbb9a26e1548e57628ab258c935490c11a7cd65324701f843b841444b3efc40071b6eec2c4d2630b483710b8fc7a601432431b0161f489102d1ca02f2ef93153d0be3843aa563d34cee1716163f58711843442aedd94a56303c0400",
           gasLimit: "0xe8d4a50fff",
           gasUsed: "0x0",

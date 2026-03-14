@@ -100,6 +100,8 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/eth/config/coinbase.yaml#/paths/~1eth~1config~1coinbase
   /eth/config/etherbase:
     $ref: ../../web3rpc/rpc-specs/paths/eth/config/etherbase.yaml#/paths/~1eth~1config~1etherbase
+  /eth/config/config:
+    $ref: ../../web3rpc/rpc-specs/paths/eth/config/config.yaml#/paths/~1eth~1config~1config
   /eth/config/protocolVersion:
     $ref: ../../web3rpc/rpc-specs/paths/eth/config/protocolVersion.yaml#/paths/~1eth~1config~1protocolVersion
 
@@ -112,6 +114,8 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/eth/gas/maxPriorityFeePerGas.yaml#/paths/~1eth~1gas~1maxPriorityFeePerGas
   /eth/gas/gasPrice:
     $ref: ../../web3rpc/rpc-specs/paths/eth/gas/gasPrice.yaml#/paths/~1eth~1gas~1gasPrice
+  /eth/gas/blobBaseFee:
+    $ref: ../../web3rpc/rpc-specs/paths/eth/gas/blobBaseFee.yaml#/paths/~1eth~1gas~1blobBaseFee
   # eth/filter
   /eth/filter/getFilterLogs:
     $ref: ../../web3rpc/rpc-specs/paths/eth/filter/getFilterLogs.yaml#/paths/~1eth~1filter~1getFilterLogs
@@ -145,4 +149,8 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/eth/miscellaneous/submitHashrate.yaml#/paths/~1eth~1miscellaneous~1submitHashrate
   /eth/miscellaneous/getProof:
     $ref: ../../web3rpc/rpc-specs/paths/eth/miscellaneous/getProof.yaml#/paths/~1eth~1miscellaneous~1getProof
+  /eth/miscellaneous/getBlobSidecars:
+    $ref: ../../web3rpc/rpc-specs/paths/eth/miscellaneous/getBlobSidecars.yaml#/paths/~1eth~1miscellaneous~1getBlobSidecars
+  /eth/miscellaneous/getBlobSidecarByTxHash:
+    $ref: ../../web3rpc/rpc-specs/paths/eth/miscellaneous/getBlobSidecarByTxHash.yaml#/paths/~1eth~1miscellaneous~1getBlobSidecarByTxHash
  

@@ -1,0 +1,156 @@
+openapi: "3.0.2"
+info:
+  title: KAIA Open API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /eth/config/config:
+    post:
+      summary: "[Configuration] eth_config"
+      tags:
+        - eth
+      operationId: config
+      description: |
+        Provides configuration data for the last, current, and next fork.
+
+        **JSONRPC:** `eth_config`
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/EthConfigReq"
+
+      responses:
+        200:
+          description: Returns the fork configuration data.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/EthConfigResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/eth/config/config.sh"
+
+components:
+  schemas:
+    EthConfigReq:
+      type: object
+      required:
+        - method
+      properties:
+        method:
+          type: string
+          default: 'eth_config'
+        params:
+          type: array
+          items: {}
+          example: []
+
+    EthConfigResp:
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            current:
+              $ref: "#/components/schemas/ForkConfig"
+            next:
+              $ref: "#/components/schemas/ForkConfig"
+              nullable: true
+            last:
+              $ref: "#/components/schemas/ForkConfig"
+              nullable: true
+          example:
+            {
+              "current": {
+                "blobSchedule": {
+                  "target": 1,
+                  "max": 1,
+                  "baseFeeUpdateFraction": 5007716
+                },
+                "chainId": "0x3e9",
+                "forkId": "0xb028792b",
+                "precompiles": {
+                  "BLAKE2F": "0x0000000000000000000000000000000000000009",
+                  "BLS12_G1ADD": "0x000000000000000000000000000000000000000b",
+                  "BLS12_G1MSM": "0x000000000000000000000000000000000000000c",
+                  "BLS12_G2ADD": "0x000000000000000000000000000000000000000d",
+                  "BLS12_G2MSM": "0x000000000000000000000000000000000000000e",
+                  "BLS12_MAP_FP2_TO_G2": "0x0000000000000000000000000000000000000011",
+                  "BLS12_MAP_FP_TO_G1": "0x0000000000000000000000000000000000000010",
+                  "BLS12_PAIRING_CHECK": "0x000000000000000000000000000000000000000f",
+                  "BN254_ADD": "0x0000000000000000000000000000000000000006",
+                  "BN254_MUL": "0x0000000000000000000000000000000000000007",
+                  "BN254_PAIRING": "0x0000000000000000000000000000000000000008",
+                  "ECREC": "0x0000000000000000000000000000000000000001",
+                  "FEE_PAYER": "0x00000000000000000000000000000000000003fe",
+                  "ID": "0x0000000000000000000000000000000000000004",
+                  "KZG_POINT_EVALUATION": "0x000000000000000000000000000000000000000a",
+                  "MODEXP": "0x0000000000000000000000000000000000000005",
+                  "P256VERIFY": "0x0000000000000000000000000000000000000100",
+                  "RIPEMD160": "0x0000000000000000000000000000000000000003",
+                  "SHA256": "0x0000000000000000000000000000000000000002",
+                  "VALIDATE_SENDER": "0x00000000000000000000000000000000000003ff",
+                  "VMLOG": "0x00000000000000000000000000000000000003fd"
+                },
+                "systemContracts": {
+                  "ADDRESS_BOOK": "0x0000000000000000000000000000000000000400",
+                  "HISTORY_STORAGE_ADDRESS": "0x0000f90827f1c53a10cb7a02335b175320002935",
+                  "KIP103": "0xd5ad6d61dd87edabe2332607c328f5cc96aecb95",
+                  "KIP160": "0x3d478e73c9dbebb72332712d7265961b1868d193",
+                  "REGISTRY": "0x0000000000000000000000000000000000000401"
+                }
+              },
+              "next": null,
+              "last": null
+            }
+
+    ForkConfig:
+      type: object
+      properties:
+        blobSchedule:
+          type: object
+          description: The blob configuration parameters for the specific fork.
+          properties:
+            target:
+              type: integer
+              description: The expected number of blobs per block.
+            max:
+              type: integer
+              description: The maximum number of blobs per block.
+            baseFeeUpdateFraction:
+              type: integer
+              description: Determines how blob gas pricing adjusts per block.
+        chainId:
+          type: string
+          format: hex
+          description: The chain ID of the current network.
+        forkId:
+          type: string
+          description: The FORK_HASH format as specified in EIP-6122 of the specific fork.
+        precompiles:
+          type: object
+          additionalProperties:
+            type: string
+            format: 20-byte DATA
+          description: A representation of the active precompile contracts for the fork.
+        systemContracts:
+          type: object
+          additionalProperties:
+            type: string
+            format: 20-byte DATA
+          description: A JSON object representing the system-level contracts defined by EIPs and KIPs.

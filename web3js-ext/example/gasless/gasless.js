@@ -1,7 +1,8 @@
 const { Web3 } = require("@kaiachain/web3js-ext");
 
 // Replace with ERC20 token address to be spent
-const tokenAddr = "0xcB00BA2cAb67A3771f9ca1Fa48FDa8881B457750"; // Kairos:TEST token
+// You can receive 1 USD₮ on Kairos network from https://www.kaia.io/faucet
+const tokenAddr = "0xd077a400968890eacc75cdc901f0356c943e4fdb"; // Kairos:USD₮ token
 // Replace with your wallet address and private key
 const senderAddr = "0x24e8efd18d65bcb6b3ba15a4698c0b0d69d13ff7";
 const senderPriv = "0x4a72b3d09c3d5e28e8652e0111f9c4ce252e8299aad95bb219a38eb0a3f4da49";
@@ -64,7 +65,7 @@ async function main() {
   console.log(`- amountRepay: ${web3.utils.fromWei(amountRepay, "ether")} KAIA`);
   const minAmountOut = web3.gasless.getMinAmountOut(amountRepay, appTxFee, commissionRate);
   console.log(`- minAmountOut: ${web3.utils.fromWei(minAmountOut, "ether")} KAIA`);
-  const slippageBps = 50 // 0.5%
+  const slippageBps = 50; // 0.5%
   const amountIn = await web3.gasless.getAmountIn(router, tokenAddr, minAmountOut, slippageBps);
   console.log(`- amountIn: ${web3.utils.fromWei(amountIn, tokenDecimals)} ${tokenSymbol}`);
 
@@ -88,7 +89,7 @@ async function main() {
 
   console.log("\nSending transactions and waiting for them to be mined...");
   const signedTxs = [];
-  const txHashes = []
+  const txHashes = [];
   for (const tx of txs) {
     const signResult = await senderAccount.signTransaction(tx);
     signedTxs.push(signResult.rawTransaction);
@@ -103,7 +104,7 @@ async function main() {
     [senderAddr.toLowerCase()]: "sender",
     [tokenAddr.toLowerCase()]: "token",
     [routerAddr.toLowerCase()]: "router",
-  }
+  };
   for (const txhash of block.transactions) {
     const tx = await web3.eth.getTransaction(txhash);
     const fromName = names[tx.from.toLowerCase()] || tx.from;

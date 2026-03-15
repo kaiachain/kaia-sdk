@@ -246,6 +246,14 @@ components:
             type: string
             format: DATA
             description: The "extra data" field of this block.
+        blobGasUsed:
+            type: string
+            format: hex
+            description: The total blob gas used by all transactions in the block.
+        excessBlobGas:
+            type: string
+            format: hex
+            description: The excess blob gas used in the block.
         gasUsed:
             type: string
             format: hex
@@ -273,20 +281,25 @@ components:
       example:
         {
           "baseFeePerGas": "0x5d21dba00",
+          "blobGasUsed": "0x20000",
           "blockScore": "0x1",
-          "extraData": "0xda83010800846b6c617989676f312e31362e31338664617277696e0000000000f89ed5949712f943b296758aaae79944ec975884188d3a96b841ddfdf7e2cb0a93538f757f87f23a93ee35df703c781c6f15e31e4978ecdfb3501fc00924372b9a01df2bc452f2a924c242d83580183d131c47e49a25b78f625201f843b841b9b6034d5a8c5f5b057274cda4f427614cd1f448ee781f4c4322861d1361d09d47d6030f2b69a26cb426db984f54e71f8c112fbf882930ccd715d595e8d8307500",
-          "gasUsed": "0x0",
+          "excessBlobGas": "0x0",
+          "extraData": "0xd883020200846b6c617988676f312e32352e33856c696e757800000000000000f901bdf86994571e53df607be97431a5bbefca1dffe5aef56f4d945cb1a7dccbd0dc446e3640898ede8820368554c894899d2b9ce7a4f8862cff4586bf99b51f14c6eabd9499fb17d324fa0e07f23b49d09028ac0919414db694b74ff9dea397fe9e231df545eb53fe2adf776cb2b841e1f2e4377f8a6a28cd73a3b1dc2d340ad4056e200c2d6b272493e0e52c6e3b70779bf14b99971079ffafccff49b5e374186bad4e274f7c28fea4f822512f4eab01f9010cb8418b98d7cb5a1159e8d1de66c375f276033a089087c0aff771cb7c63def542fe705ad26e16ade7f46c18e8e0fc5f38aaa4f6ed83ac38ec624b6b2ad0fc648714b600b841b52d5c3e29ec340a6a64469acdac1f6f2fa3a5aa6e7613c6573f117cfc20598e3fe3d40722bbcc1ae79413541f2a03093c922702cf9b335faa680871f4c7e1d200b8416022681732c3a3abb13fbf479b6d0ee7e63923f69bf19ab9182ad1b44f7bf88855f0421dfd7fd9c7510d5499d0f4f59ab5a8b1332fcffbf6b660f2fa1fd1909801b8419607331852ee926f328b9912a4ffb67b3bb389610312061a3e96534c02ee205967093a8c24b86dfae2e3fa7c0a7072383910155aac4a8a2cd150e2bd4861360701",
+          "gasUsed": "0x6713",
           "governanceData": "0x",
-          "hash": "0xe882d7a16f38126dc0c507f990b3fe18fa2d3a380002538581327abe96ca6edc",
+          "hash": "0x1683db8c05f898cd9084a8905b3fa2a64b1380b6543e963ea15d2858b241c339",
           "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-          "number": "0x1e67",
-          "parentHash": "0x28b1c054346c3bd083741c757a750dcabf94b6d50c7f87158753544e96e73550",
-          "receiptsRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
-          "reward": "0x4b2c736fd05c2e2da3ccbd001a395a444f16a861",
-          "stateRoot": "0xdf9885621c9e6e75912ca94d6987bcb1b54fef0e4a99cbec5e68f1ffc7468a78",
-          "timestamp": "0x62130beb",
+          "mixhash": "0x4238516ae446e95e1ead2cef977b19cae843b4ae9ec2fd78c856fc4ace16b71b",
+          "number": "0xc77238e",
+          "parentHash": "0xabb03206ed70c6d0cc019bee9182a4ebbb919da293a167a7c4ce4d9a94074d76",
+          "randomReveal": "0xac1c490e5b928346c554079e4244956763b989bd5028b3f296ba0fce8e334005fbaafbc094888276d2824548c6e444910762050b88b8d268bad3d59cf01b87e6e299c6b93609407f0b9246380c96b359ba68cf9f911f98fc8fdc279769cab4ce",
+          "receiptsRoot": "0x3263bcbd9e41e8744b06d4af404bca81e6dfbf256680d7067d08778d44512f00",
+          "reward": "0xef33b74083a6241af2c0be9188d911d70b9e1060",
+          "stateRoot": "0xc0827c81d54024c07f5418326e2633e082618f496a2f6d9d868bc74346736717",
+          "timestamp": "0x698be0cb",
           "timestampFoS": "0x0",
-          "transactionsRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+          "transactionsRoot": "0x194781ecab8a14756d60ce4d8f3d17873be4c886757e90e3f3efdf5e8162a259",
+          "voteData": "0x"
         }
 
     EthHeaderObject:
@@ -298,10 +311,18 @@ components:
           type: string
           format: hex
           description: The base fee per gas.
+        blobGasUsed:
+          type: string
+          format: hex
+          description: The total blob gas used by all transactions in the block.
         difficulty:
           type: string
           format: hex
           description: The integer of the difficulty for this block.
+        excessBlobGas:
+          type: string
+          format: hex
+          description: The excess blob gas used in the block.
         extraData:
           type: string
           format: DATA
@@ -373,24 +394,26 @@ components:
       example:
         {
           "baseFeePerGas": "0x5d21dba00",
+          "blobGasUsed": "0x20000",
           "difficulty": "0x1",
+          "excessBlobGas": "0x0",
           "extraData": "0x",
-          "gasLimit": "0xe8d4a50fff",
-          "gasUsed": "0x28b484",
-          "hash": "0xb8deae63002d2b6aa33247c8ef545383ee0fd2282ac9b49dbbb74114389ddb5c",
-          "logsBloom": "0x02200022800002050000084080014015001001004b0002440401060a0830000200014041044010180010430018800119120098000800200241c2090a4020011040004400002201081800440a340020a4000820100848081020003000892050105a05000002100000200012c0800408982000085100000c4040a03814000800200812210100200010004018410d80004214800123210400082002214620100021028800120309200802008291c8e000904210080008110900010100081000101000501002010a0080311886000008000000240900400000100200a402005830200010300804020200000002310000008004004080a58000550000508000000000",
-          "miner": "0xea674fdde714fd979de3edf0f56aa9716b898ec8",
-          "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "gasLimit": "0x1dcd6500",
+          "gasUsed": "0x6713",
+          "hash": "0x1683db8c05f898cd9084a8905b3fa2a64b1380b6543e963ea15d2858b241c339",
+          "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "miner": "0x899d2b9ce7a4f8862cff4586bf99b51f14c6eabd",
+          "mixHash": "0x4238516ae446e95e1ead2cef977b19cae843b4ae9ec2fd78c856fc4ace16b71b",
           "nonce": "0x0000000000000000",
-          "number": "0xd208de",
-          "parentHash": "0x99fcd33dddd763835ba8bdc842853d973496a7e64ea2f6cf826bc2c338e23b0c",
-          "receiptsRoot": "0xd3d70ed54a9274ba3191bf2d4fd8738c5d782fe17c8bfb45c03a25dc04120c35",
+          "number": "0xc77238e",
+          "parentHash": "0xabb03206ed70c6d0cc019bee9182a4ebbb919da293a167a7c4ce4d9a94074d76",
+          "randomReveal": "0xac1c490e5b928346c554079e4244956763b989bd5028b3f296ba0fce8e334005fbaafbc094888276d2824548c6e444910762050b88b8d268bad3d59cf01b87e6e299c6b93609407f0b9246380c96b359ba68cf9f911f98fc8fdc279769cab4ce",
+          "receiptsRoot": "0x3263bcbd9e41e8744b06d4af404bca81e6dfbf256680d7067d08778d44512f00",
           "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
-          "size": "0x23a",
-          "stateRoot": "0x1076e6726164bd6f74720a717242584109f37c55017d004eefccf9ec3be76c18",
-          "timestamp": "0x61b0a6c6",
-          "totalDifficulty": "0xd208df",
-          "transactionsRoot": "0x6ec8daca98c1005d9bbd7716b5e94180e2bf0e6b77770174563a166337369344"
+          "size": "0x4bb",
+          "stateRoot": "0xc0827c81d54024c07f5418326e2633e082618f496a2f6d9d868bc74346736717",
+          "timestamp": "0x698be0cb",
+          "transactionsRoot": "0x194781ecab8a14756d60ce4d8f3d17873be4c886757e90e3f3efdf5e8162a259"
         }
 
     LogObject:
@@ -587,6 +610,16 @@ components:
           type: string
           format: DATA
           description: (optional) The data sent along with the transaction.
+        maxFeePerBlobGas:
+          type: string
+          format: hex
+          description: The maximum total fee per gas the sender is willing to pay for blob gas in kei.
+        blobVersionedHashes:
+          type: array
+          items:
+            type: string
+            format: 32-byte DATA
+          description: List of versioned blob hashes associated with the transaction's KIP-279(EIP-4844) data blobs.
         nonce:
           type: string
           format: hex
@@ -733,6 +766,14 @@ components:
           type: string
           format: hex
           description: The actual value per gas deducted from the senders account.
+        blobGasPrice:
+          type: string
+          format: hex
+          description: The actual value per gas deducted from the sender's account for blob gas. Only specified for blob transactions as defined by KIP-279(EIP-4844).
+        blobGasUsed:
+          type: string
+          format: hex
+          description: The amount of blob gas used for this specific transaction. Only specified for blob transactions as defined by KIP-279(EIP-4844).
         gasPrice:
           type: string
           format: hex
@@ -1157,6 +1198,16 @@ components:
           type: string
           format: hex
           description: Chain id set on the requested node.
+        maxFeePerBlobGas:
+          type: string
+          format: hex
+          description: The maximum total fee per gas the sender is willing to pay for blob gas in kei.
+        blobVersionedHashes:
+          type: array
+          items:
+            type: string
+            format: 32-byte DATA
+          description: List of versioned blob hashes associated with the transaction's KIP-279(EIP-4844) data blobs.
         v:
           type: string
           format: hex
@@ -1383,6 +1434,14 @@ components:
           type: string
           format: DATA
           description: The "extra data" field of this block.
+        blobGasUsed:
+          type: string
+          format: hex
+          description: The total blob gas used by all transactions in the block.
+        excessBlobGas:
+          type: string
+          format: hex
+          description: The excess blob gas used in the block.
         size:
           type: string
           format: hex
@@ -1430,24 +1489,27 @@ components:
           description: The base fee per gas. It has a meaningful value when EthTxTypeCompatible and Magma hardforks are activated.
       example:
         {
-          "baseFeePerGas": "0x0",
-          "blockscore": "0x1",
-          "extraData": "0xda83010800846b6c617989676f312e31362e31338664617277696e0000000000f89ed5949712f943b296758aaae79944ec975884188d3a96b841ddfdf7e2cb0a93538f757f87f23a93ee35df703c781c6f15e31e4978ecdfb3501fc00924372b9a01df2bc452f2a924c242d83580183d131c47e49a25b78f625201f843b841b9b6034d5a8c5f5b057274cda4f427614cd1f448ee781f4c4322861d1361d09d47d6030f2b69a26cb426db984f54e71f8c112fbf882930ccd715d595e8d8307500",
-          "gasUsed": "0x0",
+          "baseFeePerGas": "0x5d21dba00",
+          "blobGasUsed": "0x20000",
+          "blockScore": "0x1",
+          "excessBlobGas": "0x0",
+          "extraData": "0xd883020200846b6c617988676f312e32352e33856c696e757800000000000000f901bdf86994571e53df607be97431a5bbefca1dffe5aef56f4d945cb1a7dccbd0dc446e3640898ede8820368554c894899d2b9ce7a4f8862cff4586bf99b51f14c6eabd9499fb17d324fa0e07f23b49d09028ac0919414db694b74ff9dea397fe9e231df545eb53fe2adf776cb2b841e1f2e4377f8a6a28cd73a3b1dc2d340ad4056e200c2d6b272493e0e52c6e3b70779bf14b99971079ffafccff49b5e374186bad4e274f7c28fea4f822512f4eab01f9010cb8418b98d7cb5a1159e8d1de66c375f276033a089087c0aff771cb7c63def542fe705ad26e16ade7f46c18e8e0fc5f38aaa4f6ed83ac38ec624b6b2ad0fc648714b600b841b52d5c3e29ec340a6a64469acdac1f6f2fa3a5aa6e7613c6573f117cfc20598e3fe3d40722bbcc1ae79413541f2a03093c922702cf9b335faa680871f4c7e1d200b8416022681732c3a3abb13fbf479b6d0ee7e63923f69bf19ab9182ad1b44f7bf88855f0421dfd7fd9c7510d5499d0f4f59ab5a8b1332fcffbf6b660f2fa1fd1909801b8419607331852ee926f328b9912a4ffb67b3bb389610312061a3e96534c02ee205967093a8c24b86dfae2e3fa7c0a7072383910155aac4a8a2cd150e2bd4861360701",
+          "gasUsed": "0x6713",
           "governanceData": "0x",
-          "hash": "0xe882d7a16f38126dc0c507f990b3fe18fa2d3a380002538581327abe96ca6edc",
+          "hash": "0x1683db8c05f898cd9084a8905b3fa2a64b1380b6543e963ea15d2858b241c339",
           "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-          "number": "0x1e67",
-          "parentHash": "0x28b1c054346c3bd083741c757a750dcabf94b6d50c7f87158753544e96e73550",
-          "receiptsRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
-          "reward": "0x4b2c736fd05c2e2da3ccbd001a395a444f16a861",
-          "size": "0x272",
-          "stateRoot": "0xdf9885621c9e6e75912ca94d6987bcb1b54fef0e4a99cbec5e68f1ffc7468a78",
-          "timestamp": "0x62130beb",
+          "mixHash": "0x4238516ae446e95e1ead2cef977b19cae843b4ae9ec2fd78c856fc4ace16b71b",
+          "number": "0xc77238e",
+          "parentHash": "0xabb03206ed70c6d0cc019bee9182a4ebbb919da293a167a7c4ce4d9a94074d76",
+          "randomReveal": "0xac1c490e5b928346c554079e4244956763b989bd5028b3f296ba0fce8e334005fbaafbc094888276d2824548c6e444910762050b88b8d268bad3d59cf01b87e6e299c6b93609407f0b9246380c96b359ba68cf9f911f98fc8fdc279769cab4ce",
+          "receiptsRoot": "0x3263bcbd9e41e8744b06d4af404bca81e6dfbf256680d7067d08778d44512f00",
+          "reward": "0xef33b74083a6241af2c0be9188d911d70b9e1060",
+          "size": "0x4c1",
+          "stateRoot": "0xc0827c81d54024c07f5418326e2633e082618f496a2f6d9d868bc74346736717",
+          "timestamp": "0x698be0cb",
           "timestampFoS": "0x0",
-          "totalBlockScore": "0x1e68",
-          "transactions": [ ],
-          "transactionsRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+          "transactions": [],
+          "transactionsRoot": "0x194781ecab8a14756d60ce4d8f3d17873be4c886757e90e3f3efdf5e8162a259",
           "voteData": "0x"
         }
 
@@ -1821,6 +1883,14 @@ components:
             type: string
             format: DATA
             description: The "extra data" field of this block.
+        blobGasUsed:
+            type: string
+            format: hex
+            description: The total blob gas used by all transactions in the block.
+        excessBlobGas:
+            type: string
+            format: hex
+            description: The excess blob gas used in the block.
         gasUsed:
             type: string
             format: hex
@@ -1848,20 +1918,25 @@ components:
       example:
         {
           "baseFeePerGas": "0x5d21dba00",
+          "blobGasUsed": "0x20000",
           "blockScore": "0x1",
-          "extraData": "0xda83010800846b6c617989676f312e31362e31338664617277696e0000000000f89ed5949712f943b296758aaae79944ec975884188d3a96b841ddfdf7e2cb0a93538f757f87f23a93ee35df703c781c6f15e31e4978ecdfb3501fc00924372b9a01df2bc452f2a924c242d83580183d131c47e49a25b78f625201f843b841b9b6034d5a8c5f5b057274cda4f427614cd1f448ee781f4c4322861d1361d09d47d6030f2b69a26cb426db984f54e71f8c112fbf882930ccd715d595e8d8307500",
-          "gasUsed": "0x0",
+          "excessBlobGas": "0x0",
+          "extraData": "0xd883020200846b6c617988676f312e32352e33856c696e757800000000000000f901bdf86994571e53df607be97431a5bbefca1dffe5aef56f4d945cb1a7dccbd0dc446e3640898ede8820368554c894899d2b9ce7a4f8862cff4586bf99b51f14c6eabd9499fb17d324fa0e07f23b49d09028ac0919414db694b74ff9dea397fe9e231df545eb53fe2adf776cb2b841e1f2e4377f8a6a28cd73a3b1dc2d340ad4056e200c2d6b272493e0e52c6e3b70779bf14b99971079ffafccff49b5e374186bad4e274f7c28fea4f822512f4eab01f9010cb8418b98d7cb5a1159e8d1de66c375f276033a089087c0aff771cb7c63def542fe705ad26e16ade7f46c18e8e0fc5f38aaa4f6ed83ac38ec624b6b2ad0fc648714b600b841b52d5c3e29ec340a6a64469acdac1f6f2fa3a5aa6e7613c6573f117cfc20598e3fe3d40722bbcc1ae79413541f2a03093c922702cf9b335faa680871f4c7e1d200b8416022681732c3a3abb13fbf479b6d0ee7e63923f69bf19ab9182ad1b44f7bf88855f0421dfd7fd9c7510d5499d0f4f59ab5a8b1332fcffbf6b660f2fa1fd1909801b8419607331852ee926f328b9912a4ffb67b3bb389610312061a3e96534c02ee205967093a8c24b86dfae2e3fa7c0a7072383910155aac4a8a2cd150e2bd4861360701",
+          "gasUsed": "0x6713",
           "governanceData": "0x",
-          "hash": "0xe882d7a16f38126dc0c507f990b3fe18fa2d3a380002538581327abe96ca6edc",
+          "hash": "0x1683db8c05f898cd9084a8905b3fa2a64b1380b6543e963ea15d2858b241c339",
           "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-          "number": "0x1e67",
-          "parentHash": "0x28b1c054346c3bd083741c757a750dcabf94b6d50c7f87158753544e96e73550",
-          "receiptsRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
-          "reward": "0x4b2c736fd05c2e2da3ccbd001a395a444f16a861",
-          "stateRoot": "0xdf9885621c9e6e75912ca94d6987bcb1b54fef0e4a99cbec5e68f1ffc7468a78",
-          "timestamp": "0x62130beb",
+          "mixhash": "0x4238516ae446e95e1ead2cef977b19cae843b4ae9ec2fd78c856fc4ace16b71b",
+          "number": "0xc77238e",
+          "parentHash": "0xabb03206ed70c6d0cc019bee9182a4ebbb919da293a167a7c4ce4d9a94074d76",
+          "randomReveal": "0xac1c490e5b928346c554079e4244956763b989bd5028b3f296ba0fce8e334005fbaafbc094888276d2824548c6e444910762050b88b8d268bad3d59cf01b87e6e299c6b93609407f0b9246380c96b359ba68cf9f911f98fc8fdc279769cab4ce",
+          "receiptsRoot": "0x3263bcbd9e41e8744b06d4af404bca81e6dfbf256680d7067d08778d44512f00",
+          "reward": "0xef33b74083a6241af2c0be9188d911d70b9e1060",
+          "stateRoot": "0xc0827c81d54024c07f5418326e2633e082618f496a2f6d9d868bc74346736717",
+          "timestamp": "0x698be0cb",
           "timestampFoS": "0x0",
-          "transactionsRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+          "transactionsRoot": "0x194781ecab8a14756d60ce4d8f3d17873be4c886757e90e3f3efdf5e8162a259",
+          "voteData": "0x"
         }
 
     KaiaArrayOfLog:
@@ -1973,6 +2048,14 @@ components:
           type: string
           format: DATA
           description: The "extra data" field of this block.
+        blobGasUsed:
+          type: string
+          format: hex
+          description: The total blob gas used by all transactions in the block.
+        excessBlobGas:
+          type: string
+          format: hex
+          description: The excess blob gas used in the block.
         size:
           type: string
           format: hex
@@ -2020,24 +2103,27 @@ components:
           description: The base fee per gas. It has a meaningful value when EthTxTypeCompatible and Magma hardforks are activated.
       example:
         {
-          "baseFeePerGas": "0x0",
-          "blockscore": "0x1",
-          "extraData": "0xda83010800846b6c617989676f312e31362e31338664617277696e0000000000f89ed5949712f943b296758aaae79944ec975884188d3a96b841ddfdf7e2cb0a93538f757f87f23a93ee35df703c781c6f15e31e4978ecdfb3501fc00924372b9a01df2bc452f2a924c242d83580183d131c47e49a25b78f625201f843b841b9b6034d5a8c5f5b057274cda4f427614cd1f448ee781f4c4322861d1361d09d47d6030f2b69a26cb426db984f54e71f8c112fbf882930ccd715d595e8d8307500",
-          "gasUsed": "0x0",
+          "baseFeePerGas": "0x5d21dba00",
+          "blobGasUsed": "0x20000",
+          "blockScore": "0x1",
+          "excessBlobGas": "0x0",
+          "extraData": "0xd883020200846b6c617988676f312e32352e33856c696e757800000000000000f901bdf86994571e53df607be97431a5bbefca1dffe5aef56f4d945cb1a7dccbd0dc446e3640898ede8820368554c894899d2b9ce7a4f8862cff4586bf99b51f14c6eabd9499fb17d324fa0e07f23b49d09028ac0919414db694b74ff9dea397fe9e231df545eb53fe2adf776cb2b841e1f2e4377f8a6a28cd73a3b1dc2d340ad4056e200c2d6b272493e0e52c6e3b70779bf14b99971079ffafccff49b5e374186bad4e274f7c28fea4f822512f4eab01f9010cb8418b98d7cb5a1159e8d1de66c375f276033a089087c0aff771cb7c63def542fe705ad26e16ade7f46c18e8e0fc5f38aaa4f6ed83ac38ec624b6b2ad0fc648714b600b841b52d5c3e29ec340a6a64469acdac1f6f2fa3a5aa6e7613c6573f117cfc20598e3fe3d40722bbcc1ae79413541f2a03093c922702cf9b335faa680871f4c7e1d200b8416022681732c3a3abb13fbf479b6d0ee7e63923f69bf19ab9182ad1b44f7bf88855f0421dfd7fd9c7510d5499d0f4f59ab5a8b1332fcffbf6b660f2fa1fd1909801b8419607331852ee926f328b9912a4ffb67b3bb389610312061a3e96534c02ee205967093a8c24b86dfae2e3fa7c0a7072383910155aac4a8a2cd150e2bd4861360701",
+          "gasUsed": "0x6713",
           "governanceData": "0x",
-          "hash": "0xe882d7a16f38126dc0c507f990b3fe18fa2d3a380002538581327abe96ca6edc",
+          "hash": "0x1683db8c05f898cd9084a8905b3fa2a64b1380b6543e963ea15d2858b241c339",
           "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-          "number": "0x1e67",
-          "parentHash": "0x28b1c054346c3bd083741c757a750dcabf94b6d50c7f87158753544e96e73550",
-          "receiptsRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
-          "reward": "0x4b2c736fd05c2e2da3ccbd001a395a444f16a861",
-          "size": "0x272",
-          "stateRoot": "0xdf9885621c9e6e75912ca94d6987bcb1b54fef0e4a99cbec5e68f1ffc7468a78",
-          "timestamp": "0x62130beb",
+          "mixHash": "0x4238516ae446e95e1ead2cef977b19cae843b4ae9ec2fd78c856fc4ace16b71b",
+          "number": "0xc77238e",
+          "parentHash": "0xabb03206ed70c6d0cc019bee9182a4ebbb919da293a167a7c4ce4d9a94074d76",
+          "randomReveal": "0xac1c490e5b928346c554079e4244956763b989bd5028b3f296ba0fce8e334005fbaafbc094888276d2824548c6e444910762050b88b8d268bad3d59cf01b87e6e299c6b93609407f0b9246380c96b359ba68cf9f911f98fc8fdc279769cab4ce",
+          "receiptsRoot": "0x3263bcbd9e41e8744b06d4af404bca81e6dfbf256680d7067d08778d44512f00",
+          "reward": "0xef33b74083a6241af2c0be9188d911d70b9e1060",
+          "size": "0x4c1",
+          "stateRoot": "0xc0827c81d54024c07f5418326e2633e082618f496a2f6d9d868bc74346736717",
+          "timestamp": "0x698be0cb",
           "timestampFoS": "0x0",
-          "totalBlockScore": "0x1e68",
-          "transactions": [ ],
-          "transactionsRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+          "transactions": [],
+          "transactionsRoot": "0x194781ecab8a14756d60ce4d8f3d17873be4c886757e90e3f3efdf5e8162a259",
           "voteData": "0x"
         }
     StateOverrideSet:

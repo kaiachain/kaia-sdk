@@ -25,10 +25,10 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/eth/account/getBalance.yaml#/paths/~1eth~1account~1getBalance
   /eth/account/getCode:
     $ref: ../../web3rpc/rpc-specs/paths/eth/account/getCode.yaml#/paths/~1eth~1account~1getCode
-  /eth/account/getTransactionCount:
-    $ref: ../../web3rpc/rpc-specs/paths/eth/account/getTransactionCount.yaml#/paths/~1eth~1account~1getTransactionCount
   /eth/account/sign:
     $ref: ../../web3rpc/rpc-specs/paths/eth/account/sign.yaml#/paths/~1eth~1account~1sign
+  /eth/account/getTransactionCount:
+    $ref: ../../web3rpc/rpc-specs/paths/eth/account/getTransactionCount.yaml#/paths/~1eth~1account~1getTransactionCount
   /eth/account/getStorageAt:
     $ref: ../../web3rpc/rpc-specs/paths/eth/account/getStorageAt.yaml#/paths/~1eth~1account~1getStorageAt
 

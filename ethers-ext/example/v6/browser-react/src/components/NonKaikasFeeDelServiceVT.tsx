@@ -1,30 +1,38 @@
 import { useState } from "react";
 import { Account } from "../types";
-import { doSendTx } from "../util";
+import { doSignTxNonKaikas } from "../util";
+import { TxType } from "@kaiachain/js-ext-core";
 import { parseKaia } from "@kaiachain/ethers-ext/v6";
 
 type Props = {
   account: Account;
 };
 
-function LegacyVT({ account }: Props) {
+function NonKaikasFeeDelServiceVT({ account }: Props) {
   const [txhash, setTxhash] = useState<string>("");
   const [error, setError] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: any) {
     e.preventDefault();
-    const toAddr = e.target.to.value;
-    const valuePeb = parseKaia(e.target.amount.value);
+    if (loading) return;
+    setTxhash("");
+    setError(null);
+    setLoading(true);
+
     const tx = {
-      to: toAddr,
-      value: valuePeb,
+      type: TxType.FeeDelegatedValueTransfer,
+      to: e.target.to.value,
+      value: parseKaia(e.target.amount.value),
     };
 
     try {
-      const txhash = await doSendTx(account, tx);
+      const txhash = await doSignTxNonKaikas(account, tx, true);
       setTxhash(txhash);
     } catch (e: any) {
       setError(e);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -36,11 +44,10 @@ function LegacyVT({ account }: Props) {
           <input type="text" name="to" defaultValue={account.address}></input>
         </p>
         <p>
-          Amount (ETH/KAIA):{" "}
-          <input type="text" name="amount" defaultValue="0.01"></input>
+          Value: <input type="text" name="amount" defaultValue="0.01"></input>
         </p>
         <p>
-          <input type="submit"></input>
+          <input type="submit" disabled={loading} value={loading ? "Signing..." : "Submit"}></input>
         </p>
       </form>
       {txhash ? (
@@ -57,4 +64,4 @@ function LegacyVT({ account }: Props) {
   );
 }
 
-export default LegacyVT;
+export default NonKaikasFeeDelServiceVT;

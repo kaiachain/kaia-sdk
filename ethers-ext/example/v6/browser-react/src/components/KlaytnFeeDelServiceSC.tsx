@@ -39,7 +39,7 @@ function KlaytnFeeDelServiceSC({ account }: Props) {
         <p><input type="submit"></input></p>
       </form>
       {txhash ? <a target="_blank" href={txhash} rel="noreferrer">{txhash}</a> : null}
-    {error ? <text><b style={{ color: "red" }}>{error}</b></text> : null}
+    {error ? <text><b style={{ color: "red" }}>{error?.message ?? String(error)}</b></text> : null}
   </div>
 );
 };

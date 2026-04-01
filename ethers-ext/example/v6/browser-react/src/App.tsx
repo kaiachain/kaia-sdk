@@ -89,7 +89,7 @@ function App() {
         isNonKaikasKaiaWallet(account) ? (
         <div>
           <hr/>
-          <h3>Non-Kaikas Sign & Send (via eth_sign)</h3>
+          <h3>Non-Kaia Wallet Sign & Send (via eth_sign)</h3>
           <h3>FeeDelegatedValueTransfer tx</h3>
           <button onClick={() => setMenu(Menu.NonKaikasFeeDelVT)}>Expand</button>
           { menu === Menu.NonKaikasFeeDelVT ? <NonKaikasFeeDelVT account={account} /> : null }

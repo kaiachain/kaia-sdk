@@ -9,12 +9,30 @@
     <body>
       <p><button id="btnConnectMM" onclick="connectMM()">Connect MetaMask</button></p>
       <p><button id="btnConnectKK" onclick="connectKK()">Connect Kaia Wallet</button></p>
+      <p><button id="btnConnectOKX" onclick="connectOKX()">Connect OKX</button></p>
+      <hr/>
+      <p><b>Privy Embedded Wallet</b></p>
+      <div id="privySection">
+        <div id="privyLoggedOut">
+          <input id="privyEmail" type="email" placeholder="Email address" style="width:250px"/>
+          <button id="btnPrivySendOTP" onclick="privySendOTP()">Send OTP</button>
+          <div id="privyOTPSection" style="display:none; margin-top:8px;">
+            <input id="privyOTP" type="text" placeholder="Enter OTP code" style="width:150px"/>
+            <button id="btnPrivyVerifyOTP" onclick="privyVerifyOTP()">Verify & Connect</button>
+          </div>
+          <div id="privyStatus" style="margin-top:4px; color:gray;"></div>
+        </div>
+        <div id="privyLoggedIn" style="display:none;">
+          <span>Privy user: <text id="textPrivyUser"></text></span>
+          <button id="btnPrivyLogout" onclick="privyLogout()">Logout</button>
+        </div>
+      </div>
       <hr/>
       <p>
         <button id="btnNetKairos" onclick="switchKairos()">Switch to Kairos</button>
       </p>
       <hr/>
-      <p>For MetaMask and Kaia Wallet</p>
+      <p>For MetaMask, Kaia Wallet, OKX, and Privy</p>
       <p><button id="btnSignMsg" onclick="signMsg()">Sign message</button></p>
       <p>
         <button id="btnLegacyVT" onclick="sendLegacyVT()">Send Legacy or Dynamic Fee tx (send ETH/KAIA)</button>
@@ -35,7 +53,28 @@
         <button id="btnFeeDelegatedServiceSC" onclick="sendFeeDelegatedServiceSC()">Sign and Send Fee Delegation Service SmartContractExecution tx</button>
       </p>
       <hr/>
+      <p>For OKX (Non-Kaikas Sign & Send via eth_sign)</p>
       <p>
+        <button id="btnNonKaikasFeeDelegatedVT" onclick="sendNonKaikasFeeDelegatedVT()">Sign and Send FeeDelegatedValueTransfer tx</button>
+        <button id="btnNonKaikasFeeDelegatedSC" onclick="sendNonKaikasFeeDelegatedSC()">Sign and Send FeeDelegatedSmartContractExecution tx</button>
+      </p>
+      <p>
+        <button id="btnNonKaikasFeeDelegatedServiceVT" onclick="sendNonKaikasFeeDelegatedServiceVT()">Sign and Send Fee Delegation Service ValueTransfer tx</button>
+        <button id="btnNonKaikasFeeDelegatedServiceSC" onclick="sendNonKaikasFeeDelegatedServiceSC()">Sign and Send Fee Delegation Service SmartContractExecution tx</button>
+      </p>
+      <hr/>
+      <p>For Privy (Fee Delegation via eth_sign / secp256k1)</p>
+      <p>
+        <button id="btnPrivyFeeDelegatedVT" onclick="sendPrivyFeeDelegatedVT()">Sign and Send FeeDelegatedValueTransfer tx</button>
+        <button id="btnPrivyFeeDelegatedSC" onclick="sendPrivyFeeDelegatedSC()">Sign and Send FeeDelegatedSmartContractExecution tx</button>
+      </p>
+      <p>
+        <button id="btnPrivyFeeDelegatedServiceVT" onclick="sendPrivyFeeDelegatedServiceVT()">Sign and Send Fee Delegation Service ValueTransfer tx</button>
+        <button id="btnPrivyFeeDelegatedServiceSC" onclick="sendPrivyFeeDelegatedServiceSC()">Sign and Send Fee Delegation Service SmartContractExecution tx</button>
+      </p>
+      <hr/>
+      <p>
+        <div>connected wallet: <text id="textWallet"></text></div>
         <div>accounts: <text id="textAccount"></text></div>
         <div>chainId: <text id="textChainId"></text></div>
       </p>
@@ -66,6 +105,7 @@
 
     <!--- to use locally compiled ethers -->
     <script src="ethers-ext.v6.bundle.js"></script>
+    <script src="privy-bundle.js"></script>
     <script src="main.js"></script>
   </body>
 </html>

@@ -1,0 +1,14 @@
+{
+  "name": "ethers-ext-v6-browser-html",
+  "private": true,
+  "scripts": {
+    "build:privy": "esbuild privy-wrapper.js --bundle --outfile=privy-bundle.js --format=iife --global-name=PrivySDK --platform=browser --target=es2020",
+    "postinstall": "npm run build:privy"
+  },
+  "dependencies": {
+    "@privy-io/js-sdk-core": "latest"
+  },
+  "devDependencies": {
+    "esbuild": "latest"
+  }
+}

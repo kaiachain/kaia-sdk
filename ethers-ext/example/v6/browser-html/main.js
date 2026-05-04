@@ -1,7 +1,21 @@
 var provider = null;
+var rawProvider = null;
 var accounts = null;
 var signedApproveTx = null;
 var signedSwapTx = null;
+var walletFlags = { isMetaMask: false, isKaikas: false, isOKX: false, isPrivy: false };
+
+// ---------------------------------------------------------------------------
+// Privy configuration — replace with your own app ID and client ID from
+// the Privy Dashboard (https://dashboard.privy.io).
+// ---------------------------------------------------------------------------
+var PRIVY_APP_ID = "cmoqvarqz00g20cjovmi09ugi";
+var PRIVY_CLIENT_ID = "client-WY6Yh964P1rdns77tJChte7nAqea6oCjqvFLrjwN9vD6k";
+
+var privyClient = null;
+var privyIframe = null;
+var privyMessageListener = null;
+var privyEmailAddress = null;
 
 // https://kairos.kaiascan.io/address/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
 var contractAddress = "0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df";
@@ -20,17 +34,22 @@ function isKaikas() {
   return provider && provider.provider.isKaikas;
 }
 
+function isNonKaikasKaiaWallet() {
+  return walletFlags.isOKX && !walletFlags.isKaikas;
+}
+
 // https://docs.ethers.org/v5/getting-started/#getting-started--connecting
-async function connect(injectedProvider) {
+async function connect(injectedProvider, flags) {
   if (!injectedProvider) {
     alert("Please install wallet");
     return;
   }
 
-  // Wrap the window.{ethereum,klaytn} object with Web3Provider.
+  rawProvider = injectedProvider;
+  walletFlags = { isMetaMask: false, isKaikas: false, isOKX: false, isPrivy: false, ...flags };
+
+  // Wrap the window.{ethereum,klaytn,okxwallet} object with Web3Provider.
   provider = new ethers_ext.Web3Provider(injectedProvider);
-  // Uncomment to use the original ethers.js Web3Provider:
-  // provider = new ethers.Web3Provider(injectedProvider);
 
   // Detect user network
   // https://docs.metamask.io/wallet/how-to/connect/detect-network/
@@ -38,11 +57,14 @@ async function connect(injectedProvider) {
   console.log("chainId", chainId);
   $("#textChainId").html(chainId);
 
-  injectedProvider.on("networkChanged", (chainId) => {
-    console.log("chainId changed", chainId);
-    $("#textChainId").html(chainId);
-    provider = new ethers_ext.providers.Web3Provider(injectedProvider);
-  });
+  // Privy's embedded wallet provider may not support .on() events
+  if (typeof injectedProvider.on === "function") {
+    injectedProvider.on("networkChanged", (chainId) => {
+      console.log("chainId changed", chainId);
+      $("#textChainId").html(chainId);
+      provider = new ethers_ext.Web3Provider(injectedProvider);
+    });
+  }
 
   // Detect user account
   // https://docs.metamask.io/wallet/how-to/connect/access-accounts/
@@ -57,19 +79,242 @@ async function connect(injectedProvider) {
       }
   }));
 
-  injectedProvider.on("accountsChanged", async (changedAccounts) => {
-    accounts = changedAccounts;
-    console.log("accounts changed", accounts);
-    $("#textAccount").html(accounts.map((a) => a.address));
-  });
+  // Display connected wallet name
+  var walletName = "";
+  if (walletFlags.isMetaMask) walletName = "MetaMask";
+  if (walletFlags.isKaikas) walletName = "Kaia Wallet";
+  if (walletFlags.isOKX) walletName = "OKX";
+  if (walletFlags.isPrivy) walletName = "Privy";
+  $("#textWallet").html(walletName);
+
+  if (typeof injectedProvider.on === "function") {
+    injectedProvider.on("accountsChanged", async (changedAccounts) => {
+      accounts = changedAccounts;
+      console.log("accounts changed", accounts);
+      $("#textAccount").html(accounts.map((a) => a.address));
+    });
+  }
 }
 async function connectMM() {
   $("text").html(""); // Clear all text
-  await connect(window.ethereum);
+  if (!window.ethereum) {
+    alert("Please install MetaMask");
+  } else {
+    await connect(window.ethereum, { isMetaMask: true });
+  }
 }
 async function connectKK() {
   $("text").html(""); // Clear all text
-  await connect(window.klaytn);
+  if (!window.klaytn) {
+    alert("Please install Kaia Wallet");
+  } else {
+    await connect(window.klaytn, { isKaikas: true });
+  }
+}
+async function connectOKX() {
+  $("text").html(""); // Clear all text
+  if (!window.okxwallet) {
+    alert("Please install OKX Wallet");
+  } else {
+    await connect(window.okxwallet, { isOKX: true });
+  }
+}
+// ---------------------------------------------------------------------------
+// Privy embedded wallet integration
+// ---------------------------------------------------------------------------
+
+async function initPrivy() {
+  if (privyClient) return privyClient;
+
+  var SDK = window.PrivySDK;
+  if (!SDK || !SDK.Privy) {
+    console.error("Privy SDK not loaded. Make sure privy-bundle.js is included.");
+    return null;
+  }
+
+  privyClient = new SDK.Privy({
+    appId: PRIVY_APP_ID,
+    clientId: PRIVY_CLIENT_ID,
+    storage: new SDK.LocalStorage(),
+  });
+
+  await privyClient.initialize();
+
+  // Mount the secure-context iframe for embedded wallet key material
+  privyIframe = document.createElement("iframe");
+  privyIframe.src = privyClient.embeddedWallet.getURL();
+  privyIframe.style.display = "none";
+  document.body.appendChild(privyIframe);
+
+  privyClient.setMessagePoster(privyIframe.contentWindow);
+
+  privyMessageListener = function (e) {
+    if (e.source !== privyIframe.contentWindow) return;
+    var data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
+    privyClient.embeddedWallet.onMessage(data);
+  };
+  window.addEventListener("message", privyMessageListener);
+
+  // Check for a returning user session (throws when no tokens exist yet)
+  try {
+    var sessionResult = await privyClient.user.get();
+    if (sessionResult && sessionResult.user) {
+      await privyConnectWallet(sessionResult.user);
+    }
+  } catch (_) {
+    // No existing session — user will authenticate via OTP
+  }
+
+  return privyClient;
+}
+
+async function privySendOTP() {
+  try {
+    var client = await initPrivy();
+    if (!client) {
+      alert("Privy SDK failed to initialize. Check your App ID and Client ID.");
+      return;
+    }
+
+    privyEmailAddress = $("#privyEmail").val().trim();
+    if (!privyEmailAddress) {
+      alert("Please enter an email address");
+      return;
+    }
+
+    $("#privyStatus").html("Sending OTP...");
+    await client.auth.email.sendCode(privyEmailAddress);
+    $("#privyOTPSection").show();
+    $("#privyStatus").html("OTP sent to " + privyEmailAddress);
+  } catch (err) {
+    console.error("Privy sendOTP error:", err);
+    $("#privyStatus").html("Error: " + err.message);
+  }
+}
+
+async function privyVerifyOTP() {
+  try {
+    if (!privyClient || !privyEmailAddress) {
+      alert("Please send an OTP first");
+      return;
+    }
+
+    var otp = $("#privyOTP").val().trim();
+    if (!otp) {
+      alert("Please enter the OTP code");
+      return;
+    }
+
+    $("#privyStatus").html("Verifying...");
+    var session = await privyClient.auth.email.loginWithCode(privyEmailAddress, otp);
+    var user = session.user;
+
+    await privyConnectWallet(user);
+  } catch (err) {
+    console.error("Privy verifyOTP error:", err);
+    $("#privyStatus").html("Error: " + err.message);
+  }
+}
+
+async function privyConnectWallet(user) {
+  var SDK = window.PrivySDK;
+
+  // Get or create the embedded Ethereum wallet
+  var wallet = SDK.getUserEmbeddedEthereumWallet(user);
+  if (!wallet) {
+    $("#privyStatus").html("Creating embedded wallet...");
+    var createResult = await privyClient.embeddedWallet.create({});
+    user = createResult.user;
+    wallet = SDK.getUserEmbeddedEthereumWallet(user);
+  }
+
+  var entropyDetails = SDK.getEntropyDetailsFromUser(user);
+  $("#privyStatus").html("Getting wallet provider...");
+
+  var privyProvider = await privyClient.embeddedWallet.getEthereumProvider({
+    wallet: wallet,
+    entropyId: entropyDetails.entropyId,
+    entropyIdVerifier: entropyDetails.entropyIdVerifier,
+  });
+
+  // Privy's EIP-1193 provider exposes request() but ethers_ext.Web3Provider
+  // may also probe for send/sendAsync. Wrap to guarantee compatibility.
+  var wrappedProvider = {
+    request: function (args) { return privyProvider.request(args); },
+    isPrivy: true,
+  };
+
+  // Clear display fields first, then update Privy UI state so textPrivyUser persists
+  $("text").html("");
+  $("#privyLoggedOut").hide();
+  $("#privyLoggedIn").show();
+  $("#textPrivyUser").html(privyEmailAddress || wallet.address);
+  $("#privyStatus").html("Connecting wallet...");
+
+  // Set up globals so transaction functions work
+  rawProvider = wrappedProvider;
+  walletFlags = { isMetaMask: false, isKaikas: false, isOKX: false, isPrivy: true };
+
+  // Get account and chain directly from the Privy provider first
+  var accts = await privyProvider.request({ method: "eth_requestAccounts" });
+  var chain = await privyProvider.request({ method: "eth_chainId" });
+  console.log("Privy accounts:", accts, "chainId:", chain);
+
+  // Create ethers-ext Web3Provider for signing/sending transactions
+  try {
+    provider = new ethers_ext.Web3Provider(wrappedProvider);
+    accounts = await provider.listAccounts();
+  } catch (err) {
+    console.warn("Web3Provider wrapping failed, using BrowserProvider:", err);
+    provider = new ethers.BrowserProvider(wrappedProvider);
+    accounts = await provider.listAccounts();
+  }
+
+  // Populate the display fields
+  $("#textWallet").html("Privy");
+  $("#textAccount").html(accts[0] || wallet.address);
+  $("#textChainId").html(chain);
+  $("#privyStatus").html("Connected");
+}
+
+async function privyLogout() {
+  try {
+    if (!privyClient) return;
+
+    var sessionResult = await privyClient.user.get();
+    if (sessionResult && sessionResult.user) {
+      await privyClient.auth.logout({ userId: sessionResult.user.id });
+    }
+
+    // Clean up iframe and listener
+    if (privyMessageListener) {
+      window.removeEventListener("message", privyMessageListener);
+      privyMessageListener = null;
+    }
+    if (privyIframe) {
+      privyIframe.remove();
+      privyIframe = null;
+    }
+    privyClient = null;
+    privyEmailAddress = null;
+
+    // Reset UI
+    $("#privyLoggedOut").show();
+    $("#privyLoggedIn").hide();
+    $("#privyOTPSection").hide();
+    $("#privyEmail").val("");
+    $("#privyOTP").val("");
+    $("#privyStatus").html("Logged out");
+    $("text").html("");
+
+    provider = null;
+    rawProvider = null;
+    accounts = null;
+    walletFlags = { isMetaMask: false, isKaikas: false, isOKX: false, isPrivy: false };
+  } catch (err) {
+    console.error("Privy logout error:", err);
+    $("#privyStatus").html("Error: " + err.message);
+  }
 }
 
 // https://docs.metamask.io/wallet/how-to/add-network/
@@ -304,6 +549,251 @@ async function sendFeeDelegatedServiceSC() {
   doSignTx(async () => {
     return {
       type: ethers_ext.TxType.FeeDelegatedSmartContractExecution, // 0x09
+      to: contractAddress,
+      data: contractCalldata,
+    };
+  }, true);
+}
+
+// For non-Kaikas wallets (e.g. OKX): since they don't support
+// klay_signTransaction, we build the Kaia tx locally, ask the wallet to
+// sign the hash via eth_sign, then assemble the signed tx client-side.
+async function doSignTxNonKaikas(makeTxRequest, isFeeDelegationService) {
+  try {
+    const address = accounts[0].address || accounts[0];
+    const txRequest = await makeTxRequest(address);
+    if (!txRequest.from) txRequest.from = address;
+
+    const rpcProvider = new ethers_ext.JsonRpcProvider("https://public-en-kairos.node.kaia.io");
+
+    if (!txRequest.nonce) txRequest.nonce = await rpcProvider.getTransactionCount(address);
+    if (!txRequest.gasLimit) {
+      const estimated = await rpcProvider.estimateGas({
+        from: txRequest.from,
+        to: txRequest.to,
+        value: txRequest.value || 0,
+        data: txRequest.data || "0x",
+      });
+      txRequest.gasLimit = Math.ceil(Number(estimated) * 2.5);
+    }
+    if (!txRequest.gasPrice) {
+      const feeData = await rpcProvider.getFeeData();
+      txRequest.gasPrice = feeData.gasPrice;
+    }
+    if (!txRequest.chainId) {
+      const network = await rpcProvider.getNetwork();
+      txRequest.chainId = Number(network.chainId);
+    }
+    if (!txRequest.value) txRequest.value = 0;
+
+    const chainId = Number(txRequest.chainId);
+    const klaytnTx = ethers_ext.KlaytnTxFactory.fromObject(txRequest);
+    // await rpcProvider.send("eth_signTransaction", [{
+    //   typeInt: 9,
+    //   from: address,
+    //   to: address,
+    //   value: '0x0',
+    //   feePayer: address,
+    //   gasLimit: txRequest.gasLimit,
+    // }]);
+    // await rawProvider.request({
+    //   method: "kaia_signTransaction", //"eth_sign",
+    //   params: [{
+    //     typeInt: 9,
+    //     from: address,
+    //     to: address,
+    //     value: '0x0',
+    //     feePayer: address,
+    //   }],
+    // });
+    const sigHash = ethers.keccak256(klaytnTx.sigRLP());
+
+    // eth_sign signs a raw 32-byte hash without any message prefix.
+    // Call the raw injected provider directly to bypass the Kaia Web3Provider wrapper.
+    const rawSig = await rawProvider.request({
+      method: "kaia_sign", //"eth_sign",
+      params: [address.toLowerCase(), sigHash],
+    });
+
+    const r = "0x" + rawSig.slice(2, 66);
+    const s = "0x" + rawSig.slice(66, 130);
+    const vByte = parseInt(rawSig.slice(130, 132), 16);
+    const recoveryParam = vByte >= 27 ? vByte - 27 : vByte;
+    const v = recoveryParam + chainId * 2 + 35;
+
+    klaytnTx.addSenderSig({ r, s, v });
+
+    let signedTx;
+    if (ethers_ext.isFeePayerSigTxType(klaytnTx.type)) {
+      console.log("senderTxHashRLP", klaytnTx.senderTxHashRLP());
+      signedTx = klaytnTx.senderTxHashRLP();
+    } else {
+      console.log("txHashRLP", klaytnTx.txHashRLP());
+      signedTx = klaytnTx.txHashRLP();
+    }
+    console.log("signedTx (non-Kaikas)", signedTx);
+    $("#textSignedTx").html(`${signedTx}`);
+
+    if (isFeeDelegationService) {
+      await doSendTxToFeeDelegationService(signedTx);
+    } else {
+      await doSendTxAsFeePayer(signedTx);
+    }
+  } catch (err) {
+    console.error(err);
+    $("#textTxhash").html(`Error: ${err.message}`);
+  }
+}
+
+async function sendNonKaikasFeeDelegatedVT() {
+  doSignTxNonKaikas(async (address) => {
+    return {
+      type: ethers_ext.TxType.FeeDelegatedValueTransfer,
+      to: address,
+      value: 0,
+    };
+  }, false);
+}
+async function sendNonKaikasFeeDelegatedSC() {
+  doSignTxNonKaikas(async () => {
+    return {
+      type: ethers_ext.TxType.FeeDelegatedSmartContractExecution,
+      to: contractAddress,
+      data: contractCalldata,
+    };
+  }, false);
+}
+async function sendNonKaikasFeeDelegatedServiceVT() {
+  doSignTxNonKaikas(async (address) => {
+    return {
+      type: ethers_ext.TxType.FeeDelegatedValueTransfer,
+      to: address,
+      value: 0,
+    };
+  }, true);
+}
+async function sendNonKaikasFeeDelegatedServiceSC() {
+  doSignTxNonKaikas(async () => {
+    return {
+      type: ethers_ext.TxType.FeeDelegatedSmartContractExecution,
+      to: contractAddress,
+      data: contractCalldata,
+    };
+  }, true);
+}
+
+// Privy fee-delegated transactions via eth_sign (raw hash, no prefix).
+// Follows the same pattern as the server-side secp256k1_sign approach:
+//   1. Build Kaia tx locally with KlaytnTxFactory
+//   2. Compute sigHash = keccak256(sigRLP)
+//   3. Sign raw hash via eth_sign on the Privy embedded wallet provider
+//   4. Decompose signature, apply EIP-155
+//   5. Send signed tx to fee payer or fee delegation service
+async function doSignTxPrivy(makeTxRequest, isFeeDelegationService) {
+  try {
+    if (!walletFlags.isPrivy || !rawProvider) {
+      alert("Please connect Privy wallet first");
+      return;
+    }
+
+    var address = accounts[0].address || accounts[0];
+    var txRequest = await makeTxRequest(address);
+    if (!txRequest.from) txRequest.from = address;
+
+    var rpcProvider = new ethers_ext.JsonRpcProvider("https://public-en-kairos.node.kaia.io");
+
+    if (!txRequest.nonce) txRequest.nonce = await rpcProvider.getTransactionCount(address);
+    if (!txRequest.gasLimit) {
+      var estimated = await rpcProvider.estimateGas({
+        from: txRequest.from,
+        to: txRequest.to,
+        value: txRequest.value || 0,
+        data: txRequest.data || "0x",
+      });
+      txRequest.gasLimit = Math.ceil(Number(estimated) * 2.5);
+    }
+    if (!txRequest.gasPrice) {
+      var feeData = await rpcProvider.getFeeData();
+      txRequest.gasPrice = feeData.gasPrice;
+    }
+    if (!txRequest.chainId) {
+      var network = await rpcProvider.getNetwork();
+      txRequest.chainId = Number(network.chainId);
+    }
+    if (!txRequest.value) txRequest.value = 0;
+
+    var chainId = Number(txRequest.chainId);
+    var klaytnTx = ethers_ext.KlaytnTxFactory.fromObject(txRequest);
+    var sigHash = ethers.keccak256(klaytnTx.sigRLP());
+    console.log("Privy sigHash:", sigHash);
+
+    // eth_sign signs a raw 32-byte hash without any message prefix,
+    // equivalent to Privy server API's secp256k1_sign.
+    var rawSig = await rawProvider.request({
+      method: "eth_sign",
+      params: [address.toLowerCase(), sigHash],
+    });
+    console.log("Privy rawSig:", rawSig);
+
+    var r = "0x" + rawSig.slice(2, 66);
+    var s = "0x" + rawSig.slice(66, 130);
+    var vByte = parseInt(rawSig.slice(130, 132), 16);
+    var recoveryParam = vByte >= 27 ? vByte - 27 : vByte;
+    var v = recoveryParam + chainId * 2 + 35;
+
+    klaytnTx.addSenderSig({ r: r, s: s, v: v });
+
+    var signedTx;
+    if (ethers_ext.isFeePayerSigTxType(klaytnTx.type)) {
+      signedTx = klaytnTx.senderTxHashRLP();
+    } else {
+      signedTx = klaytnTx.txHashRLP();
+    }
+    console.log("Privy signedTx:", signedTx);
+    $("#textSignedTx").html(signedTx);
+
+    if (isFeeDelegationService) {
+      await doSendTxToFeeDelegationService(signedTx);
+    } else {
+      await doSendTxAsFeePayer(signedTx);
+    }
+  } catch (err) {
+    console.error("Privy fee delegation error:", err);
+    $("#textTxhash").html("Error: " + err.message);
+  }
+}
+
+async function sendPrivyFeeDelegatedVT() {
+  doSignTxPrivy(async function (address) {
+    return {
+      type: ethers_ext.TxType.FeeDelegatedValueTransfer,
+      to: address,
+      value: 0,
+    };
+  }, false);
+}
+async function sendPrivyFeeDelegatedSC() {
+  doSignTxPrivy(async function () {
+    return {
+      type: ethers_ext.TxType.FeeDelegatedSmartContractExecution,
+      to: contractAddress,
+      data: contractCalldata,
+    };
+  }, false);
+}
+async function sendPrivyFeeDelegatedServiceVT() {
+  doSignTxPrivy(async function (address) {
+    return {
+      type: ethers_ext.TxType.FeeDelegatedValueTransfer,
+      to: address,
+      value: 0,
+    };
+  }, true);
+}
+async function sendPrivyFeeDelegatedServiceSC() {
+  doSignTxPrivy(async function () {
+    return {
+      type: ethers_ext.TxType.FeeDelegatedSmartContractExecution,
       to: contractAddress,
       data: contractCalldata,
     };

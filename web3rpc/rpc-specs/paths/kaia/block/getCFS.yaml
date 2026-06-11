@@ -1,0 +1,98 @@
+openapi: "3.0.2"
+info:
+  title: KAIA OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /kaia/block/getCFS:
+    post:
+      operationId: .getCFS
+      summary: "[Block] kaia_getCFS"
+      description: |
+        Returns the VRank Consensus Failure Scores (CFS) for all validators at the specified block, keyed by validator address. A higher score indicates more consensus failures attributed to the validator. If the block parameter is not set, the latest block is used.
+
+        **NOTE:**
+
+        *VRank scores are tracked on permissionless networks; the on-chain `vrank` block header field is populated after the Permissionless hardfork.*
+
+        **JSONRPC:** `kaia_getCFS`
+      tags:
+        - kaia
+
+      parameters:
+        - name: blockNumberOrTag
+          in: query
+          description: (optional) Integer or hexadecimal block number, or the string "earliest" or "latest" as in the default block parameter.
+          required: false
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KaiaGetCFSReq"
+
+      responses:
+        200:
+          description: Object - Map of validator address to its Consensus Failure Score.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KaiaGetCFSResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/kaia/block/getCFS.sh"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/kaia/block/getCFS.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/kaia/block/getCFS.py"
+
+components:
+  schemas:
+    KaiaGetCFSReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'kaia_getCFS'
+        params:
+          type: array
+          items:
+            properties:
+              BlockNumberOrTag:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+          example: ["latest"]
+
+    KaiaGetCFSResp:
+      type: object
+      properties:
+        result:
+          type: object
+          description: Map of validator address to its Consensus Failure Score.
+          additionalProperties:
+            type: number
+            description: Consensus Failure Score for the validator.
+          example:
+            "0x207e38864b45a538733741dc1ff92eff9d1a6159": 0
+            "0x300dde981e7c3bb232b9051c1d479b3c0eb12bb1": 1

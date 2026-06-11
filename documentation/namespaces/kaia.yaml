@@ -62,6 +62,12 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/block/getCouncil.yaml#/paths/~1kaia~1block~1getCouncil
   /kaia/block/getCouncilSize:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/block/getCouncilSize.yaml#/paths/~1kaia~1block~1getCouncilSize
+  /kaia/block/getNodesByState:
+    $ref: ../../web3rpc/rpc-specs/paths/kaia/block/getNodesByState.yaml#/paths/~1kaia~1block~1getNodesByState
+  /kaia/block/getPFS:
+    $ref: ../../web3rpc/rpc-specs/paths/kaia/block/getPFS.yaml#/paths/~1kaia~1block~1getPFS
+  /kaia/block/getCFS:
+    $ref: ../../web3rpc/rpc-specs/paths/kaia/block/getCFS.yaml#/paths/~1kaia~1block~1getCFS
   /kaia/block/getBlockByNumber:
     $ref: ../../web3rpc/rpc-specs/paths/kaia/block/getBlockByNumber.yaml#/paths/~1kaia~1block~1getBlockByNumber
   /kaia/block/getBlockTransactionCountByHash:

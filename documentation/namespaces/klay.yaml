@@ -62,6 +62,8 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/klay/block/getCouncil.yaml#/paths/~1klay~1block~1getCouncil
   /klay/block/getCouncilSize:
     $ref: ../../web3rpc/rpc-specs/paths/klay/block/getCouncilSize.yaml#/paths/~1klay~1block~1getCouncilSize
+  /klay/block/getNodesByState:
+    $ref: ../../web3rpc/rpc-specs/paths/klay/block/getNodesByState.yaml#/paths/~1klay~1block~1getNodesByState
   /klay/block/getBlockByNumber:
     $ref: ../../web3rpc/rpc-specs/paths/klay/block/getBlockByNumber.yaml#/paths/~1klay~1block~1getBlockByNumber
   /klay/block/getBlockTransactionCountByHash:

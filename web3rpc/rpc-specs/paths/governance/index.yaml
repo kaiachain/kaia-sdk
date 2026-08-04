@@ -53,3 +53,7 @@ paths:
     $ref: ./getRewardsAccumulated.yaml#/paths/~1governance~1getRewardsAccumulated
   /governance/status:
     $ref: ./status.yaml#/paths/~1governance~1status
+  /governance/getPFS:
+    $ref: ./getPFS.yaml#/paths/~1governance~1getPFS
+  /governance/getCFS:
+    $ref: ./getCFS.yaml#/paths/~1governance~1getCFS

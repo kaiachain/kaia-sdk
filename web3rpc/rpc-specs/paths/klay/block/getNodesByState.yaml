@@ -1,0 +1,150 @@
+openapi: "3.0.2"
+info:
+  title: KAIA OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /klay/block/getNodesByState:
+    post:
+      operationId: getNodesByState
+      summary: "[Block] klay_getNodesByState"
+      description: |
+        Returns the nodes registered in the validator set at the specified block, keyed by node address, optionally filtered by lifecycle state. If the state filter is not set, all nodes are returned. If the block parameter is not set, the latest block is used.
+
+        Each entry reports the node's lifecycle `state` and the metadata that drives its transitions. Valid state values are `Registered`, `CandReady`, `CandTesting`, `ValInactive`, `ValReady`, `ValActive`, `ValPaused`, and `ValExiting`.
+
+        **NOTE:**
+
+        *This method is available only on permissionless networks. Querying a block before the Permissionless hardfork returns an error.*
+
+        *This method reads the node states from the state at the queried block. Non-archive (pruned) nodes only retain recent state, so querying historical blocks requires an archive node; otherwise it fails with a "missing trie node" error.*
+
+        **JSONRPC:** `klay_getNodesByState`
+      tags:
+        - klay
+
+      parameters:
+        - name: blockNumberOrTag
+          in: query
+          description: (optional) Integer or hexadecimal block number, or the string "earliest" or "latest" as in the default block parameter.
+          required: false
+          schema:
+            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+        - name: states
+          in: query
+          description: (optional) Array of node-state strings to filter by. When omitted or empty, nodes in all states are returned.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - Registered
+                - CandReady
+                - CandTesting
+                - ValInactive
+                - ValReady
+                - ValActive
+                - ValPaused
+                - ValExiting
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/KlayGetNodesByStateReq"
+
+      responses:
+        200:
+          description: Object - Map of node address to its lifecycle record.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/KlayGetNodesByStateResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../../code-samples/curl/klay/block/getNodesByState.sh"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../../code-samples/javascript/klay/block/getNodesByState.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../../code-samples/python/klay/block/getNodesByState.py"
+
+components:
+  schemas:
+    KlayGetNodesByStateReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'klay_getNodesByState'
+        params:
+          type: array
+          items:
+            properties:
+              BlockNumberOrTag:
+                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+              States:
+                type: array
+                description: Array of node-state strings to filter by. When omitted or empty, nodes in all states are returned.
+                items:
+                  type: string
+          example: ["latest", ["ValActive"]]
+
+    KlayGetNodesByStateResp:
+      type: object
+      properties:
+        result:
+          type: object
+          description: Map of node address to its lifecycle record.
+          additionalProperties:
+            type: object
+            properties:
+              state:
+                type: string
+                description: Lifecycle state of the node.
+                example: "ValActive"
+              stakingAmount:
+                type: number
+                description: Staked amount in KAIA unit.
+                example: 5000000
+              idleTimeout:
+                type: string
+                format: date-time
+                description: Time after which an idle node transitions out of its current state. Zero value when not set.
+                example: "0001-01-01T00:00:00Z"
+              pausedTimeout:
+                type: string
+                format: date-time
+                description: Time after which a paused node transitions. Zero value when not set.
+                example: "0001-01-01T00:00:00Z"
+              suspended:
+                type: boolean
+                description: Whether the node is suspended from the qualified set.
+                example: false
+          example:
+            "0x207e38864b45a538733741dc1ff92eff9d1a6159":
+              state: "ValActive"
+              stakingAmount: 5000000
+              idleTimeout: "0001-01-01T00:00:00Z"
+              pausedTimeout: "0001-01-01T00:00:00Z"
+              suspended: false

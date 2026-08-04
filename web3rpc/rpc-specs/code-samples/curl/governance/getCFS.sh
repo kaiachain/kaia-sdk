@@ -3,7 +3,7 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-  "method": "klay_getPFS",
+  "method": "governance_getCFS",
   "id": 1,
   "jsonrpc": "2.0",
   "params": ["latest"]

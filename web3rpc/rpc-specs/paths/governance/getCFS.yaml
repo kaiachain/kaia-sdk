@@ -10,10 +10,10 @@ servers:
   - url: http://localhost:7151
 
 paths:
-  /kaia/block/getCFS:
+  /governance/getCFS:
     post:
-      operationId: .getCFS
-      summary: "[Block] kaia_getCFS"
+      operationId: getCFS
+      summary: "governance_getCFS"
       description: |
         Returns the VRank Consensus Failure Scores (CFS) for all validators at the specified block, keyed by validator address. A higher score indicates more consensus failures attributed to the validator. If the block parameter is not set, the latest block is used.
 
@@ -21,9 +21,9 @@ paths:
 
         *VRank scores are tracked on permissionless networks; the on-chain `vrank` block header field is populated after the Permissionless hardfork.*
 
-        **JSONRPC:** `kaia_getCFS`
+        **JSONRPC:** `governance_getCFS`
       tags:
-        - kaia
+        - governance
 
       parameters:
         - name: blockNumberOrTag
@@ -31,15 +31,15 @@ paths:
           description: (optional) Integer or hexadecimal block number, or the string "earliest" or "latest" as in the default block parameter.
           required: false
           schema:
-            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+            $ref: "../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
 
       requestBody:
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
-                - $ref: "#/components/schemas/KaiaGetCFSReq"
+                - $ref: "../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/GovernanceGetCFSReq"
 
       responses:
         200:
@@ -48,26 +48,26 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
-                  - $ref: "#/components/schemas/KaiaGetCFSResp"
+                  - $ref: "../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/GovernanceGetCFSResp"
 
       x-codeSamples:
         - lang: "Shell"
           label: "Curl"
           source:
-            $ref: "../../../code-samples/curl/kaia/block/getCFS.sh"
+            $ref: "../../code-samples/curl/governance/getCFS.sh"
         - lang: "JavaScript"
           label: "Javascript"
           source:
-            $ref: "../../../code-samples/javascript/kaia/block/getCFS.js"
+            $ref: "../../code-samples/javascript/governance/getCFS.js"
         - lang: "Python"
           label: "Python"
           source:
-            $ref: "../../../code-samples/python/kaia/block/getCFS.py"
+            $ref: "../../code-samples/python/governance/getCFS.py"
 
 components:
   schemas:
-    KaiaGetCFSReq:
+    GovernanceGetCFSReq:
       type: object
       required:
         - method
@@ -75,16 +75,16 @@ components:
       properties:
         method:
           type: string
-          default: 'kaia_getCFS'
+          default: 'governance_getCFS'
         params:
           type: array
           items:
             properties:
               BlockNumberOrTag:
-                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+                $ref: "../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
           example: ["latest"]
 
-    KaiaGetCFSResp:
+    GovernanceGetCFSResp:
       type: object
       properties:
         result:

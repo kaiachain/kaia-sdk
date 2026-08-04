@@ -5,7 +5,7 @@ host = "https://public-en-kairos.node.kaia.io"
 
 w3 = Web3(Web3.HTTPProvider(host))
 
-# kaia_getCFS has no dedicated SDK wrapper; call it through the provider.
-kaia_response = w3.provider.make_request("kaia_getCFS", ["latest"])
+# governance_getCFS has no dedicated SDK wrapper; call it through the provider.
+kaia_response = w3.provider.make_request("governance_getCFS", ["latest"])
 
 print(kaia_response)

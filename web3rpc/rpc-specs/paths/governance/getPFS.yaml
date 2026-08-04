@@ -10,10 +10,10 @@ servers:
   - url: http://localhost:7151
 
 paths:
-  /klay/block/getPFS:
+  /governance/getPFS:
     post:
       operationId: getPFS
-      summary: "[Block] klay_getPFS"
+      summary: "governance_getPFS"
       description: |
         Returns the VRank Proposal Failure Scores (PFS) for all validators at the specified block, keyed by validator address. A higher score indicates more proposal failures attributed to the validator. If the block parameter is not set, the latest block is used.
 
@@ -21,9 +21,9 @@ paths:
 
         *VRank scores are tracked on permissionless networks; the on-chain `vrank` block header field is populated after the Permissionless hardfork.*
 
-        **JSONRPC:** `klay_getPFS`
+        **JSONRPC:** `governance_getPFS`
       tags:
-        - klay
+        - governance
 
       parameters:
         - name: blockNumberOrTag
@@ -31,15 +31,15 @@ paths:
           description: (optional) Integer or hexadecimal block number, or the string "earliest" or "latest" as in the default block parameter.
           required: false
           schema:
-            $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+            $ref: "../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
 
       requestBody:
         content:
           application/json:
             schema:
               allOf:
-                - $ref: "../../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
-                - $ref: "#/components/schemas/KlayGetPFSReq"
+                - $ref: "../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/GovernanceGetPFSReq"
 
       responses:
         200:
@@ -48,26 +48,26 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: "../../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
-                  - $ref: "#/components/schemas/KlayGetPFSResp"
+                  - $ref: "../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/GovernanceGetPFSResp"
 
       x-codeSamples:
         - lang: "Shell"
           label: "Curl"
           source:
-            $ref: "../../../code-samples/curl/klay/block/getPFS.sh"
+            $ref: "../../code-samples/curl/governance/getPFS.sh"
         - lang: "JavaScript"
           label: "Javascript"
           source:
-            $ref: "../../../code-samples/javascript/klay/block/getPFS.js"
+            $ref: "../../code-samples/javascript/governance/getPFS.js"
         - lang: "Python"
           label: "Python"
           source:
-            $ref: "../../../code-samples/python/klay/block/getPFS.py"
+            $ref: "../../code-samples/python/governance/getPFS.py"
 
 components:
   schemas:
-    KlayGetPFSReq:
+    GovernanceGetPFSReq:
       type: object
       required:
         - method
@@ -75,16 +75,16 @@ components:
       properties:
         method:
           type: string
-          default: 'klay_getPFS'
+          default: 'governance_getPFS'
         params:
           type: array
           items:
             properties:
               BlockNumberOrTag:
-                $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+                $ref: "../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
           example: ["latest"]
 
-    KlayGetPFSResp:
+    GovernanceGetPFSResp:
       type: object
       properties:
         result:

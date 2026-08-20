@@ -12,8 +12,9 @@ function AccountInfo({ account, setAccount }: Props) {
       <p><b>ChainId</b>: {account.chainId}</p>
       <p>
         <b>Connected Wallet</b>:&nbsp;
-        {account.isMetaMask ? "Metamask" : null}
+        {account.isMetaMask ? "MetaMask" : null}
         {account.isKaikas ? "Kaia Wallet" : null}
+        {account.isOKX ? "OKX" : null}
       </p>
     </div>
   );

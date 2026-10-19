@@ -49,7 +49,7 @@ function KlaytnFeeDelServiceVT({ account }: Props) {
       ) : null}
       {error ? (
         <text>
-          <b style={{ color: "red" }}>{error}</b>
+          <b style={{ color: "red" }}>{error?.message ?? String(error)}</b>
         </text>
       ) : null}
     </div>

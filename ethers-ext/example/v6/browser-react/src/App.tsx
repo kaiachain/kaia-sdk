@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 
-import { Account } from "./types";
+import { Account, isKaiaCapableWallet, isNonKaikasKaiaWallet } from "./types";
 import Connect from './components/Connect';
 import AccountInfo from './components/AccountInfo'
 import SignMsg from './components/SignMsg';
@@ -13,6 +13,10 @@ import KlaytnFeeDelVT from './components/KlaytnFeeDelVT';
 import KlaytnFeeDelSC from './components/KlaytnFeeDelSC';
 import KlaytnFeeDelServiceVT from './components/KlaytnFeeDelServiceVT';
 import KlaytnFeeDelServiceSC from './components/KlaytnFeeDelServiceSC';
+import NonKaikasFeeDelVT from './components/NonKaikasFeeDelVT';
+import NonKaikasFeeDelSC from './components/NonKaikasFeeDelSC';
+import NonKaikasFeeDelServiceVT from './components/NonKaikasFeeDelServiceVT';
+import NonKaikasFeeDelServiceSC from './components/NonKaikasFeeDelServiceSC';
 
 enum Menu {
   None,
@@ -25,6 +29,10 @@ enum Menu {
   KlaytnFeeDelSC,
   KlaytnFeeDelServiceVT,
   KlaytnFeeDelServiceSC,
+  NonKaikasFeeDelVT,
+  NonKaikasFeeDelSC,
+  NonKaikasFeeDelServiceVT,
+  NonKaikasFeeDelServiceSC,
 }
 
 function App() {
@@ -52,8 +60,8 @@ function App() {
           { menu === Menu.LegacySC ? <LegacySC account={account} /> : null }
         </div>
       ) : null }
-      { /* ValueTransfer tx is not supported in MetaMask */
-        account.isKaikas ? (
+      { /* Kaia-native tx types via klay_sendTransaction (Kaikas, OKX) */
+        isKaiaCapableWallet(account) ? (
         <div>
           <hr/>
           <h3>Kaia Features</h3>
@@ -75,6 +83,25 @@ function App() {
           <h3>Sign and Send FeeDelegated Service SmartContractExecution tx</h3>
           <button onClick={() => setMenu(Menu.KlaytnFeeDelServiceSC)}>Expand</button>
           { menu === Menu.KlaytnFeeDelServiceSC ? <KlaytnFeeDelServiceSC account={account} /> : null }
+        </div>
+      ) : null }
+      { /* Non-Kaikas wallets (OKX) use client-side signing via eth_sign */
+        isNonKaikasKaiaWallet(account) ? (
+        <div>
+          <hr/>
+          <h3>Non-Kaikas Sign & Send (via eth_sign)</h3>
+          <h3>FeeDelegatedValueTransfer tx</h3>
+          <button onClick={() => setMenu(Menu.NonKaikasFeeDelVT)}>Expand</button>
+          { menu === Menu.NonKaikasFeeDelVT ? <NonKaikasFeeDelVT account={account} /> : null }
+          <h3>FeeDelegatedSmartContractExecution tx</h3>
+          <button onClick={() => setMenu(Menu.NonKaikasFeeDelSC)}>Expand</button>
+          { menu === Menu.NonKaikasFeeDelSC ? <NonKaikasFeeDelSC account={account} /> : null }
+          <h3>Fee Delegated Service ValueTransfer tx</h3>
+          <button onClick={() => setMenu(Menu.NonKaikasFeeDelServiceVT)}>Expand</button>
+          { menu === Menu.NonKaikasFeeDelServiceVT ? <NonKaikasFeeDelServiceVT account={account} /> : null }
+          <h3>Fee Delegated Service SmartContractExecution tx</h3>
+          <button onClick={() => setMenu(Menu.NonKaikasFeeDelServiceSC)}>Expand</button>
+          { menu === Menu.NonKaikasFeeDelServiceSC ? <NonKaikasFeeDelServiceSC account={account} /> : null }
         </div>
       ) : null }
     </div>

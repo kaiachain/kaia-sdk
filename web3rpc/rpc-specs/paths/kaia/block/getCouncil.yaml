@@ -23,6 +23,8 @@ paths:
         
         *In versions earlier than Kaia v1.7.0, only integer block number, the string "earliest" and "latest" are available.*
 
+        *On permissionless networks, this method reads the council from the state at the queried block. Non-archive (pruned) nodes only retain recent state, so querying historical blocks requires an archive node; otherwise it fails with a "missing trie node" error.*
+
         **JSONRPC:** `kaia_getCouncil`
       tags:
         - kaia

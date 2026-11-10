@@ -130,8 +130,6 @@ components:
               type: string
             timestampFoS:
               type: string
-            totalBlockScore:
-              type: string
             transactions:
               type: array
               items:
@@ -212,7 +210,6 @@ components:
               stateRoot: '0xc65b3e3f1c32c33c095507d6d37e2a8a5589b178b5b03a1365295908ac92c40c',
               timestamp: '0x5d11f951',
               timestampFoS: '0x0',
-              totalBlockScore: '0x4a9a',
               transactions: [
                   {
                       blockHash: '0x6ccef34eb59fab927705d344f080f449b576c0626e4aa3e20f569feb8df6e283',
@@ -262,7 +259,6 @@ components:
         - stateRoot
         - timestamp
         - timestampFoS
-        - totalBlockScore
         - transactions
         - transactionsRoot
         - voteData
@@ -335,10 +331,6 @@ components:
           type: string
           format: hex
           description: The fraction of a second of the timestamp for when the block was collated.
-        totalBlockScore:
-          type: string
-          format: hex
-          description: Integer of the total blockScore of the chain until this block.
         transactions:
           type: array
           items:

@@ -30,7 +30,7 @@ import {
   getKaikasTxType,
 } from "@kaiachain/js-ext-core";
 
-import { decryptKeystoreList, decryptKeystoreListSync } from "./keystore";
+import { decryptKeystoreList, decryptKeystoreListSync } from "./keystore.js";
 import {
   eip155sign,
   getTransactionRequest,
@@ -42,8 +42,8 @@ import {
   populateChainId,
   populateFeePayerAndSignatures,
   pollTransactionInPool,
-} from "./txutil";
-import { ExternalProvider } from "./types";
+} from "./txutil.js";
+import { ExternalProvider } from "./types.js";
 
 export class Wallet extends EthersWallet {
   // Override Wallet factories accepting keystores to support both v3 and v4 (KIP-3) formats
@@ -295,6 +295,43 @@ export class Wallet extends EthersWallet {
       signedTx,
     ]);
     return pollTransactionInPool(txhash, this.provider);
+  }
+
+  async sendTransactions(
+    transactions: TransactionRequest[]
+  ): Promise<TransactionResponse[]> {
+    const signedTxs = [];
+    for (const transaction of transactions) {
+      const tx = await getTransactionRequest(transaction);
+      if (!isKlaytnTxType(parseTxType(tx.type))) {
+        const populatedTx = await super.populateTransaction(tx);
+        const signedTx = await super.signTransaction(populatedTx);
+        signedTxs.push(signedTx);
+      } else {
+        const populatedTx = await this._populateTransaction(tx, false);
+        const signedTx = await this.signTransaction(populatedTx);
+        signedTxs.push(signedTx);
+      }
+    }
+    return this._sendKlaytnRawTransactions(signedTxs);
+  }
+
+  async _sendKlaytnRawTransactions(
+    signedTxs: string[]
+  ): Promise<TransactionResponse[]> {
+    assert(
+      this.provider instanceof EthersJsonRpcApiProvider,
+      "Provider is not JsonRpcProvider: cannot send klay_sendRawTransactions",
+      "UNSUPPORTED_OPERATION",
+      {
+        operation: "_sendKlaytnRawTransactions",
+      }
+    );
+
+    const txhashes = await this.provider.send("klay_sendRawTransactions", [
+      signedTxs
+    ]) as string[];
+    return Promise.all(txhashes.map((txhash) => pollTransactionInPool(txhash, this.provider!))); // can assume this.provider != null because we asserted above.
   }
 }
 

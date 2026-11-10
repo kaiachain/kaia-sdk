@@ -2,9 +2,17 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+This example requires the viem-ext package to be built. Navigate to `/ethers-ext` & `/js-ext-core`
+and run:
+- `npm install`
+- `npm run build`
+
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `npm install`
+Installs all project dependencies required to run the application.
 
 ### `npm start`
 

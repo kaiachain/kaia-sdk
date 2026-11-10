@@ -15,6 +15,8 @@ paths:
       operationId: showTally
       summary: "governance_showTally"
       description: |
+        **NOTE**: This API is no longer supported in Kaia v2.0.0 or later. Use kaia_getChainConfig, kaia_getParams, and  governance_status instead.
+
         The showTally property provides the current tally of governance votes. It shows the aggregated approval rate in percentage. When it goes over 50%, the vote passes.
 
         **JSONRPC:** `governance_showTally`

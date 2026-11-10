@@ -119,6 +119,12 @@ components:
                   description: Lowest number block of returned range.
                 baseFeePerGas:
                   $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BaseFeePerGas"
+                blobBaseFeePerGas:
+                  type: array
+                  items:
+                    type: string
+                    format: hex
+                  description: An array of blob base fees per gas for the requested block range.
                 gasUsedRatio:
                   type: array
                   items:
@@ -129,11 +135,11 @@ components:
                   $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/Reward"
               example:
                 {
-                  "oldestBlock": "0xa5b",
+                  "oldestBlock": "0xc874c08",
                   "reward": [
-                    [ "0x0", "0x0", "0x0" ],
-                    [ "0x5d21dba00", "0x5d21dba00", "0x5d21dba00" ]
+                    [ "0x0" ]
                   ],
-                  "baseFeePerGas": [ "0x0", ..., "0x0" ],
-                  "gasUsedRatio": [ 0, ..., 0.0002963777000002964 ]
+                  "baseFeePerGas": [ "0x5d21dba00", "0x5d21dba00" ],
+                  "blobBaseFeePerGas": [ "0x2e90edd000", "0x2e90edd000" ],
+                  "gasUsedRatio": [ 0 ]
                 }

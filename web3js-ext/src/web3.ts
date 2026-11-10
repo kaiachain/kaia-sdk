@@ -1,6 +1,6 @@
 import { AsyncNamespaceApi, rpcSendFunction, asyncOpenApi } from "@kaiachain/js-ext-core";
 // @ts-ignore: package @kaiachain/web3rpc has no .d.ts file.
-import { AdminApi, DebugApi, GovernanceApi, KlayApi, NetApi, PersonalApi, TxpoolApi } from "@kaiachain/web3rpc";
+import * as web3rpc from "@kaiachain/web3rpc";
 import { Web3 } from "web3";
 import {
   Web3Context,
@@ -15,14 +15,20 @@ import {
 } from "web3-types";
 import * as utils from "web3-utils";
 
-import { context_accounts } from "./accounts";
+import { context_accounts } from "./accounts/index.js";
 import {
   context_getProtocolVersion,
   context_sendSignedTransaction,
+  context_sendSignedTransactions,
   context_sendTransaction,
   context_signTransaction,
-} from "./eth";
-import { KlaytnWeb3EthInterface } from "./types";
+} from "./eth/index.js";
+
+import {
+  KaiaWeb3EthInterface,
+  KaiaWeb3GaslessInterface,
+} from "./index.js";
+import { context_gasless } from "./gasless/index.js";
 
 
 // Follow the Web3 class from the web3/src/web3.ts
@@ -36,7 +42,10 @@ export class KlaytnWeb3
 
   // Properties analogous to Web3 class
   public utils: typeof utils;
-  public eth: KlaytnWeb3EthInterface;
+  public eth: KaiaWeb3EthInterface;
+
+  // Additional namespaces
+  public gasless: KaiaWeb3GaslessInterface;
 
   // Additional RPC namespaces
   public admin: AsyncNamespaceApi;
@@ -54,9 +63,9 @@ export class KlaytnWeb3
 
   public constructor(
     providerOrContext?:
-			| string
-			| SupportedProviders<EthExecutionAPI>
-			| Web3ContextInitOptions<EthExecutionAPI>,
+      | string
+      | SupportedProviders<EthExecutionAPI>
+      | Web3ContextInitOptions<EthExecutionAPI>,
   ) {
     // Call super() like original Web3.constructor() does
     const contextInitOptions = getContextInitOptions(providerOrContext);
@@ -67,11 +76,13 @@ export class KlaytnWeb3
 
     // Expose required properties from inner Web3 object
     this.utils = this._web3.utils;
-    this.eth = this._web3.eth as KlaytnWeb3EthInterface;
 
     // Override web3.eth.accounts methods
     const accounts = context_accounts(this);
-    this.eth.accounts = accounts;
+    this.eth = Object.assign(this._web3.eth, {
+      accounts: accounts,
+      sendSignedTransactions: context_sendSignedTransactions(this._web3),
+    });
     this._accountProvider = accounts as any; // inevitable conflict in signTransaction types
     this._wallet = accounts.wallet;
 
@@ -80,10 +91,16 @@ export class KlaytnWeb3
     this.eth.getProtocolVersion = context_getProtocolVersion(this._web3);
     this.eth.sendTransaction = context_sendTransaction(this._web3);
     this.eth.sendSignedTransaction = context_sendSignedTransaction(this._web3);
+    this.eth.sendSignedTransactions = context_sendSignedTransactions(this._web3);
     this.eth.signTransaction = context_signTransaction(this._web3);
+
+    // Attach additional namespaces.
+    this.gasless = context_gasless(this._web3, this.eth);
 
     // Attach additional RPC namespaces.
     const send = this.makeSendFunction();
+
+    const { AdminApi, DebugApi, GovernanceApi, KlayApi, NetApi, PersonalApi, TxpoolApi } = web3rpc
     this.admin = asyncOpenApi(send, AdminApi);
     this.debug = asyncOpenApi(send, DebugApi);
     this.governance = asyncOpenApi(send, GovernanceApi);

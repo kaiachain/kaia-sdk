@@ -4,7 +4,7 @@ import {
   parseKaia as parseKaiaBase,
   parseKaiaUnits as parseKaiaUnitsBase,
   parseUnits as parseUnitsBase,
-} from "../util";
+} from "../util/index.js";
 /**
  * Convert kaia to kei
  *

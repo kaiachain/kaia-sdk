@@ -2,15 +2,19 @@ module.exports = {
   root: true,
 
   // rule presets and plugins
-  extends: [
+  "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:import/recommended",
     "plugin:import/typescript",
+    "plugin:require-extensions/recommended"
   ],
-  parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "require-extensions"
+  ],
   env: {
     es2022: true,
     browser: false,
@@ -21,6 +25,7 @@ module.exports = {
   // custom rules
   // see https://eslint.org/docs/latest/rules
   rules: {
+    "import/no-unresolved": "off",
     // logic
     "prefer-const": "warn",
     "no-promise-executor-return": "warn",
@@ -42,15 +47,6 @@ module.exports = {
         ],
         "newlines-between": "always",
         pathGroupsExcludedImportTypes: ["@kaiachain/**"],
-      },
-    ],
-    "import/no-unresolved": [
-      "error", // eslint-plugin-import cannot resolve subpaths https://github.com/firebase/firebase-admin-node/discussions/1359
-      {
-        ignore: [
-          "^@kaiachain/js-ext-core/util$",
-          "^@kaiachain/js-ext-core/ethers-v6$",
-        ],
       },
     ],
 
@@ -107,6 +103,8 @@ module.exports = {
         // give some flexibility adding and deleting variables
         "@typescript-eslint/no-unused-vars": "off",
         "prefer-const": "off",
+        "require-extensions/require-extensions": "off",
+        "require-extensions/require-index": "off"
       },
     },
     {
@@ -116,6 +114,7 @@ module.exports = {
         "no-undef": "off",
         "no-unused-vars": "off",
         "no-constant-condition": "off",
+
       },
     },
   ],
@@ -123,5 +122,6 @@ module.exports = {
     "example/**/browser-html/ethers-ext.bundle.js",
     "example/**/browser-html/ethers-ext.v6.bundle.js",
     "example/**/browser-react",
+
   ],
 };

@@ -1,8 +1,8 @@
-import { has, isArray, map } from "lodash-es";
-import { AccountKeyType } from "./const";
-import { getCompressedPublicKey } from "./ec";
-import { WeightedPublicKey } from "../field";
-import { HexStr, RLP } from "./data";
+import { AccountKeyType } from "./const.js";
+import { getCompressedPublicKey } from "./ec.js";
+import { WeightedPublicKey } from "../field/index.js";
+import { HexStr, RLP } from "./data.js";
+import {has, isArray} from "./helpers.js";
 
 export const getWeightedPublicKeyRLP = (tupleOrObject: any) => {
     if (isArray(tupleOrObject) && tupleOrObject.length == 2) {
@@ -11,7 +11,7 @@ export const getWeightedPublicKeyRLP = (tupleOrObject: any) => {
             HexStr.fromNumber(tuple[0]),
             getCompressedPublicKey(tuple[1])
         ] as WeightedPublicKey;
-    } else if (has(tupleOrObject, "weight") && has(tupleOrObject, "key")) {
+    } else if (has(tupleOrObject,"weight") && has(tupleOrObject,"key")) {
         const object: any = tupleOrObject;
         return [
             HexStr.fromNumber(object.weight),
@@ -26,10 +26,10 @@ export const convertKeysToRLP = ({ key, keys, type, threshold }: { type: Account
     if (isArray(keys)) {
         switch (Number(type)) {
             case AccountKeyType.WeightedMultiSig:
-                return RLP.encode([HexStr.from(threshold), map(keys, (tupleOrObject) => getWeightedPublicKeyRLP(tupleOrObject))])
+                return RLP.encode([HexStr.from(threshold), keys.map((tupleOrObject) => getWeightedPublicKeyRLP(tupleOrObject))])
             case AccountKeyType.RoleBased:
-                return RLP.encode(map(keys, ({ key, keys, type, threshold }: any) =>
-                    GetHexlifyRLP(type, convertKeysToRLP({ type, key, keys, threshold }))
+                return RLP.encode(keys.map(({key, keys, type, threshold}: any) =>
+                    GetHexlifyRLP(type, convertKeysToRLP({type, key, keys, threshold}))
                 ))
         }
     } else {
@@ -65,10 +65,10 @@ export const decodeObjectFromRLP = (rlp: string): { type: AccountKeyType, key?: 
     switch (type) {
         case AccountKeyType.RoleBased:
             {
-                const roleBasedInnerKeys = RLP.decode('0x' + rlp.substring(4))
+                const roleBasedInnerKeys:string[] = RLP.decode('0x' + rlp.substring(4))
                 return {
                     type: AccountKeyType.RoleBased,
-                    keys: map(roleBasedInnerKeys, (key) => decodeObjectFromRLP(key))
+                    keys: roleBasedInnerKeys.map((key:string) => decodeObjectFromRLP(key))
                 }
             }
         case AccountKeyType.WeightedMultiSig:
@@ -77,7 +77,7 @@ export const decodeObjectFromRLP = (rlp: string): { type: AccountKeyType, key?: 
                 return {
                     type: AccountKeyType.WeightedMultiSig,
                     threshold: Number(threshold),
-                    keys: map(keys, ([weight, innerKey]) => ({ weight: Number(weight), key: innerKey }))
+                    keys: keys.map(([weight, innerKey]:[string,string]) => ({weight: Number(weight), key: innerKey}))
                 }
             }
         case AccountKeyType.Public:

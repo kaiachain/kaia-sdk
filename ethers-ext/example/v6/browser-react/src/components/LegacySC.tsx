@@ -6,7 +6,7 @@ type Props = {
   account: Account;
 };
 
-// https://baobab.klaytnscope.com/account/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
+// https://kairos.kaiascan.io/address/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
 var contractAddress = "0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df";
 var contractCalldata = "0xd09de08a"; // function increment()
 
@@ -37,7 +37,7 @@ function LegacySC({ account }: Props) {
         <p><input type="submit"></input></p>
       </form>
       { txhash? <a target="_blank" href={txhash} rel="noreferrer">{txhash}</a> : null }
-    { error? <text><b style={{ color: "red" }}>{error}</b></text> : null }
+    { error? <text><b style={{ color: "red" }}>{error?.message ?? String(error)}</b></text> : null }
   </div>
 );
 };

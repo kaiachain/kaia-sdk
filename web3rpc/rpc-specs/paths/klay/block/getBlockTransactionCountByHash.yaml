@@ -53,7 +53,7 @@ paths:
 
       responses:
         200:
-          description: Return integer of the number of transactions in this block.
+          description: Returns a transaction object, or null when no transaction was found.
           content:
             application/json:
               schema:

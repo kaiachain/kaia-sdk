@@ -1,5 +1,4 @@
-curl -X 'POST' \
-  'https://public-en-kairos.node.kaia.io/kaia/sendTransactionAsFeePayer' \
+curl -X 'POST' \/kaia/sendTransactionAsFeePayer' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

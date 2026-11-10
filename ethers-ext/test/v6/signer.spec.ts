@@ -84,6 +84,9 @@ describe("Wallet v6", () => {
         sentRawTx = params[0];
         return keccak256(sentRawTx);
       });
+      P.mock_override("klay_sendRawTransactions", (params: any[]) => {
+        return params[0].map((tx: any) => keccak256(tx));
+      });
     }
   });
 
@@ -187,6 +190,14 @@ describe("Wallet v6", () => {
       expectedFrom ??= await W.getAddress();
       assert.equal(parseTransaction(sentRawTx).from, expectedFrom);
     }
+    async function testOK_Multiple(W: KlaytnWallet, txs: any[]) {
+      let results = await W.sendTransactions(txs);
+      for (let res of results) {
+        assert.isDefined(res);
+        assert.isDefined(res.hash);
+        assert.isDefined(res.wait);
+      }
+    }
 
     it("as sender", async () => {
       for (let W of [KWD]) {
@@ -221,6 +232,14 @@ describe("Wallet v6", () => {
       for (let W of [KW, KWD]) {
         await testOK_AsFeePayer(W, senderTxHashRLP_fit, from);
         await testOK_AsFeePayer(W, senderTxHashRLP_pad, from);
+      }
+    });
+    it("multiple transactions", async () => {
+      for (let W of [KW]) {
+        await testOK_Multiple(W, [
+          { type: 0, to, value },
+          { type: 0, to, value },
+        ]);
       }
     });
   });

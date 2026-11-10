@@ -48,7 +48,7 @@ paths:
 
       responses:
         200:
-          description: Returns information about a transaction by block number and transaction index position.
+          description: Returns a transaction object, or null when no transaction was found.
           content:
             application/json:
               schema:

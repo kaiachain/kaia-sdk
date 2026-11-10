@@ -112,6 +112,10 @@ components:
               properties:
                 balance:
                   type: string
+                codeFormat:
+                  type: number
+                codeHash:
+                  type: string
                 humanReadable:
                   type: boolean
                 key:
@@ -129,20 +133,25 @@ components:
                       type: number
                 nonce:
                   type: number
+                stageRoot:
+                  type: string
+                vmVersion:
+                  type: number
           example:
             {
-              accType: 1,
+              accType: 2,
               account: {
-                balance: 4985316100000000000,
+                balance: "0x0",
+                codeFormat: 0,
+                codeHash: "1HOsYh6XyEb4GvnCjNA9p+oRe57RfjtKozosj/Zy9UY=",
                 humanReadable: false,
                 key: {
-                  key: {
-                    x: "0x230037a99462acd829f317d0ce5c8e2321ac2951de1c1b1a18f9af5cff66f0d7",
-                    y: "0x18a7fb1b9012d2ac87bc291cbf1b3b2339356f1ce7669ae68405389be7f8b3b6"
-                  },
-                  keyType: 2
+                  key: {},
+                  keyType: 3
                 },
-                nonce: 11
+                nonce: 0,
+                storageRoot: "0xc5208edc055f64478e379d5fbe955d9446578c56a9b1699d5d52bd3cf900cbd5",
+                vmVersion: 0
               }
             }
 

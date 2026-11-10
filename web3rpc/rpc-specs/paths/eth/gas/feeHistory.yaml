@@ -117,6 +117,12 @@ components:
                 description: Lowest number block of returned range.
               baseFeePerGas:
                 $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/BaseFeePerGas"
+              blobBaseFeePerGas:
+                type: array
+                items:
+                  type: string
+                  format: hex
+                description: An array of blob base fees per gas for the requested block range.
               gasUsedRatio:
                 type: array
                 description: An array of block gas used ratios. Measures the network congestion level. These are calculated as the ratio of block gas used and [KIP-71 MAX_BLOCK_GAS_USED_FOR_BASE_FEE](https://kips.kaia.io/KIPs/kip-71). If the ratio is above 1, then 1 is returned.
@@ -127,55 +133,12 @@ components:
                 $ref: "../../../components/schemas/common/Common.yaml#/components/schemas/Reward"
           example:
               {
-                "oldestBlock": "0xa5b",
+                "oldestBlock": "0xc874c08",
                 "reward": [
-                  [
-                    "0x0",
-                    "0x0",
-                    "0x0"
-                  ], [
-                    "0x0",
-                    "0x0",
-                    "0x0"
-                  ], [
-                    "0x0",
-                    "0x0",
-                    "0x0"
-                  ], [
-                    "0x0",
-                    "0x0",
-                    "0x0"
-                  ], [
-                    "0x0",
-                    "0x0",
-                    "0x0"
-                  ], [
-                    "0x5d21dba00",
-                    "0x5d21dba00",
-                    "0x5d21dba00"
-                  ], [
-                    "0x0",
-                    "0x0",
-                    "0x0"
-                  ], [
-                    "0x0",
-                    "0x0",
-                    "0x0"
-                  ], [
-                    "0x5d21dba00",
-                    "0x5d21dba00",
-                    "0x5d21dba00"
-                  ], [
-                    "0x0",
-                    "0x0",
-                    "0x0"
-                  ],
+                  [ "0x0" ]
                 ],
-                "baseFeePerGas": [
-                  "0x0","0x0","0x0", "0x0", "0x0", "0x0","0x0","0x0", "0x0","0x0","0x0", "0x0","0x0","0x0","0x0","0x0"
-                ],
-                "gasUsedRatio": [
-                  0,0,0,0, 0,0.0002952004000002952,0,0,0.00029504250000029504,0,0,0.0002963777000002964,0,0,0,0
-                ]
+                "baseFeePerGas": [ "0x5d21dba00", "0x5d21dba00" ],
+                "blobBaseFeePerGas": [ "0x2e90edd000", "0x2e90edd000" ],
+                "gasUsedRatio": [ 0 ]
               }
 

@@ -2,7 +2,7 @@
 
 import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
 import { parseUnits as parseEthUnits, formatUnits as formatEthUnits } from "@ethersproject/units";
-import { isString } from "lodash-es";
+import {isString} from "./helpers.js";
 
 // All in lowercase. The ambiguity between mKLAY and MKLAY is resolved in getKlayDecimals.
 const names: { [key: string]: number } = {

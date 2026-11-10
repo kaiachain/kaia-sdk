@@ -3,7 +3,7 @@ import { recoverTransaction as ethRecoverTransaction } from "web3-eth-accounts";
 import { Address } from "web3-types";
 import { toChecksumAddress } from "web3-utils";
 
-import { _parseTxType } from "./sign";
+import { _parseTxType } from "./sign.js";
 
 
 // Analogous to: web3-eth-accounts/src/accounts.ts:recoverTransaction

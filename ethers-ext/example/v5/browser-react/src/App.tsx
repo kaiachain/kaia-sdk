@@ -39,7 +39,7 @@ function App() {
           <button onClick={() => setMenu(Menu.SignMsg)}>Expand</button>
           { menu === Menu.SignMsg ? <SignMsg account={account} /> : null }
 
-          <h3>Send KLAY/ETH</h3>
+          <h3>Send KAIA/ETH</h3>
           <button onClick={() => setMenu(Menu.LegacyVT)}>Expand</button>
           { menu === Menu.LegacyVT ? <LegacyVT account={account} /> : null }
 
@@ -52,7 +52,7 @@ function App() {
         account.isKaikas ? (
         <div>
           <hr/>
-          <h3>Klaytn Features</h3>
+          <h3>Kaia Features</h3>
           <h3>Send ValueTransfer tx</h3>
           <button onClick={() => setMenu(Menu.KlaytnVT)}>Expand</button>
           { menu === Menu.KlaytnVT ? <KlaytnVT account={account} /> : null }

@@ -44,10 +44,10 @@ paths:
                   - type: object
                     properties:
                       result:
-                        type: string
-                        format: hex
+                        type: integer
+                        format: uint64
                         description: The integer of the network identifier. "1001" Kaia Kairos testnet."8217" Kaia Cypress mainnet.
-                        example: "1001"
+                        example: 1001
 
       x-codeSamples:
         - lang: "Shell"

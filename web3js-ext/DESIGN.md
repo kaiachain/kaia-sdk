@@ -17,6 +17,9 @@ src/
     sign.ts       # web3.eth.{signTransaction}
     rpc.ts        # web3.eth.{getProtocolVersion}
     utils/        # Util functions taken from web3-eth/src/utils/
+  gasless/      # Components for web3.gasless.*
+    index.ts      # web3.gasless
+    gasless.ts    # web3.gasless.*
   index.ts
   types.ts      # Types and interfaces
   web3.ts       # The Web3 class

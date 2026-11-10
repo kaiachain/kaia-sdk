@@ -52,11 +52,11 @@ import {
 } from "web3-types";
 import { isNullish } from "web3-validator";
 
-import { getRevertReason } from "./get_revert_reason";
-import { getTransactionError } from "./get_transaction_error";
-import { getTransactionGasPricing } from "./get_transaction_gas_pricing";
-import { trySendTransaction } from "./try_send_transaction";
-import { watchTransactionForConfirmations } from "./watch_transaction_for_confirmations";
+import { getRevertReason } from "./get_revert_reason.js";
+import { getTransactionError } from "./get_transaction_error.js";
+import { getTransactionGasPricing } from "./get_transaction_gas_pricing.js";
+import { trySendTransaction } from "./try_send_transaction.js";
+import { watchTransactionForConfirmations } from "./watch_transaction_for_confirmations.js";
 
 export class SendTxHelper<
   ReturnFormat extends DataFormat,

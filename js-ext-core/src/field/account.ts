@@ -1,7 +1,8 @@
-import { getCompressedPublicKey, HexStr, isEmbeddableAccountKeyType } from "../util";
-import {  cloneDeep, has, isArray, isString, map } from 'lodash-es'
-import { FieldType } from "./common";
-import { convertKeysToRLP, decodeObjectFromRLP, GetHexlifyRLP } from "../util/rlp";
+import { getCompressedPublicKey, HexStr, isEmbeddableAccountKeyType } from "../util/index.js";
+import { FieldType } from "./common.js";
+import { convertKeysToRLP, decodeObjectFromRLP, GetHexlifyRLP } from "../util/rlp.js";
+import {has, isArray, isString} from "../util/helpers.js";
+import {clone} from "../util/transform.js";
 
 
 // Accepted types: A compressed (33-bytes) or uncompressed (65-bytes) public key
@@ -33,15 +34,14 @@ export const FieldTypeWeightedPublicKeys = new class implements FieldType {
     }
 
     // format to object if input is string
-    return map(value, (tupleOrObject: any) => {
+    return value.map((tupleOrObject: any) => {
       if (isArray(tupleOrObject) && tupleOrObject.length == 2) {
-        const tuple = tupleOrObject;
         return {
-          weight: tuple[0],
-          key: getCompressedPublicKey(tuple[1])
+          weight: tupleOrObject[0],
+          key: getCompressedPublicKey(tupleOrObject[1])
         }
       }
-      return { weight: tupleOrObject.weight, key: getCompressedPublicKey(tupleOrObject.key) }
+      return {weight: tupleOrObject.weight, key: getCompressedPublicKey(tupleOrObject.key)}
     });
   }
 
@@ -58,19 +58,19 @@ export const FieldTypeWeightedPublicKeys = new class implements FieldType {
 //   "0x02a102c8785266510368d9372badd4c7f4a94b692e82ba74e0b5e26b34558b0f081447",
 // ]
 export const FieldTypeAccountKeyList = new class implements FieldType {
-  canonicalize(value: any): string[] {
+  canonicalize(value: any): object[] {
     if (!isArray(value)) {
       throw new Error("Malformed RoleBasedKeys");
     }
 
     // format to object if input is string
-    return map(value, (elem: any) => {
-      let key = cloneDeep(elem)
+    return value.map((elem:any) => {
+      let key:any = clone(elem);
       if (isString(key) && HexStr.isHex(key)) { // convert rlp to object
-        key = decodeObjectFromRLP(key)
+        key = decodeObjectFromRLP(key);
       }
-      if (typeof key === 'object' && has(key, 'type') && isEmbeddableAccountKeyType(Number(key.type))) {
-        return key
+      if (typeof key === 'object' && has(key,'type') && isEmbeddableAccountKeyType(Number(key?.type))) {
+        return key;
       }
       throw new Error(`AccountKeyType ${key?.type} cannot be inside an AccountKeyRoleBased`);
     });

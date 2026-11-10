@@ -13,7 +13,7 @@ import {
   parseAccountKey,
   AccountKeyType,
 } from "../src";
-import { clone } from "lodash-es";
+import {clone} from "../src/util/transform";
 
 interface TestCase {
   title?: string,

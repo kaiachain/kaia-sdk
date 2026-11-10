@@ -2,9 +2,10 @@
 // to make the library slim. Decrypting the splitted keystore JSON
 // shall be done outside this library.
 
-import { flattenDepth, isArray, isNumber, map } from "lodash-es";
 
 // Cipher is an opaque structure to be passed down to decryption library.
+import {isArray, isNumber} from "./helpers.js";
+
 type EncryptedKey = any;
 
 // The V3 keystore defined in https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition
@@ -47,13 +48,13 @@ export function splitKeystoreKIP3(json: string, deleteAddress: boolean = true): 
   }
 
   let cryptos: any[] = [];
-  if (!isArray(keyring[0])) {
-    cryptos = flattenDepth(keyring, 1);
+  if (!Array.isArray(keyring[0])) {
+    cryptos = keyring.flat(1);
   } else {
-    cryptos = flattenDepth(keyring, 2);
+    cryptos = keyring.flat(2);
   }
 
-  return map(cryptos, (crypto) => {
+  return cryptos.map((crypto) => {
     const v3: KeystoreV3 = {
       version: 3,
       crypto: crypto,

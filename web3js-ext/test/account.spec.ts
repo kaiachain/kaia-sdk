@@ -3,8 +3,7 @@ import { describe, it } from "mocha";
 import { CipherOptions, KeyStore, Web3 } from "web3";
 import { sign, recover, Web3Account } from "web3-eth-accounts";
 
-import { KlaytnWeb3 } from "../src";
-import { KlaytnWeb3Account } from "../src/types";
+import { KaiaWeb3, KaiaWeb3Account } from "../src";
 
 import { MockProvider } from "./mock_provider";
 
@@ -57,12 +56,12 @@ const keystores = [
 describe("web3.eth.accounts", () => {
   let P: MockProvider;
   let EW3: Web3;
-  let KW3: KlaytnWeb3;
+  let KW3: KaiaWeb3;
 
   before(() => {
     P = new MockProvider(url);
     EW3 = new Web3(P);
-    KW3 = new KlaytnWeb3(P);
+    KW3 = new KaiaWeb3(P);
 
     // Stuff dummy values to the mock provider
     P.mock_override("eth_getTransactionCount", () => "0x1234");
@@ -146,9 +145,9 @@ describe("web3.eth.accounts", () => {
       assert.equal(W3.eth.accounts.wallet.at(2)?.address, addr2);
       checkAccountObject(W3.eth.accounts.wallet.at(0)!);
     }
-    async function checkKlaytnWallet(W3: KlaytnWeb3) {
+    async function checkKlaytnWallet(W3: KaiaWeb3) {
       await checkWallet(W3);
-      checkKlaytnAccountObject(W3.eth.accounts.wallet.at(0)!);
+      checkKaiaAccountObject(W3.eth.accounts.wallet.at(0)!);
     }
 
     await checkWallet(EW3);
@@ -157,7 +156,7 @@ describe("web3.eth.accounts", () => {
 
   it("create()", async () => {
     await checkAccountObject(EW3.eth.accounts.create());
-    await checkKlaytnAccountObject(KW3.eth.accounts.create());
+    await checkKaiaAccountObject(KW3.eth.accounts.create());
   });
 
   it("privateKeyToAccount()", async () => {
@@ -165,7 +164,7 @@ describe("web3.eth.accounts", () => {
     const addr = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 
     await checkAccountObject(EW3.eth.accounts.privateKeyToAccount(priv), addr, priv);
-    await checkKlaytnAccountObject(KW3.eth.accounts.privateKeyToAccount(priv), addr, priv);
+    await checkKaiaAccountObject(KW3.eth.accounts.privateKeyToAccount(priv), addr, priv);
   });
 
   it("decrypt()", async () => {
@@ -182,7 +181,7 @@ describe("web3.eth.accounts", () => {
     for (const tc of keystores) {
       const accounts = await KW3.eth.accounts.decryptList(tc.json, tc.password);
       for (let idx = 0; idx < accounts.length; idx++) {
-        await checkKlaytnAccountObject(accounts[idx], tc.address, tc.keys[idx]);
+        await checkKaiaAccountObject(accounts[idx], tc.address, tc.keys[idx]);
       }
     }
   });
@@ -225,8 +224,8 @@ async function checkAccountObject(account: Web3Account, expectedAddr?: string, e
   checkKeyStore(await account.encrypt("password", lightKdf));
 }
 
-// Check the result of web3.eth.accounts.create(), decrypt(), and privateKeyToAccount() from KlaytnWeb3.
-async function checkKlaytnAccountObject(account: KlaytnWeb3Account, expectedAddr?: string, expectedPriv?: string) {
+// Check the result of web3.eth.accounts.create(), decrypt(), and privateKeyToAccount() from KaiaWeb3.
+async function checkKaiaAccountObject(account: KaiaWeb3Account, expectedAddr?: string, expectedPriv?: string) {
   // All properties are defined.
   await checkAccountObject(account, expectedAddr, expectedPriv);
   assert.isFunction(account.signTransactionAsFeePayer);

@@ -39,7 +39,7 @@ paths:
                 - $ref: "#/components/schemas/KlayGetBlockTransactionCountByHashReq"
       responses:
         200:
-          description: Returns the number of transactions in a block from a block that matches the given hash.
+          description: Returns a transaction object, or null when no transaction was found.
           content:
             application/json:
               schema:

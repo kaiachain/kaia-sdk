@@ -27,7 +27,7 @@ import {
   parseTransaction,
   ParsedTransaction,
 } from "../src";
-import { clone, each } from "lodash-es";
+import {clone} from "../src/util/transform";
 
 interface TestCase {
   clazz: typeof KlaytnTx,
@@ -718,9 +718,9 @@ describe("KlaytnTxFactory", () => {
       TxType.FeeDelegatedSmartContractDeployWithRatio,
       TxType.FeeDelegatedSmartContractExecutionWithRatio,
     ];
-    each(typesWithInput, (type) => {
-      assert.equal(KlaytnTxFactory.fromObject({ type, input: "0x6162" }).getField("data"), "0x6162");
-      assert.equal(KlaytnTxFactory.fromObject({ type, data: "0x6162" }).getField("data"), "0x6162");
+    typesWithInput.forEach((type) => {
+      assert.equal(KlaytnTxFactory.fromObject({type, input: "0x6162"}).getField("data"), "0x6162");
+      assert.equal(KlaytnTxFactory.fromObject({type, data: "0x6162"}).getField("data"), "0x6162");
     });
   });
 
@@ -730,11 +730,17 @@ describe("KlaytnTxFactory", () => {
       TxType.FeeDelegatedSmartContractDeploy,
       TxType.FeeDelegatedSmartContractDeployWithRatio,
     ];
-    each(deployTypes, (type) => {
-      assert.equal(KlaytnTxFactory.fromObject({ type, to: null }).getField("to"), "0x");
-      assert.equal(KlaytnTxFactory.fromObject({ type, to: "0x" }).getField("to"), "0x");
-      assert.equal(KlaytnTxFactory.fromObject({ type, to: "0x0000000000000000000000000000000000000000" }).getField("to"), "0x");
-      assert.equal(KlaytnTxFactory.fromObject({ type, to: "0x7b65B75d204aBed71587c9E519a89277766EE1d0" }).getField("to"), "0x");
+    deployTypes.forEach((type) => {
+      assert.equal(KlaytnTxFactory.fromObject({type, to: null}).getField("to"), "0x");
+      assert.equal(KlaytnTxFactory.fromObject({type, to: "0x"}).getField("to"), "0x");
+      assert.equal(KlaytnTxFactory.fromObject({
+        type,
+        to: "0x0000000000000000000000000000000000000000"
+      }).getField("to"), "0x");
+      assert.equal(KlaytnTxFactory.fromObject({
+        type,
+        to: "0x7b65B75d204aBed71587c9E519a89277766EE1d0"
+      }).getField("to"), "0x");
     });
   });
 

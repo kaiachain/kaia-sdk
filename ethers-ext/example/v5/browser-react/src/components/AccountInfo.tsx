@@ -13,7 +13,7 @@ function AccountInfo({ account, setAccount }: Props) {
       <p>
         <b>Connected Wallet</b>:&nbsp;
         {account.isMetaMask ? "Metamask" : null}
-        {account.isKaikas ? "Kaikas" : null}
+        {account.isKaikas ? "Kaia Wallet" : null}
       </p>
     </div>
   );

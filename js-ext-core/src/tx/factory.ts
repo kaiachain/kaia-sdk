@@ -2,13 +2,12 @@ import { hexValue } from "@ethersproject/bytes";
 import { keccak256 } from "@ethersproject/keccak256";
 import { AccessList, Transaction as EthTransaction } from "ethers";
 
-import { FieldSetFactory, Fields } from "../field";
-import { HexStr, getTypePrefix, isKlaytnTxType, TxType } from "../util";
-import { forOwn } from "lodash-es";
-import { TxTypeFeeDelegatedAccountUpdate, TxTypeFeeDelegatedCancel, TxTypeFeeDelegatedSmartContractDeploy, TxTypeFeeDelegatedSmartContractExecution, TxTypeFeeDelegatedValueTransfer, TxTypeFeeDelegatedValueTransferMemo } from "./feedelegated";
-import { TxTypeAccountUpdate, TxTypeCancel, TxTypeSmartContractDeploy, TxTypeSmartContractExecution, TxTypeValueTransfer, TxTypeValueTransferMemo } from "./basic";
-import { TxTypeFeeDelegatedAccountUpdateWithRatio, TxTypeFeeDelegatedCancelWithRatio, TxTypeFeeDelegatedSmartContractDeployWithRatio, TxTypeFeeDelegatedSmartContractExecutionWithRatio, TxTypeFeeDelegatedValueTransferMemoWithRatio, TxTypeFeeDelegatedValueTransferWithRatio } from "./partialfeedelegated";
-import { KlaytnTx } from "./abstract";
+import { FieldSetFactory, Fields } from "../field/index.js";
+import { HexStr, getTypePrefix, isKlaytnTxType, TxType } from "../util/index.js";
+import { TxTypeFeeDelegatedAccountUpdate, TxTypeFeeDelegatedCancel, TxTypeFeeDelegatedSmartContractDeploy, TxTypeFeeDelegatedSmartContractExecution, TxTypeFeeDelegatedValueTransfer, TxTypeFeeDelegatedValueTransferMemo } from "./feedelegated.js";
+import { TxTypeAccountUpdate, TxTypeCancel, TxTypeSmartContractDeploy, TxTypeSmartContractExecution, TxTypeValueTransfer, TxTypeValueTransferMemo } from "./basic.js";
+import { TxTypeFeeDelegatedAccountUpdateWithRatio, TxTypeFeeDelegatedCancelWithRatio, TxTypeFeeDelegatedSmartContractDeployWithRatio, TxTypeFeeDelegatedSmartContractExecutionWithRatio, TxTypeFeeDelegatedValueTransferMemoWithRatio, TxTypeFeeDelegatedValueTransferWithRatio } from "./partialfeedelegated.js";
+import { KlaytnTx } from "./abstract.js";
 
 
 class _KlaytnTxFactory extends FieldSetFactory<KlaytnTx> {
@@ -136,7 +135,7 @@ export function parseTransaction(rlp: string): ParsedTransaction {
       parsedTx.v = parsedTx.v === 27 ? 0 : 1;
     }
     // Clean up 'explicit undefined' fields
-    forOwn(parsedTx, (value, key) => {
+    Object.entries(parsedTx).forEach(([key, value]) => {
       if (value === undefined) {
         delete (parsedTx as any)[key];
       }
@@ -166,7 +165,7 @@ export function parseTransaction(rlp: string): ParsedTransaction {
         feeRatio: tx.feeRatio ? HexStr.toNumber(tx.feeRatio) : undefined,
       };
       // Clean up 'explicit undefined' fields
-      forOwn(parsedTx, (value, key) => {
+      Object.entries(parsedTx).forEach(([key, value]) => {
         if (value === undefined) {
           delete (parsedTx as any)[key];
         }

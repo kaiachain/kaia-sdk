@@ -119,6 +119,14 @@ components:
           type: string
           format: hex
           description: The block number where this transaction was in.
+        blobGasPrice:
+          type: string
+          format: hex
+          description: The actual value per gas deducted from the sender's account for blob gas. Only specified for blob transactions as defined by KIP-279(EIP-4844).
+        blobGasUsed:
+          type: string
+          format: hex
+          description: The amount of blob gas used for this specific transaction. Only specified for blob transactions as defined by KIP-279(EIP-4844).
         contractAddress:
           type: string
           format: DATA

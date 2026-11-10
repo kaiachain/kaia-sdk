@@ -1,7 +1,7 @@
 var provider = null;
 var accounts = null;
 
-// https://baobab.klaytnscope.com/account/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
+// https://kairos.kaiascan.io/address/0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df?tabId=contractCode
 var contractAddress = "0xa9eF4a5BfB21e92C06da23Ed79294DaB11F5A6df";
 var contractCalldata = "0xd09de08a"; // function increment()
 
@@ -66,17 +66,17 @@ async function switchNetwork(networkSpec) {
     await provider.send("wallet_addEthereumChain", [networkSpec]);
   }
 }
-async function switchBaobab() {
+async function switchKairos() {
   await switchNetwork({
     chainId: "0x3e9",
-    chainName: "Klaytn Baobab",
+    chainName: "Kaia Kairos",
     nativeCurrency: {
-      name: "KLAY",
-      symbol: "KLAY",
+      name: "KAIA",
+      symbol: "KAIA",
       decimals: 18,
     },
     rpcUrls: ["https://public-en-kairos.node.kaia.io"],
-    blockExplorerUrls: ["https://baobab.klaytnscope.com/"],
+    blockExplorerUrls: ["https://kairos.kaiascan.io/"],
   });
 }
 
@@ -122,7 +122,7 @@ async function doSendTx(makeTxRequest) {
     const sentTx = await signer.sendTransaction(txRequest);
     console.log("sentTx", sentTx);
     const txhash = sentTx.hash;
-    const explorerUrl = "https://baobab.klaytnscope.com/tx/";
+    const explorerUrl = "https://kairos.kaiascan.io/tx/";
     $("#textTxhash").html(`<a href="${explorerUrl}${txhash}" target="_blank">${txhash}</a>`);
   } catch (err) {
     console.error(err);
@@ -174,7 +174,7 @@ async function doSendTxAsFeePayer(signedTx) {
   const sentTx = await feePayerWallet.sendTransactionAsFeePayer(signedTx);
   console.log("sentTx", sentTx);
   const txhash = sentTx.hash;
-  const explorerUrl = "https://baobab.klaytnscope.com/tx/";
+  const explorerUrl = "https://kairos.kaiascan.io/tx/";
   $("#textTxhash").html(`<a href="${explorerUrl}${txhash}" target="_blank">${txhash}</a>`);
 }
 

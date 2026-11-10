@@ -21,7 +21,7 @@ function KlaytnFeeDelVT({ account }: Props) {
     };
 
     try {
-      const txhash = await doSignTx(account, tx);
+      const txhash = await doSignTx(account, tx, false);
       setTxhash(txhash);
     } catch (e: any) {
       setError(e);
@@ -49,7 +49,7 @@ function KlaytnFeeDelVT({ account }: Props) {
       ) : null}
       {error ? (
         <text>
-          <b style={{ color: "red" }}>{error}</b>
+          <b style={{ color: "red" }}>{error?.message ?? String(error)}</b>
         </text>
       ) : null}
     </div>

@@ -15,6 +15,8 @@ paths:
       operationId: totalVotingPower
       summary: "governance_totalVotingPower"
       description: |
+        **NOTE**: This API is no longer supported in Kaia v2.0.0 or later. Use kaia_getChainConfig, kaia_getParams, and  governance_status instead.
+        
         The totalVotingPower property provides the sum of all voting power that CNs have. Each CN has 1.0 ~ 2.0 voting power. In "none", "single" governance mode, totalVotingPower don't provide any information.
 
         **JSONRPC:** `governance_totalVotingPower`

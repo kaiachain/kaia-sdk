@@ -51,3 +51,5 @@ paths:
     $ref: ./getChainConfig.yaml#/paths/~1governance~1getChainConfig
   /governance/getRewardsAccumulated:
     $ref: ./getRewardsAccumulated.yaml#/paths/~1governance~1getRewardsAccumulated
+  /governance/status:
+    $ref: ./status.yaml#/paths/~1governance~1status

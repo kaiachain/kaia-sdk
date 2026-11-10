@@ -30,7 +30,7 @@ import {
 import { format } from "web3-utils";
 import { isNullish } from "web3-validator";
 
-import { getTransactionType } from "./transaction_builder";
+import { getTransactionType } from "./transaction_builder.js";
 
 async function getEip1559GasPricing<ReturnFormat extends DataFormat>(
   transaction: FormatType<Transaction, typeof ETH_DATA_FORMAT>,

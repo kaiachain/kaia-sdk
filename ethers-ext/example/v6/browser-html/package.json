@@ -6,9 +6,9 @@
     "postinstall": "npm run build:privy"
   },
   "dependencies": {
-    "@privy-io/js-sdk-core": "latest"
+    "@privy-io/js-sdk-core": "0.61.3"
   },
   "devDependencies": {
-    "esbuild": "latest"
+    "esbuild": "0.28.2"
   }
 }

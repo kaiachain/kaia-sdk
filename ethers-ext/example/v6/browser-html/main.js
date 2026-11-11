@@ -9,8 +9,8 @@ var walletFlags = { isMetaMask: false, isKaikas: false, isOKX: false, isPrivy: f
 // Privy configuration — replace with your own app ID and client ID from
 // the Privy Dashboard (https://dashboard.privy.io).
 // ---------------------------------------------------------------------------
-var PRIVY_APP_ID = "cmoqvarqz00g20cjovmi09ugi";
-var PRIVY_CLIENT_ID = "client-WY6Yh964P1rdns77tJChte7nAqea6oCjqvFLrjwN9vD6k";
+var PRIVY_APP_ID = "PASTE_YOUR_PRIVY_APP_ID";
+var PRIVY_CLIENT_ID = "PASTE_YOUR_PRIVY_CLIENT_ID";
 
 var privyClient = null;
 var privyIframe = null;
@@ -123,22 +123,61 @@ async function connectOKX() {
 // Privy embedded wallet integration
 // ---------------------------------------------------------------------------
 
+// Returns a message describing why Privy can't be used, or null if the setup looks usable.
+function getPrivyConfigError() {
+  if (!window.PrivySDK || !window.PrivySDK.Privy) {
+    return "Privy SDK not loaded. Run `npm install` in this folder to build privy-bundle.js.";
+  }
+  var isUnset = function (value) {
+    return !value || value.indexOf("PASTE_YOUR_") === 0;
+  };
+  if (isUnset(PRIVY_APP_ID) || isUnset(PRIVY_CLIENT_ID)) {
+    return "Privy is not configured. Set PRIVY_APP_ID and PRIVY_CLIENT_ID in main.js (see README).";
+  }
+  return null;
+}
+
+function showPrivyStatus(message, isError) {
+  $("#privyStatus").text(message).css("color", isError ? "red" : "gray");
+}
+
+// Show the setup problem as soon as the page loads, instead of waiting for a click.
+$(function () {
+  var configError = getPrivyConfigError();
+  if (configError) showPrivyStatus(configError, true);
+});
+
+// Returns the initialized Privy client, or null (with the reason shown on screen) if Privy
+// is not configured or fails to initialize. Never throws.
 async function initPrivy() {
   if (privyClient) return privyClient;
 
-  var SDK = window.PrivySDK;
-  if (!SDK || !SDK.Privy) {
-    console.error("Privy SDK not loaded. Make sure privy-bundle.js is included.");
+  var configError = getPrivyConfigError();
+  if (configError) {
+    showPrivyStatus(configError, true);
     return null;
   }
 
-  privyClient = new SDK.Privy({
-    appId: PRIVY_APP_ID,
-    clientId: PRIVY_CLIENT_ID,
-    storage: new SDK.LocalStorage(),
-  });
-
-  await privyClient.initialize();
+  var SDK = window.PrivySDK;
+  var client;
+  try {
+    client = new SDK.Privy({
+      appId: PRIVY_APP_ID,
+      clientId: PRIVY_CLIENT_ID,
+      storage: new SDK.LocalStorage(),
+    });
+    await client.initialize();
+  } catch (err) {
+    console.error("Privy initialization failed:", err);
+    showPrivyStatus(
+      "Privy failed to initialize. Check PRIVY_APP_ID and PRIVY_CLIENT_ID in main.js. (" +
+        ((err && err.message) || err) + ")",
+      true
+    );
+    return null;
+  }
+  // Only cache the client once it initialized successfully, so a later retry starts clean.
+  privyClient = client;
 
   // Mount the secure-context iframe for embedded wallet key material
   privyIframe = document.createElement("iframe");
@@ -171,10 +210,7 @@ async function initPrivy() {
 async function privySendOTP() {
   try {
     var client = await initPrivy();
-    if (!client) {
-      alert("Privy SDK failed to initialize. Check your App ID and Client ID.");
-      return;
-    }
+    if (!client) return; // initPrivy already shows the reason on screen
 
     privyEmailAddress = $("#privyEmail").val().trim();
     if (!privyEmailAddress) {
@@ -182,13 +218,13 @@ async function privySendOTP() {
       return;
     }
 
-    $("#privyStatus").html("Sending OTP...");
+    showPrivyStatus("Sending OTP...", false);
     await client.auth.email.sendCode(privyEmailAddress);
     $("#privyOTPSection").show();
-    $("#privyStatus").html("OTP sent to " + privyEmailAddress);
+    $("#privyStatus").text("OTP sent to " + privyEmailAddress);
   } catch (err) {
     console.error("Privy sendOTP error:", err);
-    $("#privyStatus").html("Error: " + err.message);
+    showPrivyStatus("Error: " + err.message, true);
   }
 }
 
@@ -212,7 +248,7 @@ async function privyVerifyOTP() {
     await privyConnectWallet(user);
   } catch (err) {
     console.error("Privy verifyOTP error:", err);
-    $("#privyStatus").html("Error: " + err.message);
+    $("#privyStatus").text("Error: " + err.message);
   }
 }
 
@@ -248,7 +284,7 @@ async function privyConnectWallet(user) {
   $("text").html("");
   $("#privyLoggedOut").hide();
   $("#privyLoggedIn").show();
-  $("#textPrivyUser").html(privyEmailAddress || wallet.address);
+  $("#textPrivyUser").text(privyEmailAddress || wallet.address);
   $("#privyStatus").html("Connecting wallet...");
 
   // Set up globals so transaction functions work
@@ -272,7 +308,7 @@ async function privyConnectWallet(user) {
 
   // Populate the display fields
   $("#textWallet").html("Privy");
-  $("#textAccount").html(accts[0] || wallet.address);
+  $("#textAccount").text(accts[0] || wallet.address);
   $("#textChainId").html(chain);
   $("#privyStatus").html("Connected");
 }
@@ -313,7 +349,7 @@ async function privyLogout() {
     walletFlags = { isMetaMask: false, isKaikas: false, isOKX: false, isPrivy: false };
   } catch (err) {
     console.error("Privy logout error:", err);
-    $("#privyStatus").html("Error: " + err.message);
+    $("#privyStatus").text("Error: " + err.message);
   }
 }
 
@@ -641,7 +677,7 @@ async function doSignTxNonKaikas(makeTxRequest, isFeeDelegationService) {
     }
   } catch (err) {
     console.error(err);
-    $("#textTxhash").html(`Error: ${err.message}`);
+    $("#textTxhash").text(`Error: ${err.message}`);
   }
 }
 
@@ -759,7 +795,7 @@ async function doSignTxPrivy(makeTxRequest, isFeeDelegationService) {
     }
   } catch (err) {
     console.error("Privy fee delegation error:", err);
-    $("#textTxhash").html("Error: " + err.message);
+    $("#textTxhash").text("Error: " + err.message);
   }
 }
 

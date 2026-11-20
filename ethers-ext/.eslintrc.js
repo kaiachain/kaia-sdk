@@ -122,6 +122,7 @@ module.exports = {
     "example/**/browser-html/ethers-ext.bundle.js",
     "example/**/browser-html/ethers-ext.v6.bundle.js",
     "example/**/browser-react",
+    "example/**/browser-html/privy-bundle.js",
 
   ],
 };

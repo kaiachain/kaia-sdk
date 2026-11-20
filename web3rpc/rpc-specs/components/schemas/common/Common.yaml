@@ -383,10 +383,6 @@ components:
           type: string
           format: hex
           description: The Unix timestamp for when the block was collated.
-        totalDifficulty:
-          type: string
-          format: hex
-          description: The total blockScore of the chain until this block.
         transactionsRoot:
           type: string
           format: 32-byte DATA
@@ -1357,10 +1353,6 @@ components:
             type: string
             format: hex
             description: The Unix timestamp for when the block was collated.
-        totalDifficulty:
-            type: string
-            format: hex
-            description: The total blockScore of the chain until this block.
         transactionsRoot:
             type: string
             format: 32-byte DATA
@@ -1378,7 +1370,6 @@ components:
         - receiptsRoot
         - reward
         - blockScore
-        - totalBlockScore
         - extraData
         - size
         - gasUsed
@@ -1426,10 +1417,6 @@ components:
           type: string
           format: hex
           description: Former difficulty. Always 1 in the BFT consensus engine
-        totalBlockScore:
-          type: string
-          format: hex
-          description: Integer of the total blockScore of the chain until this block.
         extraData:
           type: string
           format: DATA
@@ -1517,7 +1504,6 @@ components:
       type: object
       required:
         - blockScore
-        - totalBlockScore
         - committee
         - committers
         - gasUsed
@@ -1539,10 +1525,6 @@ components:
           type: string
           format: hex
           description: Former difficulty. Always 1 in the BFT consensus engine
-        totalBlockScore:
-          type: string
-          format: hex
-          description: Integer of the total blockScore of the chain until this block.
         committee:
           type: array
           items:
@@ -1640,7 +1622,6 @@ components:
           "stateRoot": "0xb011dd6dcfbc7ec95b82f8a2a5a070945a68e9ae203713c8313350751f1df556",
           "timestamp": "0x5d814d00",
           "timestampFoS": "0x26",
-          "totalBlockScore": "0x6e0432",
           "transactions": [],
           "transactionsRoot": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
           "voteData": "0x"
@@ -1992,7 +1973,6 @@ components:
         - receiptsRoot
         - reward
         - blockScore
-        - totalBlockScore
         - extraData
         - size
         - gasUsed
@@ -2040,10 +2020,6 @@ components:
           type: string
           format: hex
           description: Former difficulty. Always 1 in the BFT consensus engine
-        totalBlockScore:
-          type: string
-          format: hex
-          description: Integer of the total blockScore of the chain until this block.
         extraData:
           type: string
           format: DATA

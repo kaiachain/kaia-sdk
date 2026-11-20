@@ -5,5 +5,6 @@ declare global {
   interface Window {
     ethereum?: ExternalProvider;
     klaytn?: ExternalProvider;
+    okxwallet?: ExternalProvider;
   }
 }

@@ -99,6 +99,8 @@ paths:
     $ref: ./config/coinbase.yaml#/paths/~1eth~1config~1coinbase
   /eth/config/etherbase:
     $ref: ./config/etherbase.yaml#/paths/~1eth~1config~1etherbase
+  /eth/config/config:
+    $ref: ./config/config.yaml#/paths/~1eth~1config~1config
   /eth/config/protocolVersion:
     $ref: ./config/protocolVersion.yaml#/paths/~1eth~1config~1protocolVersion
 
@@ -111,6 +113,8 @@ paths:
     $ref: ./gas/maxPriorityFeePerGas.yaml#/paths/~1eth~1gas~1maxPriorityFeePerGas
   /eth/gas/gasPrice:
     $ref: ./gas/gasPrice.yaml#/paths/~1eth~1gas~1gasPrice
+  /eth/gas/blobBaseFee:
+    $ref: ./gas/blobBaseFee.yaml#/paths/~1eth~1gas~1blobBaseFee
 
   # eth/filter
   /eth/filter/getFilterLogs:
@@ -145,4 +149,8 @@ paths:
     $ref: ./miscellaneous/submitHashrate.yaml#/paths/~1eth~1miscellaneous~1submitHashrate
   /eth/miscellaneous/getProof:
     $ref: ./miscellaneous/getProof.yaml#/paths/~1eth~1miscellaneous~1getProof
- 
+  /eth/miscellaneous/getBlobSidecars:
+    $ref: ./miscellaneous/getBlobSidecars.yaml#/paths/~1eth~1miscellaneous~1getBlobSidecars
+  /eth/miscellaneous/getBlobSidecarByTxHash:
+    $ref: ./miscellaneous/getBlobSidecarByTxHash.yaml#/paths/~1eth~1miscellaneous~1getBlobSidecarByTxHash
+

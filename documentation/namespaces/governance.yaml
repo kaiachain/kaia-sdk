@@ -51,3 +51,7 @@ paths:
     $ref: ../../web3rpc/rpc-specs/paths/governance/getRewardsAccumulated.yaml#/paths/~1governance~1getRewardsAccumulated
   /governance/status:
     $ref: ../../web3rpc/rpc-specs/paths/governance/status.yaml#/paths/~1governance~1status
+  /governance/getPFS:
+    $ref: ../../web3rpc/rpc-specs/paths/governance/getPFS.yaml#/paths/~1governance~1getPFS
+  /governance/getCFS:
+    $ref: ../../web3rpc/rpc-specs/paths/governance/getCFS.yaml#/paths/~1governance~1getCFS

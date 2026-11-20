@@ -1,0 +1,98 @@
+openapi: "3.0.2"
+info:
+  title: KAIA OPEN API
+  version: "1.10.0"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:7151
+
+paths:
+  /governance/getPFS:
+    post:
+      operationId: getPFS
+      summary: "governance_getPFS"
+      description: |
+        Returns the VRank Proposal Failure Scores (PFS) for all validators at the specified block, keyed by validator address. A higher score indicates more proposal failures attributed to the validator. If the block parameter is not set, the latest block is used.
+
+        **NOTE:**
+
+        *VRank scores are tracked on permissionless networks; the on-chain `vrank` block header field is populated after the Permissionless hardfork.*
+
+        **JSONRPC:** `governance_getPFS`
+      tags:
+        - governance
+
+      parameters:
+        - name: blockNumberOrTag
+          in: query
+          description: (optional) Integer or hexadecimal block number, or the string "earliest" or "latest" as in the default block parameter.
+          required: false
+          schema:
+            $ref: "../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../../components/requests/JsonRpcRequest.yaml#/components/schemas/JsonRpcRequest"
+                - $ref: "#/components/schemas/GovernanceGetPFSReq"
+
+      responses:
+        200:
+          description: Object - Map of validator address to its Proposal Failure Score.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../../components/responses/JsonRpcResponse.yaml#/components/schemas/JsonRpcResponse"
+                  - $ref: "#/components/schemas/GovernanceGetPFSResp"
+
+      x-codeSamples:
+        - lang: "Shell"
+          label: "Curl"
+          source:
+            $ref: "../../code-samples/curl/governance/getPFS.sh"
+        - lang: "JavaScript"
+          label: "Javascript"
+          source:
+            $ref: "../../code-samples/javascript/governance/getPFS.js"
+        - lang: "Python"
+          label: "Python"
+          source:
+            $ref: "../../code-samples/python/governance/getPFS.py"
+
+components:
+  schemas:
+    GovernanceGetPFSReq:
+      type: object
+      required:
+        - method
+        - params
+      properties:
+        method:
+          type: string
+          default: 'governance_getPFS'
+        params:
+          type: array
+          items:
+            properties:
+              BlockNumberOrTag:
+                $ref: "../../components/schemas/common/Common.yaml#/components/schemas/BlockNumberOrTag"
+          example: ["latest"]
+
+    GovernanceGetPFSResp:
+      type: object
+      properties:
+        result:
+          type: object
+          description: Map of validator address to its Proposal Failure Score.
+          additionalProperties:
+            type: number
+            description: Proposal Failure Score for the validator.
+          example:
+            "0x207e38864b45a538733741dc1ff92eff9d1a6159": 0
+            "0x300dde981e7c3bb232b9051c1d479b3c0eb12bb1": 2

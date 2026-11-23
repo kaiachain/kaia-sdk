@@ -61,6 +61,8 @@ paths:
     $ref: ./block/getCouncil.yaml#/paths/~1kaia~1block~1getCouncil
   /kaia/block/getCouncilSize:
     $ref: ./block/getCouncilSize.yaml#/paths/~1kaia~1block~1getCouncilSize
+  /kaia/block/getNodesByState:
+    $ref: ./block/getNodesByState.yaml#/paths/~1kaia~1block~1getNodesByState
   /kaia/block/getBlockByNumber:
     $ref: ./block/getBlockByNumber.yaml#/paths/~1kaia~1block~1getBlockByNumber
   /kaia/block/getBlockTransactionCountByHash:
